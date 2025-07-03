@@ -1,15 +1,123 @@
 @import "tailwindcss";
 
+/* Pretendard Font Face */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/font/PretendardVariable.woff2") format("woff2-variations");
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Fonts */
+  --font-pretendard:
+    "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    sans-serif;
+
+  /* Grayscale */
+  --gray-50: #ffffff;
+  --gray-100: #f5f5f5;
+  --gray-200: #e6e6e6;
+  --gray-300: #d9d9d9;
+  --gray-400: #b3b3b3;
+  --gray-500: #7a7a79;
+
+  /* Primary Orange */
+  --primary-100: #feeea;
+  --primary-200: #fed8d0;
+  --primary-300: #fd947f;
+  --primary-400: #f9502e;
+  --primary-500: #f9502e;
+
+  /* Black Scale */
+  --black-100: #61605e;
+  --black-200: #474643;
+  --black-300: #302f2d;
+  --black-400: #1e1e1e;
+  --black-500: #111111;
+
+  /* Background */
+  --bg-primary: #fcfcfc;
+  --bg-secondary: #f7f7f7;
+  --bg-tertiary: #efefef;
+
+  /* Line/Border */
+  --line-light: #f2f2f2;
+  --line-dark: #e6e6e6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-pretendard);
+
+  /* Typography Scale */
+  --fontSize-xs: 12px;
+  --lineHeight-xs-tight: 18px;
+  --lineHeight-xs: 20px;
+
+  --fontSize-sm: 13px;
+  --lineHeight-sm: 22px;
+
+  --fontSize-md: 14px;
+  --lineHeight-md: 24px;
+
+  --fontSize-lg: 16px;
+  --lineHeight-lg: 26px;
+
+  --fontSize-2lg: 18px;
+  --lineHeight-2lg: 26px;
+
+  --fontSize-xl: 20px;
+  --lineHeight-xl: 32px;
+
+  --fontSize-2xl: 24px;
+  --lineHeight-2xl: 32px;
+
+  --fontSize-3xl: 32px;
+  --lineHeight-3xl: 42px;
+
+  /* Font Weights */
+  --fontWeight-regular: 400;
+  --fontWeight-medium: 500;
+  --fontWeight-semibold: 600;
+  --fontWeight-bold: 700;
+
+  /* Grayscale Colors */
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+
+  /* Primary Colors */
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+
+  /* Black Colors */
+  --color-black-100: var(--black-100);
+  --color-black-200: var(--black-200);
+  --color-black-300: var(--black-300);
+  --color-black-400: var(--black-400);
+  --color-black-500: var(--black-500);
+
+  /* Background Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+
+  /* Border Colors */
+  --color-border-light: var(--line-light);
+  --color-border-dark: var(--line-dark);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +130,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-pretendard);
 }
