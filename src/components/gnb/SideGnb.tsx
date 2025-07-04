@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 import { TUserRole } from "@/types/userRole";
 import { GEUST_NAVIGATION_ITEMS, USER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 
-interface IMobileGnbProps {
+type TSideGnbProps = {
   isOpen: boolean;
   onClose: () => void;
   userRole: TUserRole;
   isLoggedIn?: boolean;
-}
+};
 
-export const SideGnb: React.FC<IMobileGnbProps> = ({ isOpen, onClose, userRole = "user" }) => {
+export const SideGnb = ({ isOpen, onClose, userRole = "user" }: TSideGnbProps) => {
   const pathname = usePathname();
 
   // 로그인 상태에 따른 메뉴 결정

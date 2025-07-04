@@ -6,12 +6,12 @@ import logo from "@/assets/img/logo/logo-l.png";
 import { TUserRole } from "@/types/userRole";
 import { TDeviceType } from "@/types/deviceType";
 
-interface ILogoProps {
+type TLogoProps = {
   size: TDeviceType;
   userRole: TUserRole;
-}
+};
 
-export const Logo = ({ size = "mobile", userRole = "guest" }: ILogoProps) => {
+export const Logo = ({ size = "mobile", userRole = "guest" }: TLogoProps) => {
   console.log(size);
   return (
     <Link href="/">

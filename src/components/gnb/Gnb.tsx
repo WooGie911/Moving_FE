@@ -12,8 +12,8 @@ export const Gnb = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // TODO: 추후 중앙 상태관리에서 가져오도록 수정
-  const [userRole] = useState<TUserRole>("guest");
-  // const [userRole] = useState<TUserRole>("user");
+  // const [userRole] = useState<TUserRole>("guest");
+  const [userRole] = useState<TUserRole>("user");
   // const [userRole] = useState<TUserRole>("mover");
 
   const deviceType = useWindowWidth();

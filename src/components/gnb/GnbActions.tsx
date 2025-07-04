@@ -4,13 +4,13 @@ import profile from "@/assets/icon/icon-profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/icon-notification-lg.png";
 
-interface IGnbActionsProps {
+type TGnbActionsProps = {
   userRole: TUserRole;
   toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
-}
+};
 
-export const GnbActions: React.FC<IGnbActionsProps> = ({ userRole, toggleSideMenu, isSideMenuOpen }) => {
+export const GnbActions = ({ userRole, toggleSideMenu, isSideMenuOpen }: TGnbActionsProps) => {
   // TODO : 추후 사용자 정보를 가져오는 로직이 작성되면 프로필 이미지 적용하기 없으면 기본이미지
 
   return (
