@@ -1,27 +1,13 @@
-"use client";
 import Image from "next/image";
-import React from "react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import box from "../../../assets/icon/icon-box.png";
 import home from "../../../assets/icon/icon-home.png";
 import office from "../../../assets/icon/icon-office.png";
 import document from "../../../assets/icon/icon-document.png";
 
-export const MoveTypeLabel = ({
-  type,
-  size = "responsive",
-}: {
-  type: "small" | "home" | "office" | "document";
-  size?: "sm" | "md" | "responsive";
-}) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const currentSize = size === "responsive" ? (isMobile ? "sm" : "md") : size;
-  const sizeClass = currentSize === "sm" ? "h-[26px] py-[2px]" : "h-[32px] py-[4px]";
+export const MoveTypeLabel = ({ type }: { type: "small" | "home" | "office" | "document" }) => {
   return (
     <div>
-      <div
-        className={`bg-primary-100 inline-flex items-center justify-start gap-[2px] rounded-sm pr-[7px] pl-[4px] ${sizeClass}`}
-      >
+      <div className="bg-primary-100 inline-flex h-[26px] items-center justify-start gap-[2px] rounded-sm py-[2px] pr-[7px] pl-[4px] md:h-[32px] md:py-[4px]">
         <div className="relative h-[20px] w-[20px]">
           <Image
             src={type === "small" ? box : type === "home" ? home : type === "office" ? office : document}
@@ -29,9 +15,7 @@ export const MoveTypeLabel = ({
             fill
           />
         </div>
-        <p
-          className={`text-primary-400 inline-block text-center text-sm font-semibold ${currentSize === "sm" ? "text-[13px] leading-[22px]" : "text-[14px] leading-[24px]"}`}
-        >
+        <p className="text-primary-400 inline-block text-center text-sm text-[13px] leading-[22px] font-semibold md:text-[14px] md:leading-[24px]">
           {type === "small"
             ? "소형이사"
             : type === "home"
