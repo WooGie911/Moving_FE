@@ -1,5 +1,3 @@
-import { CircleTextLabel } from "@/components/common/Chips/CircleTextLabel";
-import { MoveTypeLabel } from "@/components/common/Chips/MoveTypeLabel";
 import React from "react";
 
 const HomePage = () => {
