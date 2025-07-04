@@ -41,8 +41,8 @@
 
 @theme inline {
   /* 브레이크포인트 정의: 기본 반응형 브레이크 포인트를 디자인 요구사항에 따라 변경가능. */
-  --breakpoint-md: 744px; /* 태블릿 사이즈 */
-  --breakpoint-lg: 1200px; /* 데스크탑 사이즈 */
+  --breakpoint-md: 744px; /* 태블릿 사이즈 -744px~1199px*/
+  --breakpoint-lg: 1200px; /* 데스크탑 사이즈 1200~px*/
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
