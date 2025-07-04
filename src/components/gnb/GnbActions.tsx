@@ -4,6 +4,7 @@ import profile from "@/assets/icon/icon-profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
+import Link from "next/link";
 
 type TGnbActionsProps = {
   userRole: TUserRole;
@@ -17,6 +18,15 @@ export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpe
 
   return (
     <div className="flex items-center gap-4">
+      {userRole === "guest" && deviceType === "desktop" && (
+        <Link
+          href="/signin"
+          className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
+        >
+          로그인
+        </Link>
+      )}
+
       {userRole !== "guest" && (
         <>
           {/* 알림 버튼 */}
