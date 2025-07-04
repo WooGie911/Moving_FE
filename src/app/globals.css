@@ -1,23 +1,8 @@
 @import "tailwindcss";
 
-/* Pretendard Font Face */
-@font-face {
-  font-family: "Pretendard Variable";
-  font-weight: 45 920;
-  font-style: normal;
-  font-display: swap;
-  src: url("/src/assets/font/PretendardVariable.woff2") format("woff2-variations");
-}
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
-
-  /* Fonts */
-  --font-pretendard:
-    "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    sans-serif;
 
   /* Grayscale */
   --gray-50: #ffffff;
@@ -40,6 +25,7 @@
   --black-300: #302f2d;
   --black-400: #1e1e1e;
   --black-500: #111111;
+  --black-600: #000000;
 
   /* Background */
   --bg-primary: #fcfcfc;
@@ -56,37 +42,50 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-pretendard);
 
-  /* Typography Scale */
-  --fontSize-xs: 12px;
-  --lineHeight-xs-tight: 18px;
-  --lineHeight-xs: 20px;
+  /* =======================
+Typography Scale
+======================= */
 
-  --fontSize-sm: 13px;
-  --lineHeight-sm: 22px;
+  /* Text-3xl: 32px / 42px */
+  --text-3xl: 32px;
+  --leading-3xl: 42px;
 
-  --fontSize-md: 14px;
-  --lineHeight-md: 24px;
+  /* Text-2xl: 24px / 32px */
+  --text-2xl: 24px;
+  --leading-2xl: 32px;
 
-  --fontSize-lg: 16px;
-  --lineHeight-lg: 26px;
+  /* Text-xl: 20px / 32px */
+  --text-xl: 20px;
+  --leading-xl: 32px;
 
-  --fontSize-2lg: 18px;
-  --lineHeight-2lg: 26px;
+  /* Text-2lg: 18px / 26px */
+  --text-2lg: 18px;
+  --leading-2lg: 26px;
 
-  --fontSize-xl: 20px;
-  --lineHeight-xl: 32px;
+  /* Text-lg: 16px / 26px */
+  --text-lg: 16px;
+  --leading-lg: 26px;
 
-  --fontSize-2xl: 24px;
-  --lineHeight-2xl: 32px;
+  /* Text-md: 14px / 24px */
+  --text-md: 14px;
+  --leading-md: 24px;
 
-  --fontSize-3xl: 32px;
-  --lineHeight-3xl: 42px;
+  /* Text-sm: 13px / 22px */
+  --text-sm: 13px;
+  --leading-sm: 22px;
 
-  /* Font Weights */
-  --fontWeight-regular: 400;
-  --fontWeight-medium: 500;
-  --fontWeight-semibold: 600;
-  --fontWeight-bold: 700;
+  /* Text-xs: 12px / 20px */
+  --text-xs: 12px;
+  --leading-xs: 20px;
+
+  /* Tight line height for xs: 18px */
+  --leading-xs-tight: 18px;
+
+  /* font-weight */
+  /* --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700; */
 
   /* Grayscale Colors */
   --color-gray-50: var(--gray-50);
@@ -109,6 +108,7 @@
   --color-black-300: var(--black-300);
   --color-black-400: var(--black-400);
   --color-black-500: var(--black-500);
+  --color-black-600: var(--black-600);
 
   /* Background Colors */
   --color-bg-primary: var(--bg-primary);
@@ -130,5 +130,20 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-pretendard);
+  font-family: var(
+    --font-pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif
+  );
 }
