@@ -1,9 +1,7 @@
-import { CircleTextLabel } from "@/components/common/Chips/CircleTextLabel";
-import { MoveTypeLabel } from "@/components/common/Chips/MoveTypeLabel";
 import React from "react";
-
+import { LadingPage } from "@/pages/landing/LadingPage";
 const HomePage = () => {
-  return <div className="flex text-red-500">랜딩 페이지 입니다</div>;
+  return <LadingPage />;
 };
 
 export default HomePage;
