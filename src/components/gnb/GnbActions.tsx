@@ -3,14 +3,16 @@ import React from "react";
 import profile from "@/assets/icon/icon-profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/icon-notification-lg.png";
+import { TDeviceType } from "@/types/deviceType";
 
 type TGnbActionsProps = {
   userRole: TUserRole;
+  deviceType: TDeviceType;
   toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
 };
 
-export const GnbActions = ({ userRole, toggleSideMenu, isSideMenuOpen }: TGnbActionsProps) => {
+export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpen }: TGnbActionsProps) => {
   // TODO : 추후 사용자 정보를 가져오는 로직이 작성되면 프로필 이미지 적용하기 없으면 기본이미지
 
   return (
@@ -34,25 +36,31 @@ export const GnbActions = ({ userRole, toggleSideMenu, isSideMenuOpen }: TGnbAct
           >
             <Image src={profile} alt="프로필" width={24} height={24} />
           </button>
+          {/* TODO : 추후 userRole에서 추출후 삽입 */}
+          {deviceType === "desktop" && <div>프로필 이름</div>}
         </>
       )}
 
-      {/* 사이드 메뉴 버튼 */}
-      <button
-        onClick={toggleSideMenu}
-        className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-        aria-label="메뉴"
-      >
-        <div className="flex h-6 w-6 flex-col justify-center space-y-1">
-          <div
-            className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "translate-y-1.5 rotate-45" : ""}`}
-          ></div>
-          <div className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "opacity-0" : ""}`}></div>
-          <div
-            className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "-translate-y-1.5 -rotate-45" : ""}`}
-          ></div>
-        </div>
-      </button>
+      {deviceType !== "desktop" && (
+        <>
+          {/* 사이드 메뉴 버튼 */}
+          <button
+            onClick={toggleSideMenu}
+            className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
+            aria-label="메뉴"
+          >
+            <div className="flex h-6 w-6 flex-col justify-center space-y-1">
+              <div
+                className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "translate-y-1.5 rotate-45" : ""}`}
+              ></div>
+              <div className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "opacity-0" : ""}`}></div>
+              <div
+                className={`h-0.5 w-full bg-current transition-all ${isSideMenuOpen ? "-translate-y-1.5 -rotate-45" : ""}`}
+              ></div>
+            </div>
+          </button>
+        </>
+      )}
     </div>
   );
 };

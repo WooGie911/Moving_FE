@@ -34,18 +34,23 @@ export const Gnb = () => {
             <div className="flex w-full items-center justify-between">
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
               {/* 로그인 버튼 */}
-              <Link
-                href="/signin"
-                className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
-              >
-                로그인
-              </Link>
+              <GnbActions
+                userRole={userRole}
+                deviceType={deviceType}
+                toggleSideMenu={toggleMobileMenu}
+                isSideMenuOpen={isMobileMenuOpen}
+              />
             </div>
           ) : (
             // 모바일 & 태블릿 메뉴 버튼
             <div className="flex w-full items-center justify-between">
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
-              <GnbActions userRole={userRole} toggleSideMenu={toggleMobileMenu} isSideMenuOpen={isMobileMenuOpen} />
+              <GnbActions
+                userRole={userRole}
+                deviceType={deviceType}
+                toggleSideMenu={toggleMobileMenu}
+                isSideMenuOpen={isMobileMenuOpen}
+              />
             </div>
           )}
         </div>
