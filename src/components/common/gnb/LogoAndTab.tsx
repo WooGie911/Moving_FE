@@ -33,7 +33,7 @@ export const LogoAndTab = ({ deviceType, userRole }: TLogoAndTabProps) => {
   return (
     <>
       {/* 로고 영역 */}
-      <div className="flex items-center gap-10">
+      <div className="flex items-center gap-20">
         <Logo size={deviceType} userRole={userRole} />
 
         {/* 네비게이션 영역 */}
