@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 const tabList = [
   { name: "전체", href: "/" },
   { name: "리뷰", href: "/review" },
-  { name: "찜한 기사", href: "/favoriteMover" },
+  { name: "여기는 매우 긴 Tab 요소 입니다 모바일 크기에선 스크롤이 가능해요!", href: "/favoriteMover" },
   { name: "기사 검색", href: "/searchMover" },
 ];
 
