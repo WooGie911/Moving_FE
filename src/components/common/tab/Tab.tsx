@@ -9,11 +9,11 @@ type TTabItem = {
   href: string;
 };
 
-type TTabProps = {
+interface ITabProps {
   tabList: TTabItem[];
-};
+}
 
-export const Tab = ({ tabList }: TTabProps) => {
+export const Tab = ({ tabList }: ITabProps) => {
   const pathname = usePathname();
 
   return (
