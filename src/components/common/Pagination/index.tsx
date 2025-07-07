@@ -4,10 +4,10 @@ import { usePagination } from "./usePagination";
 import PaginationButton from "./PaginationButton";
 import PaginationEllipsis from "./PaginationEllipsis";
 
-import IconLeft from "@/assets/icon/icon-left-pn.png";
-import IconLeftBlack from "@/assets/icon/icon-left-pn-black.png";
-import IconRight from "@/assets/icon/icon-right-pn.png";
-import IconRightBlack from "@/assets/icon/icon-right-pn-black.png";
+import IconLeft from "@/assets/icon/arrow/icon-left-pn.png";
+import IconLeftBlack from "@/assets/icon/arrow/icon-left-pn-black.png";
+import IconRight from "@/assets/icon/arrow/icon-right-pn.png";
+import IconRightBlack from "@/assets/icon/arrow/icon-right-pn-black.png";
 
 export default function Pagination({
   currentPage,
