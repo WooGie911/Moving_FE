@@ -1,8 +1,8 @@
 import { TUserRole } from "@/types/userRole";
 import React from "react";
-import profile from "@/assets/icon/icon-profile-lg.png";
+import profile from "@/assets/icon/auth/icon-profile-lg.png";
 import Image from "next/image";
-import notification from "@/assets/icon/icon-notification-lg.png";
+import notification from "@/assets/icon/notification/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 
