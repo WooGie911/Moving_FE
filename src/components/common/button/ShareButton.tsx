@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IShareButtonProps } from "@/types/button";
-import iconClip from "@/assets/icon/icon-clip-md.png";
-import iconShareKakao from "@/assets/icon/icon-share-kakao-lg.png";
-import iconShareFacebook from "@/assets/icon/icon-share-facebook-lg.png";
+import iconClip from "@/assets/icon/clip/icon-clip-md.png";
+import iconShareKakao from "@/assets/icon/share/icon-share-kakao-lg.png";
+import iconShareFacebook from "@/assets/icon/share/icon-share-facebook-lg.png";
 
 /**
  * ShareButton 컴포넌트(ShareButtonGroup에서만 사용)

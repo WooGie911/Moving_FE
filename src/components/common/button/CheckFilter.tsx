@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import iconCheckboxSquareActive from "@/assets/icon/icon-checkbox-square-active.png";
-import iconCheckboxSquareInactive from "@/assets/icon/icon-checkbox-square-inactive.png";
-import iconFilterActive from "@/assets/icon/icon-filter-active.png";
-import iconFilterInactive from "@/assets/icon/icon-filter-inactive.png";
+import iconCheckboxSquareActive from "@/assets/icon/checkbox/icon-checkbox-square-active.png";
+import iconCheckboxSquareInactive from "@/assets/icon/checkbox/icon-checkbox-square-inactive.png";
+import iconFilterActive from "@/assets/icon/filter/icon-filter-active.png";
+import iconFilterInactive from "@/assets/icon/filter/icon-filter-inactive.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 
 interface CheckFilterProps {
