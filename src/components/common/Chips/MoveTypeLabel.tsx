@@ -4,7 +4,7 @@ import home from "../../../assets/icon/icon-home.png";
 import office from "../../../assets/icon/icon-office.png";
 import document from "../../../assets/icon/icon-document.png";
 
-interface TProps {
+interface IProps {
   type: "small" | "home" | "office" | "document";
 }
 
@@ -22,7 +22,7 @@ const MOVE_TYPE_ICONS = {
   document: document,
 } as const;
 
-export const MoveTypeLabel = ({ type }: TProps) => {
+export const MoveTypeLabel = ({ type }: IProps) => {
   const label = MOVE_TYPE_LABELS[type];
   const iconSrc = MOVE_TYPE_ICONS[type];
 
