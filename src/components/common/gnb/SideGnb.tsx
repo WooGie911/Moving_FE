@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 import { TUserRole } from "@/types/userRole";
 import { GEUST_NAVIGATION_ITEMS, USER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 
-type TSideGnbProps = {
+interface ISideGnbProps {
   isOpen: boolean;
   onClose: () => void;
   userRole: TUserRole;
   isLoggedIn?: boolean;
-};
+}
 
-export const SideGnb = ({ isOpen, onClose, userRole = "user" }: TSideGnbProps) => {
+export const SideGnb = ({ isOpen, onClose, userRole = "user" }: ISideGnbProps) => {
   const pathname = usePathname();
 
   // 로그인 상태에 따른 메뉴 결정
