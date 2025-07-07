@@ -1,15 +1,14 @@
 "use client";
 import React, { useState } from "react";
 
-type TProps = {
+interface TProps {
   text: string;
   clickAble?: boolean;
   onClick?: () => void;
-};
+}
 
 export const CircleTextLabel = ({ text, clickAble = false, onClick }: TProps) => {
   const [isClicked, setIsClicked] = useState(false);
-
   const handleClick = () => {
     setIsClicked(!isClicked);
   };

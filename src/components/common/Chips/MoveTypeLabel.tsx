@@ -4,25 +4,25 @@ import home from "../../../assets/icon/icon-home.png";
 import office from "../../../assets/icon/icon-office.png";
 import document from "../../../assets/icon/icon-document.png";
 
-type TProps = {
+interface TProps {
   type: "small" | "home" | "office" | "document";
-};
+}
+
+const MOVE_TYPE_LABELS = {
+  small: "소형이사",
+  home: "가정이사",
+  office: "사무실이사",
+  document: "지정 견적 요청",
+} as const;
+
+const MOVE_TYPE_ICONS = {
+  small: small,
+  home: home,
+  office: office,
+  document: document,
+} as const;
 
 export const MoveTypeLabel = ({ type }: TProps) => {
-  const MOVE_TYPE_LABELS = {
-    small: "소형이사",
-    home: "가정이사",
-    office: "사무실이사",
-    document: "지정 견적 요청",
-  } as const;
-
-  const MOVE_TYPE_ICONS = {
-    small: small,
-    home: home,
-    office: office,
-    document: document,
-  } as const;
-
   const label = MOVE_TYPE_LABELS[type];
   const iconSrc = MOVE_TYPE_ICONS[type];
 
