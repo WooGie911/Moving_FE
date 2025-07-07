@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* search input 기본 clear 버튼 제거 */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
