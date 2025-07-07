@@ -6,17 +6,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, USER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 
-type TLogoAndTabProps = {
+interface ILogoAndTabProps {
   deviceType: TDeviceType;
   userRole: TUserRole;
-};
+}
 
 type TNavigationItem = {
   name: string;
   href: string;
 };
 
-export const LogoAndTab = ({ deviceType, userRole }: TLogoAndTabProps) => {
+export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const pathname = usePathname();
   const [navigationItems, setNavigationItems] = useState<TNavigationItem[]>([]);
 
@@ -33,7 +33,7 @@ export const LogoAndTab = ({ deviceType, userRole }: TLogoAndTabProps) => {
   return (
     <>
       {/* 로고 영역 */}
-      <div className="flex items-center gap-10">
+      <div className="flex items-center gap-20">
         <Logo size={deviceType} userRole={userRole} />
 
         {/* 네비게이션 영역 */}

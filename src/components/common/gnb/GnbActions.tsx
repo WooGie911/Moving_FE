@@ -6,14 +6,14 @@ import notification from "@/assets/icon/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 
-type TGnbActionsProps = {
+interface IGnbActionsProps {
   userRole: TUserRole;
   deviceType: TDeviceType;
   toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
-};
+}
 
-export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpen }: TGnbActionsProps) => {
+export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
   // TODO : 추후 사용자 정보를 가져오는 로직이 작성되면 프로필 이미지 적용하기 없으면 기본이미지
 
   return (
