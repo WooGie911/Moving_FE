@@ -27,7 +27,7 @@ export const Gnb = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 w-full border-b border-[#F2F2F2] px-6 py-4">
+      <header className="sticky top-0 z-30 w-full border-b border-[#F2F2F2] bg-white px-6 py-4">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between">
           {deviceType === "desktop" ? (
             // 데스크탑 헤더
