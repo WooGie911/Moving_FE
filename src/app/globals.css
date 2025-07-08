@@ -32,6 +32,7 @@ input[type="search"]::-webkit-search-cancel-button {
   /* Black Scale */
   --black-100: #61605e;
   --black-200: #474643;
+  --black-250: #262524;
   --black-300: #302f2d;
   --black-400: #1e1e1e;
   --black-500: #111111;
@@ -125,6 +126,7 @@ Typography Scale
   /* Black Colors */
   --color-black-100: var(--black-100);
   --color-black-200: var(--black-200);
+  --color-black-250: var(--black-250);
   --color-black-300: var(--black-300);
   --color-black-400: var(--black-400);
   --color-black-500: var(--black-500);
