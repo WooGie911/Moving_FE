@@ -11,24 +11,33 @@ interface RequestQuoteProps {
 export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, endPoint }: RequestQuoteProps) => {
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-center gap-5 p-6 lg:flex-row lg:justify-between">
+      <div className="flex w-full max-w-300 flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:flex-row lg:justify-between lg:px-0">
         <div className="flex w-full flex-col items-start justify-center">
-          <h1 className="leading-2xl text-black-500 text-[20px] font-bold">{movingType}</h1>
-          <p className="text-[12px] leading-[18px] font-normal text-gray-500">{`견적신청일: ${requestDate}`}</p>
+          <h1 className="leading-2xl text-black-500 text-[20px] font-bold md:text-[24px]">{movingType}</h1>
+          <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`견적신청일: ${requestDate}`}</p>
         </div>
 
-        <div className="flex w-full flex-col gap-1">
-          <div className="flex flex-row justify-between">
+        <div className="flex w-full flex-col gap-1 md:flex-row md:gap-3">
+          <div className="flex flex-row justify-between md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold">{startPoint}</p>
+            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
+              {startPoint}
+            </p>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="hidden md:flex md:flex-col md:items-end md:justify-end">
+            <p className="text-black-500 text-[14px] leading-6 font-semibold">{"->"}</p>
+          </div>
+          <div className="flex flex-row justify-between md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold">{endPoint}</p>
+            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
+              {endPoint}
+            </p>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between md:ml-7 md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold">{movingDate}</p>
+            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
+              {movingDate}
+            </p>
           </div>
         </div>
       </div>
