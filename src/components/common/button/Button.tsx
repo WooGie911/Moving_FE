@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IButtonProps } from "@/types/button";
-import iconEdit from "@/assets/icon/icon-edit.png";
-import iconLikeBlack from "@/assets/icon/icon-like-black.png";
-import iconUnLike from "@/assets/icon/icon-like-white-lg.png";
+import iconEdit from "@/assets/icon/edit/icon-edit.png";
+import iconLikeBlack from "@/assets/icon/like/icon-like-black.png";
+import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
 
 /**
  * Button 컴포넌트

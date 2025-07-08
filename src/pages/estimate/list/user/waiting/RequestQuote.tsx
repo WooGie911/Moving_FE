@@ -1,6 +1,6 @@
 import React from "react";
 
-interface RequestQuoteProps {
+interface IRequestQuoteProps {
   movingType: string;
   requestDate: string;
   movingDate: string;
@@ -8,7 +8,7 @@ interface RequestQuoteProps {
   endPoint: string;
 }
 
-export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, endPoint }: RequestQuoteProps) => {
+export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, endPoint }: IRequestQuoteProps) => {
   return (
     <>
       <div className="flex w-full max-w-300 flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:flex-row lg:justify-between lg:px-0">
