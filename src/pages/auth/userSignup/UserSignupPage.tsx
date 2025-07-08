@@ -10,14 +10,14 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import google from "@/assets/icon/auth/icon-login-google-lg.png";
 import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
 import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
+import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
-import { ISignInFormValues } from "@/types/auth";
+import { ISignUpFormValues } from "@/types/auth";
 
-const MoverSigninPage = () => {
+const UserSignupPage = () => {
   const deviceType = useWindowWidth();
 
-  const form = useForm<ISignInFormValues>({
+  const form = useForm<ISignUpFormValues>({
     mode: "onChange",
   });
 
@@ -29,34 +29,56 @@ const MoverSigninPage = () => {
   } = form;
 
   // 입력 값 감시
+  const name = watch("name");
   const email = watch("email");
+  const phone = watch("phone");
   const password = watch("password");
+  const passwordCheck = watch("passwordCheck");
 
-  // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
-  const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
+  // 회원 가입 버튼 활성화 조건 (값 존재 + validation 통과)
+  const isFormValid = name && email && phone && password && passwordCheck && isValid;
 
-  const onSubmit = (data: ISignInFormValues) => {
+  const onSubmit = (data: ISignUpFormValues) => {
     console.log(data);
     // ✅ TODO: 서버 액션 연동 or mutate
   };
 
   return (
-    <div className="bg-primary-400 flex w-full items-center justify-center overflow-x-hidden md:h-screen md:px-[52px] md:py-10">
-      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-between gap-[48px] bg-white px-10 pt-20 md:rounded-[40px] md:px-10 md:py-[48px]">
+    <div className="bg-primary-400 flex min-h-screen w-full items-center justify-center overflow-x-hidden md:px-[52px] md:py-[48px]">
+      <div className="flex w-full max-w-[740px] flex-col items-center justify-between gap-[48px] bg-white px-10 py-[48px] md:rounded-[40px] md:px-10">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
           <Link href="/">
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
-          <Link href="/userSignin">
-            <span className="text-black-200 text-lg">일반 유저라면?</span>
-            <span className="text-primary-400 ml-2 text-lg font-semibold underline">일반 유저 전용 페이지</span>
+          <Link href="/moverSignup">
+            <span className="text-black-200 text-lg">기사님이신가요?</span>
+            <span className="text-primary-400 ml-2 text-lg font-semibold underline">기사님 전용 페이지</span>
           </Link>
         </div>
 
-        {/* 로그인 폼 */}
+        {/* 회원가입 폼 */}
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
+            {/* 이름 */}
+            <div className="mb-6 flex flex-col gap-2 font-normal">
+              <span className="text-black-400 text-md">이름</span>
+              <BaseInput
+                {...register("name", {
+                  required: "이름은 필수 입력입니다.",
+                  pattern: {
+                    value: /^[가-힣]{2,4}$/,
+                    message: "이름은 2~4자의 한글로 입력해주세요.",
+                  },
+                })}
+                error={errors.name?.message}
+                placeholder="이름을 입력해주세요."
+                inputClassName="py-3.5 px-3.5"
+                wrapperClassName="w-full sm:w-full"
+              />
+            </div>
+
+            {/* 이메일 */}
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">이메일</span>
               <BaseInput
@@ -74,6 +96,25 @@ const MoverSigninPage = () => {
               />
             </div>
 
+            {/* 전화번호 */}
+            <div className="mb-6 flex flex-col gap-2 font-normal">
+              <span className="text-black-400 text-md">전화번호</span>
+              <BaseInput
+                {...register("phone", {
+                  required: "전화번호는 필수 입력입니다.",
+                  pattern: {
+                    value: /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/,
+                    message: "유효한 전화번호 형식이 아닙니다. ex) 01012345678",
+                  },
+                })}
+                error={errors.phone?.message}
+                placeholder="전화번호를 입력해주세요."
+                inputClassName="py-3.5 px-3.5"
+                wrapperClassName="w-full sm:w-full"
+              />
+            </div>
+
+            {/* 비밀번호*/}
             <div className="mb-6 flex flex-col gap-2">
               <span className="text-black-400 text-md font-normal">비밀번호</span>
               <PasswordInput
@@ -85,6 +126,23 @@ const MoverSigninPage = () => {
                   },
                 })}
                 placeholder="비밀번호를 입력해주세요."
+                inputClassName="py-3.5 px-3.5"
+                wrapperClassName="w-full sm:w-full"
+              />
+            </div>
+
+            {/* 비밀번호 확인*/}
+            <div className="mb-6 flex flex-col gap-2">
+              <span className="text-black-400 text-md font-normal">비밀번호 확인</span>
+              <PasswordInput
+                {...register("passwordCheck", {
+                  required: "비밀번호 확인은 필수 입력입니다.",
+                  validate: (value) => {
+                    const passwordValue = watch("password");
+                    return value === passwordValue || "비밀번호가 일치하지 않습니다.";
+                  },
+                })}
+                placeholder="비밀번호를 다시 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -103,9 +161,9 @@ const MoverSigninPage = () => {
               </button>
               {/* 회원가입 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
-                <span className="text-black-200 text-lg">아직 무빙 회원이 아니신가요?</span>
-                <Link href="/moverSignup">
-                  <span className="text-primary-400 text-lg font-semibold underline">회원가입</span>
+                <span className="text-black-200 text-lg">이미 무빙 회원이신가요?</span>
+                <Link href="/userSignin">
+                  <span className="text-primary-400 text-lg font-semibold underline">로그인</span>
                 </Link>
               </div>
             </div>
@@ -124,7 +182,7 @@ const MoverSigninPage = () => {
           {deviceType === "tablet" && (
             <div className="relative flex min-w-[180px]">
               <Image
-                src={moverAvatarLg}
+                src={userAvatarLg}
                 alt="moverAvatar"
                 width={180}
                 className="absolute -right-[330px] -bottom-[54px]"
@@ -135,7 +193,7 @@ const MoverSigninPage = () => {
           {deviceType === "desktop" && (
             <div className="relative flex min-w-[420px]">
               <Image
-                src={moverAvatarLg}
+                src={userAvatarLg}
                 alt="moverAvatar"
                 width={420}
                 className="absolute -right-[520px] -bottom-[80px]"
@@ -148,4 +206,4 @@ const MoverSigninPage = () => {
   );
 };
 
-export default MoverSigninPage;
+export default UserSignupPage;
