@@ -1,7 +1,8 @@
+import { LandingPage } from "@/pages/landing/LadingPage";
 import React from "react";
 
 const HomePage = () => {
-  return <div className="flex text-red-500">랜딩 페이지 입니다</div>;
+  return <LandingPage />;
 };
 
 export default HomePage;
