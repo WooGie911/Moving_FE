@@ -10,11 +10,11 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import google from "@/assets/icon/auth/icon-login-google-lg.png";
 import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
 import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
-import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
+import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
 
-const MoverSignupPage = () => {
+const UserSignupPage = () => {
   const deviceType = useWindowWidth();
 
   const form = useForm<ISignUpFormValues>({
@@ -51,9 +51,9 @@ const MoverSignupPage = () => {
           <Link href="/">
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
-          <Link href="/userSignup">
-            <span className="text-black-200 text-lg">일반 유저라면?</span>
-            <span className="text-primary-400 ml-2 text-lg font-semibold underline">일반 유저 전용 페이지</span>
+          <Link href="/moverSignup">
+            <span className="text-black-200 text-lg">기사님이신가요?</span>
+            <span className="text-primary-400 ml-2 text-lg font-semibold underline">기사님 전용 페이지</span>
           </Link>
         </div>
 
@@ -149,7 +149,7 @@ const MoverSignupPage = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              {/* 회원가입 버튼 */}
+              {/* 로그인 버튼 */}
               <button
                 type="submit"
                 disabled={!isFormValid}
@@ -157,12 +157,12 @@ const MoverSignupPage = () => {
                   isFormValid ? "bg-primary-400 hover:bg-primary-500 cursor-pointer" : "cursor-not-allowed bg-gray-300"
                 }`}
               >
-                회원가입
+                로그인
               </button>
-              {/* 로그인 링크 */}
+              {/* 회원가입 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
                 <span className="text-black-200 text-lg">이미 무빙 회원이신가요?</span>
-                <Link href="/moverSignin">
+                <Link href="/userSignin">
                   <span className="text-primary-400 text-lg font-semibold underline">로그인</span>
                 </Link>
               </div>
@@ -182,7 +182,7 @@ const MoverSignupPage = () => {
           {deviceType === "tablet" && (
             <div className="relative flex min-w-[180px]">
               <Image
-                src={moverAvatarLg}
+                src={userAvatarLg}
                 alt="moverAvatar"
                 width={180}
                 className="absolute -right-[330px] -bottom-[54px]"
@@ -193,7 +193,7 @@ const MoverSignupPage = () => {
           {deviceType === "desktop" && (
             <div className="relative flex min-w-[420px]">
               <Image
-                src={moverAvatarLg}
+                src={userAvatarLg}
                 alt="moverAvatar"
                 width={420}
                 className="absolute -right-[520px] -bottom-[80px]"
@@ -206,4 +206,4 @@ const MoverSignupPage = () => {
   );
 };
 
-export default MoverSignupPage;
+export default UserSignupPage;
