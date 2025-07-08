@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 // 버튼 상태 타입
 export type TSolidState = "default" | "disabled";
 export type TOutlinedState = "default" | "active" | "done";
@@ -12,14 +10,18 @@ export type TShareType = "clip" | "kakao" | "facebook";
 
 // 버튼 Props 인터페이스
 export interface IButtonProps {
-  variant: TButtonVariant;
-  state?: TSolidState | TOutlinedState;
-  children?: ReactNode;
+  variant: "solid" | "outlined" | "like";
+  state?: "default" | "disabled" | "active" | "done";
+  children?: React.ReactNode;
   onClick?: () => void;
   isEditButton?: boolean;
   className?: string;
   disabled?: boolean;
   isLiked?: boolean;
+  width?: string;
+  height?: string;
+  rounded?: string;
+  style?: React.CSSProperties;
 }
 
 // 공유 버튼 Props 인터페이스
