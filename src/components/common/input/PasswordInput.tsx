@@ -31,28 +31,26 @@ export const PasswordInput = ({
   const error = get(errors, name)?.message;
   const [visible, setVisible] = useState(false);
 
+  const toggleIcon = (
+    <button
+      onClick={() => setVisible(!visible)}
+      className="flex h-6 w-6 items-center justify-center"
+      aria-label={visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
+    >
+      <Image
+        src={visible ? visibilityOff : visibilityOn}
+        alt={visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
+        className="h-6 w-6 object-cover"
+      />
+    </button>
+  );
+
   return (
     <BaseInput
       type={visible ? "text" : "password"}
       placeholder={placeholder}
       error={error}
-      icon={
-        visible ? (
-          <Image
-            onClick={() => setVisible(false)}
-            src={visibilityOff}
-            alt="비밀번호 안보이기"
-            className="h-6 w-6 cursor-pointer"
-          />
-        ) : (
-          <Image
-            onClick={() => setVisible(true)}
-            src={visibilityOn}
-            alt="비밀번호 보이기"
-            className="h-6 w-6 cursor-pointer"
-          />
-        )
-      }
+      icon={toggleIcon}
       iconPosition="right"
       inputClassName={inputClassName}
       errorClassName={errorClassName}

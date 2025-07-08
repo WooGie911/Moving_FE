@@ -40,8 +40,6 @@ export const SearchInput = ({
     clearErrors(name);
   };
 
-  const defaultWrapperClass = "w-[260px] h-[52px] sm:w-[560px] sm:h-[64px]";
-
   return (
     <BaseInput
       type="search"
@@ -52,7 +50,7 @@ export const SearchInput = ({
       iconPosition={iconPosition}
       inputClassName={inputClassName}
       errorClassName={errorClassName}
-      wrapperClassName={`${defaultWrapperClass} ${wrapperClassName}`}
+      wrapperClassName={`w-[260px] h-[52px] sm:w-[560px] sm:h-[64px] ${wrapperClassName}`}
       value={value ?? ""}
       {...register(name, rules)}
     />

@@ -20,7 +20,7 @@ export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpe
     <div className="flex items-center gap-4">
       {userRole === "guest" && deviceType === "desktop" && (
         <Link
-          href="/signin"
+          href="/userSignin"
           className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
         >
           로그인
