@@ -8,13 +8,13 @@ const styles = {
   postalCode: "text-black-250 text-[14px] leading-6 font-semibold md:text-base md:leading-[26px]",
 };
 
-interface AddressCardProps {
+interface IAddressCardProps {
   postalCode?: string;
   roadAddress?: string;
   jibunAddress?: string;
 }
 
-const AddressCard = ({ postalCode, roadAddress, jibunAddress }: AddressCardProps) => {
+const AddressCard = ({ postalCode, roadAddress, jibunAddress }: IAddressCardProps) => {
   return (
     <div className="border-border-light flex min-w-65 flex-col items-start gap-4 rounded-2xl border px-4 pt-5 pb-6 shadow-[2px_2px_10px_0px_rgba(224,224,224,0.20)]">
       <label className={styles.postalCode}>{postalCode || "우편번호"}</label>
