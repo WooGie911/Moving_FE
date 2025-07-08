@@ -19,7 +19,7 @@ export const SideGnb = ({ isOpen, onClose, userRole = "user" }: ISideGnbProps) =
   // 로그인 상태에 따른 메뉴 결정
   const getMenuItems = () => {
     if (userRole === "guest") {
-      return [...GEUST_NAVIGATION_ITEMS, { name: "로그인", href: "/signin" }];
+      return [...GEUST_NAVIGATION_ITEMS, { name: "로그인", href: "/userSignin" }];
     } else {
       return userRole === "user" ? USER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
     }
