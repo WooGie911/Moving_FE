@@ -1,13 +1,13 @@
 import React from "react";
 import clsx from "clsx";
-import type { PaginationSize } from "./types";
+import type { TPaginationSize } from "@/types/pagination";
 
-interface Props {
+interface IPaginationButtonProps {
   children: React.ReactNode;
   active?: boolean;
   disabled?: boolean;
   onClick?: () => void;
-  size?: PaginationSize;
+  size?: TPaginationSize;
   isArrow?: boolean; 
   isRightArrow?: boolean; 
 }
@@ -20,7 +20,7 @@ export default function PaginationButton({
   size = "sm",
   isArrow = false,
   isRightArrow = false,
-}: Props) {
+}: IPaginationButtonProps) {
   return (
     <button
       type="button"

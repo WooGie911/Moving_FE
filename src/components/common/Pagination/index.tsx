@@ -1,13 +1,14 @@
 import React from "react";
-import type { PaginationProps } from "./types";
+import type { IPaginationProps } from "@/types/pagination";
 import { usePagination } from "./usePagination";
 import PaginationButton from "./PaginationButton";
 import PaginationEllipsis from "./PaginationEllipsis";
 
-import IconLeft from "@/assets/icon/arrow/icon-left-pn.png";
-import IconLeftBlack from "@/assets/icon/arrow/icon-left-pn-black.png";
-import IconRight from "@/assets/icon/arrow/icon-right-pn.png";
-import IconRightBlack from "@/assets/icon/arrow/icon-right-pn-black.png";
+import leftActiveIcon from "@/assets/icon/arrow/icon-left-pn-black.png";
+import leftInactiveIcon from "@/assets/icon/arrow/icon-left-pn.png";
+import rightActiveIcon from "@/assets/icon/arrow/icon-right-pn-black.png";
+import rightInactiveIcon from "@/assets/icon/arrow/icon-right-pn.png";
+import Image from "next/image";
 
 export default function Pagination({
   currentPage,
@@ -15,18 +16,13 @@ export default function Pagination({
   onPageChange,
   size = "sm",
   className = "",
-}: PaginationProps) {
+}: IPaginationProps) {
   const pages = usePagination(currentPage, totalPages, size);
 
   if (totalPages <= 1) return null;
 
   const isPrevDisabled = currentPage === 1;
   const isNextDisabled = currentPage === totalPages;
-
-  const leftActiveIcon = IconLeftBlack;
-  const rightActiveIcon = IconRightBlack;
-  const leftInactiveIcon = IconLeft;
-  const rightInactiveIcon = IconRight;
 
   const iconSizeClass = size === "lg" ? "w-12 h-12" : "w-[34px] h-[34px]";
   const navSizeClass = size === "lg" ? "w-[476px] h-12" : "w-[270px] h-[34px]";
@@ -39,9 +35,11 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         isArrow
       >
-        <img
-          src={isPrevDisabled ? leftInactiveIcon.src : leftActiveIcon.src}
+        <Image
+          src={isPrevDisabled ? leftInactiveIcon : leftActiveIcon}
           alt="이전"
+          width={size === "lg" ? 48 : 34}
+          height={size === "lg" ? 48 : 34}
           className={iconSizeClass}
         />
       </PaginationButton>
@@ -66,9 +64,11 @@ export default function Pagination({
         isArrow
         isRightArrow
       >
-        <img
-          src={isNextDisabled ? rightInactiveIcon.src : rightActiveIcon.src}
+        <Image
+          src={isNextDisabled ? rightInactiveIcon : rightActiveIcon}
           alt="다음"
+          width={size === "lg" ? 48 : 34}
+          height={size === "lg" ? 48 : 34}
           className={iconSizeClass}
         />
       </PaginationButton>
