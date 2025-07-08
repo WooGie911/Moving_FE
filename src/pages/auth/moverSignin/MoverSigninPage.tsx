@@ -46,7 +46,7 @@ const MoverSigninPage = () => {
 
   return (
     <div className="bg-primary-400 flex w-full items-center justify-center md:h-[947px] md:px-[52px] lg:h-[942px]">
-      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-center gap-[48px] bg-white px-10 pt-10 md:max-h-[768px] md:rounded-xl">
+      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-center gap-[48px] bg-white px-10 pt-10 md:max-h-[768px] md:rounded-[40px]">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
           <Link href="/">
