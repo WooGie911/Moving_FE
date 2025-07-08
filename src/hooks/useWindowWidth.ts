@@ -1,3 +1,5 @@
+"use client"
+
 import { TDeviceType } from "@/types/deviceType";
 import throttle from "lodash.throttle";
 import { useState, useEffect } from "react";
