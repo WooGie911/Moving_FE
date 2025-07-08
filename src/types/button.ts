@@ -48,3 +48,11 @@ export interface IUseLikeToggleProps {
   moverId: string;
   initialIsLiked?: boolean;
 }
+
+// 체크필터 Props 인터페이스
+export interface CheckFilterProps {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: string;
+  className?: string;
+}

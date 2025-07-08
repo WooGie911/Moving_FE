@@ -1,9 +1,9 @@
-export type PaginationSize = "sm" | "lg";
+export type TPaginationSize = "sm" | "lg";
 
-export interface PaginationProps {
+export interface IPaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  size?: PaginationSize;
+  size?: TPaginationSize;
   className?: string;
 } 
