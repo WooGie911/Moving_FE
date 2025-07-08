@@ -2,8 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
+<<<<<<< HEAD
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IButtonProps } from "@/types/button";
+=======
+import type { IButtonProps } from "@/types/button";
+>>>>>>> 7017946088c784b1ceb58cd8a2f15a80ef3766f8
 import iconEdit from "@/assets/icon/edit/icon-edit.png";
 import iconLikeBlack from "@/assets/icon/like/icon-like-black.png";
 import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
@@ -19,6 +23,10 @@ import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
  * @param className - 버튼 추가 클래스
  * @param disabled - 버튼 비활성화 여부 (solid, outlined 버튼에서만 사용)
  * @param isLiked - 찜(좋아요) 상태 (like 버튼에서만 사용)
+ * @param width - 버튼 너비
+ * @param height - 버튼 높이
+ * @param rounded - 버튼 라운드 여부
+ * @param style - 버튼 스타일
  */
 export const Button = ({
   variant,
@@ -29,45 +37,38 @@ export const Button = ({
   className = "",
   disabled = false,
   isLiked = false,
+  width = "",
+  height = "",
+  rounded = "",
+  style,
 }: IButtonProps) => {
-  const deviceType = useWindowWidth();
-  const isMobile = deviceType === "mobile";
-  const isTablet = deviceType === "tablet";
 
   /* Solid */
   const solidBase =
     "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none ";
-  const solidSize = isMobile
-    ? "h-[54px] w-[327px] text-md rounded-[12px]"
-    : "h-[60px] w-[640px] text-lg rounded-[16px]";
   let solidState = "bg-primary-400 hover:bg-primary-500";
   if (state === "disabled" || disabled) solidState = "bg-gray-300 cursor-not-allowed";
 
   /* Outlined */
   const outlinedBase =
     "flex items-center justify-center border-[1px] text-primary-400 font-semibold transition-colors duration-200 focus:outline-none ";
-  const outlinedSize = isMobile
-    ? "h-[54px] w-[327px] text-md rounded-[12px]"
-    : "h-[60px] w-[640px] text-lg rounded-[16px]";
   let outlinedState = "border-primary-400 text-primary-400 bg-inherit hover:bg-primary-50";
   if (state === "active") outlinedState = "border-primary-400 text-primary-400 bg-primary-100";
   if (state === "done") outlinedState = "border-gray-150 text-gray-600! bg-inherit";
 
   /* Like(찜) 버튼 */
   if (variant === "like") {
-    const likeSize = isMobile || isTablet ? "h-[54px] w-[54px]" : "h-[54px] w-[320px] text-md flex-row";
     const likeIcon = isLiked ? iconLikeBlack : iconUnLike;
     const likeIconSize = 24;
-    const likeText =
-      isMobile || isTablet ? null : <span className="ml-[10px] font-semibold text-black">기사님 찜하기</span>;
     return (
       <button
         type="button"
-        className={`flex items-center justify-center rounded-[16px] border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${likeSize} ${className}`}
+        className={`flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
         onClick={onClick}
+        style={style}
       >
         <Image src={likeIcon} alt="찜" width={likeIconSize} height={likeIconSize} />
-        {likeText}
+        <span className="ml-[10px] hidden font-semibold text-black lg:inline">기사님 찜하기</span>
       </button>
     );
   }
@@ -75,8 +76,8 @@ export const Button = ({
   /* 버튼 클래스 조합 */
   const buttonClass =
     variant === "solid"
-      ? `${solidBase} ${solidSize} ${solidState} ${className}`
-      : `${outlinedBase} ${outlinedSize} ${outlinedState} ${className}`;
+      ? `${solidBase} ${solidState} ${width} ${height} ${rounded} ${className}`
+      : `${outlinedBase} ${outlinedState} ${width} ${height} ${rounded} ${className}`;
 
   return (
     <button
@@ -84,6 +85,7 @@ export const Button = ({
       className={buttonClass}
       onClick={onClick}
       disabled={variant === "solid" ? state === "disabled" || disabled : false}
+      style={style}
     >
       {children}
       {/* 수정 아이콘 */}

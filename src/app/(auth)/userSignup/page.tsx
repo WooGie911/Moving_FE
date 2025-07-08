@@ -1,7 +1,7 @@
-import React from "react";
+import UserSignupPage from "@/pages/auth/userSignup/UserSignupPage";
 
-const SignupPage = () => {
-  return <div>Signup</div>;
+const page = () => {
+  return <UserSignupPage />;
 };
 
-export default SignupPage;
+export default page;

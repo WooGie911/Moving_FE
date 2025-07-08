@@ -13,16 +13,12 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import userAvatar from "@/assets/img/mascot/user-avatartion.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-
-interface IFormValues {
-  email: string;
-  password: string;
-}
+import { ISignInFormValues } from "@/types/auth";
 
 const UserSigninPage = () => {
   const deviceType = useWindowWidth();
 
-  const form = useForm<IFormValues>({
+  const form = useForm<ISignInFormValues>({
     mode: "onChange",
   });
 
@@ -40,14 +36,14 @@ const UserSigninPage = () => {
   // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
-  const onSubmit = (data: IFormValues) => {
+  const onSubmit = (data: ISignInFormValues) => {
     console.log(data);
     // ✅ TODO: 서버 액션 연동 or mutate
   };
 
   return (
-    <div className="bg-primary-400 flex w-full items-center justify-center md:h-[947px] md:px-[52px] lg:h-[942px]">
-      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-center gap-[48px] bg-white px-10 pt-10 md:max-h-[768px] md:rounded-[40px]">
+    <div className="bg-primary-400 flex w-full items-center justify-center overflow-x-hidden md:h-screen md:px-[52px] md:py-10">
+      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-between gap-[48px] bg-white px-10 pt-20 md:rounded-[40px] md:px-10 md:py-[48px]">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
           <Link href="/">
@@ -117,7 +113,7 @@ const UserSigninPage = () => {
           </form>
         </FormProvider>
 
-        {/* 소셜 로그인 */}
+        {/* 소셜 로그인 및 마스코트 캐릭터 배치*/}
         <div className="flex w-full flex-col items-center justify-center gap-8">
           <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
           <div className="flex items-center gap-8">
@@ -125,20 +121,23 @@ const UserSigninPage = () => {
             <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>
+          {deviceType === "tablet" && (
+            <div className="relative flex min-w-[180px]">
+              <Image src={userAvatar} alt="userAvatar" width={180} className="absolute -right-[330px] -bottom-[54px]" />
+            </div>
+          )}
+
+          {deviceType === "desktop" && (
+            <div className="relative flex min-w-[420px]">
+              <Image
+                src={userAvatarLg}
+                alt="userAvatar"
+                width={420}
+                className="absolute -right-[520px] -bottom-[80px]"
+              />
+            </div>
+          )}
         </div>
-
-        {/* 마스코트 캐릭터 */}
-        {deviceType === "tablet" && (
-          <div className="relative flex min-w-[180px]">
-            <Image src={userAvatar} alt="userAvatar" width={180} className="absolute -right-[330px] -bottom-[54px]" />
-          </div>
-        )}
-
-        {deviceType === "desktop" && (
-          <div className="relative flex min-w-[320px]">
-            <Image src={userAvatarLg} alt="userAvatar" width={320} className="absolute -right-[480px] -bottom-[32px]" />
-          </div>
-        )}
       </div>
     </div>
   );
