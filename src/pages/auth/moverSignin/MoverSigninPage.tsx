@@ -74,7 +74,7 @@ const MoverSigninPage = () => {
                 error={errors.email?.message}
                 placeholder="이메일을 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
-                wrapperClassName="w-full"
+                wrapperClassName="w-full sm:w-full"
               />
             </div>
 
@@ -90,7 +90,7 @@ const MoverSigninPage = () => {
                 })}
                 placeholder="비밀번호를 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
-                wrapperClassName="w-full"
+                wrapperClassName="w-full sm:w-full"
               />
             </div>
 
