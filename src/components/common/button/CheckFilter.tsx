@@ -5,13 +5,7 @@ import iconCheckboxSquareInactive from "@/assets/icon/checkbox/icon-checkbox-squ
 import iconFilterActive from "@/assets/icon/filter/icon-filter-active.png";
 import iconFilterInactive from "@/assets/icon/filter/icon-filter-inactive.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-
-interface CheckFilterProps {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  label: string;
-  className?: string;
-}
+import { CheckFilterProps } from "@/types/button";
 
 /**
  * 데스크탑: 네모 체크박스 + 텍스트
