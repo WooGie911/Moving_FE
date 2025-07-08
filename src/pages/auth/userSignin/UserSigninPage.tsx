@@ -10,31 +10,44 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import google from "@/assets/icon/auth/icon-login-google-lg.png";
 import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
 import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
+import userAvatar from "@/assets/img/mascot/user-avatartion.png";
+import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
 
-interface FormValues {
+interface IFormValues {
   email: string;
   password: string;
 }
 
 const UserSigninPage = () => {
-  const form = useForm<FormValues>({
+  const deviceType = useWindowWidth();
+
+  const form = useForm<IFormValues>({
     mode: "onChange",
   });
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid },
   } = form;
 
-  const onSubmit = (data: FormValues) => {
+  // 입력 값 감시
+  const email = watch("email");
+  const password = watch("password");
+
+  // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
+  const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
+
+  const onSubmit = (data: IFormValues) => {
     console.log(data);
     // ✅ TODO: 서버 액션 연동 or mutate
   };
 
   return (
-    <div className="bg-primary-400 flex min-h-screen w-full items-center justify-center px-[52px] py-[65px]">
-      <div className="flex h-full max-h-[868px] w-full max-w-[740px] flex-col items-center justify-center gap-[48px] rounded-xl bg-white px-10 py-17">
+    <div className="bg-primary-400 flex w-full items-center justify-center md:h-[947px] md:px-[52px] lg:h-[942px]">
+      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-center gap-[48px] bg-white px-10 pt-10 md:max-h-[768px] md:rounded-xl">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
           <Link href="/">
@@ -86,7 +99,10 @@ const UserSigninPage = () => {
               {/* 로그인 버튼 */}
               <button
                 type="submit"
-                className="bg-primary-400 hover:bg-primary-500 mt-4 cursor-pointer rounded-xl px-4 py-4 text-lg font-semibold text-white transition"
+                disabled={!isFormValid}
+                className={`mt-4 rounded-xl px-4 py-4 text-lg font-semibold text-white transition ${
+                  isFormValid ? "bg-primary-400 hover:bg-primary-500 cursor-pointer" : "cursor-not-allowed bg-gray-300"
+                }`}
               >
                 로그인
               </button>
@@ -110,6 +126,19 @@ const UserSigninPage = () => {
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>
         </div>
+
+        {/* 마스코트 캐릭터 */}
+        {deviceType === "tablet" && (
+          <div className="relative flex min-w-[180px]">
+            <Image src={userAvatar} alt="userAvatar" width={180} className="absolute -right-[330px] -bottom-[54px]" />
+          </div>
+        )}
+
+        {deviceType === "desktop" && (
+          <div className="relative flex min-w-[320px]">
+            <Image src={userAvatarLg} alt="userAvatar" width={320} className="absolute -right-[480px] -bottom-[32px]" />
+          </div>
+        )}
       </div>
     </div>
   );
