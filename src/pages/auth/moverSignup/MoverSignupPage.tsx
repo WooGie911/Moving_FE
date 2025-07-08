@@ -1,7 +1,7 @@
 import React from "react";
 
-const page = () => {
+const MoverSignupPage = () => {
   return <div>MoverSignup</div>;
 };
 
-export default page;
+export default MoverSignupPage;
