@@ -1,7 +1,8 @@
+import UserReceivedEstimatesPage from "@/pages/estimate/list/user/received/ReceivedEstimatesPage";
 import React from "react";
 
 const ReceivedEstimatesPage = () => {
-  return <div>받은 견적</div>;
+  return <UserReceivedEstimatesPage />;
 };
 
 export default ReceivedEstimatesPage;

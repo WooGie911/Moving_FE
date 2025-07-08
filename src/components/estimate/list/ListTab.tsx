@@ -1,5 +1,5 @@
 import { Tab } from "@/components/common/tab/Tab";
-import React, { Children } from "react";
+import React from "react";
 const UserTabList = [
   { name: "대기 중인 견적", href: "/estimate/list/user/waiting" },
   { name: "받았던 견적", href: "/estimate/list/user/received" },
@@ -11,14 +11,8 @@ const MoverTabList = [
 
 interface IUserType {
   userType: "User" | "Mover";
-  children: React.ReactNode;
 }
 
-export const ListPage = ({ userType, children }: IUserType) => {
-  return (
-    <>
-      <Tab tabList={userType === "User" ? UserTabList : MoverTabList} />
-      {children}
-    </>
-  );
+export const ListTab = ({ userType }: IUserType) => {
+  return <Tab tabList={userType === "User" ? UserTabList : MoverTabList} />;
 };

@@ -1,7 +1,8 @@
+import MoverRequestedEstimateDetailPage from "@/pages/estimate/list/mover/(myEstimate)/requested/[id]/MoverRequestedEstimateDetailPage";
 import React from "react";
 
 const RequestedEstimateDetailPage = () => {
-  return <div>보낸 견적 상세</div>;
+  return <MoverRequestedEstimateDetailPage />;
 };
 
 export default RequestedEstimateDetailPage;
