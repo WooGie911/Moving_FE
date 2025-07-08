@@ -1,7 +1,8 @@
+import UserWaitingEstimatesPage from "@/pages/estimate/list/user/waiting/WaitingEstimatesPage";
 import React from "react";
 
 const WaitingEstimatesPage = () => {
-  return <div>대기중인 견적</div>;
+  return <UserWaitingEstimatesPage />;
 };
 
 export default WaitingEstimatesPage;

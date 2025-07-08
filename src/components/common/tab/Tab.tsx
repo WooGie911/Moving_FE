@@ -17,7 +17,7 @@ export const Tab = ({ tabList }: ITabProps) => {
   const pathname = usePathname();
 
   return (
-    <div className="flex w-full justify-center px-6">
+    <div className="border-border-light flex w-full justify-center border-b-[1px] px-6">
       <nav className="flex w-[var(--breakpoint-lg)] gap-10 overflow-x-auto">
         {tabList.map((tab) => (
           <Link

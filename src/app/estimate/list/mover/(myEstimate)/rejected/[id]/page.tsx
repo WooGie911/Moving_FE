@@ -1,7 +1,8 @@
+import MoverRejectedEstimateDetailPage from "@/pages/estimate/list/mover/(myEstimate)/rejected/[id]/MoverRejectedEstimateDetailPage";
 import React from "react";
 
 const RejectedEstimateDetailPage = () => {
-  return <div>반려한 견적 상세</div>;
+  return <MoverRejectedEstimateDetailPage />;
 };
 
 export default RejectedEstimateDetailPage;

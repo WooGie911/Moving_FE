@@ -37,7 +37,6 @@ export const Button = ({
   rounded = "",
   style,
 }: IButtonProps) => {
-
   /* Solid */
   const solidBase =
     "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none ";

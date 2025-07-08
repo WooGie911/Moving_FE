@@ -1,8 +1,8 @@
 import Image from "next/image";
-import small from "../../../assets/icon/icon-box.png";
-import home from "../../../assets/icon/icon-home.png";
-import office from "../../../assets/icon/icon-office.png";
-import document from "../../../assets/icon/icon-document.png";
+import small from "../../../assets/icon/box/icon-box.png";
+import home from "../../../assets/icon/home/icon-home.png";
+import office from "../../../assets/icon/etc/icon-office.png";
+import document from "../../../assets/icon/document/icon-document.png";
 
 interface IProps {
   type: "small" | "home" | "office" | "document";
