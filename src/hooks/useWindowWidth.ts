@@ -1,3 +1,5 @@
+"use client";
+
 import { TDeviceType } from "@/types/deviceType";
 import throttle from "lodash.throttle";
 import { useState, useEffect } from "react";
@@ -13,8 +15,8 @@ import { useState, useEffect } from "react";
  */
 
 const BREAKPOINTS = {
-  tablet: 768,
-  desktop: 1024,
+  tablet: 744,
+  desktop: 1200,
 };
 
 export const useWindowWidth = (): TDeviceType => {

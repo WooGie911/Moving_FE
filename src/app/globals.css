@@ -47,6 +47,10 @@ input[type="search"]::-webkit-search-cancel-button {
   --line-dark: #e6e6e6;
 }
 
+.bg-orange-gradient {
+  background: linear-gradient(90.32deg, #F95D2E 3.36%, #F9502E 88.38%);
+}
+
 @theme inline {
   /* 브레이크포인트 정의: 기본 반응형 브레이크 포인트를 디자인 요구사항에 따라 변경가능. */
   --breakpoint-md: 744px; /* 태블릿 사이즈 -744px~1199px*/
@@ -141,6 +145,39 @@ Typography Scale
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+@keyframes truck-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-16px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.truck-slide-in {
+  animation: truck-slide-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+
+@keyframes slow-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+.slow-pulse {
+  animation: slow-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 body {
