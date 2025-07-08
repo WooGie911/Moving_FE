@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import clearIcon from "@/assets/icon/etc/icon-x.png";
 
-export interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IBaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
@@ -12,7 +12,7 @@ export interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputEleme
   wrapperClassName?: string;
 }
 
-export interface BaseTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface IBaseTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   textareaClassName?: string;
   errorClassName?: string;
@@ -28,7 +28,7 @@ export const BaseInput = ({
   errorClassName = "",
   wrapperClassName = "",
   ...rest
-}: BaseInputProps) => {
+}: IBaseInputProps) => {
   const inputStyle = `w-full border rounded px-3 py-2 outline-none transition
     ${error ? "border-state-error" : "border-gray-200"}
     ${rest.disabled ? "bg-gray-100 cursor-not-allowed" : ""}
@@ -61,7 +61,7 @@ export const BaseInput = ({
   return (
     <div className={`mb-4 ${defaultWrapperClass} ${wrapperClassName}`}>
       {renderInput()}
-      {error && <p className={`text-state-error mt-1 text-sm ${defaultErrorClass} ${errorClassName}}`}>{error}</p>}
+      {error && <p className={`text-state-error mt-1 text-sm ${defaultErrorClass} ${errorClassName}`}>{error}</p>}
     </div>
   );
 };
@@ -72,7 +72,7 @@ export const BaseTextarea = ({
   errorClassName = "",
   wrapperClassName = "",
   ...rest
-}: BaseTextareaProps) => {
+}: IBaseTextareaProps) => {
   const defaultTextareaClass = "w-[327px] h-[160px] sm:w-[560px] sm:h-[160px]";
   const defaultErrorClass = "h-[26px] text-[13px] sm:h-[30px] sm:text-[16px]";
 
