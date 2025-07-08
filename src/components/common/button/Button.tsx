@@ -2,12 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-<<<<<<< HEAD
-import { useWindowWidth } from "@/hooks/useWindowWidth";
-import { IButtonProps } from "@/types/button";
-=======
 import type { IButtonProps } from "@/types/button";
->>>>>>> 7017946088c784b1ceb58cd8a2f15a80ef3766f8
 import iconEdit from "@/assets/icon/edit/icon-edit.png";
 import iconLikeBlack from "@/assets/icon/like/icon-like-black.png";
 import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
@@ -42,7 +37,6 @@ export const Button = ({
   rounded = "",
   style,
 }: IButtonProps) => {
-
   /* Solid */
   const solidBase =
     "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none ";

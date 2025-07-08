@@ -1,9 +1,9 @@
 import { ListTab } from "@/components/estimate/list/ListTab";
 import React from "react";
-import { RequestQuote } from "./RequestQuote";
-import { CardList } from "../CardList";
+import { RequestQuote } from "../../../../../components/estimate/list/user/waiting/RequestQuote";
+import { CardList } from "../../../../../components/estimate/list/user/CardList";
 
-type Profile = {
+type TProfile = {
   id: number;
   userId: number;
   nickname: string;
@@ -17,12 +17,12 @@ type Profile = {
   description: string;
 };
 
-type Mover = {
+type TMover = {
   id: number;
   email: string;
   name: String;
   currentRole: "CUSTOMER" | "MOVER";
-  profile: Profile;
+  profile: TProfile;
 };
 
 const profile1 = {

@@ -15,7 +15,7 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString();
 };
 
-type Profile = {
+type TProfile = {
   id: number;
   userId: number;
   nickname: string;
@@ -29,12 +29,12 @@ type Profile = {
   description: string;
 };
 
-type Mover = {
+type TMover = {
   id: number;
   email: string;
   name: String;
   currentRole: "CUSTOMER" | "MOVER";
-  profile: Profile;
+  profile: TProfile;
 };
 
 interface ICardListProps {
@@ -44,7 +44,7 @@ interface ICardListProps {
   estimateState: string;
   estimateTitle: string;
   estimatePrice: number;
-  mover: Mover;
+  mover: TMover;
   type: "waiting" | "received";
 }
 //todo Link컴포넌트 연결->상세페이지 이동
