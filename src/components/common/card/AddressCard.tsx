@@ -1,4 +1,5 @@
 import React from "react";
+import { CircleTextLabel } from "../chips/CircleTextLabel";
 
 // 공통 스타일 정의
 const styles = {
@@ -20,16 +21,12 @@ const AddressCard = ({ postalCode, roadAddress, jibunAddress }: IAddressCardProp
       <label className={styles.postalCode}>{postalCode || "우편번호"}</label>
 
       <div className="flex w-full items-start gap-2">
-        <div className="flex items-start gap-2">
-          <label className={styles.label}>도로명</label>
-        </div>
+        <CircleTextLabel text="도로명" />
         <span className={styles.addressText}>{roadAddress || "도로명 주소를 입력해주세요"}</span>
       </div>
 
       <div className="flex w-full items-start gap-2">
-        <div className="flex items-start gap-2">
-          <label className={styles.label}>지번</label>
-        </div>
+        <CircleTextLabel text="지번" />
         <span className={styles.addressText}>{jibunAddress || "지번 주소를 입력해주세요"}</span>
       </div>
 
