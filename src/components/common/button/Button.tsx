@@ -36,6 +36,7 @@ export const Button = ({
   height = "",
   rounded = "",
   style,
+  fontSize = "",
 }: IButtonProps) => {
   /* Solid */
   const solidBase =
@@ -57,7 +58,7 @@ export const Button = ({
     return (
       <button
         type="button"
-        className={`flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
+        className={`text-2lg flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
         onClick={onClick}
         style={style}
       >
@@ -70,8 +71,8 @@ export const Button = ({
   /* 버튼 클래스 조합 */
   const buttonClass =
     variant === "solid"
-      ? `${solidBase} ${solidState} ${width} ${height} ${rounded} ${className}`
-      : `${outlinedBase} ${outlinedState} ${width} ${height} ${rounded} ${className}`;
+      ? `${solidBase} ${solidState} ${width} ${height} ${rounded} ${fontSize} ${className}`
+      : `${outlinedBase} ${outlinedState} ${width} ${height} ${rounded} ${fontSize} ${className}`;
 
   return (
     <button
