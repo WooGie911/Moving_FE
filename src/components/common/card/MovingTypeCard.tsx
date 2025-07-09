@@ -2,7 +2,7 @@ import React from "react";
 import CheckIcon from "@/assets/icon/checkbox/icon-checkbox-circle-active.png";
 import Image from "next/image";
 
-interface MovingTypeCardProps {
+interface IMovingTypeCardProps {
   selected: boolean;
   label: string;
   description: string;
@@ -10,7 +10,7 @@ interface MovingTypeCardProps {
   onClick: () => void;
 }
 
-const MovingTypeCard = ({ selected, label, description, image, onClick }: MovingTypeCardProps) => {
+const MovingTypeCard = ({ selected, label, description, image, onClick }: IMovingTypeCardProps) => {
   return (
     <button
       type="button"
