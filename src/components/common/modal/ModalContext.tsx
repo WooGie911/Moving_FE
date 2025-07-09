@@ -2,26 +2,9 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { Button } from "@/components/common/button/Button";
+import type { IModalButton, IModalOptions, IModalContextType } from "@/types/modal";
 
-interface ModalButton {
-  text: string;
-  onClick: () => void;
-  disabled?: boolean;
-}
-
-export interface ModalOptions {
-  title: string;
-  children: ReactNode;
-  buttons?: ModalButton[];
-  type?: "center" | "bottomSheet"; // 추가
-}
-
-interface ModalContextType {
-  open: (options: ModalOptions) => void;
-  close: () => void;
-}
-
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
+const ModalContext = createContext<IModalContextType | undefined>(undefined);
 
 export function useModal() {
   const ctx = useContext(ModalContext);
@@ -30,9 +13,9 @@ export function useModal() {
 }
 
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [modal, setModal] = useState<ModalOptions | null>(null);
+  const [modal, setModal] = useState<IModalOptions | null>(null);
 
-  const open = (options: ModalOptions) => setModal(options);
+  const open = (options: IModalOptions) => setModal(options);
   const close = () => setModal(null);
 
   return (
@@ -43,7 +26,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function ModalLayout({ title, children, buttons, onClose, type = "center" }: ModalOptions & { onClose: () => void }) {
+function ModalLayout({ title, children, buttons, onClose, type = "center" }: IModalOptions & { onClose: () => void }) {
   // ESC 키로 닫기
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
