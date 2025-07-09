@@ -35,11 +35,11 @@ export const PasswordInput = ({
     <button
       onClick={() => setVisible(!visible)}
       className="flex h-6 w-6 items-center justify-center"
-      aria-label={visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
+      aria-label={!visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
     >
       <Image
-        src={visible ? visibilityOff : visibilityOn}
-        alt={visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
+        src={!visible ? visibilityOff : visibilityOn}
+        alt={!visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
         className="h-6 w-6 object-cover"
       />
     </button>
