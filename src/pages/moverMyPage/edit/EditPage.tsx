@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { Button } from "@/components/common/button/Button";
-import { IEditBasicForm } from "@/types/dto/user.dto";
+import { IEditBasicForm } from "@/types/user";
 import { useRouter } from "next/navigation";
 
 const user = {
