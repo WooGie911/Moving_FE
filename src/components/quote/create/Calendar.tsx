@@ -19,18 +19,13 @@ interface ICalendarProps {
   onChange: (date: Date) => void;
 }
 
-function Calendar({ value, onChange }: ICalendarProps) {
-  // 현재 연/월 상태
+// Calendar 컴포넌트 화살표 함수로 변경
+const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-
-  // 달력 데이터 생성 함수 (아래에서 설명)
   const calendarMatrix = getCalendarMatrix(currentDate);
 
-  // 월 이동 핸들러
   const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
   const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-
-  // 날짜 클릭 핸들러
   const handleDateClick = (date: Date) => onChange(date);
 
   return (
@@ -92,26 +87,18 @@ function Calendar({ value, onChange }: ICalendarProps) {
       ))}
     </div>
   );
-}
+};
 
-// 달력 데이터 생성 함수
-function getCalendarMatrix(date: Date): IDateObj[][] {
+// getCalendarMatrix 함수도 화살표 함수로 변경
+const getCalendarMatrix = (date: Date): IDateObj[][] => {
   const year = date.getFullYear();
   const month = date.getMonth();
-
-  // 이번달 1일의 요일
   const startDay = getDay(startOfMonth(date));
-  // 이번달 마지막 날짜
   const daysInMonth = getDaysInMonth(date);
-
-  // 저번달 마지막 날짜
   const prevMonth = subMonths(date, 1);
   const daysInPrevMonth = getDaysInMonth(prevMonth);
-
-  // 달력에 표시할 날짜 배열
   const days: IDateObj[] = [];
 
-  // 저번달 날짜
   for (let i = startDay - 1; i >= 0; i--) {
     days.push({
       day: daysInPrevMonth - i,
@@ -119,7 +106,6 @@ function getCalendarMatrix(date: Date): IDateObj[][] {
       isOtherMonth: true,
     });
   }
-  // 이번달 날짜
   for (let i = 1; i <= daysInMonth; i++) {
     days.push({
       day: i,
@@ -127,7 +113,6 @@ function getCalendarMatrix(date: Date): IDateObj[][] {
       isOtherMonth: false,
     });
   }
-  // 다음달 날짜
   while (days.length % 7 !== 0) {
     const nextDay: number = days.length - (startDay + daysInMonth) + 1;
     days.push({
@@ -136,13 +121,11 @@ function getCalendarMatrix(date: Date): IDateObj[][] {
       isOtherMonth: true,
     });
   }
-
-  // 2차원 배열(주 단위)로 변환
   const matrix: IDateObj[][] = [];
   for (let i = 0; i < days.length; i += 7) {
     matrix.push(days.slice(i, i + 7));
   }
   return matrix;
-}
+};
 
 export default Calendar;
