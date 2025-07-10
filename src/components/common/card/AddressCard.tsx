@@ -19,7 +19,7 @@ const AddressCard = ({ postalCode, roadAddress, jibunAddress, selected = false }
     <div
       className={`flex min-w-65 flex-col items-start gap-4 rounded-2xl border px-4 pt-5 pb-6 shadow-[2px_2px_10px_0px_rgba(224,224,224,0.20)] transition-colors ${selected ? "border-primary-400 bg-primary-100" : "border-border-light bg-white"} `}
     >
-      <label className={styles.postalCode}>{postalCode || "우편번호"}</label>
+      <span className={styles.postalCode}>{postalCode || "우편번호"}</span>
 
       <div className="flex w-full items-start gap-2">
         <CircleTextLabel text="도로명" />
