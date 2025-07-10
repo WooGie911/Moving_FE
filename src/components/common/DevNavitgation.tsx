@@ -38,7 +38,6 @@ const routeGroups: RouteGroup[] = [
     routes: [
       { name: "프로필 등록", path: "/profile/register" },
       { name: "프로필 수정", path: "/profile/edit" },
-      { name: "기본정보 수정", path: "/moverMyPage/edit" },
     ],
     allowedRoles: ["USER", "MOVER"],
   },
