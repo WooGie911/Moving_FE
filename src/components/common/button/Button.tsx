@@ -36,16 +36,17 @@ export const Button = ({
   height = "",
   rounded = "",
   style,
+  fontSize = "",
 }: IButtonProps) => {
   /* Solid */
   const solidBase =
-    "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none ";
+    "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none cursor-pointer";
   let solidState = "bg-primary-400 hover:bg-primary-500";
   if (state === "disabled" || disabled) solidState = "bg-gray-300 cursor-not-allowed";
 
   /* Outlined */
   const outlinedBase =
-    "flex items-center justify-center border-[1px] text-primary-400 font-semibold transition-colors duration-200 focus:outline-none ";
+    "flex items-center justify-center border-[1px] text-primary-400 font-semibold transition-colors duration-200 focus:outline-none cursor-pointer";
   let outlinedState = "border-primary-400 text-primary-400 bg-inherit hover:bg-primary-50";
   if (state === "active") outlinedState = "border-primary-400 text-primary-400 bg-primary-100";
   if (state === "done") outlinedState = "border-gray-150 text-gray-600! bg-inherit";
@@ -57,7 +58,7 @@ export const Button = ({
     return (
       <button
         type="button"
-        className={`flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
+        className={`text-2lg flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
         onClick={onClick}
         style={style}
       >
@@ -70,8 +71,8 @@ export const Button = ({
   /* 버튼 클래스 조합 */
   const buttonClass =
     variant === "solid"
-      ? `${solidBase} ${solidState} ${width} ${height} ${rounded} ${className}`
-      : `${outlinedBase} ${outlinedState} ${width} ${height} ${rounded} ${className}`;
+      ? `${solidBase} ${solidState} ${width} ${height} ${rounded} ${fontSize} ${className}`
+      : `${outlinedBase} ${outlinedState} ${width} ${height} ${rounded} ${fontSize} ${className}`;
 
   return (
     <button

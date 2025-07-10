@@ -21,6 +21,7 @@ export interface IButtonProps {
   width?: string;
   height?: string;
   rounded?: string;
+  fontSize?: string;
   style?: React.CSSProperties;
 }
 
