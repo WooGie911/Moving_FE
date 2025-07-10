@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 interface RouteGroup {
   title: string;
@@ -10,6 +11,7 @@ interface RouteGroup {
     name: string;
     path: string;
   }>;
+  allowedRoles?: ("guest" | "USER" | "MOVER")[];
 }
 
 const routeGroups: RouteGroup[] = [
@@ -19,13 +21,17 @@ const routeGroups: RouteGroup[] = [
       { name: "홈", path: "/" },
       { name: "404", path: "/not-found" },
     ],
+    allowedRoles: ["guest", "USER", "MOVER"],
   },
   {
     title: "인증",
     routes: [
-      { name: "로그인", path: "/signin" },
-      { name: "회원가입", path: "/signup" },
+      { name: "유저 로그인", path: "/userSignin" },
+      { name: "유저 회원가입", path: "/userSignup" },
+      { name: "기사 로그인", path: "/moverSignin" },
+      { name: "기사 회원가입", path: "/moverSignup" },
     ],
+    allowedRoles: ["guest"],
   },
   {
     title: "프로필",
@@ -34,48 +40,75 @@ const routeGroups: RouteGroup[] = [
       { name: "프로필 수정", path: "/profile/edit" },
       { name: "기본정보 수정", path: "/moverMyPage/edit" },
     ],
+    allowedRoles: ["USER", "MOVER"],
   },
   {
-    title: "견적 (유저)",
+    title: "기사님 견적 받은 요청/ 내 견적 관리",
     routes: [
-      { name: "견적 등록", path: "/estimate/request" },
-      { name: "대기중 견적", path: "/estimate/list/user/waiting" },
-      { name: "대기중 상세", path: "/estimate/list/user/waiting/1" },
-      { name: "받은 견적", path: "/estimate/list/user/received" },
-      { name: "받은 상세", path: "/estimate/list/user/received/1" },
+      { name: "기사님 받은 요청", path: "/estimate/received" },
+      { name: "기사님 보낸 견적 조회", path: "/estimate/request" },
+      { name: "기사님 보낸 견적 조회 상세", path: "/estimate/request/1" },
+      { name: "기사님 반려 요청 조회", path: "/estimate/resolved" },
+      { name: "기사님 반려 요청 상세", path: "/estimate/resolved/1" },
+      { name: "기사님 반려 요청 조회", path: "/estimate/rejected" },
+      { name: "기사님 반려 요청 상세", path: "/estimate/rejected/1" },
     ],
+    allowedRoles: ["MOVER"],
   },
   {
-    title: "견적 (기사)",
+    title: "유저님 내 견적 관리",
     routes: [
-      { name: "받은 요청", path: "/estimate/list/mover/received" },
-      { name: "보낸 견적", path: "/estimate/list/mover/requested" },
-      { name: "보낸 상세", path: "/estimate/list/mover/requested/1" },
-      { name: "반려 견적", path: "/estimate/list/mover/rejected" },
-      { name: "반려 상세", path: "/estimate/list/mover/rejected/1" },
+      { name: "유저님 견적 요청 작성", path: "/quote/create" },
+      { name: "유저님 대기 중인 견적 조회", path: "/quote/pending" },
+      { name: "유저님 대기 중인 견적 조회 상세", path: "/quote/pending/1" },
+      { name: "유저님 받았던 견적 조회", path: "/quote/received" },
+      { name: "유저님 받았던 견적 조회 상세", path: "/quote/received/1" },
     ],
+    allowedRoles: ["USER"],
   },
   {
-    title: "기사님",
+    title: "기사님 찾기",
     routes: [
       { name: "기사님 찾기", path: "/searchMover" },
       { name: "기사님 상세", path: "/searchMover/1" },
-      { name: "찜한 기사님", path: "/favoriteMover" },
     ],
+    allowedRoles: ["guest", "USER"],
+  },
+  {
+    title: "찜한 기사님",
+    routes: [{ name: "찜한 기사님", path: "/favoriteMover" }],
+    allowedRoles: ["USER"],
+  },
+  {
+    title: "기사 마이페이지",
+    routes: [
+      { name: "기사 마이페이지", path: "/moverMyPage" },
+      { name: "기사 정보 수정", path: "/moverMyPage/edit" },
+    ],
+    allowedRoles: ["MOVER"],
   },
   {
     title: "리뷰",
     routes: [
-      { name: "리뷰 목록", path: "/review" },
+      { name: "작성 가능한 리뷰", path: "/review/writable" },
       { name: "작성한 리뷰", path: "/review/written" },
-      { name: "작성 가능", path: "/review/writable" },
     ],
+    allowedRoles: ["USER"],
   },
 ];
 
 export const DevNavitgation = () => {
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
+  const { isLoggedIn, user, login, logout } = useAuth();
+
+  // 현재 유저 역할 결정
+  const currentRole = isLoggedIn ? user?.currentRole : "guest";
+
+  // 현재 유저가 접근 가능한 라우트 그룹 필터링
+  const filteredRouteGroups = routeGroups.filter((group) =>
+    group.allowedRoles?.includes(currentRole as "guest" | "USER" | "MOVER" | "ADMIN"),
+  );
 
   useEffect(() => {
     const stored = localStorage.getItem("devNavVisible");
@@ -87,6 +120,31 @@ export const DevNavitgation = () => {
     setIsVisible(newVisibility);
     localStorage.setItem("devNavVisible", newVisibility.toString());
   };
+
+  const handleLogin = () => {
+    // 테스트용 로그인 (실제로는 적절한 토큰과 유저 정보를 받아야 함)
+    const mockUser = {
+      id: "test-user",
+      email: "test@example.com",
+      currentRole: "USER" as const,
+    };
+    login("mock-token", mockUser);
+  };
+
+  const handleMoverLogin = () => {
+    // 테스트용 기사 로그인
+    const mockMover = {
+      id: "test-mover",
+      email: "mover@example.com",
+      currentRole: "MOVER" as const,
+    };
+    login("mock-token", mockMover);
+  };
+
+  useEffect(() => {
+    console.log("현재 로그인 상태", isLoggedIn);
+    console.log("현재 유저 역할", user?.currentRole || "비회원");
+  }, [isLoggedIn, user]);
 
   // 개발 환경에서만 표시
   if (process.env.NODE_ENV === "production") return null;
@@ -108,11 +166,35 @@ export const DevNavitgation = () => {
           <div className="p-4">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-black-500 text-lg font-semibold">🚧 Dev Navigation</h3>
-              <span className="text-sm text-gray-400">Current: {pathname}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {isLoggedIn ? `${user?.currentRole}: ${user?.email}` : "비회원"}
+                </span>
+                {isLoggedIn ? (
+                  <button onClick={logout} className="rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600">
+                    로그아웃
+                  </button>
+                ) : (
+                  <div className="flex gap-1">
+                    <button
+                      onClick={handleLogin}
+                      className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+                    >
+                      유저 로그인
+                    </button>
+                    <button
+                      onClick={handleMoverLogin}
+                      className="rounded bg-green-500 px-2 py-1 text-xs text-white hover:bg-green-600"
+                    >
+                      기사 로그인
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-              {routeGroups.map((group) => (
+              {filteredRouteGroups.map((group) => (
                 <div key={group.title} className="space-y-2">
                   <h4 className="border-b border-gray-200 pb-1 text-sm font-medium text-gray-700">{group.title}</h4>
                   <div className="space-y-1">

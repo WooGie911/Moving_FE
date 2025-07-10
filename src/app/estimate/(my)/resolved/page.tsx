@@ -1,5 +1,7 @@
 import React from "react";
 
-export const page = () => {
-  return <div>page</div>;
+const page = () => {
+  return <div>완료된 견적 페이지</div>;
 };
+
+export default page;
