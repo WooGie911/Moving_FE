@@ -1,5 +1,5 @@
 import React from "react";
-import { CircleTextLabel } from "../chips/CircleTextLabel";
+import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 
 // 공통 스타일 정의
 const styles = {
