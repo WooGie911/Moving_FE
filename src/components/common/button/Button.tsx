@@ -40,13 +40,13 @@ export const Button = ({
 }: IButtonProps) => {
   /* Solid */
   const solidBase =
-    "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none ";
+    "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none cursor-pointer";
   let solidState = "bg-primary-400 hover:bg-primary-500";
   if (state === "disabled" || disabled) solidState = "bg-gray-300 cursor-not-allowed";
 
   /* Outlined */
   const outlinedBase =
-    "flex items-center justify-center border-[1px] text-primary-400 font-semibold transition-colors duration-200 focus:outline-none ";
+    "flex items-center justify-center border-[1px] text-primary-400 font-semibold transition-colors duration-200 focus:outline-none cursor-pointer";
   let outlinedState = "border-primary-400 text-primary-400 bg-inherit hover:bg-primary-50";
   if (state === "active") outlinedState = "border-primary-400 text-primary-400 bg-primary-100";
   if (state === "done") outlinedState = "border-gray-150 text-gray-600! bg-inherit";

@@ -1,5 +1,7 @@
 import React from "react";
 
-export const page = () => {
+const UserReceivedQuotePage = () => {
   return <div>page</div>;
 };
+
+export default UserReceivedQuotePage;
