@@ -6,7 +6,7 @@ interface AuthState {
   user: {
     id: string;
     email: string;
-    currentRole: "USER" | "ADMIN" | "MOVER";
+    currentRole: "USER" | "MOVER";
   } | null;
   setLogin: (token: string, user: AuthState["user"]) => void;
   setLogout: () => void;

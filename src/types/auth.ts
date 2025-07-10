@@ -6,7 +6,8 @@ export interface ISignInFormValues {
 export interface ISignUpFormValues {
   name: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   password: string;
-  passwordCheck: string;
+  passwordCheck?: string;
+  currentRole: "CUSTOMER" | "MOVER";
 }
