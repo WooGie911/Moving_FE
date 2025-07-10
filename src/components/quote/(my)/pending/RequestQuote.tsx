@@ -17,7 +17,7 @@ export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, 
           <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`견적신청일: ${requestDate}`}</p>
         </div>
 
-        <div className="flex w-full flex-col gap-1 md:flex-row md:gap-3">
+        <div className="flex w-full flex-col gap-1 md:flex-row md:justify-end md:gap-3">
           <div className="flex flex-row justify-between md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">

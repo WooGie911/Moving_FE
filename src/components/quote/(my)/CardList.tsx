@@ -69,7 +69,7 @@ export const CardList = ({
   };
 
   return (
-    <div className="border-border-light flex max-w-[327px] flex-col items-center justify-center gap-4 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] lg:max-w-[558px]">
+    <div className="border-border-light flex w-full max-w-[327px] flex-col items-center justify-center gap-4 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] lg:max-w-[558px]">
       {/* 라벨 및 견적서 상태 영역 */}
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row gap-2">
@@ -80,61 +80,68 @@ export const CardList = ({
           <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateState}</p>
         </div>
       </div>
-      {/* 견적서 타이틀 영역 */}
-      <h1 className="text-black-300 w-full text-[16px] leading-[26px] font-semibold">{estimateTitle}</h1>
-      {/* 기사님 프로필 영역 */}
-      <div className="flex w-full">
-        <div className="border-border-light flex w-full flex-row items-center justify-center gap-2 border-b-1 pt-3 pb-5">
-          {/* 좌측 프로필 이미지 */}
-          <Image
-            src={mover.profile.profileImage ? mover.profile.profileImage : defaultProfile}
-            alt="profile"
-            width={50}
-            height={50}
-          />
-          {/* 프로필 이미지 외 모든 프로필 정보*/}
-          <div className="border-border-light flex w-full flex-col items-start justify-center gap-1 pt-4 pb-5">
-            {/* 기사님 별명과 찜 횟수 영역 */}
-            <div className="flex w-full flex-row items-center justify-between">
-              <div className="flex flex-row items-center justify-center gap-1">
-                <Image src={chat} alt="chat" width={20} height={20} />
-                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.nickname} 기사님`}</p>
-              </div>
+      <div className="flex w-full flex-col items-center justify-center gap-1">
+        {/* 견적서 타이틀 영역 */}
+        <h1 className="text-black-300 w-full text-[16px] leading-[26px] font-semibold">{estimateTitle}</h1>
+        {/* 기사님 프로필 영역 */}
+        <div className="flex w-full">
+          <div className="border-border-light flex w-full flex-row items-center justify-center gap-2 border-b-1 pt-3 pb-5">
+            {/* 좌측 프로필 이미지 */}
+            <Image
+              src={mover.profile.profileImage ? mover.profile.profileImage : defaultProfile}
+              alt="profile"
+              width={50}
+              height={50}
+            />
+            {/* 프로필 이미지 외 모든 프로필 정보*/}
+            <div className="border-border-light flex w-full flex-col items-start justify-center gap-1">
+              {/* 기사님 별명과 찜 횟수 영역 */}
+              <div className="flex w-full flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <Image src={chat} alt="chat" width={20} height={20} />
+                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.nickname} 기사님`}</p>
+                </div>
 
-              <div className="flex flex-row items-center justify-center gap-1">
-                <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
-                  <Image src={isLiked ? like_red : like_white} alt="like" width={20} height={20} />
-                </button>
-                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{mover.profile.favoriteCount}</p>
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <button
+                    className="flex cursor-pointer flex-row items-center justify-center"
+                    onClick={handleLikeClick}
+                  >
+                    <Image src={isLiked ? like_red : like_white} alt="like" width={20} height={20} />
+                  </button>
+                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">{mover.profile.favoriteCount}</p>
+                </div>
               </div>
-            </div>
-            {/* 기사님 평점과 경력 확정건수 영역 */}
-            <div className="flex w-full flex-row items-center justify-start">
-              <div className="flex flex-row items-center justify-center gap-1">
-                <Image src={star} alt="star" width={20} height={20} />
-                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.profile.avgRating}</p>
-                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.profile.reviewCount})`}</p>
-              </div>
-              <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
+              {/* 기사님 평점과 경력 확정건수 영역 */}
+              <div className="flex w-full flex-row items-center justify-start">
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <Image src={star} alt="star" width={20} height={20} />
+                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.profile.avgRating}</p>
+                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.profile.reviewCount})`}</p>
+                </div>
+                <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-              <div className="flex flex-row items-center justify-center gap-1">
-                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{"경력"}</p>
-                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.experience}년`}</p>
-              </div>
-              <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">경력</p>
+                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.experience}년`}</p>
+                </div>
+                <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-              <div className="flex flex-row items-center justify-center gap-1">
-                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.completedCount}건`}</p>
-                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{"확정"}</p>
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.completedCount}건`}</p>
+                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">확정</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       {/* 견적서 금액 영역 */}
-      <div className="flex w-full flex-row items-center justify-between">
-        <p className="text-[14px] leading-[24px] font-normal text-gray-300">{"견적 금액"}</p>
-        <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${formatNumber(estimatePrice)}원`}</p>
+      <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
+        <p className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium">
+          견적 금액
+        </p>
+        <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}원`}</p>
       </div>
       {type === "pending" ? (
         <div className="flex w-full flex-col items-center justify-center">
