@@ -1,34 +1,43 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
+import React from "react";
 import { Button } from "@/components/common/button/Button";
-import type { IModalButton, IModalOptions, IModalContextType } from "@/types/modal";
+import type { IModalButton, IModalOptions } from "@/types/modal";
+import { create } from "zustand";
 
-const ModalContext = createContext<IModalContextType | undefined>(undefined);
-
-export function useModal() {
-  const ctx = useContext(ModalContext);
-  if (!ctx) throw new Error("모달 컨텍스트를 찾을 수 없습니다.");
-  return ctx;
+// zustand store 정의
+interface ModalStore {
+  modal: IModalOptions | null;
+  open: (options: IModalOptions) => void;
+  close: () => void;
 }
 
-export function ModalProvider({ children }: { children: ReactNode }) {
-  const [modal, setModal] = useState<IModalOptions | null>(null);
+export const useModalStore = create<ModalStore>((set) => ({
+  modal: null,
+  open: (options) => set({ modal: options }),
+  close: () => set({ modal: null }),
+}));
 
-  const open = (options: IModalOptions) => setModal(options);
-  const close = () => setModal(null);
+export function useModal() {
+  const open = useModalStore((state) => state.open);
+  const close = useModalStore((state) => state.close);
+  return { open, close };
+}
+
+export function ModalProvider({ children }: { children: React.ReactNode }) {
+  const modal = useModalStore((state) => state.modal);
+  const close = useModalStore((state) => state.close);
 
   return (
-    <ModalContext.Provider value={{ open, close }}>
+    <>
       {children}
       {modal && <ModalLayout {...modal} onClose={close} />}
-    </ModalContext.Provider>
+    </>
   );
 }
 
 function ModalLayout({ title, children, buttons, onClose, type = "center" }: IModalOptions & { onClose: () => void }) {
-  // ESC 키로 닫기
-  useEffect(() => {
+  React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -38,8 +47,7 @@ function ModalLayout({ title, children, buttons, onClose, type = "center" }: IMo
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // 바깥 영역 클릭 시 닫기
-  const handleBackdropClick = useCallback(
+  const handleBackdropClick = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) {
         onClose();
@@ -48,10 +56,9 @@ function ModalLayout({ title, children, buttons, onClose, type = "center" }: IMo
     [onClose],
   );
 
-  // type이 bottomSheet일 때 PC/태블릿에서는 center로 강제
-  const [responsiveType, setResponsiveType] = useState(type);
+  const [responsiveType, setResponsiveType] = React.useState(type);
 
-  useEffect(() => {
+  React.useEffect(() => {
     function handleResize() {
       if (type === "bottomSheet") {
         setResponsiveType(window.innerWidth < 768 ? "bottomSheet" : "center");

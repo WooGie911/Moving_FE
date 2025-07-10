@@ -1,10 +1,10 @@
 import React from "react";
 
-interface ProgressBarProps {
+interface IProgressBarProps {
   value: number; // 0~100 (진행률 %)
 }
 
-const ProgressBar = ({ value }: ProgressBarProps) => {
+const ProgressBar = ({ value }: IProgressBarProps) => {
   // 0~100 사이로 제한
   const safeValue = Math.max(0, Math.min(100, value));
 
