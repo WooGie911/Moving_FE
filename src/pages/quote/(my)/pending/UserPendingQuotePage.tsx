@@ -1,50 +1,8 @@
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import { CardList } from "@/components/quote/(my)/CardList";
 import { RequestQuote } from "@/components/quote/(my)/pending/RequestQuote";
+import { mover1 } from "@/types/userQuote";
 import React from "react";
-
-type TProfile = {
-  id: number;
-  userId: number;
-  nickname: string;
-  profileImage?: string | undefined | "";
-  experience?: number; // 경력
-  introduction: string;
-  completedCount: number; // 완료된 이사 건수
-  avgRating: number; // 평균 평점
-  reviewCount: number; // 리뷰 총 개수
-  favoriteCount: number; // 찜한 사용자 수
-  description: string;
-};
-
-type TMover = {
-  id: number;
-  email: string;
-  name: String;
-  currentRole: "CUSTOMER" | "MOVER";
-  profile: TProfile;
-};
-
-const profile1 = {
-  id: 1,
-  userId: 1,
-  nickname: "김코드",
-  profileImage: "",
-  experience: 10,
-  introduction: "안녕하세요, 김코드입니다.",
-  completedCount: 99,
-  avgRating: 4.8,
-  reviewCount: 46,
-  favoriteCount: 33,
-  description: "안녕하세요, 김코드입니다.",
-};
-const mover1 = {
-  id: 1,
-  email: "test@test.com",
-  name: "김코드",
-  currentRole: "MOVER" as const,
-  profile: profile1,
-};
 
 export const UserPendingQuotePage = () => {
   return (
@@ -64,7 +22,7 @@ export const UserPendingQuotePage = () => {
               movingType="office"
               isDesignated={true}
               estimateId="0"
-              estimateState="견적 대기"
+              estimateState="PENDING"
               estimateTitle="사무실 이사전문 김코드"
               estimatePrice={170000}
               type="pending"
@@ -74,7 +32,7 @@ export const UserPendingQuotePage = () => {
               movingType="home"
               isDesignated={true}
               estimateId="1"
-              estimateState="견적 대기"
+              estimateState="PENDING"
               estimateTitle="예시 견적서 1"
               estimatePrice={170000}
               type="pending"
@@ -84,7 +42,7 @@ export const UserPendingQuotePage = () => {
               movingType="small"
               isDesignated={false}
               estimateId="2"
-              estimateState="견적 대기"
+              estimateState="PENDING"
               estimateTitle="예시 견적서 2"
               estimatePrice={100000}
               type="pending"
@@ -95,7 +53,7 @@ export const UserPendingQuotePage = () => {
               movingType="small"
               isDesignated={false}
               estimateId="3"
-              estimateState="견적 대기"
+              estimateState="PENDING"
               estimateTitle="예시 견적서 3"
               estimatePrice={100000}
               type="pending"
