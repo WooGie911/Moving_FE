@@ -12,7 +12,6 @@ interface ILogoProps {
 }
 
 export const Logo = ({ size = "mobile", userRole = "guest" }: ILogoProps) => {
-  console.log(size);
   return (
     <Link href="/">
       {userRole !== "guest" && size === "mobile" ? (

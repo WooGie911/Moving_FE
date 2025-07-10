@@ -13,6 +13,7 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
+import authApi from "@/lib/api/auth.api";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
@@ -31,16 +32,28 @@ const UserSignupPage = () => {
   // 입력 값 감시
   const name = watch("name");
   const email = watch("email");
-  const phone = watch("phone");
+  const phoneNumber = watch("phoneNumber");
   const password = watch("password");
   const passwordCheck = watch("passwordCheck");
 
   // 회원 가입 버튼 활성화 조건 (값 존재 + validation 통과)
-  const isFormValid = name && email && phone && password && passwordCheck && isValid;
+  const isFormValid = name && email && phoneNumber && password && passwordCheck && isValid;
 
-  const onSubmit = (data: ISignUpFormValues) => {
-    console.log(data);
-    // ✅ TODO: 서버 액션 연동 or mutate
+  const onSubmit = async (data: ISignUpFormValues) => {
+    const signUpData = {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      currentRole: "CUSTOMER" as const,
+    };
+
+    try {
+      const response = await authApi.signUp(signUpData);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -100,14 +113,14 @@ const UserSignupPage = () => {
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">전화번호</span>
               <BaseInput
-                {...register("phone", {
+                {...register("phoneNumber", {
                   required: "전화번호는 필수 입력입니다.",
                   pattern: {
                     value: /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/,
                     message: "유효한 전화번호 형식이 아닙니다. ex) 01012345678",
                   },
                 })}
-                error={errors.phone?.message}
+                error={errors.phoneNumber?.message}
                 placeholder="전화번호를 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"

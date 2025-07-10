@@ -7,8 +7,10 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   //   // ✅ 쿠키에서 토큰 가져오기
-  //   const accessToken = request.cookies.get("accessToken")?.value;
-  //   const refreshToken = request.cookies.get("refreshToken")?.value;
+  const accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
+
+  console.log(accessToken, refreshToken);
 
   //   /**
   //    * ✅ 토큰 기반 유저 역할 추출
