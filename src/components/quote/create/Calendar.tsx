@@ -7,17 +7,7 @@ import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
 import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
-
-interface IDateObj {
-  day: number;
-  date: Date;
-  isOtherMonth: boolean;
-}
-
-interface ICalendarProps {
-  value: Date | null;
-  onChange: (date: Date) => void;
-}
+import { ICalendarProps, IDateObj } from "@/types/quote";
 
 // Calendar 컴포넌트 화살표 함수로 변경
 const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
@@ -29,7 +19,7 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
   const handleDateClick = (date: Date) => onChange(date);
 
   return (
-    <div className="mx-auto min-w-[327px] pb-[2px] md:min-w-[327px] lg:max-w-160">
+    <div className="w-full pb-[2px]">
       {/* 연/월, 이전/다음 버튼 */}
       <div className="mt-[14px] flex w-full items-center justify-between px-[14px] py-[11px]">
         <button onClick={handlePrevMonth}>
@@ -71,7 +61,7 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
             const isCurrentDay = isToday(dateObj.date);
 
             const cellClass = [
-              "flex-1 aspect-square flex items-center justify-center mx-[2px] my-[2px] cursor-pointer select-none",
+              "basis-[14.28%] aspect-square flex items-center justify-center p-0 cursor-pointer select-none",
               isPrevOrNextMonth ? "text-gray-300" : "text-gray-900",
               isCurrentDay ? "font-black" : "",
               isSelected ? "bg-primary-400 rounded-full text-white" : "",
