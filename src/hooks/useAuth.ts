@@ -1,21 +1,27 @@
+import authApi from "@/lib/api/auth.api";
 import { useAuthStore } from "@/stores/authStore ";
 
-type User = {
-  id: string;
-  email: string;
-  currentRole: "USER" | "ADMIN" | "MOVER";
-};
-
 export const useAuth = () => {
-  const { isLoggedIn, user, accessToken, setLogin, setLogout } = useAuthStore();
+  const { isLoggedIn, user, setLogin, setLogout } = useAuthStore();
 
-  const login = (token: string, user: User) => {
-    setLogin(token, user);
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await authApi.signIn({
+        email,
+        password,
+      });
+
+      setLogin(response.user);
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const logout = () => {
     setLogout();
   };
 
-  return { isLoggedIn, user, accessToken, login, logout };
+  return { isLoggedIn, user, login, logout };
 };

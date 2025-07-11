@@ -13,8 +13,11 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { ISignInFormValues } from "@/types/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 const MoverSigninPage = () => {
+  const { login } = useAuth();
+
   const deviceType = useWindowWidth();
 
   const form = useForm<ISignInFormValues>({
@@ -35,9 +38,12 @@ const MoverSigninPage = () => {
   // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
-  const onSubmit = (data: ISignInFormValues) => {
-    console.log(data);
-    // ✅ TODO: 서버 액션 연동 or mutate
+  const onSubmit = async () => {
+    try {
+      await login(email, password);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
