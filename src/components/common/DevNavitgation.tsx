@@ -5,23 +5,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
-interface RouteGroup {
+interface IRouteGroup {
   title: string;
   routes: Array<{
     name: string;
     path: string;
   }>;
-  allowedRoles?: ("guest" | "USER" | "MOVER")[];
+  allowedRoles?: ("guest" | "CUSTOMER" | "MOVER")[];
 }
 
-const routeGroups: RouteGroup[] = [
+const routeGroups: IRouteGroup[] = [
   {
     title: "메인",
     routes: [
       { name: "홈", path: "/" },
       { name: "404", path: "/not-found" },
     ],
-    allowedRoles: ["guest", "USER", "MOVER"],
+    allowedRoles: ["guest", "CUSTOMER", "MOVER"],
   },
   {
     title: "인증",
@@ -39,7 +39,7 @@ const routeGroups: RouteGroup[] = [
       { name: "프로필 등록", path: "/profile/register" },
       { name: "프로필 수정", path: "/profile/edit" },
     ],
-    allowedRoles: ["USER", "MOVER"],
+    allowedRoles: ["CUSTOMER", "MOVER"],
   },
   {
     title: "기사님 견적 받은 요청/ 내 견적 관리",
@@ -63,7 +63,7 @@ const routeGroups: RouteGroup[] = [
       { name: "유저님 받았던 견적 조회", path: "/quote/received" },
       { name: "유저님 받았던 견적 조회 상세", path: "/quote/received/1" },
     ],
-    allowedRoles: ["USER"],
+    allowedRoles: ["CUSTOMER"],
   },
   {
     title: "기사님 찾기",
@@ -71,12 +71,12 @@ const routeGroups: RouteGroup[] = [
       { name: "기사님 찾기", path: "/searchMover" },
       { name: "기사님 상세", path: "/searchMover/1" },
     ],
-    allowedRoles: ["guest", "USER"],
+    allowedRoles: ["guest", "CUSTOMER"],
   },
   {
     title: "찜한 기사님",
     routes: [{ name: "찜한 기사님", path: "/favoriteMover" }],
-    allowedRoles: ["USER"],
+    allowedRoles: ["CUSTOMER"],
   },
   {
     title: "기사 마이페이지",
@@ -92,7 +92,7 @@ const routeGroups: RouteGroup[] = [
       { name: "작성 가능한 리뷰", path: "/review/writable" },
       { name: "작성한 리뷰", path: "/review/written" },
     ],
-    allowedRoles: ["USER"],
+    allowedRoles: ["CUSTOMER"],
   },
 ];
 
@@ -102,11 +102,11 @@ export const DevNavitgation = () => {
   const { isLoggedIn, user, login, logout } = useAuth();
 
   // 현재 유저 역할 결정
-  const currentRole = isLoggedIn ? user?.currentRole : "guest";
+  const currentRole = isLoggedIn ? user?.userRole : "guest";
 
   // 현재 유저가 접근 가능한 라우트 그룹 필터링
   const filteredRouteGroups = routeGroups.filter((group) =>
-    group.allowedRoles?.includes(currentRole as "guest" | "USER" | "MOVER" | "ADMIN"),
+    group.allowedRoles?.includes(currentRole as "guest" | "CUSTOMER" | "MOVER"),
   );
 
   useEffect(() => {
@@ -120,29 +120,30 @@ export const DevNavitgation = () => {
     localStorage.setItem("devNavVisible", newVisibility.toString());
   };
 
+  // TODO : 현재 로그인 정보가 맞지 않음 서버에 해당 데이터 넣고 다시 테스트
   const handleLogin = () => {
-    // 테스트용 로그인 (실제로는 적절한 토큰과 유저 정보를 받아야 함)
-    const mockUser = {
-      id: "test-user",
-      email: "test@example.com",
-      currentRole: "USER" as const,
+    // 테스트용 로그인
+    const mockCustomer = {
+      email: "testCustomer@test.com",
+      password: "1rhdiddl!",
     };
-    login("mock-token", mockUser);
+    login(mockCustomer.email, mockCustomer.password);
   };
 
   const handleMoverLogin = () => {
     // 테스트용 기사 로그인
     const mockMover = {
-      id: "test-mover",
-      email: "mover@example.com",
-      currentRole: "MOVER" as const,
+      email: "testMover@test.com",
+      password: "1rhdiddl!",
     };
-    login("mock-token", mockMover);
+    login(mockMover.email, mockMover.password);
   };
 
   useEffect(() => {
+    // TODO : 추후 삭제 예정
     console.log("현재 로그인 상태", isLoggedIn);
-    console.log("현재 유저 역할", user?.currentRole || "비회원");
+    console.log("현재 유저 역할", user?.userRole || "비회원");
+    console.log("현재 유저 이메일", user?.userName || "비회원");
   }, [isLoggedIn, user]);
 
   // 개발 환경에서만 표시
@@ -166,9 +167,7 @@ export const DevNavitgation = () => {
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-black-500 text-lg font-semibold">🚧 Dev Navigation</h3>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">
-                  {isLoggedIn ? `${user?.currentRole}: ${user?.email}` : "비회원"}
-                </span>
+                <span className="text-sm text-gray-600">{isLoggedIn ? `이름: ${user?.userName}` : "비회원"}</span>
                 {isLoggedIn ? (
                   <button onClick={logout} className="rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600">
                     로그아웃

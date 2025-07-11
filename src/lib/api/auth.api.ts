@@ -10,6 +10,7 @@ const authApi = {
       },
       method: "POST",
       body: JSON.stringify(data),
+      credentials: "include",
     });
     return response.json();
   },
@@ -21,6 +22,7 @@ const authApi = {
       },
       method: "POST",
       body: JSON.stringify(data),
+      credentials: "include",
     });
     return response.json();
   },
