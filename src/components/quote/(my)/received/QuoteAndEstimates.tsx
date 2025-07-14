@@ -1,15 +1,7 @@
 import React from "react";
 import QuoteInfo from "./QuoteInfo";
 import { EstimateListSection } from "./EstimateListSection";
-import { IQuoteProps, mockestimateList } from "@/types/userQuote";
-
-const QuoteInfo1: IQuoteProps = {
-  movingType: "small",
-  requestDate: "2025년 6월 24일",
-  movingDate: "2025년 7월 8일(화)",
-  startPoint: "서울시 중랑구 능동로 21길",
-  endPoint: "경기도 수원시 팔달구 팔달로 123길",
-};
+import { mockestimateList, QuoteInfo1 } from "@/types/userQuote";
 
 export const QuoteAndEstimates = () => {
   return (

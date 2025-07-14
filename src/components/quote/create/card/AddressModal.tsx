@@ -4,10 +4,12 @@ import AddressCard from "./AddressCard";
 import { Button } from "@/components/common/button/Button";
 import { BaseInput } from "@/components/common/input/BaseInput";
 import { IAddressModalProps, IDaumAddress } from "@/types/quote";
+import { useLanguageStore } from "@/stores/languageStore";
 
 const AddressModal: React.FC<IAddressModalProps> = ({ onComplete, onClose }) => {
   const [base, setBase] = useState<IDaumAddress | null>(null);
   const [detail, setDetail] = useState("");
+  const { t } = useLanguageStore();
 
   const handleComplete = () => {
     if (base && detail) {
@@ -23,7 +25,7 @@ const AddressModal: React.FC<IAddressModalProps> = ({ onComplete, onClose }) => 
           <div className="mt-2">
             <BaseInput
               type="text"
-              placeholder="상세주소 (예: 101동 202호)"
+              placeholder={t("quote.detailAddressPlaceholder")}
               value={detail}
               onChange={(e) => setDetail(e.target.value)}
               inputClassName="w-full border rounded px-3 py-2"
@@ -48,7 +50,7 @@ const AddressModal: React.FC<IAddressModalProps> = ({ onComplete, onClose }) => 
           disabled={!base || !detail}
           onClick={handleComplete}
         >
-          선택완료
+          {t("quote.completeSelection")}
         </Button>
       )}
     </div>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 
 interface IGnbActionsProps {
   userRole: TUserRole;
@@ -18,6 +19,9 @@ export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpe
 
   return (
     <div className="flex items-center gap-4">
+      {/* 언어 변경 버튼 */}
+      <LanguageSwitcher />
+
       {userRole === "guest" && deviceType === "desktop" && (
         <Link
           href="/userSignin"

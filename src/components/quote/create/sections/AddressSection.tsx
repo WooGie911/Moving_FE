@@ -7,16 +7,21 @@ import {
   addressSectionLastClass,
 } from "@/constant/quoteStyles";
 import { IAddress, IAddressSectionProps } from "@/types/quote";
+import { useLanguageStore } from "@/stores/languageStore";
 
-const AddressSection: React.FC<IAddressSectionProps> = ({ label, value, onClick }) => (
-  <div className={label === "출발지" ? addressSectionClass : addressSectionLastClass}>
-    <span className={sectionLabelClass}>{label}</span>
-    <ChooseAddressBtn className={addressBtnClass} onClick={onClick}>
-      {value.roadAddress
-        ? `${value.roadAddress}${value.detailAddress ? ` ${value.detailAddress}` : ""}`
-        : `${label} 선택하기`}
-    </ChooseAddressBtn>
-  </div>
-);
+const AddressSection: React.FC<IAddressSectionProps> = ({ label, value, onClick }) => {
+  const { t } = useLanguageStore();
+  const isDeparture = label === "departure";
+  return (
+    <div className={isDeparture ? addressSectionClass : addressSectionLastClass}>
+      <span className={sectionLabelClass}>{t(`quote.${label}`)}</span>
+      <ChooseAddressBtn className={addressBtnClass} onClick={onClick}>
+        {value.roadAddress
+          ? `${value.roadAddress}${value.detailAddress ? ` ${value.detailAddress}` : ""}`
+          : `${t(`quote.${label}`)} ${t("quote.selectAddress")}`}
+      </ChooseAddressBtn>
+    </div>
+  );
+};
 
 export default AddressSection;
