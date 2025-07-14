@@ -1,6 +1,7 @@
 // src/middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { decodeAccessToken, DecodedTokenPayload } from "./utils/decodeAccessToken";
+import { TUserRole } from "./types/user.types";
 
 // ✅ 미들웨어 엔트리 함수
 export async function middleware(request: NextRequest) {
@@ -9,22 +10,20 @@ export async function middleware(request: NextRequest) {
   // ✅ 쿠키에서 토큰 가져오기
   const accessToken = request.cookies.get("accessToken")?.value;
 
-  console.log("Middleware - accessToken:", request.cookies);
-
   /**
    * ✅ 토큰 기반 유저 역할 추출
    * - accessToken이 존재하면 decode하여 role 추출
    * - 없으면 undefined
    */
-  let userRole: "CUSTOMER" | "MOVER" | undefined;
+  let userRole: TUserRole | undefined;
   let decodedToken: DecodedTokenPayload | null = null;
 
   if (accessToken) {
     try {
       decodedToken = await decodeAccessToken(accessToken);
-      userRole = decodedToken?.role;
+      userRole = decodedToken?.role as TUserRole;
     } catch (error) {
-      console.error("Token decoding failed", error);
+      console.error("❌ 토큰 디코딩 실패:", error);
     }
   }
 
@@ -52,10 +51,30 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/quote") || pathname.startsWith("/favoriteMover") || pathname.startsWith("/review");
 
   /**
-   * ✅ 인증된 사용자가 로그인/회원가입 페이지 접근 시 홈으로 리디렉션
+   * ✅ 홈 페이지 접근 제어 (GUEST 전용)
+   * 인증된 사용자가 홈에 접근하면 역할에 따라 리디렉션
    */
-  if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL("/", request.url));
+
+  if (pathname === "/" && isAuthenticated && userRole) {
+    if (userRole === "CUSTOMER") {
+      return NextResponse.redirect(new URL("/searchMover", request.url));
+    }
+    if (userRole === "MOVER") {
+      console.log("MOVER 접근");
+      return NextResponse.redirect(new URL("/estimate/received", request.url));
+    }
+  }
+
+  /**
+   * ✅ 인증된 사용자가 로그인/회원가입 페이지 접근 시 역할별 페이지로 리디렉션
+   */
+  if (isAuthRoute && isAuthenticated && userRole) {
+    if (userRole === "CUSTOMER") {
+      return NextResponse.redirect(new URL("/searchMover", request.url));
+    }
+    if (userRole === "MOVER") {
+      return NextResponse.redirect(new URL("/estimate/received", request.url));
+    }
   }
 
   /**
@@ -71,12 +90,12 @@ export async function middleware(request: NextRequest) {
   if (isAuthenticated && userRole) {
     // 기사 전용 페이지에 고객이 접근하는 경우
     if (isMoverOnlyRoute && userRole === "CUSTOMER") {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/searchMover", request.url));
     }
 
     // 고객 전용 페이지에 기사가 접근하는 경우
     if (isCustomerOnlyRoute && userRole === "MOVER") {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/estimate/received", request.url));
     }
   }
 

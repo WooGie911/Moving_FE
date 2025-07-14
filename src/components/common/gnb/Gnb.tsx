@@ -3,19 +3,18 @@
 import React, { useState } from "react";
 import { SideGnb } from "./SideGnb";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
-import { TUserRole } from "@/types/userRole";
 import { LogoAndTab } from "./LogoAndTab";
 import { GnbActions } from "./GnbActions";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const Gnb = () => {
+  const { user } = useAuth();
+  const deviceType = useWindowWidth();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // TODO: 추후 중앙 상태관리에서 가져오도록 수정
-  const [userRole] = useState<TUserRole>("guest");
-  // const [userRole] = useState<TUserRole>("user");
-  // const [userRole] = useState<TUserRole>("mover");
-
-  const deviceType = useWindowWidth();
+  const userRole = user?.currentRole || "GUEST";
+  const userName = user?.name || "";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -35,6 +34,7 @@ export const Gnb = () => {
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
               <GnbActions
                 userRole={userRole}
+                userName={userName}
                 deviceType={deviceType}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}
@@ -46,6 +46,7 @@ export const Gnb = () => {
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
               <GnbActions
                 userRole={userRole}
+                userName={userName}
                 deviceType={deviceType}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}

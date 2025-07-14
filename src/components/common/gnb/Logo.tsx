@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import fulllogo from "@/assets/img/logo/fulllogo-lg.png";
 import logo from "@/assets/img/logo/logo-l.png";
-import { TUserRole } from "@/types/userRole";
+import { TUserRole } from "@/types/user.types";
 import { TDeviceType } from "@/types/deviceType";
 
 interface ILogoProps {
@@ -11,10 +11,10 @@ interface ILogoProps {
   userRole: TUserRole;
 }
 
-export const Logo = ({ size = "mobile", userRole = "guest" }: ILogoProps) => {
+export const Logo = ({ size = "mobile", userRole = "GUEST" }: ILogoProps) => {
   return (
     <Link href="/">
-      {userRole !== "guest" && size === "mobile" ? (
+      {userRole !== "GUEST" && size === "mobile" ? (
         <Image src={logo} alt="logo" width={32} height={32} />
       ) : (
         <Image src={fulllogo} alt="logo" width={size === "desktop" ? 116 : 88} height={size === "desktop" ? 44 : 34} />

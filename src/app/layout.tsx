@@ -4,7 +4,6 @@ import "./globals.css";
 import Providers from "./providers";
 import { DevNavitgation } from "@/components/common/DevNavitgation";
 import { Gnb } from "@/components/common/gnb/Gnb";
-import { Tab } from "@/components/common/tab/Tab";
 
 const pretendard = localFont({
   src: "../assets/font/PretendardVariable.woff2",

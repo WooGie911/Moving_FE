@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import authApi from "@/lib/api/auth.api";
 import userApi from "@/lib/api/user.api";
 
@@ -48,6 +48,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const [user, setUser] = useState<TUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
 
   /**
    * 서버에서 현재 사용자 정보 조회
@@ -65,8 +66,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     } catch (error) {
       console.error("사용자 정보 조회 실패:", error);
       setUser(null);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -85,13 +84,17 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
+      if (response.user.userRole === "CUSTOMER") {
+        router.push("/searchMover");
+      } else if (response.user.userRole === "MOVER") {
+        router.push("/estimate/received");
+      }
+
       return response;
     } catch (error) {
       console.error("로그인 실패:", error);
       setUser(null);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -103,13 +106,16 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       setUser(null);
 
       await authApi.logout();
+      router.push("/");
     } catch (error) {
       console.error("로그아웃 실패:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   /**
-   * 앱 초기화시 인증 상태 확인
+   * 새로고침 시 인증 상태 확인
    */
   useEffect(() => {
     const initializeAuth = async () => {
@@ -121,7 +127,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
         return;
       }
 
-      // 보호된 페이지에서는 사용자 정보 조회
+      // 인증된 페이지에서는 사용자 정보 조회
       await getUser();
     };
 

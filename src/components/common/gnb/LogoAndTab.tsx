@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { TDeviceType } from "@/types/deviceType";
-import { TUserRole } from "@/types/userRole";
+import { TUserRole } from "@/types/user.types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, USER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
+import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 
 interface ILogoAndTabProps {
   deviceType: TDeviceType;
@@ -21,9 +21,9 @@ export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const [navigationItems, setNavigationItems] = useState<TNavigationItem[]>([]);
 
   useEffect(() => {
-    if (userRole === "user") {
-      setNavigationItems(USER_NAVIGATION_ITEMS);
-    } else if (userRole === "mover") {
+    if (userRole === "CUSTOMER") {
+      setNavigationItems(CUSTOMER_NAVIGATION_ITEMS);
+    } else if (userRole === "MOVER") {
       setNavigationItems(MOVER_NAVIGATION_ITEMS);
     } else {
       setNavigationItems(GEUST_NAVIGATION_ITEMS);
