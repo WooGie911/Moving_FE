@@ -6,13 +6,13 @@ import type { IModalButton, IModalOptions } from "@/types/modal";
 import { create } from "zustand";
 
 // zustand store 정의
-interface ModalStore {
+interface IModalStore {
   modal: IModalOptions | null;
   open: (options: IModalOptions) => void;
   close: () => void;
 }
 
-export const useModalStore = create<ModalStore>((set) => ({
+export const useModalStore = create<IModalStore>((set) => ({
   modal: null,
   open: (options) => set({ modal: options }),
   close: () => set({ modal: null }),

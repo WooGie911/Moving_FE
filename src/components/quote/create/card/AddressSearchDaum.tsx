@@ -7,7 +7,7 @@ declare global {
     daum?: {
       Postcode: IDaumPostcodeConstructor;
     };
-  }
+  } // 실제 전역 객체
 }
 
 const loadDaumPostcodeScript = () => {

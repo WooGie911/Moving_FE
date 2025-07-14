@@ -38,11 +38,11 @@ function getQueryClient() {
   }
 }
 
-interface QueryProviderProps {
+interface IQueryProviderProps {
   children: ReactNode;
 }
 
-export default function QueryProvider({ children }: QueryProviderProps) {
+export default function QueryProvider({ children }: IQueryProviderProps) {
   const queryClient = getQueryClient();
 
   return (
