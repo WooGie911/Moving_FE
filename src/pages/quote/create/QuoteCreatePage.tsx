@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ProgressBar from "@/components/quote/create/ProgressBar";
 import SpeechBubble from "@/components/quote/create/SpeechBubble";
 import { Button } from "@/components/common/button/Button";
@@ -29,14 +29,35 @@ const initialForm: IFormState = {
 const QuoteCreatePage = () => {
   const [form, setForm] = useState<IFormState>(initialForm);
   const [step, setStep] = useState(1); // 1:이사종류, 2:날짜, 3:주소, 4:확정
+  const [showNextQuestion, setShowNextQuestion] = useState(true); // 초기에는 첫 번째 질문을 보여줌
+  const [pendingAnswer, setPendingAnswer] = useState<string | null>(null);
   const { open, close } = useModal();
 
   const progress = step === 4 ? 100 : step * 33;
 
+  // 답변 후 다음 질문 표시를 위한 타이머
+  useEffect(() => {
+    if (pendingAnswer) {
+      const timer = setTimeout(() => {
+        setShowNextQuestion(true);
+        setPendingAnswer(null);
+        // 다음 단계로 진행
+        if (step === 1) {
+          setStep(2);
+        } else if (step === 2) {
+          setStep(3);
+        }
+      }, 1500); // 1.5초 후 다음 질문 표시
+
+      return () => clearTimeout(timer);
+    }
+  }, [pendingAnswer, step]);
+
   // 핸들러 함수들
   const handleSelectMovingType = useCallback((type: string) => {
     setForm((prev) => ({ ...prev, movingType: type }));
-    setStep(2);
+    setPendingAnswer(type);
+    setShowNextQuestion(false);
   }, []);
 
   const handleDateChange = useCallback((date: string) => {
@@ -45,8 +66,9 @@ const QuoteCreatePage = () => {
 
   const handleDateComplete = useCallback(() => {
     setForm((prev) => ({ ...prev, isDateConfirmed: true }));
-    setStep(3);
-  }, []);
+    setPendingAnswer(form.movingDate);
+    setShowNextQuestion(false);
+  }, [form.movingDate]);
 
   const handleOpenAddressModal = useCallback(
     (type: TAddressType) => {
@@ -73,8 +95,30 @@ const QuoteCreatePage = () => {
     console.log("견적 요청 데이터:", form);
   }, [form]);
 
+  // 답변 말풍선 렌더링
+  const renderAnswerBubble = () => {
+    if (!pendingAnswer) return null;
+
+    let answerText = "";
+    if (step === 1) {
+      answerText = getMovingTypeLabel(pendingAnswer);
+    } else if (step === 2) {
+      answerText = formatDateToKorean(pendingAnswer);
+    }
+
+    return (
+      <div className="fade-in-up">
+        <SpeechBubble type="answer" isLatest={true}>
+          {answerText}
+        </SpeechBubble>
+      </div>
+    );
+  };
+
   // 단계별 렌더링 함수
   const renderStep = () => {
+    if (!showNextQuestion) return null;
+
     switch (step) {
       case 1:
         return (
@@ -85,6 +129,7 @@ const QuoteCreatePage = () => {
       case 2:
         return (
           <div className="fade-in-up">
+            <SpeechBubble type="question">이사 예정일을 알려주세요.</SpeechBubble>
             <DateSection value={form.movingDate} onChange={handleDateChange} onComplete={handleDateComplete} />
           </div>
         );
@@ -147,8 +192,12 @@ const QuoteCreatePage = () => {
         <div key="movingType" className="fade-in-up">
           <SpeechBubble
             type="answer"
-            isLatest={step === 2} // step 2일 때만 최신 답변으로 처리
-            onEdit={() => setStep(1)}
+            isLatest={false}
+            onEdit={() => {
+              setStep(1);
+              setShowNextQuestion(true);
+              setPendingAnswer(null);
+            }}
           >
             {getMovingTypeLabel(form.movingType)}
           </SpeechBubble>
@@ -162,8 +211,12 @@ const QuoteCreatePage = () => {
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble
             type="answer"
-            isLatest={false} // 지역 선택 시점에서는 더 이상 최신 답변이 아님
-            onEdit={() => setStep(2)}
+            isLatest={false}
+            onEdit={() => {
+              setStep(2);
+              setShowNextQuestion(true);
+              setPendingAnswer(null);
+            }}
           >
             {formatDateToKorean(form.movingDate)}
           </SpeechBubble>
@@ -179,7 +232,7 @@ const QuoteCreatePage = () => {
       <style jsx>{fadeInUpAnimation}</style>
 
       {/* 상태바 영역 */}
-      <div className="bg-white p-6">
+      <div className="sticky top-[72px] z-10 border-b border-gray-200 bg-white p-6 shadow-sm">
         <h2 className="text-2lg text-black-400 leading-lg mb-4 font-semibold">견적요청</h2>
         <ProgressBar value={progress} />
       </div>
@@ -195,6 +248,9 @@ const QuoteCreatePage = () => {
 
         {/* 이전 답변들 */}
         {renderPreviousAnswers()}
+
+        {/* 현재 답변 말풍선 */}
+        {renderAnswerBubble()}
 
         {/* 현재 단계 */}
         {renderStep()}
