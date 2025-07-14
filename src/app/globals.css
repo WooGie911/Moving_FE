@@ -49,7 +49,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .bg-orange-gradient {
-  background: linear-gradient(90.32deg, #F95D2E 3.36%, #F9502E 88.38%);
+  background: linear-gradient(90.32deg, #f95d2e 3.36%, #f9502e 88.38%);
 }
 
 @theme inline {
@@ -171,7 +171,8 @@ Typography Scale
 }
 
 @keyframes slow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {

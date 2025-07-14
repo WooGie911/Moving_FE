@@ -1,35 +1,43 @@
 "use client";
 
 import React, { useState } from "react";
-import { getDaysInMonth, addMonths, subMonths, startOfMonth, getDay, isToday, format } from "date-fns";
+import {
+  getDaysInMonth,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  getDay,
+  isToday,
+  format,
+  isBefore,
+  startOfDay,
+} from "date-fns";
 import LeftArrowIcon from "@/assets/icon/arrow/icon-left.png";
 import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
 import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
-
-interface IDateObj {
-  day: number;
-  date: Date;
-  isOtherMonth: boolean;
-}
-
-interface ICalendarProps {
-  value: Date | null;
-  onChange: (date: Date) => void;
-}
+import { ICalendarProps, IDateObj } from "@/types/quote";
 
 // Calendar 컴포넌트 화살표 함수로 변경
 const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const calendarMatrix = getCalendarMatrix(currentDate);
+  const today = startOfDay(new Date()); // 오늘 날짜 (시간 제거)
 
   const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
   const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  const handleDateClick = (date: Date) => onChange(date);
+
+  const handleDateClick = (date: Date) => {
+    // 과거 날짜는 선택할 수 없음
+    if (isBefore(startOfDay(date), today)) {
+      return;
+    }
+    onChange(date);
+  };
 
   return (
-    <div className="mx-auto min-w-[327px] pb-[2px] md:min-w-[327px] lg:max-w-160">
+    <div className="w-full pb-[2px]">
       {/* 연/월, 이전/다음 버튼 */}
       <div className="mt-[14px] flex w-full items-center justify-between px-[14px] py-[11px]">
         <button onClick={handlePrevMonth}>
@@ -69,16 +77,26 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange }) => {
             const isPrevOrNextMonth = dateObj.isOtherMonth;
             const isSelected = value && format(value, "yyyy-MM-dd") === format(dateObj.date, "yyyy-MM-dd");
             const isCurrentDay = isToday(dateObj.date);
+            const isPastDate = isBefore(startOfDay(dateObj.date), today);
 
             const cellClass = [
-              "flex-1 aspect-square flex items-center justify-center mx-[2px] my-[2px] cursor-pointer select-none",
-              isPrevOrNextMonth ? "text-gray-300" : "text-gray-900",
-              isCurrentDay ? "font-black" : "",
+              "basis-[14.28%] aspect-square flex items-center justify-center p-0 select-none",
+              isPrevOrNextMonth
+                ? "text-gray-400 cursor-not-allowed"
+                : isPastDate
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "cursor-pointer text-gray-900",
+              isCurrentDay && !isPastDate ? "font-black" : "",
               isSelected ? "bg-primary-400 rounded-full text-white" : "",
             ].join(" ");
 
             return (
-              <div key={j} onClick={() => handleDateClick(dateObj.date)} className={cellClass}>
+              <div
+                key={j}
+                onClick={() => handleDateClick(dateObj.date)}
+                className={cellClass}
+                title={isPrevOrNextMonth || isPastDate ? "과거 날짜는 선택할 수 없습니다" : ""}
+              >
                 {dateObj.day}
               </div>
             );
