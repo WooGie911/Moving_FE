@@ -9,10 +9,12 @@ const MoverTab = [
   { name: "반려 요청", href: "/estimate/resolved" },
 ];
 
+const DetailTab = [{ name: "견적 상세", href: "" }];
+
 interface IUserType {
-  userType: "User" | "Mover";
+  userType: "User" | "Mover" | "Detail";
 }
 
 export const QuoteAndEstimateTab = ({ userType }: IUserType) => {
-  return <Tab tabList={userType === "User" ? UserTab : MoverTab} />;
+  return <Tab tabList={userType === "Detail" ? DetailTab : userType === "User" ? UserTab : MoverTab} />;
 };
