@@ -1,30 +1,31 @@
 import { ISignInFormValues, ISignUpFormValues } from "@/types/auth";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { logoutAction, signInAction, signUpAction } from "../actions/auth.actions";
 
 const authApi = {
   signIn: async (data: ISignInFormValues) => {
-    const response = await fetch(`${API_URL}/auth/sign-in`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-    return response.json();
+    const response = await signInAction(data);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("accessToken", response.accessToken);
+    }
+
+    return response;
   },
 
   signUp: async (data: ISignUpFormValues) => {
-    const response = await fetch(`${API_URL}/auth/sign-up`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-    return response.json();
+    const response = await signUpAction(data);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("accessToken", response.accessToken);
+    }
+
+    return response;
+  },
+
+  logout: async () => {
+    if (typeof window !== "undefined") {
+      const accessToken = localStorage.getItem("accessToken") || "";
+      await logoutAction(accessToken);
+      localStorage.removeItem("accessToken");
+    }
   },
 };
 

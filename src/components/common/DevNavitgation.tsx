@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/providers/AuthProvider";
 
 interface IRouteGroup {
   title: string;
@@ -102,7 +102,7 @@ export const DevNavitgation = () => {
   const { isLoggedIn, user, login, logout } = useAuth();
 
   // 현재 유저 역할 결정
-  const currentRole = isLoggedIn ? user?.userRole : "guest";
+  const currentRole = isLoggedIn ? user?.currentRole : "guest";
 
   // 현재 유저가 접근 가능한 라우트 그룹 필터링
   const filteredRouteGroups = routeGroups.filter((group) =>
@@ -120,7 +120,6 @@ export const DevNavitgation = () => {
     localStorage.setItem("devNavVisible", newVisibility.toString());
   };
 
-  // TODO : 현재 로그인 정보가 맞지 않음 서버에 해당 데이터 넣고 다시 테스트
   const handleLogin = () => {
     // 테스트용 로그인
     const mockCustomer = {
@@ -141,9 +140,10 @@ export const DevNavitgation = () => {
 
   useEffect(() => {
     // TODO : 추후 삭제 예정
+    console.log("user", user);
     console.log("현재 로그인 상태", isLoggedIn);
-    console.log("현재 유저 역할", user?.userRole || "비회원");
-    console.log("현재 유저 이메일", user?.userName || "비회원");
+    console.log("현재 유저 역할", user?.currentRole || "비회원");
+    console.log("현재 유저 이메일", user?.name || "비회원");
   }, [isLoggedIn, user]);
 
   // 개발 환경에서만 표시
@@ -167,7 +167,7 @@ export const DevNavitgation = () => {
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-black-500 text-lg font-semibold">🚧 Dev Navigation</h3>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{isLoggedIn ? `이름: ${user?.userName}` : "비회원"}</span>
+                <span className="text-sm text-gray-600">{isLoggedIn ? `이름: ${user?.name}` : "비회원"}</span>
                 {isLoggedIn ? (
                   <button onClick={logout} className="rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600">
                     로그아웃

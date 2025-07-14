@@ -14,9 +14,13 @@ import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
 import authApi from "@/lib/api/auth.api";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
+  const router = useRouter();
+  const { isLoading } = useAuth();
 
   const form = useForm<ISignUpFormValues>({
     mode: "onChange",
@@ -49,10 +53,12 @@ const MoverSignupPage = () => {
     };
 
     try {
-      const response = await authApi.signUp(signUpData);
-      console.log(response);
+      if (isLoading) return;
+      await authApi.signUp(signUpData);
+      router.push("/");
     } catch (error) {
       console.error(error);
+    } finally {
     }
   };
 
@@ -165,12 +171,21 @@ const MoverSignupPage = () => {
               {/* 회원가입 버튼 */}
               <button
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || isLoading}
                 className={`mt-4 rounded-xl px-4 py-4 text-lg font-semibold text-white transition ${
-                  isFormValid ? "bg-primary-400 hover:bg-primary-500 cursor-pointer" : "cursor-not-allowed bg-gray-300"
+                  isFormValid && !isLoading
+                    ? "bg-primary-400 hover:bg-primary-500 cursor-pointer"
+                    : "cursor-not-allowed bg-gray-300"
                 }`}
               >
-                회원가입
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span className="ml-2">회원가입 중...</span>
+                  </div>
+                ) : (
+                  "회원가입"
+                )}
               </button>
               {/* 로그인 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
