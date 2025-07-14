@@ -1,0 +1,68 @@
+{
+  "common": {
+    "language": "语言",
+    "korean": "한국어",
+    "english": "English",
+    "chinese": "中文",
+    "loading": "加载中...",
+    "error": "发生错误",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "search": "搜索",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "completeSelection": "完成选择",
+    "editAnswer": "修改"
+  },
+  "quote": {
+    "title": "报价请求",
+    "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
+    "movingTypeQuestion": "请告诉我们搬家类型。",
+    "dateQuestion": "请告诉我们您的搬家日期。",
+    "addressQuestion": "请选择搬家区域。",
+    "departure": "出发地",
+    "arrival": "目的地",
+    "confirmQuote": "确认报价",
+    "movingTypes": {
+      "small": "小型搬家",
+      "smallDesc": "单间、两室、20坪以下",
+      "home": "家庭搬家",
+      "homeDesc": "三室、20坪以上",
+      "office": "办公室搬家",
+      "officeDesc": "办公室、商业空间",
+      "store": "商店搬家",
+      "piano": "钢琴搬家",
+      "art": "艺术品搬家",
+      "storage": "仓储搬家"
+    },
+    "result": {
+      "movingType": "搬家类型",
+      "movingDate": "搬家日期",
+      "departure": "出发地",
+      "arrival": "目的地"
+    },
+    "selectAddress": "选择",
+    "selectAddressTitle": "请选择{{place}}",
+    "searchAddress": "地址搜索",
+    "detailAddressPlaceholder": "详细地址（例如：101栋202室）",
+    "serviceAvailableCountry": "*目前仅在大韩民国提供服务。",
+    "addressSearchScriptNotLoaded": "地址搜索脚本尚未加载，请稍后再试。",
+    "postalCode": "邮政编码",
+    "roadNameLabel": "道路名",
+    "jibunLabel": "地段",
+    "roadAddressPlaceholder": "请输入道路名地址",
+    "jibunAddressPlaceholder": "请输入地段地址"
+  },
+  "navigation": {
+    "home": "首页",
+    "quote": "报价",
+    "services": "服务",
+    "about": "关于我们",
+    "contact": "联系我们"
+  }
+}

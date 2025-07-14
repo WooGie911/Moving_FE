@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { IAddressSearchDaumProps, IDaumAddress, IDaumAddressData, IDaumPostcodeConstructor } from "@/types/quote";
+import { useLanguageStore } from "@/stores/languageStore";
 
 declare global {
   interface Window {
@@ -19,6 +20,7 @@ const loadDaumPostcodeScript = () => {
 };
 
 const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) => {
+  const { t } = useLanguageStore();
   useEffect(() => {
     if (!window.daum?.Postcode) {
       loadDaumPostcodeScript();
@@ -27,7 +29,7 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
 
   const handleClick = () => {
     if (!window.daum?.Postcode) {
-      alert("주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.");
+      alert(t("quote.addressSearchScriptNotLoaded"));
       return;
     }
     new window.daum.Postcode({
@@ -43,13 +45,16 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      className="border-primary-400 text-primary-400 h-[54px] w-full items-center rounded-2xl border px-6 text-left text-base leading-[26px] font-semibold transition-colors focus:outline-none"
-    >
-      주소 검색
-    </button>
+    <div>
+      <button
+        type="button"
+        onClick={handleClick}
+        className="border-primary-400 text-primary-400 h-[54px] w-full items-center rounded-2xl border px-6 text-left text-base leading-[26px] font-semibold transition-colors focus:outline-none"
+      >
+        {t("quote.searchAddress")}
+      </button>
+      <span className="text-md text-gray-500">{t("quote.serviceAvailableCountry")}</span>
+    </div>
   );
 };
 

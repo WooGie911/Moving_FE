@@ -15,7 +15,8 @@ import AddressSection from "@/components/quote/create/sections/AddressSection";
 // 타입과 상수
 import { IFormState, TAddressType } from "@/types/quote";
 import { fadeInUpAnimation } from "@/constant/quoteStyles";
-import { formatDateToKorean, getMovingTypeLabel } from "@/utils/dateUtils";
+import { formatDateByLanguage } from "@/utils/dateUtils";
+import { useLanguageStore } from "@/stores/languageStore";
 
 // 초기 상태
 const initialForm: IFormState = {
@@ -32,6 +33,7 @@ const QuoteCreatePage = () => {
   const [showNextQuestion, setShowNextQuestion] = useState(true); // 초기에는 첫 번째 질문을 보여줌
   const [pendingAnswer, setPendingAnswer] = useState<string | null>(null);
   const { open, close } = useModal();
+  const { t, language } = useLanguageStore();
 
   const progress = step === 4 ? 100 : step * 33;
 
@@ -73,7 +75,7 @@ const QuoteCreatePage = () => {
   const handleOpenAddressModal = useCallback(
     (type: TAddressType) => {
       open({
-        title: `${type === "departure" ? "출발지" : "도착지"}를 선택해주세요`,
+        title: t("quote.selectAddressTitle", { place: t(`quote.${type}`) }),
         children: (
           <AddressModal
             onComplete={(addr) => {
@@ -101,9 +103,10 @@ const QuoteCreatePage = () => {
 
     let answerText = "";
     if (step === 1) {
-      answerText = getMovingTypeLabel(pendingAnswer);
+      // getMovingTypeLabel 대신 t로 조합
+      answerText = `${t(`quote.movingTypes.${pendingAnswer}`)} (${t(`quote.movingTypes.${pendingAnswer}Desc`)})`;
     } else if (step === 2) {
-      answerText = formatDateToKorean(pendingAnswer);
+      answerText = formatDateByLanguage(pendingAnswer, language);
     }
 
     return (
@@ -129,22 +132,26 @@ const QuoteCreatePage = () => {
       case 2:
         return (
           <div className="fade-in-up">
-            <SpeechBubble type="question">이사 예정일을 알려주세요.</SpeechBubble>
+            <SpeechBubble type="question">{t("quote.dateQuestion")}</SpeechBubble>
             <DateSection value={form.movingDate} onChange={handleDateChange} onComplete={handleDateComplete} />
           </div>
         );
       case 3:
         return (
           <div className="fade-in-up">
-            <SpeechBubble type="question">이사 지역을 선택해주세요.</SpeechBubble>
+            <SpeechBubble type="question">{t("quote.addressQuestion")}</SpeechBubble>
             <SpeechBubble type="question">
               <div className="flex min-w-[279px] flex-col gap-2 px-6 py-5">
                 <AddressSection
-                  label="출발지"
+                  label="departure"
                   value={form.departure}
                   onClick={() => handleOpenAddressModal("departure")}
                 />
-                <AddressSection label="도착지" value={form.arrival} onClick={() => handleOpenAddressModal("arrival")} />
+                <AddressSection
+                  label="arrival"
+                  value={form.arrival}
+                  onClick={() => handleOpenAddressModal("arrival")}
+                />
                 <Button
                   variant="solid"
                   width="w-full"
@@ -154,7 +161,7 @@ const QuoteCreatePage = () => {
                   disabled={!form.arrival.roadAddress}
                   onClick={handleConfirmQuote}
                 >
-                  견적 확정하기
+                  {t("quote.confirmQuote")}
                 </Button>
               </div>
             </SpeechBubble>
@@ -165,13 +172,20 @@ const QuoteCreatePage = () => {
           <div className="fade-in-up">
             <SpeechBubble type="answer" isLatest={true}>
               <div>
-                <div>이사 종류: {getMovingTypeLabel(form.movingType)}</div>
-                <div>이사 예정일: {formatDateToKorean(form.movingDate)}</div>
                 <div>
-                  출발지: {form.departure.roadAddress} {form.departure.detailAddress}
+                  {t("quote.result.movingType")}:{" "}
+                  {form.movingType
+                    ? `${t(`quote.movingTypes.${form.movingType}`)} (${t(`quote.movingTypes.${form.movingType}Desc`)})`
+                    : ""}
                 </div>
                 <div>
-                  도착지: {form.arrival.roadAddress} {form.arrival.detailAddress}
+                  {t("quote.result.movingDate")}: {formatDateByLanguage(form.movingDate, language)}
+                </div>
+                <div>
+                  {t("quote.result.departure")}: {form.departure.roadAddress} {form.departure.detailAddress}
+                </div>
+                <div>
+                  {t("quote.result.arrival")}: {form.arrival.roadAddress} {form.arrival.detailAddress}
                 </div>
               </div>
             </SpeechBubble>
@@ -199,7 +213,9 @@ const QuoteCreatePage = () => {
               setPendingAnswer(null);
             }}
           >
-            {getMovingTypeLabel(form.movingType)}
+            {form.movingType
+              ? `${t(`quote.movingTypes.${form.movingType}`)} (${t(`quote.movingTypes.${form.movingType}Desc`)})`
+              : ""}
           </SpeechBubble>
         </div>,
       );
@@ -218,7 +234,7 @@ const QuoteCreatePage = () => {
               setPendingAnswer(null);
             }}
           >
-            {formatDateToKorean(form.movingDate)}
+            {formatDateByLanguage(form.movingDate, language)}
           </SpeechBubble>
         </div>,
       );
@@ -233,17 +249,17 @@ const QuoteCreatePage = () => {
 
       {/* 상태바 영역 */}
       <div className="sticky top-[72px] z-10 border-b border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="text-2lg text-black-400 leading-lg mb-4 font-semibold">견적요청</h2>
+        <h2 className="text-2lg text-black-400 leading-lg mb-4 font-semibold">{t("quote.title")}</h2>
         <ProgressBar value={progress} />
       </div>
 
       {/* 말풍선 영역 */}
       <div className="space-y-4 p-6">
         <div className="fade-in-up">
-          <SpeechBubble type="question">몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)</SpeechBubble>
+          <SpeechBubble type="question">{t("quote.intro")}</SpeechBubble>
         </div>
         <div className="fade-in-up">
-          <SpeechBubble type="question">이사 종류를 알려주세요.</SpeechBubble>
+          <SpeechBubble type="question">{t("quote.movingTypeQuestion")}</SpeechBubble>
         </div>
 
         {/* 이전 답변들 */}
