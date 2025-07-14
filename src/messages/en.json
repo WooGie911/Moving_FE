@@ -1,0 +1,68 @@
+{
+  "common": {
+    "language": "Language",
+    "korean": "한국어",
+    "english": "English",
+    "chinese": "中文",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "completeSelection": "Complete Selection",
+    "editAnswer": "Edit"
+  },
+  "quote": {
+    "title": "Quote Request",
+    "intro": "Just provide a few pieces of information and you can receive up to 5 quotes :)",
+    "movingTypeQuestion": "Please tell us the type of move.",
+    "dateQuestion": "Please tell us your moving date.",
+    "addressQuestion": "Please select the moving area.",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "confirmQuote": "Confirm Quote",
+    "movingTypes": {
+      "small": "Small Moving",
+      "smallDesc": "Studio, 2-room, under 20 pyeong",
+      "home": "Home Moving",
+      "homeDesc": "3-room, 20 pyeong or more",
+      "office": "Office Moving",
+      "officeDesc": "Office, commercial space",
+      "store": "Store Moving",
+      "piano": "Piano Moving",
+      "art": "Art Moving",
+      "storage": "Storage Moving"
+    },
+    "result": {
+      "movingType": "Moving Type",
+      "movingDate": "Moving Date",
+      "departure": "Departure",
+      "arrival": "Arrival"
+    },
+    "selectAddress": "Select",
+    "selectAddressTitle": "Please select {{place}}",
+    "searchAddress": "Search Address",
+    "detailAddressPlaceholder": "Detail address (e.g. Apt 101, Unit 202)",
+    "serviceAvailableCountry": "*Currently, the service is only available in South Korea.",
+    "addressSearchScriptNotLoaded": "The address search script has not loaded yet. Please try again in a moment.",
+    "postalCode": "Postal Code",
+    "roadNameLabel": "Road Name",
+    "jibunLabel": "Jibun",
+    "roadAddressPlaceholder": "Please enter the road name address",
+    "jibunAddressPlaceholder": "Please enter the jibun address"
+  },
+  "navigation": {
+    "home": "Home",
+    "quote": "Quote",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact"
+  }
+}

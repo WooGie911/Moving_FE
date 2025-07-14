@@ -3,13 +3,12 @@ import { useMemo } from "react";
 export function usePagination(current: number, total: number, size: "sm" | "lg" = "sm") {
   const DOTS = "...";
   const siblingCount = 1;
-  const totalPageNumbers = 2 * siblingCount + 3; 
+  const totalPageNumbers = 2 * siblingCount + 3;
 
   return useMemo(() => {
     if (total <= 1) return [];
 
-    const range = (start: number, end: number) =>
-      Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
     // sm 사이즈
     if (size === "sm") {
@@ -85,4 +84,4 @@ export function usePagination(current: number, total: number, size: "sm" | "lg" 
 
     return range(1, total);
   }, [current, total, size]);
-} 
+}
