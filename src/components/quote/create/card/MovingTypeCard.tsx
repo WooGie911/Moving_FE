@@ -1,14 +1,7 @@
 import React from "react";
 import CheckIcon from "@/assets/icon/checkbox/icon-checkbox-circle-active.png";
 import Image from "next/image";
-
-interface IMovingTypeCardProps {
-  selected: boolean;
-  label: string;
-  description: string;
-  image: React.ReactNode;
-  onClick: () => void;
-}
+import { IMovingTypeCardProps } from "@/types/quote";
 
 const MovingTypeCard = ({ selected, label, description, image, onClick }: IMovingTypeCardProps) => {
   return (
