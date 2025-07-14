@@ -4,14 +4,12 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
 import React, { useState } from "react";
 import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
-import chat from "@/assets/icon/etc/icon-chat.png";
-import like_red from "@/assets/icon/like/icon-like-red.png";
-import like_white from "@/assets/icon/like/icon-like-white-lg.png";
-import star from "@/assets/icon/star/icon-star-active-sm.png";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { ICardListProps } from "@/types/userQuote";
+import { LabelAndTitleSection } from "./LabelAndTitleSection";
+import { MoverInfo } from "./MoverInfo";
 
 // 숫자를 천 단위로 쉼표를 추가하는 함수
 const formatNumber = (num: number): string => {
@@ -28,45 +26,23 @@ export const CardList = ({
   mover,
   type,
 }: ICardListProps) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsLiked(!isLiked);
-    console.log(isLiked);
-    //todo 하트 버튼 클릭 시 찜하기 API 연동
-  };
-
   const cardContent = (
     <div
       className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-5 md:max-w-[600px] lg:max-w-[558px]"}`}
     >
-      {/* 라벨 및 견적서 상태 영역 */}
-      <div className="flex w-full flex-row items-center justify-between">
-        <div className="flex flex-row gap-2">
-          <MoveTypeLabel type={movingType} />
-          {isDesignated && <MoveTypeLabel type="document" />}
-        </div>
-        <div className={type === "received" ? "hidden md:block" : ""}>
-          {estimateState === "PENDING" ? (
-            <p className="text-[16px] leading-[26px] font-semibold text-gray-300">견적대기</p>
-          ) : estimateState === "ACCEPTED" ? (
-            <div className="flex flex-row items-center justify-center gap-1">
-              <Image src={confirm} alt="confirm" width={16} height={16} />
-              <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
-            </div>
-          ) : (
-            <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateState}</p>
-          )}
-        </div>
-      </div>
       <div className="flex w-full flex-col items-center justify-center gap-1">
-        {/* 견적서 타이틀 영역 */}
-        <h1 className="text-black-300 w-full text-[16px] leading-[26px] font-semibold">{estimateTitle}</h1>
+        <LabelAndTitleSection
+          estimateState={estimateState}
+          estimateTitle={estimateTitle}
+          isDesignated={isDesignated}
+          moveType={movingType}
+          type={type}
+          usedAtDetail={false}
+        />
         {/* 기사님 프로필 영역 */}
         <div className={`flex w-full ${type === "received" ? "border-border-light rounded-lg border-2 p-2" : ""}`}>
           <div
-            className={`flex w-full flex-row items-center justify-center gap-2 pt-3 pb-5 ${type === "pending" ? "border-border-light border-b-1" : ""} `}
+            className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${type === "pending" ? "border-border-light border-b-1" : ""} `}
           >
             {/* 좌측 프로필 이미지 */}
             <Image
@@ -76,45 +52,7 @@ export const CardList = ({
               height={50}
             />
             {/* 프로필 이미지 외 모든 프로필 정보*/}
-            <div className="border-border-light flex w-full flex-col items-start justify-center gap-1">
-              {/* 기사님 별명과 찜 횟수 영역 */}
-              <div className="flex w-full flex-row items-center justify-between">
-                <div className="flex flex-row items-center justify-center gap-1">
-                  <Image src={chat} alt="chat" width={20} height={20} />
-                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.nickname} 기사님`}</p>
-                </div>
-
-                <div className="flex flex-row items-center justify-center gap-1">
-                  <button
-                    className="flex cursor-pointer flex-row items-center justify-center"
-                    onClick={handleLikeClick}
-                  >
-                    <Image src={isLiked ? like_red : like_white} alt="like" width={20} height={20} />
-                  </button>
-                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">{mover.profile.favoriteCount}</p>
-                </div>
-              </div>
-              {/* 기사님 평점과 경력 확정건수 영역 */}
-              <div className="flex w-full flex-row items-center justify-start">
-                <div className="flex flex-row items-center justify-center gap-1">
-                  <Image src={star} alt="star" width={20} height={20} />
-                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.profile.avgRating}</p>
-                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.profile.reviewCount})`}</p>
-                </div>
-                <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
-
-                <div className="flex flex-row items-center justify-center gap-1">
-                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">경력</p>
-                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.experience}년`}</p>
-                </div>
-                <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
-
-                <div className="flex flex-row items-center justify-center gap-1">
-                  <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.completedCount}건`}</p>
-                  <p className="text-[14px] leading-[24px] font-normal text-gray-500">확정</p>
-                </div>
-              </div>
-            </div>
+            <MoverInfo mover={mover} usedAtDetail={false} />
           </div>
         </div>
       </div>
