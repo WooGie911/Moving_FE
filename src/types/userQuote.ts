@@ -10,7 +10,7 @@ export type TProfile = {
   id: number;
   userId: number;
   nickname: string;
-  profileImage?: string | undefined | "";
+  profileImage?: string | null;
   experience?: number; // 경력
   introduction: string;
   completedCount: number; // 완료된 이사 건수
