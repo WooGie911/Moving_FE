@@ -116,7 +116,7 @@ function ModalLayout({ title, children, buttons, onClose, type = "center" }: IMo
             {buttons.map((btn, i) => (
               <Button
                 key={i}
-                variant="solid"
+                variant={btn.variant === "outline" ? "outlined" : "solid"}
                 onClick={btn.onClick}
                 disabled={btn.disabled}
                 width="w-full"

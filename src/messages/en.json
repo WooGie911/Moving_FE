@@ -21,6 +21,7 @@
   },
   "quote": {
     "title": "Quote Request",
+    "editTitle": "Edit Quote",
     "intro": "Just provide a few pieces of information and you can receive up to 5 quotes :)",
     "movingTypeQuestion": "Please tell us the type of move.",
     "dateQuestion": "Please tell us your moving date.",
@@ -28,6 +29,13 @@
     "departure": "Departure",
     "arrival": "Arrival",
     "confirmQuote": "Confirm Quote",
+    "editQuestion": "You can Edit or Delete it through the button below.",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "deleteConfirmTitle": "Delete Quote",
+    "deleteConfirmMessage": "Are you sure you want to delete this quote? Deleted quotes cannot be recovered.",
+    "confirmQuoteTitle": "Confirm Quote",
+    "confirmQuoteMessage": "Your quote request has been sent successfully. Would you like to confirm the quote?",
     "movingTypes": {
       "small": "Small Moving",
       "smallDesc": "Studio, 2-room, under 20 pyeong",
@@ -56,7 +64,8 @@
     "roadNameLabel": "Road Name",
     "jibunLabel": "Jibun",
     "roadAddressPlaceholder": "Please enter the road name address",
-    "jibunAddressPlaceholder": "Please enter the jibun address"
+    "jibunAddressPlaceholder": "Please enter the jibun address",
+    "editAnswer": "Edit"
   },
   "navigation": {
     "home": "Home",
