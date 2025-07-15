@@ -62,8 +62,8 @@ export const LandingPage = () => {
       </div>
 
       <div className="relative flex">
-        <Image src={bannerImg} alt="explain-banner" className="lg:mb-[61px]" />
-        <p className="absolute top-[5%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[20.3%] lg:left-[54.5%]">
+        <Image src={bannerImg} alt="explain-banner" className="lg:max-w-[1200px] lg:mb-[61px]" />
+        <p className="absolute top-[5%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[18.3%] lg:left-[53.0%] lg:text-start">
           원하는 이사 서비스를 요청하고
           <br />
           견적을 받아보세요
