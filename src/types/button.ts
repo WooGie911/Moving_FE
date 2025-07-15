@@ -29,8 +29,8 @@ export interface IButtonProps {
 export interface IShareButtonProps {
   type: TShareType;
   url?: string; // 현재 페이지 URL 자동 사용
-  title?: string; // TODO: 추후 API 연동 시 사용
-  description?: string; // TODO: 추후 API 연동 시 사용
+  title?: string; 
+  description?: string; 
   className?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
@@ -53,7 +53,7 @@ export interface IUseLikeToggleProps {
 }
 
 // 체크필터 Props 인터페이스
-export interface CheckFilterProps {
+export interface ICheckFilterProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label: string;
