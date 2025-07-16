@@ -9,11 +9,9 @@ export function setTokensToCookie(accessToken: string) {
     return setServerSideTokens(accessToken);
   }
 
-  console.log(accessToken);
-
   const accessTokenData = JSON.parse(atob(accessToken.split(".")[1]));
 
-  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
+  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000); // 2주
 
   document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=Strict`;
 }

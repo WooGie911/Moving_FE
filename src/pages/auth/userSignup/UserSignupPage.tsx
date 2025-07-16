@@ -16,11 +16,14 @@ import { ISignUpFormValues } from "@/types/auth";
 import authApi from "@/lib/api/auth.api";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
+import { validationRules } from "@/utils/validators";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
   const router = useRouter();
   const { isLoading } = useAuth();
+  const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
     mode: "onChange",
@@ -54,8 +57,16 @@ const UserSignupPage = () => {
 
     try {
       if (isLoading) return;
-      await authApi.signUp(signUpData);
-      router.push("/");
+      const response = await authApi.signUp(signUpData);
+      if (response.status === 200) {
+        router.push("/");
+      } else {
+        open({
+          title: "회원가입 실패",
+          children: <div>{response.message}</div>,
+          buttons: [{ text: "확인", onClick: () => close() }],
+        });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -82,13 +93,7 @@ const UserSignupPage = () => {
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">이름</span>
               <BaseInput
-                {...register("name", {
-                  required: "이름은 필수 입력입니다.",
-                  pattern: {
-                    value: /^[가-힣]{2,4}$/,
-                    message: "이름은 2~4자의 한글로 입력해주세요.",
-                  },
-                })}
+                {...register("name", validationRules.name)}
                 error={errors.name?.message}
                 placeholder="이름을 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
@@ -100,13 +105,7 @@ const UserSignupPage = () => {
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">이메일</span>
               <BaseInput
-                {...register("email", {
-                  required: "이메일은 필수 입력입니다.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "유효한 이메일 형식이 아닙니다.",
-                  },
-                })}
+                {...register("email", validationRules.email)}
                 error={errors.email?.message}
                 placeholder="이메일을 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
@@ -118,13 +117,7 @@ const UserSignupPage = () => {
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">전화번호</span>
               <BaseInput
-                {...register("phoneNumber", {
-                  required: "전화번호는 필수 입력입니다.",
-                  pattern: {
-                    value: /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/,
-                    message: "유효한 전화번호 형식이 아닙니다. ex) 01012345678",
-                  },
-                })}
+                {...register("phoneNumber", validationRules.phoneNumber)}
                 error={errors.phoneNumber?.message}
                 placeholder="전화번호를 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
@@ -136,13 +129,7 @@ const UserSignupPage = () => {
             <div className="mb-6 flex flex-col gap-2">
               <span className="text-black-400 text-md font-normal">비밀번호</span>
               <PasswordInput
-                {...register("password", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/,
-                    message: "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 포함해야 합니다.",
-                  },
-                })}
+                {...register("password", validationRules.password)}
                 placeholder="비밀번호를 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"

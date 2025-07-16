@@ -1,5 +1,6 @@
 import { ISignInFormValues, ISignUpFormValues } from "@/types/auth";
 import { getTokenFromCookie, setTokensToCookie } from "@/utils/auth";
+import { clearServerSideTokens } from "../actions/auth.actions";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,9 +22,9 @@ const authApi = {
 
     const responseData = await response.json();
 
-    console.log(responseData);
-
-    setTokensToCookie(responseData.accessToken);
+    if (responseData.status === 200) {
+      setTokensToCookie(responseData.accessToken);
+    }
 
     return responseData;
   },
@@ -40,7 +41,9 @@ const authApi = {
 
     const responseData = await response.json();
 
-    setTokensToCookie(responseData.accessToken);
+    if (responseData.status === 200) {
+      setTokensToCookie(responseData.accessToken);
+    }
 
     return responseData;
   },
@@ -54,6 +57,8 @@ const authApi = {
     });
 
     const responseData = await response.json();
+
+    await clearServerSideTokens();
 
     return responseData;
   },
