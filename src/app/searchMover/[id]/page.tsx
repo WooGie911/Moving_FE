@@ -1,7 +1,8 @@
 import React from "react";
+import SearchMoverDetail from "@/pages/searchMover/[id]/SearchMoverDetailPage";
 
 const SearchMoverDetailPage = () => {
-  return <div>SearchMover details</div>;
+  return <SearchMoverDetail />;
 };
 
 export default SearchMoverDetailPage;
