@@ -54,19 +54,17 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
    * 서버에서 현재 사용자 정보 조회
    */
   const getUser = async () => {
+    let userData = null;
     try {
-      setIsLoading(true);
       const response = await userApi.getUser();
-
-      if (!response.success) {
-        throw new Error("사용자 정보 조회 실패");
+      if (response.success) {
+        userData = response.data;
       }
-
-      setUser(response.data);
-    } catch (error) {
-      console.error("사용자 정보 조회 실패:", error);
-      setUser(null);
+    } catch (e) {
+      // 비회원은 userData = null
+      userData = null;
     }
+    setUser(userData);
   };
 
   /**
