@@ -1,3 +1,4 @@
+// 백엔드 API 응답 구조에 맞는 타입 정의
 export interface IQuoteProps {
   movingType: string;
   requestDate: string;
@@ -28,6 +29,114 @@ export type TMover = {
   profile: TProfile;
 };
 
+// 백엔드 API 응답 타입들
+export interface IQuote {
+  id: number;
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  createdAt: Date;
+  departureAddr: string;
+  arrivalAddr: string;
+  departureDetail: string | null;
+  status: string;
+  confirmedEstimateId: number | null;
+  estimateCount: number;
+  designatedEstimateCount: number;
+}
+
+export interface IEstimate {
+  id: number;
+  price: number;
+  description: string;
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED";
+  isDesignated: boolean;
+  mover: {
+    id: number;
+    name: string;
+    currentRole: string;
+    profile: {
+      nickname: string;
+      profileImage: string | null;
+      experience: number;
+      introduction: string;
+      description: string;
+      completedCount: number;
+      avgRating: number;
+      reviewCount: number;
+      favoriteCount: number;
+    } | null;
+  };
+}
+
+export interface IPendingQuoteResponse {
+  quote: IQuote;
+  estimates: IEstimate[];
+}
+
+export interface IReceivedQuoteResponse {
+  quote: IQuote;
+  estimates: IEstimate[];
+}
+
+export interface IQuoteDetailResponse {
+  id: number;
+  price: number;
+  description: string;
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED";
+  isDesignated: boolean;
+  mover: {
+    id: number;
+    name: string;
+    currentRole: string;
+    profile: {
+      nickname: string;
+      profileImage: string | null;
+      experience: number;
+      introduction: string;
+      description: string;
+      completedCount: number;
+      avgRating: number;
+      reviewCount: number;
+      favoriteCount: number;
+    } | null;
+  };
+}
+
+export interface IConfirmEstimateRequest {
+  estimateId: number;
+}
+
+export interface IDesignateQuoteRequest {
+  message: string;
+  moverId: number;
+}
+
+export interface IQuoteHistoryResponse {
+  id: number;
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  movingDate: Date;
+  departureAddr: string;
+  arrivalAddr: string;
+  status: "COMPLETED";
+  confirmedEstimate: {
+    id: number;
+    price: number;
+    description: string;
+    mover: {
+      id: number;
+      name: string;
+      profile: {
+        nickname: string;
+        profileImage?: string;
+        experience: number;
+        avgRating: number;
+        reviewCount: number;
+      };
+    };
+  };
+  completedAt: Date;
+}
+
+// 기존 타입들 (호환성 유지)
 export interface ICardListProps {
   movingType: "small" | "home" | "office" | "document";
   isDesignated: boolean;

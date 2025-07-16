@@ -12,6 +12,56 @@ export interface IFormState {
   arrival: IAddress;
 }
 
+// 백엔드 API 요청 타입
+export interface ICreateQuoteRequest {
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  departure: {
+    zonecode?: string;
+    roadAddress: string;
+    jibunAddress?: string;
+    extraAddress?: string;
+    detailAddress?: string;
+  };
+  arrival: {
+    zonecode?: string;
+    roadAddress: string;
+    jibunAddress?: string;
+    extraAddress?: string;
+    detailAddress?: string;
+  };
+  movingDate: string; // YYYY-MM-DD 형식
+  isDateConfirmed: boolean;
+  description?: string;
+}
+
+export interface ICreateQuoteResponse {
+  id: number;
+  userId: number;
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  departureAddr: string;
+  arrivalAddr: string;
+  departureDetail: string | null;
+  arrivalDetail: string | null;
+  movingDate: Date;
+  status: "ACTIVE";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IActiveQuoteResponse {
+  id: number;
+  userId: number;
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  departureAddr: string;
+  arrivalAddr: string;
+  departureDetail: string | null;
+  arrivalDetail: string | null;
+  movingDate: Date;
+  status: "ACTIVE";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type TMovingType = "small" | "home" | "office";
 export type TAddressType = "departure" | "arrival";
 
