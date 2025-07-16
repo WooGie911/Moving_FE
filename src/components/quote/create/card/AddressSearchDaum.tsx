@@ -29,7 +29,7 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
 
   const handleClick = () => {
     if (!window.daum?.Postcode) {
-      alert(t("quote.addressSearchScriptNotLoaded"));
+      alert(t("addressSearchScriptNotLoaded"));
       return;
     }
     new window.daum.Postcode({
@@ -53,7 +53,7 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
       >
         {t("quote.searchAddress")}
       </button>
-      <span className="text-md text-gray-500">{t("quote.serviceAvailableCountry")}</span>
+      <span className="text-md text-gray-500">{t("serviceAvailableCountry")}</span>
     </div>
   );
 };
