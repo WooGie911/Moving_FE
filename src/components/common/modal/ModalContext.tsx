@@ -15,8 +15,12 @@ interface IModalStore {
 
 export const useModalStore = create<IModalStore>((set, get) => ({
   modal: null,
-  open: (options) => set({ modal: options }),
-  close: () => set({ modal: null }),
+  open: (options) => {
+    set({ modal: options });
+  },
+  close: () => {
+    set({ modal: null });
+  },
   updateButtons: (buttons) => {
     const currentModal = get().modal;
     if (currentModal) {
@@ -77,7 +81,7 @@ function ModalLayout({ title, children, buttons, onClose, type = "center" }: IMo
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [type, title, children, buttons]);
+  }, [type]);
 
   const modalClass =
     responsiveType === "bottomSheet"

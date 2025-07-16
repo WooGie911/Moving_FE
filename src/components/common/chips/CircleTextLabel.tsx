@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-interface IProps {
+interface ICircleTextLabelProps {
   text: string;
   clickAble?: boolean;
   onClick?: () => void;
@@ -10,7 +10,14 @@ interface IProps {
   isSelected?: boolean;
 }
 
-export const CircleTextLabel = ({ text, clickAble = false, onClick, hasBorder1, hasBorder2, isSelected }: IProps) => {
+export const CircleTextLabel = ({
+  text,
+  clickAble = false,
+  onClick,
+  hasBorder1,
+  hasBorder2,
+  isSelected,
+}: ICircleTextLabelProps) => {
   const [isClicked, setIsClicked] = useState(false);
 
   // isSelected prop이 변경될 때 내부 상태 동기화
