@@ -1,10 +1,10 @@
 import { jwtVerify, JWTPayload } from "jose";
 
-// 커스텀 토큰 payload 타입 정의
+// 현재 서버 토큰 구조에 맞춘 타입 정의
 export interface DecodedTokenPayload extends JWTPayload {
-  role: "USER" | "ADMIN";
-  userId: string;
-  email: string;
+  role: "CUSTOMER" | "MOVER";
+  userId: number;
+  name: string;
 }
 
 export async function decodeAccessToken(token: string): Promise<DecodedTokenPayload | null> {
@@ -19,9 +19,9 @@ export async function decodeAccessToken(token: string): Promise<DecodedTokenPayl
       typeof payload === "object" &&
       "role" in payload &&
       "userId" in payload &&
-      "email" in payload &&
+      "name" in payload &&
       typeof payload.role === "string" &&
-      (payload.role === "USER" || payload.role === "ADMIN")
+      (payload.role === "CUSTOMER" || payload.role === "MOVER")
     ) {
       return payload as DecodedTokenPayload;
     }

@@ -1,8 +1,5 @@
 import React from "react";
-
-interface IProgressBarProps {
-  value: number; // 0~100 (진행률 %)
-}
+import { IProgressBarProps } from "@/types/quote";
 
 const ProgressBar = ({ value }: IProgressBarProps) => {
   // 0~100 사이로 제한

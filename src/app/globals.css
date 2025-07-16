@@ -18,7 +18,9 @@ input[type="search"]::-webkit-search-cancel-button {
   --gray-150: #c4c4c4;
   --gray-200: #e6e6e6;
   --gray-300: #d9d9d9;
+  --gray-350: #ababab;
   --gray-400: #b3b3b3;
+  --gray-450: #999999;
   --gray-500: #7a7a79;
   --gray-600: #808080;
 
@@ -49,7 +51,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .bg-orange-gradient {
-  background: linear-gradient(90.32deg, #F95D2E 3.36%, #F9502E 88.38%);
+  background: linear-gradient(90.32deg, #f95d2e 3.36%, #f9502e 88.38%);
 }
 
 @theme inline {
@@ -171,7 +173,8 @@ Typography Scale
 }
 
 @keyframes slow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -201,4 +204,26 @@ body {
     "Segoe UI Symbol",
     sans-serif
   );
+}
+/* Custom Dropdown Sheet Scrollbar */
+.dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-300) var(--gray-100);
+}
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 194px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  opacity: 1;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 100px;
+  opacity: 1;
+}
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 100px;
+  opacity: 1;
 }

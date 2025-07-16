@@ -3,8 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TUserRole } from "@/types/userRole";
-import { GEUST_NAVIGATION_ITEMS, USER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
+import { TUserRole } from "@/types/user.types";
+import { GEUST_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 
 interface ISideGnbProps {
   isOpen: boolean;
@@ -13,15 +13,15 @@ interface ISideGnbProps {
   isLoggedIn?: boolean;
 }
 
-export const SideGnb = ({ isOpen, onClose, userRole = "user" }: ISideGnbProps) => {
+export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) => {
   const pathname = usePathname();
 
   // 로그인 상태에 따른 메뉴 결정
   const getMenuItems = () => {
-    if (userRole === "guest") {
+    if (userRole === "GUEST") {
       return [...GEUST_NAVIGATION_ITEMS, { name: "로그인", href: "/userSignin" }];
     } else {
-      return userRole === "user" ? USER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
+      return userRole === "CUSTOMER" ? CUSTOMER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
     }
   };
 

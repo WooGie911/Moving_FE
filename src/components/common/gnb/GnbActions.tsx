@@ -1,24 +1,27 @@
-import { TUserRole } from "@/types/userRole";
 import React from "react";
 import profile from "@/assets/icon/auth/icon-profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
+import { TUserRole } from "@/types/user.types";
 
 interface IGnbActionsProps {
   userRole: TUserRole;
+  userName: string;
   deviceType: TDeviceType;
   toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
 }
 
-export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
-  // TODO : 추후 사용자 정보를 가져오는 로직이 작성되면 프로필 이미지 적용하기 없으면 기본이미지
-
+export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
   return (
     <div className="flex items-center gap-4">
-      {userRole === "guest" && deviceType === "desktop" && (
+      {/* 언어 변경 버튼 */}
+      <LanguageSwitcher />
+
+      {userRole === "GUEST" && deviceType === "desktop" && (
         <Link
           href="/userSignin"
           className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
@@ -27,7 +30,7 @@ export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpe
         </Link>
       )}
 
-      {userRole !== "guest" && (
+      {userRole !== "GUEST" && (
         <>
           {/* 알림 버튼 */}
           <button className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors" aria-label="알림">
@@ -47,7 +50,7 @@ export const GnbActions = ({ userRole, deviceType, toggleSideMenu, isSideMenuOpe
             <Image src={profile} alt="프로필" width={24} height={24} />
           </button>
           {/* TODO : 추후 userRole에서 추출후 삽입 */}
-          {deviceType === "desktop" && <div>프로필 이름</div>}
+          {deviceType === "desktop" && <div>{userName}</div>}
         </>
       )}
 

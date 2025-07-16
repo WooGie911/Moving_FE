@@ -14,9 +14,13 @@ import userAvatar from "@/assets/img/mascot/user-avatartion.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const UserSigninPage = () => {
+  const { login, isLoading } = useAuth();
   const deviceType = useWindowWidth();
+  const router = useRouter();
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",
@@ -36,9 +40,14 @@ const UserSigninPage = () => {
   // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
-  const onSubmit = (data: ISignInFormValues) => {
-    console.log(data);
-    // ✅ TODO: 서버 액션 연동 or mutate
+  const onSubmit = async () => {
+    try {
+      if (isLoading) return;
+      await login(email, password);
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -95,12 +104,21 @@ const UserSigninPage = () => {
               {/* 로그인 버튼 */}
               <button
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || isLoading}
                 className={`mt-4 rounded-xl px-4 py-4 text-lg font-semibold text-white transition ${
-                  isFormValid ? "bg-primary-400 hover:bg-primary-500 cursor-pointer" : "cursor-not-allowed bg-gray-300"
+                  isFormValid && !isLoading
+                    ? "bg-primary-400 hover:bg-primary-500 cursor-pointer"
+                    : "cursor-not-allowed bg-gray-300"
                 }`}
               >
-                로그인
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span className="ml-2">로그인 중...</span>
+                  </div>
+                ) : (
+                  "로그인"
+                )}
               </button>
               {/* 회원가입 링크 */}
               <div className="flex w-full items-center justify-center gap-2">

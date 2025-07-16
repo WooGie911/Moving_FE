@@ -1,7 +1,8 @@
+import UserReceivedQuoteDetailPage from "@/pages/quote/(my)/received/[id]/page";
 import React from "react";
 
 const page = () => {
-  return <div>받은 견적서 상세 페이지</div>;
+  return <UserReceivedQuoteDetailPage />;
 };
 
 export default page;

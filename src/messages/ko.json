@@ -1,0 +1,68 @@
+{
+  "common": {
+    "language": "언어",
+    "korean": "한국어",
+    "english": "English",
+    "chinese": "中文",
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "confirm": "확인",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "수정",
+    "search": "검색",
+    "close": "닫기",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전"
+  },
+  "quote": {
+    "title": "견적요청",
+    "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
+    "movingTypeQuestion": "이사 종류를 알려주세요.",
+    "dateQuestion": "이사 예정일을 알려주세요.",
+    "addressQuestion": "이사 지역을 선택해주세요.",
+    "departure": "출발지",
+    "arrival": "도착지",
+    "confirmQuote": "견적 확정하기",
+    "movingTypes": {
+      "small": "소형 이사",
+      "smallDesc": "원룸, 투룸, 20평대 미만",
+      "home": "가정 이사",
+      "homeDesc": "쓰리룸, 20평대 이상",
+      "office": "사무실 이사",
+      "officeDesc": "사무실, 상업공간",
+      "store": "상가이사",
+      "piano": "피아노이사",
+      "art": "예술품이사",
+      "storage": "보관이사"
+    },
+    "result": {
+      "movingType": "이사 종류",
+      "movingDate": "이사 예정일",
+      "departure": "출발지",
+      "arrival": "도착지"
+    },
+    "selectAddress": "선택하기",
+    "selectAddressTitle": "{{place}}를 선택해주세요",
+    "searchAddress": "주소 검색",
+    "detailAddressPlaceholder": "상세주소 (예: 101동 202호)",
+    "completeSelection": "선택완료",
+    "postalCode": "우편번호",
+    "roadNameLabel": "도로명",
+    "jibunLabel": "지번",
+    "roadAddressPlaceholder": "도로명 주소를 입력해주세요",
+    "jibunAddressPlaceholder": "지번 주소를 입력해주세요",
+    "editAnswer": "수정하기"
+  },
+  "navigation": {
+    "home": "홈",
+    "quote": "견적",
+    "services": "서비스",
+    "about": "회사소개",
+    "contact": "문의"
+  },
+  "serviceAvailableCountry": "*현재 서비스 가능 국가는 대한민국입니다.",
+  "addressSearchScriptNotLoaded": "주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요."
+}

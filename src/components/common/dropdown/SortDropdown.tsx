@@ -1,0 +1,76 @@
+import Image from "next/image";
+import React from "react";
+import iconDown from "@/assets/icon/arrow/icon-down-md.png";
+import iconUp from "@/assets/icon/arrow/icon-up-md.png";
+import { Option, BaseDropdownProps } from "@/types/dropdown";
+
+const SortDropdown: React.FC<BaseDropdownProps> = ({
+  options,
+  value,
+  onChange,
+  placeholder = "정렬 선택",
+  className = "",
+  buttonClassName = "",
+  disabled = false,
+  onOpenChange,
+}) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const selectedOption = options.find((option) => option.value === value);
+
+  const handleSelect = (option: Option) => {
+    onChange(option.value);
+    setIsOpen(false);
+  };
+
+  const handleToggle = () => {
+    if (!disabled) setIsOpen((prev) => !prev);
+  };
+
+  React.useEffect(() => {
+    onOpenChange?.(isOpen);
+  }, [isOpen, onOpenChange]);
+
+  return (
+    <div className={`relative ${className}`}>
+      <button
+        type="button"
+        onClick={handleToggle}
+        disabled={disabled}
+        className={`flex h-10 w-[100px] items-center justify-between gap-0.5 pr-[6px] pl-2 text-left text-[12px] font-medium text-[#999999] ${buttonClassName}`}
+      >
+        <span className={selectedOption ? "text-gray-900" : "text-gray-250"}>
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <Image
+          src={isOpen ? iconUp : iconDown}
+          alt={isOpen ? "위쪽 화살표" : "아래쪽 화살표"}
+          className="h-5 w-5 transition-transform duration-200"
+        />
+      </button>
+      {isOpen && (
+        <div
+          className="rounded-2 absolute z-50 bg-white"
+          style={{ width: 91, maxHeight: 128, boxShadow: "4px 4px 10px 0px #E0E0E040" }}
+        >
+          <div
+            className="dropdown-scrollbar overflow-auto rounded-[8px] border-1 border-gray-200 bg-white"
+            style={{ height: 128, width: 91 }}
+          >
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => handleSelect(option)}
+                className={`w-full px-[10px] py-[7px] text-left text-[12px] leading-[18px] font-medium transition-colors duration-150 hover:bg-gray-50 ${option.value === value ? "bg-primary-50 text-primary-600 font-medium" : "text-gray-700"} ${option.value === "" ? "text-gray-500" : ""}`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SortDropdown;

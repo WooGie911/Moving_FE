@@ -1,7 +1,5 @@
-import React from "react";
+import QuoteCreatePage from "@/pages/quote/create/QuoteCreatePage";
 
-const page = () => {
-  return <div>견적서 작성 페이지</div>;
-};
-
-export default page;
+export default function Page() {
+  return <QuoteCreatePage />;
+}
