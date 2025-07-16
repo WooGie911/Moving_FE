@@ -64,7 +64,7 @@ export const BaseInput = ({
   };
 
   return (
-    <div className={`mb-4 h-[54px] w-[327px] sm:h-[64px] sm:w-[560px] ${wrapperClassName}`}>
+    <div className={`mb-4 h-[54px] w-[327px] ${wrapperClassName}`}>
       {renderInput()}
       {error && (
         <p
@@ -88,7 +88,7 @@ export const BaseTextarea = ({
     <div className={`mb-4 h-full ${wrapperClassName}`}>
       <div className="relative">
         <textarea
-          className={`h-[160px] w-[327px] resize-none rounded-2xl border px-3 py-2 transition outline-none sm:h-[160px] sm:w-[560px] ${textareaClassName}`}
+          className={`h-[160px] w-[327px] resize-none rounded-2xl border px-3 py-2 transition outline-none ${textareaClassName}`}
           {...rest}
         />
       </div>
