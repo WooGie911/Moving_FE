@@ -1,7 +1,8 @@
+import EditPage from "@/pages/moverMyPage/edit/EditPage";
 import React from "react";
 
 const page = () => {
-  return <div>기사 프로필 수정 페이지</div>;
+  return <EditPage />;
 };
 
-export default page;
+export default page; 
