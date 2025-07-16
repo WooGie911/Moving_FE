@@ -19,7 +19,7 @@ export async function setServerSideTokens(accessToken: string) {
 
   // 쿠키 설정
   cookieStore.set("accessToken", accessToken, {
-    path: "/",
+    path: "/this-cookie-is-for-client-side",
     maxAge: accessTokenExpiresIn,
     sameSite: "strict",
   });
@@ -35,7 +35,7 @@ export async function updateAccessToken(accessToken: string) {
 
   // 액세스 토큰만 갱신
   cookieStore.set("accessToken", accessToken, {
-    path: "/",
+    path: "/this-cookie-is-for-client-side",
     maxAge: accessTokenExpiresIn,
     sameSite: "strict",
   });
