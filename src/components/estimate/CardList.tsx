@@ -1,6 +1,6 @@
 "use client";
 import { IQuoteResponse } from "@/types/moverEstimate";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { LabelArea } from "./LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import { shortenRegionInAddress } from "@/utils/regionMapping";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import { Button } from "../common/button/Button";
 import edit from "@/assets/icon/edit/icon-edit.png";
+import { useModal } from "../common/modal/ModalContext";
+import { ModalChild } from "./received/ModalChild";
 
 interface ICardListProps {
   data: IQuoteResponse;
@@ -19,6 +21,70 @@ interface ICardListProps {
 }
 
 export const CardList = ({ data, isDesignated, isConfirmed, type, estimatePrice }: ICardListProps) => {
+  const { open, close, updateButtons } = useModal();
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [currentModalType, setCurrentModalType] = useState<"rejected" | "sent" | null>(null);
+
+  const handleFormChange = (isValid: boolean) => {
+    setIsFormValid(isValid);
+  };
+
+  // 폼 상태가 변경될 때마다 버튼 업데이트
+  useEffect(() => {
+    if (currentModalType) {
+      const buttons = [
+        {
+          text: currentModalType === "rejected" ? "반려하기" : "견적보내기",
+          onClick: () => {
+            close();
+          },
+          disabled: !isFormValid,
+        },
+      ];
+      updateButtons(buttons);
+    }
+  }, [isFormValid, currentModalType, updateButtons, close]);
+
+  const openRejectModal = () => {
+    setIsFormValid(false); // 모달이 열릴 때 초기화
+    setCurrentModalType("rejected");
+    open({
+      title: "반려요청",
+      children: (
+        <ModalChild data={data} isDesignated={isDesignated} type={"rejected"} onFormChange={handleFormChange} />
+      ),
+      type: "bottomSheet",
+      buttons: [
+        {
+          text: "반려하기",
+          onClick: () => {
+            close();
+          },
+          disabled: true, // 초기에는 비활성화
+        },
+      ],
+    });
+  };
+
+  const openSendEstimateModal = () => {
+    setIsFormValid(false); // 모달이 열릴 때 초기화
+    setCurrentModalType("sent");
+    open({
+      title: "견적 보내기",
+      children: <ModalChild data={data} isDesignated={isDesignated} type={"sent"} onFormChange={handleFormChange} />,
+      type: "bottomSheet",
+      buttons: [
+        {
+          text: "견적보내기",
+          onClick: () => {
+            close();
+          },
+          disabled: true, // 초기에는 비활성화
+        },
+      ],
+    });
+  };
+
   return (
     <div className="border-border-light flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
       {/* 라벨과 확정견적/견적서시간/부분 */}
@@ -71,7 +137,6 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, estimatePrice 
         </div>
       </div>
       {/* 버튼 혹은 견적금액 부분 */}
-
       {type === "received" ? (
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:justify-between md:pt-4">
           <Button
@@ -80,7 +145,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, estimatePrice 
             width="w-[254px] lg:w-[233px]"
             height="h-[54px]"
             rounded="rounded-[12px]"
-            onClick={() => console.log("반려모달 연결 예정")}
+            onClick={openRejectModal}
             className="hidden md:block"
           >
             반려하기
@@ -91,7 +156,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, estimatePrice 
             width="w-[254px] lg:w-[233px]"
             height="h-[54px]"
             rounded="rounded-[12px]"
-            onClick={() => console.log("견적보내기 모달연결 예정")}
+            onClick={openSendEstimateModal}
           >
             <div className="flex flex-row items-center justify-center gap-2">
               <p>견적 보내기 </p>
@@ -104,7 +169,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, estimatePrice 
             width="w-[254px] lg:w-[233px]"
             height="h-[54px]"
             rounded="rounded-[12px]"
-            onClick={() => console.log("반려모달 연결 예정")}
+            onClick={openRejectModal}
             className="md:hidden"
           >
             반려하기

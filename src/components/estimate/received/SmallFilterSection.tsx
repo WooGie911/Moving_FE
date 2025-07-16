@@ -36,8 +36,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   // 모달이 열릴 때마다 현재 부모의 필터 상태로 초기화
   useEffect(() => {
     if (modal) {
-      console.log("Modal opened, syncing filters:", filters);
-      console.log("Current modalFilters before sync:", modalFilters);
       const newModalFilters = {
         movingTypes: [...filters.movingTypes],
         isDesignatedOnly: filters.isDesignatedOnly,
@@ -45,7 +43,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
         searchKeyword: filters.searchKeyword,
         sortBy: filters.sortBy,
       };
-      console.log("Setting modal filters to:", newModalFilters);
       setModalFilters(newModalFilters);
       currentModalFilters.current = newModalFilters;
     }
@@ -53,11 +50,9 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
 
   // 이사 유형 변경 핸들러 (모달 내부용)
   const handleModalTypeChange = (type: string) => {
-    console.log("Modal type change:", type, "current:", modalFilters.movingTypes);
     const newTypes = modalFilters.movingTypes.includes(type)
       ? modalFilters.movingTypes.filter((t) => t !== type)
       : [...modalFilters.movingTypes, type];
-    console.log("New types:", newTypes);
     const updatedFilters = { ...modalFilters, movingTypes: newTypes };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
@@ -65,14 +60,12 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
 
   // 체크박스 변경 핸들러 (모달 내부용)
   const handleModalDesignatedChange = (checked: boolean) => {
-    console.log("Modal designated change:", checked);
     const updatedFilters = { ...modalFilters, isDesignatedOnly: checked };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
   };
 
   const handleModalServiceAreaChange = (checked: boolean) => {
-    console.log("Modal service area change:", checked);
     const updatedFilters = { ...modalFilters, isServiceAreaOnly: checked };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
@@ -80,7 +73,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
 
   // 조회하기 버튼 클릭 시 실제 필터 적용
   const handleApplyFilters = () => {
-    console.log("Applying filters:", currentModalFilters.current);
     // 현재 모달 상태를 부모 컴포넌트에 즉시 적용
     onFiltersChange({
       movingTypes: [...currentModalFilters.current.movingTypes],
@@ -111,7 +103,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
         <button
           className="relative h-[32px] w-[32px]"
           onClick={() => {
-            console.log("Opening modal with current filters:", filters);
             isModalOpening.current = true;
             open({
               title: "필터",
@@ -138,7 +129,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
                 {
                   text: "조회하기",
                   onClick: () => {
-                    console.log("조회하기 버튼 클릭됨!");
                     handleApplyFilters();
                   },
                   disabled: false, // 선택사항

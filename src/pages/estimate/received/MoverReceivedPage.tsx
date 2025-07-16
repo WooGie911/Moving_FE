@@ -59,11 +59,8 @@ export const MoverReceivedPage = () => {
 
   // 필터 업데이트 함수
   const updateFilters = (newFilters: Partial<IFilterState>) => {
-    console.log("Parent: Updating filters with:", newFilters);
-    console.log("Parent: Current filters before update:", filters);
     setFilters((prev) => {
       const updated = { ...prev, ...newFilters };
-      console.log("Parent: Updated filters:", updated);
       return updated;
     });
   };

@@ -10,18 +10,26 @@ interface IModalStore {
   modal: IModalOptions | null;
   open: (options: IModalOptions) => void;
   close: () => void;
+  updateButtons: (buttons: IModalButton[]) => void;
 }
 
-export const useModalStore = create<IModalStore>((set) => ({
+export const useModalStore = create<IModalStore>((set, get) => ({
   modal: null,
   open: (options) => set({ modal: options }),
   close: () => set({ modal: null }),
+  updateButtons: (buttons) => {
+    const currentModal = get().modal;
+    if (currentModal) {
+      set({ modal: { ...currentModal, buttons } });
+    }
+  },
 }));
 
 export function useModal() {
   const open = useModalStore((state) => state.open);
   const close = useModalStore((state) => state.close);
-  return { open, close };
+  const updateButtons = useModalStore((state) => state.updateButtons);
+  return { open, close, updateButtons };
 }
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {

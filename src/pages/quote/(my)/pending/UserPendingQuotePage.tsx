@@ -12,13 +12,6 @@ export const UserPendingQuotePage = () => {
     queryKey: ["pendingQuotes"],
     queryFn: () => customerQuoteApi.getPendingQuote(),
   });
-
-  console.log("=== 쿼리 상태 ===");
-  console.log("isPending:", isPending);
-  console.log("isError:", isError);
-  console.log("error:", error);
-  console.log("data:", data);
-  console.log("==================");
   return (
     <>
       <div className="flex flex-col items-center justify-center">
