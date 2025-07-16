@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* 커스텀 둥근 모서리 클래스 */
+.rounded-16 {
+  border-radius: 16px;
+}
+
+.rounded-24 {
+  border-radius: 24px;
+}
+
 /* search input 기본 clear 버튼 제거 */
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
