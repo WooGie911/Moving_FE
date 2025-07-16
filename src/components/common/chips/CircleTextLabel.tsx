@@ -5,10 +5,9 @@ interface IProps {
   text: string;
   clickAble?: boolean;
   onClick?: () => void;
-
-  isSelected?: boolean;
   hasBorder1?: boolean;
   hasBorder2?: boolean;
+  isSelected?: boolean;
 }
 
 export const CircleTextLabel = ({ text, clickAble = false, onClick, hasBorder1, hasBorder2, isSelected }: IProps) => {
