@@ -37,10 +37,6 @@ const EditPage = () => {
   } = form;
 
   const onSubmit = (data: IEditBasicForm) => {
-    if (data.newPassword !== data.newPasswordConfirm) {
-      setError("newPasswordConfirm", { message: "새 비밀번호가 일치하지 않습니다." });
-      return;
-    }
     // TODO: 서버에 수정 요청
     console.log(data);
   };
@@ -127,9 +123,6 @@ const EditPage = () => {
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
-                {errors.newPasswordConfirm?.message && (
-                  <span className="text-state-error text-sm mt-1">{errors.newPasswordConfirm.message}</span>
-                )}
               </div>
             </div>
             {/* 버튼 영역: 반응형 정렬 및 사이즈 */}
