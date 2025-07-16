@@ -30,26 +30,22 @@ const EditPage = () => {
 
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     watch,
-    setError,
-    clearErrors,
   } = form;
+
+  const allFilled = [
+    watch("name"),
+    watch("phone"),
+    watch("currentPassword"),
+    watch("newPassword"),
+    watch("newPasswordConfirm"),
+  ].every((v) => v && v.trim() !== "");
 
   const onSubmit = (data: IEditBasicForm) => {
     // TODO: 서버에 수정 요청
     console.log(data);
   };
-
-  React.useEffect(() => {
-    if (watch("newPassword") && watch("newPasswordConfirm")) {
-      if (watch("newPassword") !== watch("newPasswordConfirm")) {
-        setError("newPasswordConfirm", { message: "새 비밀번호가 일치하지 않습니다." });
-      } else {
-        clearErrors("newPasswordConfirm");
-      }
-    }
-  }, [watch("newPassword"), watch("newPasswordConfirm")]);
 
   return (
     <div className="min-h-screen w-full bg-white flex items-center justify-center">
@@ -57,9 +53,7 @@ const EditPage = () => {
         <div className="text-2xl font-bold mb-4 text-black !text-black">기본정보 수정</div>
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8">
-            {/* 왼쪽: 이름, 이메일, 전화번호 */}
             <div className="flex flex-col gap-8">
-              {/* 이름 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">이름</div>
                 <TextInput
@@ -70,7 +64,6 @@ const EditPage = () => {
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
               </div>
-              {/* 이메일 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">이메일</div>
                 <TextInput
@@ -80,7 +73,6 @@ const EditPage = () => {
                   placeholder="이메일을 입력해주세요"
                 />
               </div>
-              {/* 전화번호 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">전화번호</div>
                 <TextInput
@@ -92,40 +84,42 @@ const EditPage = () => {
                 />
               </div>
             </div>
-            {/* 오른쪽: 비밀번호 관련 */}
             <div className="flex flex-col gap-8">
-              {/* 현재 비밀번호 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">현재 비밀번호</div>
                 <PasswordInput
                   name="currentPassword"
                   placeholder="현재 비밀번호를 입력해주세요"
+                  rules={{ required: "현재 비밀번호는 필수입니다." }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
-              {/* 새 비밀번호 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">새 비밀번호</div>
                 <PasswordInput
                   name="newPassword"
                   placeholder="새 비밀번호를 입력해주세요"
+                  rules={{ required: "새 비밀번호는 필수입니다." }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
-              {/* 새 비밀번호 확인 */}
               <div className="flex flex-col gap-4">
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">새 비밀번호 확인</div>
                 <PasswordInput
                   name="newPasswordConfirm"
                   placeholder="새 비밀번호를 다시 한번 입력해주세요"
+                  rules={{
+                    required: "새 비밀번호 확인은 필수입니다.",
+                    validate: (value) =>
+                      !value || value === form.getValues("newPassword") || "새 비밀번호가 일치하지 않습니다.",
+                  }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
             </div>
-            {/* 버튼 영역: 반응형 정렬 및 사이즈 */}
             <div className="col-span-1 lg:col-span-2 flex flex-col-reverse lg:flex-row gap-3 lg:gap-4 mt-8 w-full lg:justify-end">
               <button
                 type="button"
@@ -136,9 +130,9 @@ const EditPage = () => {
               </button>
               <Button
                 variant="solid"
-                state={isValid ? "default" : "disabled"}
+                state={allFilled ? "default" : "disabled"}
                 className="w-full h-[54px] lg:w-[240px] lg:h-[60px] p-4 rounded-xl text-white text-base font-semibold bg-[#F9502E] hover:bg-[#e04322]"
-                disabled={!isValid}
+                disabled={!allFilled}
               >
                 수정하기
               </Button>
@@ -146,7 +140,6 @@ const EditPage = () => {
           </form>
         </FormProvider>
       </div>
-      {/* PasswordInput 아이콘 위치 오버라이드 */}
       <style jsx global>{`
         .relative [class*='absolute'][class*='right-'] {
           right: 1rem !important;
