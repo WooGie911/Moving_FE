@@ -85,7 +85,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/pending`, {
+      const response = await fetch(`${API_URL}/customer-quotes/pending`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -116,7 +116,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/received`, {
+      const response = await fetch(`${API_URL}/customer-quotes/received`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -147,7 +147,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/pending/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/pending/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -180,7 +180,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/received/${quoteId}/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/received/${quoteId}/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -213,7 +213,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/confirm?estimateId=${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/confirm?estimateId=${estimateId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -247,7 +247,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/designate?quoteId=${quoteId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/designate?quoteId=${quoteId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -285,7 +285,7 @@ const customerQuoteApi = {
     try {
       const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
 
-      const response = await fetch(`${API_URL}/user-quotes/history`, {
+      const response = await fetch(`${API_URL}/customer-quotes/history`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
