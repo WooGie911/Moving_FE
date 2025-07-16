@@ -12,7 +12,7 @@ export const UserPendingQuotePage = () => {
     queryKey: ["pendingQuotes"],
     queryFn: () => customerQuoteApi.getPendingQuote(),
   });
-  console.log(pendingQuotes);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
