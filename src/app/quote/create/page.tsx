@@ -1,5 +1,5 @@
-import QuoteCreatePage from "@/pages/quote/create/QuoteCreatePage";
+import QuotePageWrapper from "@/components/quote/QuotePageWrapper";
 
 export default function Page() {
-  return <QuoteCreatePage />;
+  return <QuotePageWrapper />;
 }

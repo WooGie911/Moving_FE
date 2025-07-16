@@ -2,6 +2,9 @@
 export interface IAddress {
   roadAddress: string;
   detailAddress: string;
+  zonecode?: string;
+  jibunAddress?: string;
+  extraAddress?: string;
 }
 
 export interface IFormState {

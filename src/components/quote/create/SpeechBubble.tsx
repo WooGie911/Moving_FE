@@ -34,7 +34,7 @@ const SpeechBubble = ({ type, children, isLatest = false, onEdit }: ISpeechBubbl
           className="hover:text-primary-400 mt-1 mr-2 text-xs leading-6 font-medium text-gray-500 underline transition-colors lg:mt-[6px] lg:text-base"
           onClick={onEdit}
         >
-          {t("common.editAnswer")}
+          {t("quote.editAnswer")}
         </button>
       )}
     </div>
