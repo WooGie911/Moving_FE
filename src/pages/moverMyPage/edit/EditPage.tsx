@@ -57,7 +57,7 @@ const EditPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-white flex items-center justify-center">
-      <div className="w-full max-w-[1200px] px-4 py-10 bg-white rounded-3xl flex flex-col gap-12">
+      <div className="w-full max-w-[560px] lg:max-w-[1200px] mx-auto px-4 py-10 bg-white rounded-3xl flex flex-col gap-12">
         <div className="text-2xl font-bold mb-4 text-black !text-black">기본정보 수정</div>
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8">
@@ -71,7 +71,7 @@ const EditPage = () => {
                   rules={{ required: "이름은 필수입니다." }}
                   placeholder="이름을 입력해주세요"
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
-                  wrapperClassName="w-full lg:w-[500px]"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
               </div>
               {/* 이메일 */}
@@ -79,10 +79,9 @@ const EditPage = () => {
                 <div className="text-zinc-800 text-base lg:text-lg font-semibold leading-relaxed">이메일</div>
                 <TextInput
                   name="email"
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-neutral-400 !text-black"
-                  wrapperClassName="w-full lg:w-[500px]"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-neutral-400 !text-black pointer-events-none bg-gray-100"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                   placeholder="이메일을 입력해주세요"
-                  readOnly
                 />
               </div>
               {/* 전화번호 */}
@@ -93,7 +92,7 @@ const EditPage = () => {
                   rules={{ required: "전화번호는 필수입니다." }}
                   placeholder="전화번호를 입력해주세요"
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
-                  wrapperClassName="w-full lg:w-[500px]"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
               </div>
             </div>
@@ -105,8 +104,8 @@ const EditPage = () => {
                 <PasswordInput
                   name="currentPassword"
                   placeholder="현재 비밀번호를 입력해주세요"
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-14"
-                  wrapperClassName="w-full lg:w-[500px] relative"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
               {/* 새 비밀번호 */}
@@ -115,8 +114,8 @@ const EditPage = () => {
                 <PasswordInput
                   name="newPassword"
                   placeholder="새 비밀번호를 입력해주세요"
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-14"
-                  wrapperClassName="w-full lg:w-[500px] relative"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
               {/* 새 비밀번호 확인 */}
@@ -125,28 +124,27 @@ const EditPage = () => {
                 <PasswordInput
                   name="newPasswordConfirm"
                   placeholder="새 비밀번호를 다시 한번 입력해주세요"
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-14"
-                  wrapperClassName="w-full lg:w-[500px] relative"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
                 {errors.newPasswordConfirm?.message && (
                   <span className="text-state-error text-sm mt-1">{errors.newPasswordConfirm.message}</span>
                 )}
               </div>
             </div>
-            {/* 버튼 영역: 오른쪽 정렬 */}
-            <div className="col-span-1 lg:col-span-2 flex justify-end gap-4 mt-8">
+            {/* 버튼 영역: 반응형 정렬 및 사이즈 */}
+            <div className="col-span-1 lg:col-span-2 flex flex-col-reverse lg:flex-row gap-3 lg:gap-4 mt-8 w-full lg:justify-end">
               <button
                 type="button"
-                className="h-14 lg:h-[60px] w-full lg:w-[240px] px-6 py-4 rounded-xl shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 text-neutral-400 text-base font-semibold"
+                className="w-full h-[54px] lg:w-[240px] lg:h-[60px] px-6 py-4 rounded-xl shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 text-neutral-400 text-base font-semibold"
                 onClick={() => router.back()}
               >
                 취소
               </button>
               <Button
-                type="submit"
                 variant="solid"
                 state={isValid ? "default" : "disabled"}
-                className="h-14 lg:h-[60px] w-full lg:w-[240px] p-4 rounded-xl text-white text-base font-semibold bg-[#F9502E] hover:bg-[#e04322]"
+                className="w-full h-[54px] lg:w-[240px] lg:h-[60px] p-4 rounded-xl text-white text-base font-semibold bg-[#F9502E] hover:bg-[#e04322]"
                 disabled={!isValid}
               >
                 수정하기
@@ -159,6 +157,11 @@ const EditPage = () => {
       <style jsx global>{`
         .relative [class*='absolute'][class*='right-'] {
           right: 1rem !important;
+        }
+        @media (min-width: 1024px) {
+          .relative [class*='absolute'][class*='right-'] {
+            right: 1.25rem !important; /* right-4 */
+          }
         }
       `}</style>
     </div>
