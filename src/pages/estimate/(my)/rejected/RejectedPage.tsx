@@ -1,7 +1,7 @@
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import React from "react";
 
-export const RequsetPage = () => {
+export const RejectedPage = () => {
   return (
     <div>
       <div>

@@ -1,5 +1,5 @@
 import React from "react";
 
-export const page = () => {
+export const RequsetDetailPage = () => {
   return <div>page</div>;
 };
