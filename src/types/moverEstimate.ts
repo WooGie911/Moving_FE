@@ -143,13 +143,24 @@ export interface IUpdateEstimateResponse {
   updatedAt: Date;
 }
 
+// 필터 상태 타입
+
+// 필터 상태 타입
+export interface IFilterState {
+  movingTypes: string[];
+  isDesignatedOnly: boolean;
+  isServiceAreaOnly: boolean;
+  searchKeyword: string;
+  sortBy: "movingDate" | "createdAt";
+}
+
 // 견적 응답 예시 데이터
 export const mockQuoteResponseData: IQuoteResponse[] = [
   {
     id: 1,
     userId: 101,
     movingType: "HOME",
-    movingDate: new Date("2024-12-16"), // 월요일
+    movingDate: new Date("2025-07-31"), // 월요일
     departureAddr: "서울특별시 강남구 테헤란로 123",
     arrivalAddr: "서울특별시 서초구 서초대로 456",
     departureDetail: "강남역 1번 출구 근처",
@@ -175,7 +186,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     id: 2,
     userId: 102,
     movingType: "OFFICE",
-    movingDate: new Date("2024-12-17"), // 화요일
+    movingDate: new Date("2025-07-29"), // 화요일
     departureAddr: "서울특별시 마포구 와우산로 789",
     arrivalAddr: "서울특별시 성동구 왕십리로 321",
     departureDetail: "홍대입구역 2번 출구",
@@ -201,7 +212,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     id: 3,
     userId: 103,
     movingType: "SMALL",
-    movingDate: new Date("2024-12-18"), // 수요일
+    movingDate: new Date("2025-07-27"), // 수요일
     departureAddr: "서울특별시 송파구 올림픽로 654",
     arrivalAddr: "서울특별시 강동구 천호대로 987",
     departureDetail: "잠실역 4번 출구",
@@ -227,7 +238,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     id: 4,
     userId: 104,
     movingType: "HOME",
-    movingDate: new Date("2024-12-19"), // 목요일
+    movingDate: new Date("2025-07-25"), // 목요일
     departureAddr: "서울특별시 종로구 종로 111",
     arrivalAddr: "서울특별시 중구 을지로 222",
     departureDetail: "종로3가역 1번 출구",
@@ -253,7 +264,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     id: 5,
     userId: 105,
     movingType: "HOME",
-    movingDate: new Date("2024-12-20"), // 금요일
+    movingDate: new Date("2025-07-23"), // 금요일
     departureAddr: "서울특별시 노원구 동일로 333",
     arrivalAddr: "서울특별시 도봉구 도봉로 444",
     departureDetail: "노원역 2번 출구",

@@ -26,6 +26,11 @@ export const Checkbox = ({
 }: ICheckboxProps) => {
   const [isChecked, setIsChecked] = useState(checked);
 
+  // 외부 checked prop 변화 감지
+  React.useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+
   const handleClick = () => {
     if (disabled) return;
 

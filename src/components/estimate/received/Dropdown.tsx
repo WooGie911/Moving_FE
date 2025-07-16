@@ -6,8 +6,13 @@ import up from "@/assets/icon/arrow/icon-up-sm.png";
 import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
 
-export const Dropdown = () => {
-  const [sordOption, setSortOption] = useState<string>("이사 빠른순");
+interface DropdownProps {
+  value?: "movingDate" | "createdAt";
+  onChange?: (value: "movingDate" | "createdAt") => void;
+}
+
+export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
+  const [sortOption, setSortOption] = useState<string>(value === "movingDate" ? "이사 빠른순" : "요청일 빠른순");
   const [isOptionModalOpen, setIsOptionModalOpen] = useState<boolean>(false);
 
   return (
@@ -17,7 +22,7 @@ export const Dropdown = () => {
         onClick={() => setIsOptionModalOpen(!isOptionModalOpen)}
       >
         <p className={`text-[14px] leading-[24px] font-medium text-gray-400 lg:text-[16px] lg:leading-[26px]`}>
-          {sordOption === "" ? "이사빠른순" : sordOption}
+          {sortOption === "" ? "이사빠른순" : sortOption}
         </p>
 
         <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
@@ -35,6 +40,7 @@ export const Dropdown = () => {
             className="flex h-10 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15"
             onClick={() => {
               setSortOption("이사 빠른순");
+              onChange?.("movingDate");
               setIsOptionModalOpen(false);
             }}
           >
@@ -44,6 +50,7 @@ export const Dropdown = () => {
             className="flex h-10 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15"
             onClick={() => {
               setSortOption("요청일 빠른순");
+              onChange?.("createdAt");
               setIsOptionModalOpen(false);
             }}
           >
