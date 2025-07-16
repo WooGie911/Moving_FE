@@ -48,6 +48,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
   }, [isFormValid, currentModalType, updateButtons, close]);
 
   const isPastDate = new Date(data.movingDate) < new Date();
+  const isRejected = data.status === "REJECTED" || type === "rejected";
 
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
@@ -95,7 +96,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
       {isPastDate && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-          <p className="text-[18px] leading-[26px] font-semibold text-white">이사 완료된 견적입니다.</p>
+          <p className="text-[18px] leading-[26px] font-semibold text-white">이사 완료된 견적 입니다.</p>
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
             <Button
               variant="outlined"
@@ -110,10 +111,18 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
           </Link>
         </div>
       )}
+      {isRejected && (
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
+          <p className="text-[18px] leading-[26px] font-semibold text-white">반려된 요청 입니다.</p>
+        </div>
+      )}
 
-      {/* type이 "sent"이고 과거 날짜가 아닐 때만 전체를 링크로 감쌈 */}
-      {type === "sent" && !isPastDate ? (
-        <Link href={`/estimate/request/${id}`} className="cursor-pointer">
+      {/* type이 "sent"이고 과거 날짜가 아닐 때 혹은 반려된 요청일때 전체를 링크로 감쌈 */}
+      {(type === "sent" && !isPastDate) || type === "rejected" ? (
+        <Link
+          href={type === "sent" ? `/estimate/request/${id}` : `/estimate/rejected/${id}`}
+          className="cursor-pointer"
+        >
           <div className="flex w-full flex-col items-center justify-center gap-6">
             {/* 라벨과 확정견적/견적서시간/부분 */}
             <div className="flex w-full flex-row items-center justify-between">
@@ -162,11 +171,15 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 </p>
               </div>
             </div>
-            {/* 견적금액 부분 */}
-            <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
-              <p className="text-black-400 text-[16px] leading-[26px] font-medium">견적금액</p>
-              <p className="text-black-400 text-[24px] leading-[32px] font-bold">{estimatePrice?.toLocaleString()}원</p>
-            </div>
+            {/* 견적금액 부분 - rejected 타입일 때는 숨김 */}
+            {type !== "rejected" && (
+              <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
+                <p className="text-black-400 text-[16px] leading-[26px] font-medium">견적금액</p>
+                <p className="text-black-400 text-[24px] leading-[32px] font-bold">
+                  {estimatePrice?.toLocaleString()}원
+                </p>
+              </div>
+            )}
           </div>
         </Link>
       ) : (
