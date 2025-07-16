@@ -1,10 +1,18 @@
+"use client";
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import { CardList } from "@/components/quote/(my)/CardList";
 import { RequestQuote } from "@/components/quote/(my)/pending/RequestQuote";
+import customerQuoteApi from "@/lib/api/customerQuote";
 import { mover1 } from "@/types/userQuote";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 export const UserPendingQuotePage = () => {
+  const { data: pendingQuotes } = useQuery({
+    queryKey: ["pendingQuotes"],
+    queryFn: () => customerQuoteApi.getPendingQuote(),
+  });
+  console.log(pendingQuotes);
   return (
     <>
       <div className="flex flex-col items-center justify-center">
