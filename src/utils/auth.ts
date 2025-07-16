@@ -1,5 +1,12 @@
 import { getServerSideToken, setServerSideTokens } from "@/lib/actions/auth.actions";
 
+const base64UrlDecode = (input: string): string => {
+  input = input.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = input.length % 4;
+  if (pad) input += "=".repeat(4 - pad); // 패딩 추가
+  return atob(input);
+};
+
 /**
  * accessToken을 쿠키에 저장하는 함수
  * @param {string} accessToken - JWT 액세스 토큰
@@ -9,11 +16,16 @@ export function setTokensToCookie(accessToken: string) {
     return setServerSideTokens(accessToken);
   }
 
-  const accessTokenData = JSON.parse(atob(accessToken.split(".")[1]));
+  try {
+    const accessTokenPayload = base64UrlDecode(accessToken.split(".")[1]);
+    const accessTokenData = JSON.parse(accessTokenPayload);
 
-  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000); // 2주
+    const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-  document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=Strict`;
+    document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=Strict; Secure`;
+  } catch (error) {
+    console.error("❌ Failed to decode JWT:", error);
+  }
 }
 
 export async function getTokenFromCookie(type = "accessToken") {
@@ -30,6 +42,7 @@ export async function getTokenFromCookie(type = "accessToken") {
  * 사용자가 인증되었는지 확인하는 함수
  * @returns {boolean} 인증 여부
  */
-export function isAuthenticated() {
-  return !!getTokenFromCookie();
+export async function isAuthenticated(): Promise<boolean> {
+  const token = await getTokenFromCookie();
+  return !!token;
 }
