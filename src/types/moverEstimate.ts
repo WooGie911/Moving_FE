@@ -43,7 +43,7 @@ export interface IUpdateEstimateRequest {
 export interface IQuoteResponse {
   id: number;
   userId: number;
-  movingType: "SMALL" | "HOME" | "OFFICE" | "DOCUMENT";
+  movingType: "SMALL" | "HOME" | "OFFICE" | "DOCUMENT" | "small" | "home" | "office";
   movingDate: Date;
   departureAddr: string;
   arrivalAddr: string;
@@ -74,11 +74,42 @@ export interface IEstimateResponse {
   moverId: number;
   price: number;
   description: string;
-  status: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT" | "MOVER_REJECTED";
+  status: string;
   isDesignated: boolean;
   createdAt: Date;
   updatedAt: Date;
   quote?: IQuoteResponse;
+}
+
+// 서비스 타입 정의
+export interface IServiceType {
+  id: number;
+  name: string;
+  description: string | null;
+  iconUrl: string | null;
+}
+
+export interface TMover {
+  id: number;
+  name: string;
+  currentRole: string;
+  profile: IProfile | null;
+}
+
+// 프로필 타입 정의
+export interface IProfile {
+  nickname: string;
+  profileImage: string | null;
+  introduction: string;
+  description: string;
+  experience: number;
+  completedCount: number;
+  avgRating: number;
+  reviewCount: number;
+  favoriteCount: number;
+  serviceTypes: {
+    service: IServiceType;
+  }[];
 }
 
 // 내가 보낸 견적서 응답 타입
@@ -93,6 +124,7 @@ export interface IMyEstimateResponse {
   createdAt: Date;
   updatedAt: Date;
   quote: IQuoteResponse;
+  mover: TMover;
 }
 
 // 내가 반려한 견적 응답 타입
@@ -104,6 +136,7 @@ export interface IMyRejectedQuoteResponse {
   status: string;
   createdAt: Date;
   quote: IQuoteResponse;
+  mover: TMover;
 }
 
 // 견적 생성 응답 타입
@@ -152,6 +185,16 @@ export interface IFilterState {
   isServiceAreaOnly: boolean;
   searchKeyword: string;
   sortBy: "movingDate" | "createdAt";
+}
+
+export interface ICardListProps {
+  id: string | number;
+  data: IQuoteResponse;
+  isDesignated: boolean;
+  isConfirmed: boolean;
+  estimatePrice?: number;
+  mover?: TMover;
+  type: "received" | "sent" | "rejected";
 }
 
 // 견적 응답 예시 데이터
@@ -289,7 +332,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
 ];
 
 // 내가 보낸 견적서 예시 데이터
-export const mockMyEstimateData: IEstimateResponse[] = [
+export const mockMyEstimateData: IMyEstimateResponse[] = [
   {
     id: 1,
     quoteId: 101,
@@ -324,6 +367,40 @@ export const mockMyEstimateData: IEstimateResponse[] = [
           introduction: "안녕하세요! 깔끔하게 이사해주세요.",
           description: "신중하고 꼼꼼한 고객입니다.",
         },
+      },
+    },
+    mover: {
+      id: 201,
+      name: "김이사",
+      currentRole: "MOVER",
+      profile: {
+        nickname: "김이사",
+        profileImage: "https://example.com/mover1.jpg",
+        introduction: "5년 경력의 전문 이사업체입니다.",
+        description: "신중하고 안전한 이사 서비스",
+        experience: 5,
+        completedCount: 120,
+        avgRating: 4.8,
+        reviewCount: 45,
+        favoriteCount: 23,
+        serviceTypes: [
+          {
+            service: {
+              id: 1,
+              name: "가정이사",
+              description: "가정집 이사 전문 서비스",
+              iconUrl: "/icons/home-moving.png",
+            },
+          },
+          {
+            service: {
+              id: 2,
+              name: "소형이사",
+              description: "소형 물품 이사 서비스",
+              iconUrl: "/icons/small-moving.png",
+            },
+          },
+        ],
       },
     },
   },
@@ -363,6 +440,40 @@ export const mockMyEstimateData: IEstimateResponse[] = [
         },
       },
     },
+    mover: {
+      id: 201,
+      name: "김이사",
+      currentRole: "MOVER",
+      profile: {
+        nickname: "김이사",
+        profileImage: "https://example.com/mover1.jpg",
+        introduction: "5년 경력의 전문 이사업체입니다.",
+        description: "신중하고 안전한 이사 서비스",
+        experience: 5,
+        completedCount: 120,
+        avgRating: 4.8,
+        reviewCount: 45,
+        favoriteCount: 23,
+        serviceTypes: [
+          {
+            service: {
+              id: 1,
+              name: "가정이사",
+              description: "가정집 이사 전문 서비스",
+              iconUrl: "/icons/home-moving.png",
+            },
+          },
+          {
+            service: {
+              id: 3,
+              name: "사무실이사",
+              description: "사무실 이사 전문 서비스",
+              iconUrl: "/icons/office-moving.png",
+            },
+          },
+        ],
+      },
+    },
   },
   {
     id: 3,
@@ -398,6 +509,32 @@ export const mockMyEstimateData: IEstimateResponse[] = [
           introduction: "간단한 이사 부탁드립니다.",
           description: "저렴한 가격을 원합니다.",
         },
+      },
+    },
+    mover: {
+      id: 201,
+      name: "김이사",
+      currentRole: "MOVER",
+      profile: {
+        nickname: "김이사",
+        profileImage: "https://example.com/mover1.jpg",
+        introduction: "5년 경력의 전문 이사업체입니다.",
+        description: "신중하고 안전한 이사 서비스",
+        experience: 5,
+        completedCount: 120,
+        avgRating: 4.8,
+        reviewCount: 45,
+        favoriteCount: 23,
+        serviceTypes: [
+          {
+            service: {
+              id: 2,
+              name: "소형이사",
+              description: "소형 물품 이사 서비스",
+              iconUrl: "/icons/small-moving.png",
+            },
+          },
+        ],
       },
     },
   },
@@ -437,6 +574,32 @@ export const mockMyEstimateData: IEstimateResponse[] = [
         },
       },
     },
+    mover: {
+      id: 201,
+      name: "김이사",
+      currentRole: "MOVER",
+      profile: {
+        nickname: "김이사",
+        profileImage: "https://example.com/mover1.jpg",
+        introduction: "5년 경력의 전문 이사업체입니다.",
+        description: "신중하고 안전한 이사 서비스",
+        experience: 5,
+        completedCount: 120,
+        avgRating: 4.8,
+        reviewCount: 45,
+        favoriteCount: 23,
+        serviceTypes: [
+          {
+            service: {
+              id: 1,
+              name: "가정이사",
+              description: "가정집 이사 전문 서비스",
+              iconUrl: "/icons/home-moving.png",
+            },
+          },
+        ],
+      },
+    },
   },
   {
     id: 5,
@@ -472,6 +635,32 @@ export const mockMyEstimateData: IEstimateResponse[] = [
           introduction: "가족 이사 경험이 많습니다.",
           description: "안전하고 신중한 이사를 원합니다.",
         },
+      },
+    },
+    mover: {
+      id: 201,
+      name: "김이사",
+      currentRole: "MOVER",
+      profile: {
+        nickname: "김이사",
+        profileImage: "https://example.com/mover1.jpg",
+        introduction: "5년 경력의 전문 이사업체입니다.",
+        description: "신중하고 안전한 이사 서비스",
+        experience: 5,
+        completedCount: 120,
+        avgRating: 4.8,
+        reviewCount: 45,
+        favoriteCount: 23,
+        serviceTypes: [
+          {
+            service: {
+              id: 1,
+              name: "가정이사",
+              description: "가정집 이사 전문 서비스",
+              iconUrl: "/icons/home-moving.png",
+            },
+          },
+        ],
       },
     },
   },

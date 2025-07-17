@@ -40,9 +40,9 @@ export type TMover = {
 // 백엔드 API 응답 타입들
 export interface IQuote {
   id: number;
-  movingType: "SMALL" | "HOME" | "OFFICE";
-  movingDate: Date;
-  createdAt: Date;
+  movingType: "SMALL" | "HOME" | "OFFICE" | "small" | "home" | "office";
+  movingDate: Date | undefined;
+  createdAt: Date | undefined;
   departureAddr: string;
   arrivalAddr: string;
   arrivalDetail: string | null;
@@ -164,7 +164,7 @@ export interface IQuoteHistoryResponse {
       };
     };
   };
-  completedAt: Date;
+  completedAt: Date | string;
 }
 
 export interface IDetailPageMainSeactionProps {

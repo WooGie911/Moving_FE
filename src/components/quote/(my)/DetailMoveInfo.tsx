@@ -10,7 +10,8 @@ export const DetailMoveInfo = ({
   departureDetail,
   arrivalDetail,
 }: IQuote) => {
-  const formatKoreanDate = (date: Date): string => {
+  const formatKoreanDate = (date: Date | undefined): string => {
+    if (!date) return "날짜 정보 없음";
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -38,7 +39,7 @@ export const DetailMoveInfo = ({
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">견적 요청일</p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {formatKoreanDate(createdAt)}
+            {createdAt instanceof Date ? formatKoreanDate(createdAt) : `${createdAt}`}
           </p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
@@ -50,7 +51,7 @@ export const DetailMoveInfo = ({
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">이용일</p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {formatKoreanDate(movingDate)}
+            {movingDate instanceof Date ? formatKoreanDate(movingDate) : `${movingDate}`}
           </p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">

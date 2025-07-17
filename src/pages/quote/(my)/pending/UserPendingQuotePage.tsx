@@ -29,8 +29,8 @@ export const UserPendingQuotePage = () => {
         <QuoteAndEstimateTab userType="User" />
         <RequestQuote
           movingType={data.quote.movingType.toLowerCase() as "small" | "home" | "office" | "document"}
-          requestDate={formatKoreanDate(data.quote.createdAt)}
-          movingDate={formatKoreanDate(data.quote.movingDate)}
+          requestDate={data.quote.createdAt!.toLocaleDateString()}
+          movingDate={data.quote.movingDate!.toLocaleDateString()}
           startPoint={shortenRegionInAddress(data.quote.departureAddr.split(" ").slice(0, 2).join(" "))}
           endPoint={shortenRegionInAddress(data.quote.arrivalAddr.split(" ").slice(0, 2).join(" "))}
         />
