@@ -1,13 +1,9 @@
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "s3.amazonaws.com",
-      // 필요하다면 다른 외부 도메인도 추가
-    ],
+    domains: ["part4-moving-s3.s3.ap-northeast-2.amazonaws.com", "s3.amazonaws.com"],
   },
-  // ...기존 설정 유지
 };
 
 module.exports = nextConfig;

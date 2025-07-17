@@ -1,32 +1,80 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
+import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
-import { REGION_OPTIONS, SERVICE_OPTIONS } from "@/constant/profile";
+import { REGION_OPTIONS, SERVICE_MAPPING, SERVICE_OPTIONS, REGION_MAPPING } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
-
-interface ICustomerRegisterPageProps {
-  profileImage: string;
-  services: string[];
-  regions: string[];
-}
+import userApi from "@/lib/api/user.api";
+import { useRouter } from "next/navigation";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const CustomerRegisterPage = () => {
-  const methods = useForm();
-  const { watch, handleSubmit } = methods;
+  const router = useRouter();
+  const { open, close } = useModal();
 
-  const [services, setServices] = useState<string[]>(["소형이사"]);
-  const [regions, setRegions] = useState<string[]>(["서울", "경기", "인천"]);
+  const methods = useForm({
+    mode: "onChange", // 실시간 벨리데이션
+  });
+  const { handleSubmit } = methods;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const allFilled = services.length > 0 && regions.length > 0;
-  const onSubmit = () => {
-    // TODO: 실제 저장 API 연동
-    console.log({ ...data, services, regions });
+  const [services, setServices] = useState<number[]>([]);
+  const [regions, setRegions] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState({
+    name: "",
+    type: "",
+    dataUrl: uploadSkeleton.src,
+  });
+
+  const allFilled = selectedImage && services.length > 0 && regions;
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
   };
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    // 1. presigned URL 요청 및 s3 업로드
+    const fileUrl = await userApi.uploadFilesToS3(file);
+
+    // 2. 미리보기 이미지와 메타데이터 저장
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage({
+        name: file.name,
+        type: file.type,
+        dataUrl: fileUrl,
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const onSubmit = async () => {
+    const response = await userApi.postProfile({
+      profileImage: selectedImage.dataUrl,
+      currentRegion: regions,
+      userServices: services,
+    });
+
+    if (response.success) {
+      router.push("/searchMover");
+    } else {
+      open({
+        title: "프로필 등록 실패",
+        children: <div>{response.message}</div>,
+        buttons: [{ text: "확인", onClick: () => close() }],
+      });
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-4 lg:mt-12 lg:max-w-[640px] lg:px-0 lg:pb-4">
@@ -46,9 +94,29 @@ const CustomerRegisterPage = () => {
             {/* 프로필 이미지 */}
             <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
               <div className="text-base leading-relaxed font-semibold text-zinc-800">프로필 이미지</div>
-              <div className="flex h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]">
-                <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+              <div
+                className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
+                onClick={handleImageClick}
+              >
+                {selectedImage ? (
+                  <Image
+                    src={selectedImage.dataUrl}
+                    alt="선택된 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={uploadSkeleton}
+                    alt="기본 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
             </div>
 
             {/* 이용 서비스 */}
@@ -63,18 +131,24 @@ const CustomerRegisterPage = () => {
                 </span>
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {SERVICE_OPTIONS.map((service) => (
-                  <CircleTextLabel
-                    key={service}
-                    text={service}
-                    clickAble={true}
-                    onClick={() =>
-                      setServices((prev) =>
-                        prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
-                      )
-                    }
-                  />
-                ))}
+                {SERVICE_OPTIONS.map((service) => {
+                  const serviceNumber = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
+                  return (
+                    <CircleTextLabel
+                      key={service}
+                      text={service}
+                      clickAble={true}
+                      isSelected={services.includes(serviceNumber)}
+                      onClick={() => {
+                        setServices((prev) =>
+                          prev.includes(serviceNumber)
+                            ? prev.filter((s) => s !== serviceNumber)
+                            : [...prev, serviceNumber],
+                        );
+                      }}
+                    />
+                  );
+                })}
               </div>
             </div>
 
@@ -95,18 +169,20 @@ const CustomerRegisterPage = () => {
 
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
                 <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
-                  {REGION_OPTIONS.map((region) => (
-                    <CircleTextLabel
-                      key={region}
-                      text={region}
-                      clickAble={true}
-                      onClick={() =>
-                        setRegions((prev) =>
-                          prev.includes(region) ? prev.filter((r) => r !== region) : [...prev, region],
-                        )
-                      }
-                    />
-                  ))}
+                  {REGION_OPTIONS.map((region) => {
+                    const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
+                    return (
+                      <CircleTextLabel
+                        key={region}
+                        text={region}
+                        clickAble={true}
+                        isSelected={regions === regionValue}
+                        onClick={() => {
+                          setRegions(regions === regionValue ? "" : regionValue);
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
