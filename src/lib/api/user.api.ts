@@ -7,6 +7,12 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
+interface IProfileInput {
+  profileImage: string;
+  currentRegion: string;
+  userServices: number[];
+}
+
 const userApi = {
   getUser: async () => {
     const response = await fetch(`${API_URL}/users`, {
@@ -41,6 +47,18 @@ const userApi = {
 
     // 3) 업로드 완료된 S3 접근 URL 반환
     return presigned.fileUrl;
+  },
+
+  postProfile: async (profile: IProfileInput) => {
+    const response = await fetch(`${API_URL}/users/profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify(profile),
+    });
+    return response.json();
   },
 };
 

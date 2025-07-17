@@ -6,24 +6,31 @@ import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
-import { REGION_OPTIONS, SERVICE_OPTIONS } from "@/constant/profile";
+import { REGION_OPTIONS, SERVICE_MAPPING, SERVICE_OPTIONS, REGION_MAPPING } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
 import userApi from "@/lib/api/user.api";
+import { useRouter } from "next/navigation";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const CustomerRegisterPage = () => {
+  const router = useRouter();
+  const { open, close } = useModal();
+
   const methods = useForm();
   const { handleSubmit } = methods;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [services, setServices] = useState<string[]>([]);
-  const [regions, setRegions] = useState<string[]>([]);
+  const [services, setServices] = useState<number[]>([]);
+  const [regions, setRegions] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState({
     name: "",
     type: "",
     dataUrl: uploadSkeleton.src,
   });
 
-  const allFilled = selectedImage && services.length > 0 && regions.length > 0;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const allFilled = selectedImage && services.length > 0 && regions;
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -35,7 +42,7 @@ const CustomerRegisterPage = () => {
     if (!file) return;
 
     // 1. presigned URL 요청 및 s3 업로드
-    await userApi.uploadFilesToS3(file);
+    const fileUrl = await userApi.uploadFilesToS3(file);
 
     // 2. 미리보기 이미지와 메타데이터 저장
     const reader = new FileReader();
@@ -43,15 +50,31 @@ const CustomerRegisterPage = () => {
       setSelectedImage({
         name: file.name,
         type: file.type,
-        dataUrl: reader.result as string,
+        dataUrl: fileUrl,
       });
     };
+
     reader.readAsDataURL(file);
   };
 
   const onSubmit = async () => {
-    // TODO: 실제 저장 API 연동
-    console.log({ services, regions, selectedImage, selectedImageName: selectedImage.name });
+    setIsLoading(true);
+
+    const response = await userApi.postProfile({
+      profileImage: selectedImage.dataUrl,
+      currentRegion: regions,
+      userServices: services,
+    });
+
+    if (response.success) {
+      router.push("/searchMover");
+    } else if (response.status === 401) {
+      open({
+        title: "프로필 등록 실패",
+        children: <div>{response.message}</div>,
+        buttons: [{ text: "확인", onClick: () => close() }],
+      });
+    }
   };
 
   return (
@@ -110,18 +133,24 @@ const CustomerRegisterPage = () => {
                 </span>
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {SERVICE_OPTIONS.map((service) => (
-                  <CircleTextLabel
-                    key={service}
-                    text={service}
-                    clickAble={true}
-                    onClick={() =>
-                      setServices((prev) =>
-                        prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
-                      )
-                    }
-                  />
-                ))}
+                {SERVICE_OPTIONS.map((service) => {
+                  const serviceNumber = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
+                  return (
+                    <CircleTextLabel
+                      key={service}
+                      text={service}
+                      clickAble={true}
+                      isSelected={services.includes(serviceNumber)}
+                      onClick={() => {
+                        setServices((prev) =>
+                          prev.includes(serviceNumber)
+                            ? prev.filter((s) => s !== serviceNumber)
+                            : [...prev, serviceNumber],
+                        );
+                      }}
+                    />
+                  );
+                })}
               </div>
             </div>
 
@@ -142,18 +171,20 @@ const CustomerRegisterPage = () => {
 
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
                 <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
-                  {REGION_OPTIONS.map((region) => (
-                    <CircleTextLabel
-                      key={region}
-                      text={region}
-                      clickAble={true}
-                      onClick={() =>
-                        setRegions((prev) =>
-                          prev.includes(region) ? prev.filter((r) => r !== region) : [...prev, region],
-                        )
-                      }
-                    />
-                  ))}
+                  {REGION_OPTIONS.map((region) => {
+                    const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
+                    return (
+                      <CircleTextLabel
+                        key={region}
+                        text={region}
+                        clickAble={true}
+                        isSelected={regions === regionValue}
+                        onClick={() => {
+                          setRegions(regions === regionValue ? "" : regionValue);
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
