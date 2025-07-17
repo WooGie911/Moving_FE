@@ -10,17 +10,19 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import google from "@/assets/icon/auth/icon-login-google-lg.png";
 import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
 import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
-import userAvatar from "@/assets/img/mascot/user-avatartion.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
-import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
+import { validationRules } from "@/utils/validators";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSigninPage = () => {
   const { login, isLoading } = useAuth();
   const deviceType = useWindowWidth();
   const router = useRouter();
+  const { open, close } = useModal();
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",
@@ -43,16 +45,24 @@ const UserSigninPage = () => {
   const onSubmit = async () => {
     try {
       if (isLoading) return;
-      await login(email, password);
-      router.push("/");
+      const response = await login(email, password);
+      if (response.user) {
+        router.push("/");
+      } else {
+        open({
+          title: "로그인 실패",
+          children: <div>{response.message}</div>,
+          buttons: [{ text: "확인", onClick: () => close() }],
+        });
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="bg-primary-400 flex w-full items-center justify-center overflow-x-hidden md:h-screen md:px-[52px] md:py-10">
-      <div className="flex h-full w-full max-w-[740px] flex-col items-center justify-between gap-[48px] bg-white px-10 pt-20 md:rounded-[40px] md:px-10 md:py-[48px]">
+    <div className="bg-primary-400 flex min-h-screen w-full items-center justify-center overflow-x-hidden md:px-[52px] md:py-[48px]">
+      <div className="flex w-full max-w-[740px] flex-col items-center justify-between gap-[48px] bg-white px-10 py-[48px] md:rounded-[40px] md:px-10">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
           <Link href="/">
@@ -70,13 +80,7 @@ const UserSigninPage = () => {
             <div className="mb-6 flex flex-col gap-2 font-normal">
               <span className="text-black-400 text-md">이메일</span>
               <BaseInput
-                {...register("email", {
-                  required: "이메일은 필수 입력입니다.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "유효한 이메일 형식이 아닙니다.",
-                  },
-                })}
+                {...register("email", validationRules.email)}
                 error={errors.email?.message}
                 placeholder="이메일을 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
@@ -87,13 +91,7 @@ const UserSigninPage = () => {
             <div className="mb-6 flex flex-col gap-2">
               <span className="text-black-400 text-md font-normal">비밀번호</span>
               <PasswordInput
-                {...register("password", {
-                  required: "비밀번호는 필수 입력입니다.",
-                  pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/,
-                    message: "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 포함해야 합니다.",
-                  },
-                })}
+                {...register("password", validationRules.password)}
                 placeholder="비밀번호를 입력해주세요."
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
@@ -139,9 +137,15 @@ const UserSigninPage = () => {
             <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>
+
           {deviceType === "tablet" && (
             <div className="relative flex min-w-[180px]">
-              <Image src={userAvatar} alt="userAvatar" width={180} className="absolute -right-[330px] -bottom-[54px]" />
+              <Image
+                src={userAvatarLg}
+                alt="moverAvatar"
+                width={180}
+                className="absolute -right-[330px] -bottom-[54px]"
+              />
             </div>
           )}
 
@@ -149,7 +153,7 @@ const UserSigninPage = () => {
             <div className="relative flex min-w-[420px]">
               <Image
                 src={userAvatarLg}
-                alt="userAvatar"
+                alt="moverAvatar"
                 width={420}
                 className="absolute -right-[520px] -bottom-[80px]"
               />

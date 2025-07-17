@@ -1,14 +1,17 @@
-"use client";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
+
 const userApi = {
   getUser: async () => {
-    const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
-
     const response = await fetch(`${API_URL}/users`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${await getAccessToken()}`,
       },
     });
     return response.json();

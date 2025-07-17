@@ -1,89 +1,54 @@
 "use server";
 
-import { ISignInFormValues, ISignUpFormValues } from "@/types/auth";
 import { cookies } from "next/headers";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// 서버 사이드 전용 함수
+export async function getServerSideToken(type: string) {
+  const cookieStore = await cookies();
+  const tokenCookie = cookieStore.get(type);
+  return tokenCookie ? tokenCookie.value : null;
+}
 
-export const signInAction = async (data: ISignInFormValues) => {
+export async function setServerSideTokens(accessToken: string) {
   const cookieStore = await cookies();
 
-  const response = await fetch(`${API_URL}/auth/sign-in`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(data),
-    credentials: "include",
+  // 토큰 디코딩 및 만료 시간 계산
+  const accessTokenData = JSON.parse(Buffer.from(accessToken.split(".")[1], "base64url").toString());
+
+  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
+
+  // 쿠키 설정
+  cookieStore.set("accessToken", accessToken, {
+    path: "/this-cookie-is-for-client-side",
+    maxAge: accessTokenExpiresIn,
+    sameSite: "strict",
   });
+}
 
-  const responseData = await response.json();
-
-  // 서버에서 받은 토큰들을 쿠키에 저장
-  if (responseData.accessToken) {
-    cookieStore.set("accessToken", responseData.accessToken, {
-      path: "/",
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-      maxAge: 60 * 15, // 15분
-    });
-  }
-
-  return responseData;
-};
-
-export const signUpAction = async (data: ISignUpFormValues) => {
+export async function updateAccessToken(accessToken: string) {
   const cookieStore = await cookies();
 
-  const response = await fetch(`${API_URL}/auth/sign-up`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(data),
-    credentials: "include",
+  // 토큰 디코딩 및 만료 시간 계산
+  const accessTokenData = JSON.parse(Buffer.from(accessToken.split(".")[1], "base64url").toString());
+
+  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
+
+  // 액세스 토큰만 갱신
+  cookieStore.set("accessToken", accessToken, {
+    path: "/this-cookie-is-for-client-side",
+    maxAge: accessTokenExpiresIn,
+    sameSite: "strict",
   });
+}
 
-  const responseData = await response.json();
-
-  // 서버에서 받은 토큰들을 쿠키에 저장
-  if (responseData.accessToken) {
-    cookieStore.set("accessToken", responseData.accessToken, {
-      path: "/",
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-      maxAge: 60 * 15, // 15분
-    });
-  }
-
-  return responseData;
-};
-
-export const logoutAction = async (accessToken: string) => {
+export async function clearServerSideTokens() {
   const cookieStore = await cookies();
 
-  try {
-    const response = await fetch(`${API_URL}/auth/logout`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  // 액세스 토큰 삭제
+  cookieStore.delete("accessToken");
 
-    const responseData = await response.json();
+  // 리프레시 토큰 삭제
+  cookieStore.delete("refreshToken");
 
-    // 쿠키 삭제
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
-
-    return responseData;
-  } catch (error) {
-    console.error("로그아웃 실패:", error);
-    // 오류가 발생해도 쿠키는 삭제
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
-    throw error;
-  }
-};
+  return { success: true };
+}
