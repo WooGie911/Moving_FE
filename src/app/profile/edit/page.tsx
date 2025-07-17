@@ -1,7 +1,5 @@
-import React from "react";
+import ProfileEditPage from "@/pages/profile/edit/ProfileEditPage";
 
-const EditPage = () => {
-  return <div>EditPage</div>;
-};
-
-export default EditPage;
+export default function EditPage() {
+  return <ProfileEditPage />;
+}
