@@ -1,10 +1,18 @@
-import { IQuoteProps } from "@/types/userQuote";
+import { IQuote } from "@/types/userQuote";
 import React from "react";
 
-export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, endPoint }: IQuoteProps) => {
+export const QuoteInfo = ({
+  movingType,
+  createdAt,
+  movingDate,
+  departureAddr,
+  arrivalAddr,
+  departureDetail,
+  arrivalDetail,
+}: IQuote) => {
   // movingType에 따른 텍스트 변환 함수
   const getMovingTypeText = (type: string) => {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case "small":
         return "소형이사";
       case "home":
@@ -16,6 +24,21 @@ export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, end
     }
   };
 
+  // Date 객체를 한국어 날짜 문자열로 변환하는 함수
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+  };
+
+  // 주소와 상세주소를 결합하는 함수
+  const formatAddress = (addr: string, detail: string | null) => {
+    return detail ? `${addr} ${detail}` : addr;
+  };
+
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 lg:w-[400px]">
       {/* 타이틀 및 견적 요청 날짜 부분 */}
@@ -23,7 +46,7 @@ export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, end
         <h1 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
           견적 정보
         </h1>
-        <p className="hidden text-[14px] leading-[24px] font-normal text-gray-500 md:block">{requestDate}</p>
+        <p className="hidden text-[14px] leading-[24px] font-normal text-gray-500 md:block">{formatDate(createdAt)}</p>
       </div>
       {/* 견적 정보 부분 */}
       <div className="flex w-full flex-col items-center justify-center gap-2">
@@ -43,7 +66,7 @@ export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, end
               출발지
             </p>
             <p className="text-black-500 flex-1 text-right text-[14px] leading-[24px] font-semibold break-words md:text-[16px] md:leading-[26px]">
-              {startPoint}
+              {formatAddress(departureAddr, departureDetail)}
             </p>
           </div>
           <div className="flex w-full flex-row items-start justify-between">
@@ -51,7 +74,7 @@ export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, end
               도착지
             </p>
             <p className="text-black-500 flex-1 text-right text-[14px] leading-[24px] font-semibold break-words md:text-[16px] md:leading-[26px]">
-              {endPoint}
+              {formatAddress(arrivalAddr, arrivalDetail)}
             </p>
           </div>
         </div>
@@ -61,13 +84,13 @@ export const QuoteInfo = ({ movingType, requestDate, movingDate, startPoint, end
             이사날짜
           </p>
           <p className="text-black-500 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
-            {movingDate}
+            {formatDate(movingDate)}
           </p>
         </div>
       </div>
       {/* 모바일용 요청 날짜 */}
       <div className="flex w-full flex-row items-center justify-end">
-        <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:hidden">{requestDate}</p>
+        <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:hidden">{formatDate(createdAt)}</p>
       </div>
     </div>
   );

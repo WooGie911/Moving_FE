@@ -1,15 +1,21 @@
 // 백엔드 API 응답 구조에 맞는 타입 정의
-export interface IQuoteProps {
-  movingType: string;
+export interface IRequestQuoteProps {
+  movingType: "home" | "office" | "small" | "document";
   requestDate: string;
   movingDate: string;
   startPoint: string;
   endPoint: string;
 }
 
-export type TProfile = {
+// 서비스 타입 정의
+export type TServiceType = {
   id: number;
-  userId: number;
+  name: string;
+  description: string | null;
+  iconUrl: string | null;
+};
+
+export type TProfile = {
   nickname: string;
   profileImage?: string | null;
   experience?: number; // 경력
@@ -19,11 +25,13 @@ export type TProfile = {
   reviewCount: number; // 리뷰 총 개수
   favoriteCount: number; // 찜한 사용자 수
   description: string;
+  serviceTypes?: {
+    service: TServiceType;
+  }[];
 };
 
 export type TMover = {
-  id: number;
-  email: string;
+  id: number | string;
   name: String;
   currentRole: "CUSTOMER" | "MOVER";
   profile: TProfile;
@@ -33,14 +41,28 @@ export type TMover = {
 export interface IQuote {
   id: number;
   movingType: "SMALL" | "HOME" | "OFFICE";
+  movingDate: Date;
   createdAt: Date;
   departureAddr: string;
   arrivalAddr: string;
+  arrivalDetail: string | null;
   departureDetail: string | null;
   status: string;
   confirmedEstimateId: number | null;
   estimateCount: number;
   designatedEstimateCount: number;
+  serviceTypes?: TServiceType[];
+}
+
+// 기존 타입들 (호환성 유지)
+export interface ICardListProps {
+  isDesignated: boolean;
+  estimateId: string | number;
+  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
+  estimateTitle: string;
+  estimatePrice: number;
+  mover: TMover;
+  type: "pending" | "received";
 }
 
 export interface IEstimate {
@@ -63,6 +85,9 @@ export interface IEstimate {
       avgRating: number;
       reviewCount: number;
       favoriteCount: number;
+      serviceTypes?: {
+        service: TServiceType;
+      }[];
     } | null;
   };
 }
@@ -100,6 +125,9 @@ export interface IQuoteDetailResponse {
       avgRating: number;
       reviewCount: number;
       favoriteCount: number;
+      serviceTypes?: {
+        service: TServiceType;
+      }[];
     } | null;
   };
 }
@@ -139,516 +167,228 @@ export interface IQuoteHistoryResponse {
   completedAt: Date;
 }
 
-// 기존 타입들 (호환성 유지)
-export interface ICardListProps {
-  movingType: "small" | "home" | "office" | "document";
-  isDesignated: boolean;
-  estimateId: string;
-  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
-  estimateTitle: string;
-  estimatePrice: number;
-  mover: TMover;
-  type: "pending" | "received";
-}
-
-export const profile1: TProfile = {
-  id: 1,
-  userId: 1,
-  nickname: "김코드",
-  profileImage: "",
-  experience: 10,
-  introduction: "안녕하세요, 김코드입니다.",
-  completedCount: 99,
-  avgRating: 4.8,
-  reviewCount: 46,
-  favoriteCount: 33,
-  description: "안녕하세요, 김코드입니다.",
-};
-export const mover1: TMover = {
-  id: 1,
-  email: "test@test.com",
-  name: "김코드",
-  currentRole: "MOVER",
-  profile: profile1,
-};
-
-export const mockestimateList: ICardListProps[] = [
-  {
-    movingType: "small",
-    isDesignated: true,
-    estimateId: "12",
-    estimateState: "ACCEPTED",
-    estimateTitle: "확정된 견적 목데이터 입니다",
-    estimatePrice: 130000,
-    mover: mover1,
-    type: "received",
-  },
-
-  {
-    movingType: "small",
-    isDesignated: true,
-    estimateId: "13",
-    estimateState: "PENDING",
-    estimateTitle: "확정이 아닌 대기중인 견적 1",
-    estimatePrice: 150000,
-    mover: mover1,
-    type: "received",
-  },
-  {
-    movingType: "small",
-    isDesignated: false,
-    estimateId: "14",
-    estimateState: "PENDING",
-    estimateTitle: "확정이 아닌 지정도 아닌 대기중인 견적 1",
-    estimatePrice: 160000,
-    mover: mover1,
-    type: "received",
-  },
-  {
-    movingType: "small",
-    isDesignated: false,
-    estimateId: "15",
-    estimateState: "PENDING",
-    estimateTitle: "확정이 아닌 지정도 아닌 대기중인 견적 2",
-    estimatePrice: 180000,
-    mover: mover1,
-    type: "received",
-  },
-];
-export const QuoteInfo1: IQuoteProps = {
-  movingType: "small",
-  requestDate: "2025년 6월 24일",
-  movingDate: "2025년 7월 8일(화)",
-  startPoint: "서울시 중랑구 능동로 21길",
-  endPoint: "경기도 수원시 팔달구 팔달로 123길",
-};
 export interface IDetailPageMainSeactionProps {
-  moveType: "home" | "office" | "document";
-  isDesignated: boolean;
-  estimateId: string;
-  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
-  estimateTitle: string;
-  estimatePrice: number;
-  mover: TMover;
+  quote: IQuote;
+  estimate: IEstimate;
   type: "pending" | "received";
 }
 
-export const data1: IDetailPageMainSeactionProps = {
-  moveType: "home",
-  isDesignated: true,
-  estimateId: "1234567890",
-  estimateState: "PENDING",
-  estimateTitle: "고궹님의 물품을 안전스하게 운송해 드립니다.",
-  estimatePrice: 100000,
-  mover: mover1,
-  type: "pending",
+// IPendingQuoteResponse 예시 데이터
+export const mockPendingQuoteResponses: IPendingQuoteResponse = {
+  quote: {
+    id: 1,
+    movingType: "HOME",
+    movingDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5일 후
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7일 전
+    departureAddr: "서울시 강남구 테헤란로 123",
+    arrivalAddr: "서울시 서초구 서초대로 456",
+    departureDetail: "101동 304호",
+    arrivalDetail: "202동 501호",
+    status: "PENDING",
+    confirmedEstimateId: null,
+    estimateCount: 3,
+    designatedEstimateCount: 1,
+  },
+  estimates: [
+    {
+      id: 101,
+      price: 150000,
+      description: "안전하고 신속한 이사 서비스 제공합니다. 포장부터 설치까지 완벽하게 도와드립니다.",
+      status: "PENDING",
+      isDesignated: true,
+      mover: {
+        id: 1,
+        name: "김이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "김이사",
+          profileImage: "",
+          experience: 5,
+          introduction: "5년 경력의 전문 이사업체입니다.",
+          description: "신중하고 안전한 이사 서비스",
+          completedCount: 120,
+          avgRating: 4.8,
+          reviewCount: 45,
+          favoriteCount: 23,
+          serviceTypes: [
+            {
+              service: {
+                id: 1,
+                name: "가정이사",
+                description: "가정집 이사 전문 서비스",
+                iconUrl: "/icons/home-moving.png",
+              },
+            },
+            {
+              service: {
+                id: 2,
+                name: "소형이사",
+                description: "소형 물품 이사 서비스",
+                iconUrl: "/icons/small-moving.png",
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      id: 102,
+      price: 180000,
+      description: "고급 포장재 사용으로 안전한 운송을 보장합니다.",
+      status: "PENDING",
+      isDesignated: false,
+      mover: {
+        id: 2,
+        name: "박이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "박이사",
+          profileImage: "",
+          experience: 8,
+          introduction: "8년 경력의 전문 이사업체입니다.",
+          description: "고급 포장재 사용 전문",
+          completedCount: 200,
+          avgRating: 4.9,
+          reviewCount: 78,
+          favoriteCount: 45,
+          serviceTypes: [
+            {
+              service: {
+                id: 1,
+                name: "가정이사",
+                description: "가정집 이사 전문 서비스",
+                iconUrl: "/icons/home-moving.png",
+              },
+            },
+            {
+              service: {
+                id: 3,
+                name: "사무실이사",
+                description: "사무실 이사 전문 서비스",
+                iconUrl: "/icons/office-moving.png",
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      id: 103,
+      price: 130000,
+      description: "합리적인 가격으로 양질의 서비스를 제공합니다.",
+      status: "PENDING",
+      isDesignated: false,
+      mover: {
+        id: 3,
+        name: "이이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "이이사",
+          profileImage: "",
+          experience: 3,
+          introduction: "3년 경력의 이사업체입니다.",
+          description: "합리적인 가격 전문",
+          completedCount: 80,
+          avgRating: 4.6,
+          reviewCount: 32,
+          favoriteCount: 15,
+        },
+      },
+    },
+    {
+      id: 301,
+      price: 250000,
+      description: "사무실 이사 전문 서비스입니다. 업무 중단 최소화로 진행합니다.",
+      status: "PENDING",
+      isDesignated: true,
+      mover: {
+        id: 6,
+        name: "한이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "한이사",
+          profileImage: "",
+          experience: 10,
+          introduction: "10년 경력의 사무실 이사 전문업체입니다.",
+          description: "사무실 이사 전문",
+          completedCount: 300,
+          avgRating: 4.9,
+          reviewCount: 120,
+          favoriteCount: 65,
+        },
+      },
+    },
+    {
+      id: 302,
+      price: 280000,
+      description: "고급 사무실 이사 서비스입니다. 전문 장비와 인력으로 진행합니다.",
+      status: "PENDING",
+      isDesignated: true,
+      mover: {
+        id: 7,
+        name: "송이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "송이사",
+          profileImage: "",
+          experience: 12,
+          introduction: "12년 경력의 고급 사무실 이사 전문업체입니다.",
+          description: "고급 사무실 이사",
+          completedCount: 400,
+          avgRating: 5.0,
+          reviewCount: 180,
+          favoriteCount: 95,
+        },
+      },
+    },
+    {
+      id: 303,
+      price: 220000,
+      description: "합리적인 가격의 사무실 이사 서비스입니다.",
+      status: "PENDING",
+      isDesignated: false,
+      mover: {
+        id: 8,
+        name: "강이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "강이사",
+          profileImage: "",
+          experience: 7,
+          introduction: "7년 경력의 사무실 이사업체입니다.",
+          description: "합리적인 사무실 이사",
+          completedCount: 180,
+          avgRating: 4.7,
+          reviewCount: 75,
+          favoriteCount: 35,
+        },
+      },
+    },
+    {
+      id: 304,
+      price: 240000,
+      description: "신속한 사무실 이사 서비스입니다. 업무 연속성을 보장합니다.",
+      status: "PENDING",
+      isDesignated: false,
+      mover: {
+        id: 9,
+        name: "윤이사",
+        currentRole: "MOVER",
+        profile: {
+          nickname: "윤이사",
+          profileImage: "",
+          experience: 9,
+          introduction: "9년 경력의 신속 이사 전문업체입니다.",
+          description: "신속한 사무실 이사",
+          completedCount: 250,
+          avgRating: 4.8,
+          reviewCount: 95,
+          favoriteCount: 48,
+        },
+      },
+    },
+  ],
 };
-
-// IPendingQuoteResponse 예시 데이터 5개
-export const mockPendingQuoteResponses: IPendingQuoteResponse[] = [
-  {
-    quote: {
-      id: 1,
-      movingType: "HOME",
-      createdAt: new Date("2025-01-15"),
-      departureAddr: "서울시 강남구 테헤란로 123",
-      arrivalAddr: "서울시 서초구 서초대로 456",
-      departureDetail: "101동 304호",
-      status: "PENDING",
-      confirmedEstimateId: null,
-      estimateCount: 3,
-      designatedEstimateCount: 1,
-    },
-    estimates: [
-      {
-        id: 101,
-        price: 150000,
-        description: "안전하고 신속한 이사 서비스 제공합니다. 포장부터 설치까지 완벽하게 도와드립니다.",
-        status: "PENDING",
-        isDesignated: true,
-        mover: {
-          id: 1,
-          name: "김이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "김이사",
-            profileImage: "/images/mover1.jpg",
-            experience: 5,
-            introduction: "5년 경력의 전문 이사업체입니다.",
-            description: "신중하고 안전한 이사 서비스",
-            completedCount: 120,
-            avgRating: 4.8,
-            reviewCount: 45,
-            favoriteCount: 23,
-          },
-        },
-      },
-      {
-        id: 102,
-        price: 180000,
-        description: "고급 포장재 사용으로 안전한 운송을 보장합니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 2,
-          name: "박이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "박이사",
-            profileImage: "/images/mover2.jpg",
-            experience: 8,
-            introduction: "8년 경력의 전문 이사업체입니다.",
-            description: "고급 포장재 사용 전문",
-            completedCount: 200,
-            avgRating: 4.9,
-            reviewCount: 78,
-            favoriteCount: 45,
-          },
-        },
-      },
-      {
-        id: 103,
-        price: 130000,
-        description: "합리적인 가격으로 양질의 서비스를 제공합니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 3,
-          name: "이이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "이이사",
-            profileImage: "/images/mover3.jpg",
-            experience: 3,
-            introduction: "3년 경력의 이사업체입니다.",
-            description: "합리적인 가격 전문",
-            completedCount: 80,
-            avgRating: 4.6,
-            reviewCount: 32,
-            favoriteCount: 15,
-          },
-        },
-      },
-    ],
-  },
-  {
-    quote: {
-      id: 2,
-      movingType: "SMALL",
-      createdAt: new Date("2025-01-16"),
-      departureAddr: "서울시 마포구 와우산로 789",
-      arrivalAddr: "서울시 성동구 왕십리로 321",
-      departureDetail: "2층 201호",
-      status: "PENDING",
-      confirmedEstimateId: null,
-      estimateCount: 2,
-      designatedEstimateCount: 0,
-    },
-    estimates: [
-      {
-        id: 201,
-        price: 80000,
-        description: "소형 이사 전문 서비스입니다. 빠르고 깔끔하게 처리해드립니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 4,
-          name: "최이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "최이사",
-            profileImage: "/images/mover4.jpg",
-            experience: 4,
-            introduction: "소형 이사 전문업체입니다.",
-            description: "소형 이사 전문",
-            completedCount: 95,
-            avgRating: 4.7,
-            reviewCount: 38,
-            favoriteCount: 18,
-          },
-        },
-      },
-      {
-        id: 202,
-        price: 95000,
-        description: "신중하고 꼼꼼한 소형 이사 서비스 제공합니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 5,
-          name: "정이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "정이사",
-            profileImage: "/images/mover5.jpg",
-            experience: 6,
-            introduction: "6년 경력의 소형 이사 전문업체입니다.",
-            description: "신중한 소형 이사",
-            completedCount: 150,
-            avgRating: 4.8,
-            reviewCount: 62,
-            favoriteCount: 28,
-          },
-        },
-      },
-    ],
-  },
-  {
-    quote: {
-      id: 3,
-      movingType: "OFFICE",
-      createdAt: new Date("2025-01-17"),
-      departureAddr: "서울시 종로구 종로 456",
-      arrivalAddr: "서울시 중구 을지로 789",
-      departureDetail: "3층 301호",
-      status: "PENDING",
-      confirmedEstimateId: null,
-      estimateCount: 4,
-      designatedEstimateCount: 2,
-    },
-    estimates: [
-      {
-        id: 301,
-        price: 250000,
-        description: "사무실 이사 전문 서비스입니다. 업무 중단 최소화로 진행합니다.",
-        status: "PENDING",
-        isDesignated: true,
-        mover: {
-          id: 6,
-          name: "한이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "한이사",
-            profileImage: "/images/mover6.jpg",
-            experience: 10,
-            introduction: "10년 경력의 사무실 이사 전문업체입니다.",
-            description: "사무실 이사 전문",
-            completedCount: 300,
-            avgRating: 4.9,
-            reviewCount: 120,
-            favoriteCount: 65,
-          },
-        },
-      },
-      {
-        id: 302,
-        price: 280000,
-        description: "고급 사무실 이사 서비스입니다. 전문 장비와 인력으로 진행합니다.",
-        status: "PENDING",
-        isDesignated: true,
-        mover: {
-          id: 7,
-          name: "송이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "송이사",
-            profileImage: "/images/mover7.jpg",
-            experience: 12,
-            introduction: "12년 경력의 고급 사무실 이사 전문업체입니다.",
-            description: "고급 사무실 이사",
-            completedCount: 400,
-            avgRating: 5.0,
-            reviewCount: 180,
-            favoriteCount: 95,
-          },
-        },
-      },
-      {
-        id: 303,
-        price: 220000,
-        description: "합리적인 가격의 사무실 이사 서비스입니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 8,
-          name: "강이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "강이사",
-            profileImage: "/images/mover8.jpg",
-            experience: 7,
-            introduction: "7년 경력의 사무실 이사업체입니다.",
-            description: "합리적인 사무실 이사",
-            completedCount: 180,
-            avgRating: 4.7,
-            reviewCount: 75,
-            favoriteCount: 35,
-          },
-        },
-      },
-      {
-        id: 304,
-        price: 240000,
-        description: "신속한 사무실 이사 서비스입니다. 업무 연속성을 보장합니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 9,
-          name: "윤이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "윤이사",
-            profileImage: "/images/mover9.jpg",
-            experience: 9,
-            introduction: "9년 경력의 신속 이사 전문업체입니다.",
-            description: "신속한 사무실 이사",
-            completedCount: 250,
-            avgRating: 4.8,
-            reviewCount: 95,
-            favoriteCount: 48,
-          },
-        },
-      },
-    ],
-  },
-  {
-    quote: {
-      id: 4,
-      movingType: "HOME",
-      createdAt: new Date("2025-01-18"),
-      departureAddr: "경기도 성남시 분당구 정자로 123",
-      arrivalAddr: "경기도 용인시 기흥구 동백로 456",
-      departureDetail: "102동 505호",
-      status: "PENDING",
-      confirmedEstimateId: null,
-      estimateCount: 3,
-      designatedEstimateCount: 1,
-    },
-    estimates: [
-      {
-        id: 401,
-        price: 200000,
-        description: "분당에서 용인까지 안전한 가정 이사 서비스입니다.",
-        status: "PENDING",
-        isDesignated: true,
-        mover: {
-          id: 10,
-          name: "조이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "조이사",
-            profileImage: "/images/mover10.jpg",
-            experience: 6,
-            introduction: "6년 경력의 가정 이사 전문업체입니다.",
-            description: "가정 이사 전문",
-            completedCount: 160,
-            avgRating: 4.8,
-            reviewCount: 68,
-            favoriteCount: 32,
-          },
-        },
-      },
-      {
-        id: 402,
-        price: 230000,
-        description: "고급 가정 이사 서비스입니다. 특별한 보관함을 제공합니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 11,
-          name: "임이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "임이사",
-            profileImage: "/images/mover11.jpg",
-            experience: 8,
-            introduction: "8년 경력의 고급 가정 이사 전문업체입니다.",
-            description: "고급 가정 이사",
-            completedCount: 220,
-            avgRating: 4.9,
-            reviewCount: 88,
-            favoriteCount: 42,
-          },
-        },
-      },
-      {
-        id: 403,
-        price: 180000,
-        description: "합리적인 가격의 가정 이사 서비스입니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 12,
-          name: "백이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "백이사",
-            profileImage: "/images/mover12.jpg",
-            experience: 4,
-            introduction: "4년 경력의 가정 이사업체입니다.",
-            description: "합리적인 가정 이사",
-            completedCount: 120,
-            avgRating: 4.6,
-            reviewCount: 45,
-            favoriteCount: 20,
-          },
-        },
-      },
-    ],
-  },
-  {
-    quote: {
-      id: 5,
-      movingType: "SMALL",
-      createdAt: new Date("2025-01-19"),
-      departureAddr: "서울시 송파구 올림픽로 321",
-      arrivalAddr: "서울시 강동구 천호대로 654",
-      departureDetail: "1층 101호",
-      status: "PENDING",
-      confirmedEstimateId: null,
-      estimateCount: 2,
-      designatedEstimateCount: 0,
-    },
-    estimates: [
-      {
-        id: 501,
-        price: 70000,
-        description: "송파에서 강동까지 소형 이사 서비스입니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 13,
-          name: "남이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "남이사",
-            profileImage: "/images/mover13.jpg",
-            experience: 3,
-            introduction: "3년 경력의 소형 이사업체입니다.",
-            description: "소형 이사 전문",
-            completedCount: 85,
-            avgRating: 4.5,
-            reviewCount: 32,
-            favoriteCount: 15,
-          },
-        },
-      },
-      {
-        id: 502,
-        price: 85000,
-        description: "신중하고 꼼꼼한 소형 이사 서비스입니다.",
-        status: "PENDING",
-        isDesignated: false,
-        mover: {
-          id: 14,
-          name: "구이사",
-          currentRole: "MOVER",
-          profile: {
-            nickname: "구이사",
-            profileImage: "/images/mover14.jpg",
-            experience: 5,
-            introduction: "5년 경력의 소형 이사 전문업체입니다.",
-            description: "신중한 소형 이사",
-            completedCount: 140,
-            avgRating: 4.7,
-            reviewCount: 55,
-            favoriteCount: 25,
-          },
-        },
-      },
-    ],
-  },
-];
 
 // IReceivedQuoteListResponse 예시 데이터 5개
 export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
@@ -656,10 +396,12 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
     quote: {
       id: 101,
       movingType: "HOME",
-      createdAt: new Date("2024-12-01"),
+      movingDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15일 전
+      createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), // 20일 전
       departureAddr: "서울시 강남구 테헤란로 123",
       arrivalAddr: "서울시 서초구 서초대로 456",
       departureDetail: "101동 304호",
+      arrivalDetail: "202동 501호",
       status: "COMPLETED",
       confirmedEstimateId: 1001,
       estimateCount: 3,
@@ -678,7 +420,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "김이사",
-            profileImage: "/images/mover1.jpg",
+            profileImage: "",
             experience: 5,
             introduction: "5년 경력의 전문 이사업체입니다.",
             description: "신중하고 안전한 이사 서비스",
@@ -686,6 +428,24 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.8,
             reviewCount: 46,
             favoriteCount: 24,
+            serviceTypes: [
+              {
+                service: {
+                  id: 1,
+                  name: "가정이사",
+                  description: "가정집 이사 전문 서비스",
+                  iconUrl: "/icons/home-moving.png",
+                },
+              },
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -701,7 +461,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "박이사",
-            profileImage: "/images/mover2.jpg",
+            profileImage: "",
             experience: 8,
             introduction: "8년 경력의 전문 이사업체입니다.",
             description: "고급 포장재 사용 전문",
@@ -709,6 +469,24 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.9,
             reviewCount: 78,
             favoriteCount: 45,
+            serviceTypes: [
+              {
+                service: {
+                  id: 1,
+                  name: "가정이사",
+                  description: "가정집 이사 전문 서비스",
+                  iconUrl: "/icons/home-moving.png",
+                },
+              },
+              {
+                service: {
+                  id: 3,
+                  name: "사무실이사",
+                  description: "사무실 이사 전문 서비스",
+                  iconUrl: "/icons/office-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -724,7 +502,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "이이사",
-            profileImage: "/images/mover3.jpg",
+            profileImage: "",
             experience: 3,
             introduction: "3년 경력의 이사업체입니다.",
             description: "합리적인 가격 전문",
@@ -732,6 +510,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.6,
             reviewCount: 32,
             favoriteCount: 15,
+            serviceTypes: [
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -741,10 +529,12 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
     quote: {
       id: 102,
       movingType: "SMALL",
-      createdAt: new Date("2024-11-15"),
+      movingDate: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000), // 25일 전
+      createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30일 전
       departureAddr: "서울시 마포구 와우산로 789",
       arrivalAddr: "서울시 성동구 왕십리로 321",
       departureDetail: "2층 201호",
+      arrivalDetail: "5층 502호",
       status: "COMPLETED",
       confirmedEstimateId: 2001,
       estimateCount: 2,
@@ -763,7 +553,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "최이사",
-            profileImage: "/images/mover4.jpg",
+            profileImage: "",
             experience: 4,
             introduction: "소형 이사 전문업체입니다.",
             description: "소형 이사 전문",
@@ -771,6 +561,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.7,
             reviewCount: 39,
             favoriteCount: 19,
+            serviceTypes: [
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -786,7 +586,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "정이사",
-            profileImage: "/images/mover5.jpg",
+            profileImage: "",
             experience: 6,
             introduction: "6년 경력의 소형 이사 전문업체입니다.",
             description: "신중한 소형 이사",
@@ -794,6 +594,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.8,
             reviewCount: 62,
             favoriteCount: 28,
+            serviceTypes: [
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -803,10 +613,12 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
     quote: {
       id: 103,
       movingType: "OFFICE",
-      createdAt: new Date("2024-10-20"),
+      movingDate: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000), // 35일 전
+      createdAt: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000), // 40일 전
       departureAddr: "서울시 종로구 종로 456",
       arrivalAddr: "서울시 중구 을지로 789",
       departureDetail: "3층 301호",
+      arrivalDetail: "7층 701호",
       status: "COMPLETED",
       confirmedEstimateId: 3001,
       estimateCount: 4,
@@ -825,7 +637,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "한이사",
-            profileImage: "/images/mover6.jpg",
+            profileImage: "",
             experience: 10,
             introduction: "10년 경력의 사무실 이사 전문업체입니다.",
             description: "사무실 이사 전문",
@@ -833,6 +645,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.9,
             reviewCount: 121,
             favoriteCount: 66,
+            serviceTypes: [
+              {
+                service: {
+                  id: 3,
+                  name: "사무실이사",
+                  description: "사무실 이사 전문 서비스",
+                  iconUrl: "/icons/office-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -848,7 +670,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "송이사",
-            profileImage: "/images/mover7.jpg",
+            profileImage: "",
             experience: 12,
             introduction: "12년 경력의 고급 사무실 이사 전문업체입니다.",
             description: "고급 사무실 이사",
@@ -856,6 +678,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 5.0,
             reviewCount: 180,
             favoriteCount: 95,
+            serviceTypes: [
+              {
+                service: {
+                  id: 3,
+                  name: "사무실이사",
+                  description: "사무실 이사 전문 서비스",
+                  iconUrl: "/icons/office-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -871,7 +703,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "강이사",
-            profileImage: "/images/mover8.jpg",
+            profileImage: "",
             experience: 7,
             introduction: "7년 경력의 사무실 이사업체입니다.",
             description: "합리적인 사무실 이사",
@@ -879,6 +711,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.7,
             reviewCount: 75,
             favoriteCount: 35,
+            serviceTypes: [
+              {
+                service: {
+                  id: 3,
+                  name: "사무실이사",
+                  description: "사무실 이사 전문 서비스",
+                  iconUrl: "/icons/office-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -894,7 +736,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "윤이사",
-            profileImage: "/images/mover9.jpg",
+            profileImage: "",
             experience: 9,
             introduction: "9년 경력의 신속 이사 전문업체입니다.",
             description: "신속한 사무실 이사",
@@ -902,6 +744,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.8,
             reviewCount: 95,
             favoriteCount: 48,
+            serviceTypes: [
+              {
+                service: {
+                  id: 3,
+                  name: "사무실이사",
+                  description: "사무실 이사 전문 서비스",
+                  iconUrl: "/icons/office-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -911,10 +763,12 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
     quote: {
       id: 104,
       movingType: "HOME",
-      createdAt: new Date("2024-09-10"),
+      movingDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000), // 45일 전
+      createdAt: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000), // 50일 전
       departureAddr: "경기도 성남시 분당구 정자로 123",
       arrivalAddr: "경기도 용인시 기흥구 동백로 456",
       departureDetail: "102동 505호",
+      arrivalDetail: "301동 802호",
       status: "COMPLETED",
       confirmedEstimateId: 4001,
       estimateCount: 3,
@@ -933,7 +787,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "조이사",
-            profileImage: "/images/mover10.jpg",
+            profileImage: "",
             experience: 6,
             introduction: "6년 경력의 가정 이사 전문업체입니다.",
             description: "가정 이사 전문",
@@ -941,6 +795,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.8,
             reviewCount: 69,
             favoriteCount: 33,
+            serviceTypes: [
+              {
+                service: {
+                  id: 1,
+                  name: "가정이사",
+                  description: "가정집 이사 전문 서비스",
+                  iconUrl: "/icons/home-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -956,7 +820,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "임이사",
-            profileImage: "/images/mover11.jpg",
+            profileImage: "",
             experience: 8,
             introduction: "8년 경력의 고급 가정 이사 전문업체입니다.",
             description: "고급 가정 이사",
@@ -964,6 +828,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.9,
             reviewCount: 88,
             favoriteCount: 42,
+            serviceTypes: [
+              {
+                service: {
+                  id: 1,
+                  name: "가정이사",
+                  description: "가정집 이사 전문 서비스",
+                  iconUrl: "/icons/home-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -979,7 +853,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "백이사",
-            profileImage: "/images/mover12.jpg",
+            profileImage: "",
             experience: 4,
             introduction: "4년 경력의 가정 이사업체입니다.",
             description: "합리적인 가정 이사",
@@ -987,6 +861,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.6,
             reviewCount: 45,
             favoriteCount: 20,
+            serviceTypes: [
+              {
+                service: {
+                  id: 1,
+                  name: "가정이사",
+                  description: "가정집 이사 전문 서비스",
+                  iconUrl: "/icons/home-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -996,10 +880,12 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
     quote: {
       id: 105,
       movingType: "SMALL",
-      createdAt: new Date("2024-08-25"),
+      movingDate: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000), // 55일 전
+      createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 60일 전
       departureAddr: "서울시 송파구 올림픽로 321",
       arrivalAddr: "서울시 강동구 천호대로 654",
       departureDetail: "1층 101호",
+      arrivalDetail: "3층 303호",
       status: "COMPLETED",
       confirmedEstimateId: 5001,
       estimateCount: 2,
@@ -1018,7 +904,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "남이사",
-            profileImage: "/images/mover13.jpg",
+            profileImage: "",
             experience: 3,
             introduction: "3년 경력의 소형 이사업체입니다.",
             description: "소형 이사 전문",
@@ -1026,6 +912,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.5,
             reviewCount: 33,
             favoriteCount: 16,
+            serviceTypes: [
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },
@@ -1041,7 +937,7 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
           currentRole: "MOVER",
           profile: {
             nickname: "구이사",
-            profileImage: "/images/mover14.jpg",
+            profileImage: "",
             experience: 5,
             introduction: "5년 경력의 소형 이사 전문업체입니다.",
             description: "신중한 소형 이사",
@@ -1049,6 +945,16 @@ export const mockReceivedQuoteListResponses: IReceivedQuoteListResponse = [
             avgRating: 4.7,
             reviewCount: 55,
             favoriteCount: 25,
+            serviceTypes: [
+              {
+                service: {
+                  id: 2,
+                  name: "소형이사",
+                  description: "소형 물품 이사 서비스",
+                  iconUrl: "/icons/small-moving.png",
+                },
+              },
+            ],
           },
         },
       },

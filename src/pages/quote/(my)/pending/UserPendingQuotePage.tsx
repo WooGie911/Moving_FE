@@ -2,10 +2,19 @@
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import { CardList } from "@/components/quote/(my)/CardList";
 import { RequestQuote } from "@/components/quote/(my)/pending/RequestQuote";
-import { mockPendingQuoteResponses, mover1 } from "@/types/userQuote";
+import { mockPendingQuoteResponses, TMover } from "@/types/userQuote";
 import customerQuoteApi from "@/lib/api/customerQuote";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
+
+// Date 객체를 한국어 날짜 형식으로 변환하는 함수
+const formatKoreanDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}년 ${month}월 ${day}일`;
+};
 
 export const UserPendingQuotePage = () => {
   const data = mockPendingQuoteResponses;
@@ -13,60 +22,32 @@ export const UserPendingQuotePage = () => {
   //   queryKey: ["pendingQuotes"],
   //   queryFn: () => customerQuoteApi.getPendingQuote(),
   // });
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
         <QuoteAndEstimateTab userType="User" />
         <RequestQuote
-          movingType="소형이사"
-          requestDate="2025년 6월 24일"
-          movingDate="2025년 7월 8일(화)"
-          startPoint="서울시 중랑구"
-          endPoint="경기도 수원시"
+          movingType={data.quote.movingType.toLowerCase() as "small" | "home" | "office" | "document"}
+          requestDate={formatKoreanDate(data.quote.createdAt)}
+          movingDate={formatKoreanDate(data.quote.movingDate)}
+          startPoint={shortenRegionInAddress(data.quote.departureAddr.split(" ").slice(0, 2).join(" "))}
+          endPoint={shortenRegionInAddress(data.quote.arrivalAddr.split(" ").slice(0, 2).join(" "))}
         />
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
           <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
-            <CardList
-              movingType="office"
-              isDesignated={true}
-              estimateId="0"
-              estimateState="PENDING"
-              estimateTitle="사무실 이사전문 김코드"
-              estimatePrice={170000}
-              type="pending"
-              mover={mover1}
-            />
-            <CardList
-              movingType="home"
-              isDesignated={true}
-              estimateId="1"
-              estimateState="PENDING"
-              estimateTitle="예시 견적서 1"
-              estimatePrice={170000}
-              type="pending"
-              mover={mover1}
-            />
-            <CardList
-              movingType="small"
-              isDesignated={false}
-              estimateId="2"
-              estimateState="PENDING"
-              estimateTitle="예시 견적서 2"
-              estimatePrice={100000}
-              type="pending"
-              mover={mover1}
-            />
-
-            <CardList
-              movingType="small"
-              isDesignated={false}
-              estimateId="3"
-              estimateState="PENDING"
-              estimateTitle="예시 견적서 3"
-              estimatePrice={100000}
-              type="pending"
-              mover={mover1}
-            />
+            {mockPendingQuoteResponses.estimates.map((item) => (
+              <CardList
+                key={item.id}
+                mover={item.mover as TMover}
+                isDesignated={false}
+                estimateId={item.id}
+                estimateState={item.status}
+                estimateTitle={item.description}
+                estimatePrice={item.price}
+                type="pending"
+              />
+            ))}
           </div>
         </div>
       </div>

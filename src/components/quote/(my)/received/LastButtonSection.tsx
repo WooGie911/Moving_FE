@@ -11,7 +11,7 @@ export const LastButtonSection = () => {
         </div>
       </button>
       <Button variant="solid" width="w-full" height="h-[54px]" rounded="rounded-[8px]">
-        지정견적 요청하기
+        견적 확정하기
       </Button>
     </div>
   );
