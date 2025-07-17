@@ -71,7 +71,7 @@ const EditPage = () => {
       });
       if (result.success) {
         alert("기본정보가 성공적으로 수정되었습니다.");
-        router.push("/moverMyPage"); // 예시: 마이페이지로 이동
+        router.push("/moverMyPage"); 
       } else {
         alert(result.message || "수정에 실패했습니다.");
       }
