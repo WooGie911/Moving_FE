@@ -7,10 +7,18 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-interface IProfileInput {
+interface ICustomerProfileInput {
   profileImage: string;
   currentRegion: string;
   userServices: number[];
+}
+
+interface IMoverProfileInput {
+  profileImage: string;
+  nickname?: string;
+  experience?: number;
+  introduction?: string;
+  description?: string;
 }
 
 const userApi = {
@@ -49,8 +57,10 @@ const userApi = {
     return presigned.fileUrl;
   },
 
-  postProfile: async (profile: IProfileInput) => {
-    const response = await fetch(`${API_URL}/users/profile`, {
+  postProfile: async (profile: ICustomerProfileInput | IMoverProfileInput) => {
+    console.log(profile);
+
+    const response = await fetch(`http://localhost:5050/users/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

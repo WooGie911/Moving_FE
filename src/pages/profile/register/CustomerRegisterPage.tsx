@@ -16,7 +16,9 @@ const CustomerRegisterPage = () => {
   const router = useRouter();
   const { open, close } = useModal();
 
-  const methods = useForm();
+  const methods = useForm({
+    mode: "onChange", // 실시간 벨리데이션
+  });
   const { handleSubmit } = methods;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -27,8 +29,6 @@ const CustomerRegisterPage = () => {
     type: "",
     dataUrl: uploadSkeleton.src,
   });
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const allFilled = selectedImage && services.length > 0 && regions;
 
@@ -58,8 +58,6 @@ const CustomerRegisterPage = () => {
   };
 
   const onSubmit = async () => {
-    setIsLoading(true);
-
     const response = await userApi.postProfile({
       profileImage: selectedImage.dataUrl,
       currentRegion: regions,
@@ -68,7 +66,7 @@ const CustomerRegisterPage = () => {
 
     if (response.success) {
       router.push("/searchMover");
-    } else if (response.status === 401) {
+    } else {
       open({
         title: "프로필 등록 실패",
         children: <div>{response.message}</div>,

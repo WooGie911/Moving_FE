@@ -14,14 +14,12 @@ import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
 import authApi from "@/lib/api/auth.api";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const router = useRouter();
   const { isLoading } = useAuth();
   const { open, close } = useModal();
 

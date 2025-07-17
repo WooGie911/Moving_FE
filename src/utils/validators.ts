@@ -46,11 +46,11 @@ export const isValidEmail = (email: string): boolean => {
 /**
  * 이름 유효성 검사
  * - 한글, 영문만 허용
- * - 최소 2자 이상
+ * - 최소 1자 이상 (백엔드 기준)
  * - 최대 10자 이하
  */
 export const isValidName = (name: string): boolean => {
-  const nameRegex = /^[가-힣a-zA-Z]{2,10}$/;
+  const nameRegex = /^[가-힣a-zA-Z]{1,10}$/;
   return nameRegex.test(name);
 };
 
@@ -76,12 +76,40 @@ export const isValidPassword = (password: string): boolean => {
 };
 
 /**
+ * 경력 유효성 검사
+ * - 숫자만, 0 이상 (백엔드 기준)
+ */
+export const isValidCareer = (career: number): boolean => {
+  return !isNaN(career) && career >= 0;
+};
+
+/**
+ * 소개글 유효성 검사
+ * - 최소 8자 이상
+ */
+export const isValidIntro = (intro: string): boolean => {
+  return intro.trim().length >= 8;
+};
+
+/**
+ * 설명 유효성 검사
+ * - 최소 10자 이상
+ */
+export const isValidDescription = (desc: string): boolean => {
+  return desc.trim().length >= 10;
+};
+
+/**
  * React Hook Form에서 사용할 벨리데이션 규칙
  */
 export const validationRules = {
   name: {
-    required: "이름은 필수 입력입니다.",
-    validate: (value: string) => isValidName(value) || "이름은 2~10자의 한글, 영문만 입력 가능합니다.",
+    required: "이름을 입력해주세요",
+    validate: (value: string) => isValidName(value) || "이름은 1~10자의 한글, 영문만 입력 가능합니다.",
+  },
+  nickname: {
+    required: "별명을 입력해주세요",
+    validate: (value: string) => isValidName(value) || "별명은 1~10자의 한글, 영문만 입력 가능합니다.",
   },
   email: {
     required: "이메일은 필수 입력입니다.",
@@ -95,5 +123,17 @@ export const validationRules = {
     required: "비밀번호는 필수 입력입니다.",
     validate: (value: string) =>
       isValidPassword(value) || "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 각각 포함해야 합니다.",
+  },
+  career: {
+    required: "경력을 입력해주세요",
+    validate: (value: number) => isValidCareer(value) || "경력은 0 이상의 숫자로 입력해주세요. (예: 8)",
+  },
+  intro: {
+    required: "한줄 소개를 입력해주세요",
+    validate: (value: string) => isValidIntro(value) || "한 줄 소개는 8자 이상 입력해주세요.",
+  },
+  description: {
+    required: "상세 설명을 입력해주세요",
+    validate: (value: string) => isValidDescription(value) || "상세 설명은 10자 이상 입력해주세요.",
   },
 };
