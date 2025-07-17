@@ -192,7 +192,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     departureDetail: "홍대입구역 2번 출구",
     arrivalDetail: "왕십리역 1번 출구",
     description: "소규모 사무실 이사입니다. 책상 5개, 의자 5개, 서랍장 2개, 복사기 1대 있습니다.",
-    status: "CONFIRMED",
+    status: "PENDING",
     createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2시간 전
     updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
     user: {
@@ -218,7 +218,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     departureDetail: "잠실역 4번 출구",
     arrivalDetail: "천호역 2번 출구",
     description: "작은 짐만 있습니다. 옷장과 작은 서랍장, 이불 정도만 있어요.",
-    status: "REJECTED",
+    status: "PENDING",
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3일 전
     updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     user: {
@@ -270,7 +270,7 @@ export const mockQuoteResponseData: IQuoteResponse[] = [
     departureDetail: "노원역 2번 출구",
     arrivalDetail: "도봉역 1번 출구",
     description: "가족 이사입니다. 가전제품과 가구가 많아서 조심해서 다뤄주세요.",
-    status: "CONFIRMED",
+    status: "PENDING",
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10일 전
     updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     user: {
@@ -304,7 +304,7 @@ export const mockMyEstimateData: IEstimateResponse[] = [
       id: 101,
       userId: 101,
       movingType: "HOME",
-      movingDate: new Date("2024-12-16"),
+      movingDate: new Date("2025-07-21"),
       departureAddr: "서울특별시 강남구 테헤란로 123",
       arrivalAddr: "서울특별시 서초구 서초대로 456",
       departureDetail: "강남역 1번 출구 근처",
@@ -341,7 +341,7 @@ export const mockMyEstimateData: IEstimateResponse[] = [
       id: 102,
       userId: 102,
       movingType: "OFFICE",
-      movingDate: new Date("2024-12-17"),
+      movingDate: new Date("2025-07-24"),
       departureAddr: "서울특별시 마포구 와우산로 789",
       arrivalAddr: "서울특별시 성동구 왕십리로 321",
       departureDetail: "홍대입구역 2번 출구",
@@ -368,9 +368,9 @@ export const mockMyEstimateData: IEstimateResponse[] = [
     id: 3,
     quoteId: 103,
     moverId: 201,
-    price: 80000,
+    price: 180000,
     description: "작은 짐 이사 서비스입니다. 옷장, 서랍장 등 소형 가구만 있어서 빠르게 처리 가능합니다.",
-    status: "REJECTED",
+    status: "PENDING",
     isDesignated: false,
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1일 전
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
@@ -378,13 +378,13 @@ export const mockMyEstimateData: IEstimateResponse[] = [
       id: 103,
       userId: 103,
       movingType: "SMALL",
-      movingDate: new Date("2024-12-18"),
+      movingDate: new Date("2025-07-30"),
       departureAddr: "서울특별시 송파구 올림픽로 654",
       arrivalAddr: "서울특별시 강동구 천호대로 987",
       departureDetail: "잠실역 4번 출구",
       arrivalDetail: "천호역 2번 출구",
       description: "작은 짐만 있습니다. 옷장과 작은 서랍장, 이불 정도만 있어요.",
-      status: "REJECTED",
+      status: "PENDING",
       createdAt: new Date("2024-12-07T16:45:00"),
       updatedAt: new Date("2024-12-08T10:30:00"),
       user: {
@@ -414,8 +414,8 @@ export const mockMyEstimateData: IEstimateResponse[] = [
     quote: {
       id: 104,
       userId: 104,
-      movingType: "DOCUMENT",
-      movingDate: new Date("2024-12-19"),
+      movingType: "HOME",
+      movingDate: new Date("2025-06-25"),
       departureAddr: "서울특별시 종로구 종로 111",
       arrivalAddr: "서울특별시 중구 을지로 222",
       departureDetail: "종로3가역 1번 출구",
@@ -444,7 +444,7 @@ export const mockMyEstimateData: IEstimateResponse[] = [
     moverId: 201,
     price: 300000,
     description: "가족 이사 전문 서비스입니다. 가전제품과 가구를 안전하게 포장하여 이전해드립니다.",
-    status: "SENT",
+    status: "PENDING",
     isDesignated: false,
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5일 전
     updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
@@ -452,13 +452,13 @@ export const mockMyEstimateData: IEstimateResponse[] = [
       id: 105,
       userId: 105,
       movingType: "HOME",
-      movingDate: new Date("2024-12-20"),
+      movingDate: new Date("2025-05-21"),
       departureAddr: "서울특별시 노원구 동일로 333",
       arrivalAddr: "서울특별시 도봉구 도봉로 444",
       departureDetail: "노원역 2번 출구",
       arrivalDetail: "도봉역 1번 출구",
       description: "가족 이사입니다. 가전제품과 가구가 많아서 조심해서 다뤄주세요.",
-      status: "CONFIRMED",
+      status: "PENDING",
       createdAt: new Date("2024-12-06T10:25:00"),
       updatedAt: new Date("2024-12-07T15:40:00"),
       user: {

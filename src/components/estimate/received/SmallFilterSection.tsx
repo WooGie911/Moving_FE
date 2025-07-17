@@ -5,7 +5,7 @@ import sort_active from "@/assets/icon/filter/icon-filter-active.png";
 import sort_inactive from "@/assets/icon/filter/icon-filter-inactive.png";
 import { useModal, useModalStore } from "@/components/common/modal/ModalContext";
 import { SelectCheckBox } from "./SelectCheckBox";
-import { SelectMovinType } from "./SelectMovinType";
+import { SelectMovingType } from "./SelectMovingType";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { Dropdown } from "./Dropdown";
 import { IFilterState } from "@/types/moverEstimate";
@@ -26,9 +26,9 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   // 모달 내부 상태 관리 (실시간 반영을 위해)
   const [modalFilters, setModalFilters] = useState<IFilterState>(filters);
 
-  // 화면이 desktop(lg)이상이면 모달 자동 close
+  // 화면이 desktop(lg)이상이면 모달 자동 close (필터 모달인 경우에만)
   React.useEffect(() => {
-    if (modal && deviceType === "desktop") {
+    if (modal && deviceType === "desktop" && modal.title === "필터") {
       close();
     }
   }, [deviceType, modal, close]);
@@ -111,7 +111,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
                   {/* 이사유형 라벨 선택 영역 */}
                   <div className="flex flex-col items-start justify-center gap-2 pb-7">
                     <p className="text-black-500 text-[16px] leading-[26px] font-semibold">이사 유형</p>
-                    <SelectMovinType selectedTypes={modalFilters.movingTypes} onTypeChange={handleModalTypeChange} />
+                    <SelectMovingType selectedTypes={modalFilters.movingTypes} onTypeChange={handleModalTypeChange} />
                   </div>
                   <div className="flex flex-col items-start justify-center gap-2">
                     <p className="text-black-500 text-[16px] leading-[26px] font-semibold">지역 및 견적 </p>

@@ -1,12 +1,12 @@
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import React from "react";
 
-interface SelectMovinTypeProps {
+interface SelectMovingTypeProps {
   selectedTypes: string[];
   onTypeChange: (type: string) => void;
 }
 
-export const SelectMovinType = ({ selectedTypes, onTypeChange }: SelectMovinTypeProps) => {
+export const SelectMovingType = ({ selectedTypes, onTypeChange }: SelectMovingTypeProps) => {
   const movingTypes = [
     { text: "소형이사", value: "SMALL" },
     { text: "가정이사", value: "HOME" },

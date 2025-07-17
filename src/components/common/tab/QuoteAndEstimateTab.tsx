@@ -8,7 +8,7 @@ const UserTab = [
 
 const MoverTab = [
   { name: "보낸 견적 조회", href: "/estimate/request" },
-  { name: "반려 요청", href: "/estimate/resolved" },
+  { name: "반려 요청", href: "/estimate/rejected" },
 ];
 
 const DetailTab = [{ name: "견적 상세", href: "" }];
