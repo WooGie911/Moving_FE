@@ -1,7 +1,10 @@
+import SectionHeader from "@/components/common/SectionHeader";
 import React from "react";
 
 const ReviewPage = () => {
-  return <div>review</div>;
+  return (
+
+  );
 };
 
 export default ReviewPage;
