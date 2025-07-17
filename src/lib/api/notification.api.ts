@@ -1,9 +1,10 @@
 import { INotification } from "@/types/notification.types";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getAccessToken = async () => {
-  const accessToken = await localStorage.getItem("accessToken");
+  const accessToken = await getTokenFromCookie();
   return accessToken;
 };
 
