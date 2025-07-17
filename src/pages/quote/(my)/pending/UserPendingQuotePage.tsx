@@ -8,11 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 export const UserPendingQuotePage = () => {
-  const { data: pendingQuotes } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["pendingQuotes"],
     queryFn: () => customerQuoteApi.getPendingQuote(),
   });
-
   return (
     <>
       <div className="flex flex-col items-center justify-center">
