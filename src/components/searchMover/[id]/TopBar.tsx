@@ -7,8 +7,9 @@ import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.png";
 import defaultProfileMd from "@/assets/img/mascot/moverprofile-md.png";
 import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { TopBarProps } from "@/types/moverDetail";
 
-const TopBar = () => {
+const TopBar = ({ profileImage }: TopBarProps) => {
   const deviceType = useWindowWidth();
 
   let defaultProfile;

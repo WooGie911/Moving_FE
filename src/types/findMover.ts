@@ -32,3 +32,28 @@ export interface IMoverListParams {
 export interface FavoriteMoverListProps {
   movers: IMoverInfo[];
 }
+
+export interface IReview {
+  id: number;
+  rating: number;
+  content: string;
+  createdAt: string;
+  userId: number;
+  moverId: number;
+  quoteId: number;
+  estimateId: number;
+  status: "PENDING" | "COMPLETED";
+  isPublic: boolean;
+  updatedAt?: string;
+  user: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface IReviewListResponse {
+  items: IReview[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
