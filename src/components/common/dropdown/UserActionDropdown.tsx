@@ -54,21 +54,6 @@ const DropdownHeader = ({
   </div>
 );
 
-// 공통 메뉴 아이템 컴포넌트
-const MenuItem = ({
-  children,
-  className = "",
-  onClick,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}) => (
-  <div className={`border-b border-neutral-200 bg-white px-4 py-3 ${className}`} onClick={onClick}>
-    {children}
-  </div>
-);
-
 const UserActionDropdown = ({ type, onClose, isOpen, children, name }: IUserActionDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
