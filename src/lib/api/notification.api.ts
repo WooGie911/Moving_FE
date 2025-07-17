@@ -60,3 +60,18 @@ export async function readAllNotifications() {
   if (!res.ok) throw new Error("전체 알림 읽음 처리 실패");
   return res.json();
 }
+
+// 테스트용 알림 생성
+export async function createTestNotification() {
+  const accessToken = await getAccessToken();
+  const res = await fetch(`${API_URL}/actions/test`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) throw new Error("테스트 알림 생성 실패");
+  return res.json();
+}
