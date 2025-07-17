@@ -1,14 +1,6 @@
 "use client";
+import { ICircleTextLabelProps } from "@/types/Chip";
 import React, { useState, useEffect } from "react";
-
-interface ICircleTextLabelProps {
-  text: string;
-  clickAble?: boolean;
-  onClick?: () => void;
-  hasBorder1?: boolean;
-  hasBorder2?: boolean;
-  isSelected?: boolean;
-}
 
 export const CircleTextLabel = ({
   text,

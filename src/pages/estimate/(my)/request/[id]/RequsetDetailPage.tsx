@@ -1,5 +1,11 @@
+import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import React from "react";
 
 export const RequsetDetailPage = () => {
-  return <div>내가요청한견적상세페이지입니다</div>;
+  return (
+    <div>
+      <QuoteAndEstimateTab userType="Detail" />
+      반려한견적
+    </div>
+  );
 };

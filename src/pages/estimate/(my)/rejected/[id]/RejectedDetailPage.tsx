@@ -1,5 +1,11 @@
+import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import React from "react";
 
 export const RejectedDetailPage = () => {
-  return <div>내가 반려한 요청 상세페이지</div>;
+  return (
+    <div>
+      <QuoteAndEstimateTab userType="Detail" />
+      반려한견적
+    </div>
+  );
 };
