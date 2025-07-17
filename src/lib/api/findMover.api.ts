@@ -1,5 +1,6 @@
 import { IMoverInfo, IMoverListParams } from "@/types/findMover";
 import { REGION_LIST, SERVICE_TYPE_LIST } from "@/lib/utils/moverStaticData";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -55,10 +56,16 @@ const findMoverApi = {
    */
   fetchFavoriteMovers: async (): Promise<IMoverInfo[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const getAccessToken = async () => {
+        const accessToken = await getTokenFromCookie();
+        return accessToken;
+      };
+      if (!getAccessToken) {
+        throw new Error("로그인이 필요합니다.");
+      }
       const res = await fetch(`${API_URL}/movers/favorite`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${await getAccessToken()}`,
         },
       });
 
@@ -77,6 +84,20 @@ const findMoverApi = {
     } catch (error) {
       console.error("API 호출 실패:", error);
       throw error;
+    }
+  },
+
+  /**
+   * 기사님 상세 조회 API
+   */
+  fetchMoverDetail: async (moverId: number) => {
+    try {
+      const res = await fetch(`${API_URL}/movers/${moverId}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.data || null;
+    } catch (error) {
+      return null;
     }
   },
 

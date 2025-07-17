@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["part4-moving-s3.s3.ap-northeast-2.amazonaws.com"],
+    domains: ["part4-moving-s3.s3.ap-northeast-2.amazonaws.com", "s3.amazonaws.com"],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
