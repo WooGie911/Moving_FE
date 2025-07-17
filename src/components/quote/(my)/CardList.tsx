@@ -17,7 +17,6 @@ const formatNumber = (num: number): string => {
 };
 
 export const CardList = ({
-  movingType,
   isDesignated,
   estimateId,
   estimateState,
@@ -35,7 +34,7 @@ export const CardList = ({
           estimateState={estimateState}
           estimateTitle={estimateTitle}
           isDesignated={isDesignated}
-          moveType={movingType}
+          mover={mover}
           type={type}
           usedAtDetail={false}
         />
@@ -76,7 +75,7 @@ export const CardList = ({
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
               </div>
             ) : (
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateState}</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">반려견적</p>
             )}
           </div>
           <div className="flex w-full flex-row items-center justify-end gap-3 md:justify-end">

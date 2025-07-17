@@ -1,6 +1,7 @@
 import {
   IPendingQuoteResponse,
   IReceivedQuoteResponse,
+  IReceivedQuoteListResponse,
   IQuoteDetailResponse,
   IDesignateQuoteRequest,
   IQuoteHistoryResponse,
@@ -118,7 +119,7 @@ const customerQuoteApi = {
   /**
    * 완료된 견적 목록 조회
    */
-  getReceivedQuotes: async (): Promise<IReceivedQuoteResponse[]> => {
+  getReceivedQuotes: async (): Promise<IReceivedQuoteListResponse> => {
     try {
       const accessToken = await getAccessToken();
 

@@ -2,9 +2,10 @@ import React from "react";
 import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
+import { TMover } from "@/types/userQuote";
 
 interface IProps {
-  moveType: "home" | "office" | "document" | "small";
+  mover: TMover;
   isDesignated: boolean;
   estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
   estimateTitle: string;
@@ -12,8 +13,22 @@ interface IProps {
   usedAtDetail: boolean;
 }
 
+// 서비스 타입 이름을 MoveTypeLabel 타입으로 매핑하는 함수
+const mapServiceTypeToMoveType = (serviceName: string): "small" | "home" | "office" | "document" => {
+  switch (serviceName) {
+    case "소형이사":
+      return "small";
+    case "가정이사":
+      return "home";
+    case "사무실이사":
+      return "office";
+    default:
+      return "home"; // 기본값
+  }
+};
+
 export const LabelAndTitleSection = ({
-  moveType,
+  mover,
   isDesignated,
   estimateState,
   estimateTitle,
@@ -25,7 +40,10 @@ export const LabelAndTitleSection = ({
       <div className="flex w-full flex-row items-center justify-between">
         {/* 이사타입과 지정견적 라벨 */}
         <div className="flex flex-row gap-2">
-          <MoveTypeLabel type={moveType} />
+          {/* mover의 serviceTypes에 따라 여러 라벨 표시 */}
+          {mover.profile?.serviceTypes?.map((serviceType, index) => (
+            <MoveTypeLabel key={index} type={mapServiceTypeToMoveType(serviceType.service.name)} />
+          ))}
           {isDesignated ? <MoveTypeLabel type="document" /> : ""}
         </div>
         {/* 확정견적인지 + 견적상태  모바일만 표시 */}
@@ -45,7 +63,7 @@ export const LabelAndTitleSection = ({
           <p
             className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
           >
-            {estimateState}
+            {estimateState === "REJECTED" ? "반려견적" : estimateState}
           </p>
         )}
       </div>
@@ -73,7 +91,7 @@ export const LabelAndTitleSection = ({
         ) : (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateState}</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">반려견적</p>
             </div>
           </div>
         )}

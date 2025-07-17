@@ -45,11 +45,8 @@ export const RequestDetailMain = ({ data }: { data: IEstimateResponse }) => {
 
         {/* 이사견적 상세정보들 */}
         <DetailMoveInfo
-          movingType={data.quote?.movingType.toLowerCase() as "small" | "home" | "office"}
-          requestDate={data.quote?.createdAt.toLocaleDateString() || "견적 요청일 정보 없음"}
-          movingDate={data.quote?.movingDate.toLocaleDateString() || "이용일 정보 없음"}
-          startPoint={data.quote?.departureAddr + " " + data.quote?.departureDetail || "출발지 정보 없음"}
-          endPoint={data.quote?.arrivalAddr + " " + data.quote?.arrivalDetail || "도착지 정보 없음"}
+          {...(data.quote as any)}
+          movingType={data.quote!.movingType.toLowerCase() as "small" | "home" | "office"}
         />
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
