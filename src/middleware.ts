@@ -16,12 +16,14 @@ export async function middleware(request: NextRequest) {
    * - 없으면 undefined
    */
   let userRole: TUserRole | undefined;
+  let hasProfile: boolean | undefined;
   let decodedToken: DecodedTokenPayload | null = null;
 
   if (accessToken) {
     try {
       decodedToken = await decodeAccessToken(accessToken);
       userRole = decodedToken?.role as TUserRole;
+      hasProfile = decodedToken?.hasProfile as boolean;
     } catch (error) {
       console.error("❌ 토큰 디코딩 실패:", error);
     }
