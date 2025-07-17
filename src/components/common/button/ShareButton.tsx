@@ -7,6 +7,14 @@ import { IShareButtonProps } from "@/types/button";
 import iconClip from "@/assets/icon/clip/icon-clip-md.png";
 import iconShareKakao from "@/assets/icon/share/icon-share-kakao-lg.png";
 import iconShareFacebook from "@/assets/icon/share/icon-share-facebook-lg.png";
+import {
+  copyToClipboard,
+  getCurrentPageUrl,
+  shareToKakao,
+  shareToFacebook,
+  showShareSuccess,
+  showShareError,
+} from "@/utils/shareUtils";
 
 /**
  * ShareButton 컴포넌트(ShareButtonGroup에서만 사용)
@@ -40,10 +48,20 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
   const handleClipCopy = async () => {
     try {
       const shareUrl = getCurrentPageUrl();
-      await navigator.clipboard.writeText(shareUrl);
-      onSuccess?.();
-    } catch {
-      onError?.("클립보드 복사에 실패했습니다.");
+      const success = await copyToClipboard(shareUrl);
+
+      if (success) {
+        showShareSuccess("clip");
+        onSuccess?.();
+      } else {
+        const errorMessage = "클립보드 복사에 실패했습니다.";
+        showShareError(errorMessage);
+        onError?.(errorMessage);
+      }
+    } catch (error) {
+      const errorMessage = "클립보드 복사에 실패했습니다.";
+      showShareError(errorMessage);
+      onError?.(errorMessage);
     }
   };
 
@@ -51,11 +69,13 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
   const handleKakaoShare = () => {
     try {
       const shareUrl = getCurrentPageUrl();
-      // TODO: 카카오톡 API 연결 필요
-      console.log("카카오톡 공유 URL:", shareUrl);
+      shareToKakao(shareUrl);
+      showShareSuccess("kakao");
       onSuccess?.();
-    } catch {
-      onError?.("카카오톡 공유 기능이 아직 구현되지 않았습니다.");
+    } catch (error) {
+      const errorMessage = "카카오톡 공유에 실패했습니다.";
+      showShareError(errorMessage);
+      onError?.(errorMessage);
     }
   };
 
@@ -63,11 +83,13 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
   const handleFacebookShare = () => {
     try {
       const shareUrl = getCurrentPageUrl();
-      // TODO: 페이스북 API 연결 필요
-      console.log("페이스북 공유 URL:", shareUrl);
+      shareToFacebook(shareUrl);
+      showShareSuccess("facebook");
       onSuccess?.();
-    } catch {
-      onError?.("페이스북 공유 기능이 아직 구현되지 않았습니다.");
+    } catch (error) {
+      const errorMessage = "페이스북 공유에 실패했습니다.";
+      showShareError(errorMessage);
+      onError?.(errorMessage);
     }
   };
 

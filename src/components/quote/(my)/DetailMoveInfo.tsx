@@ -11,7 +11,7 @@ export const DetailMoveInfo = ({
   const movetype = { small: "소형이사", home: "가정이사", office: "사무실이사" };
 
   return (
-    <div className="my-2 flex w-full flex-col items-start justify-center gap-5">
+    <div className="my-2 flex w-full flex-col items-start justify-center gap-7">
       <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">견적 정보</p>
       <div className="flex w-full flex-col items-start justify-center gap-3">
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
