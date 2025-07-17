@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IAddressSearchDaumProps, IDaumAddress, IDaumAddressData, IDaumPostcodeConstructor } from "@/types/quote";
+import { IAddressSearchDaumProps, IDaumAddressData, IDaumPostcodeConstructor } from "@/types/quote";
 import { useLanguageStore } from "@/stores/languageStore";
 
 declare global {

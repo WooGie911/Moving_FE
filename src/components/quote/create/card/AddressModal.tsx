@@ -6,7 +6,7 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import { IAddressModalProps, IDaumAddress } from "@/types/quote";
 import { useLanguageStore } from "@/stores/languageStore";
 
-const AddressModal: React.FC<IAddressModalProps> = ({ onComplete, onClose }) => {
+const AddressModal: React.FC<IAddressModalProps> = ({ onComplete }) => {
   const [base, setBase] = useState<IDaumAddress | null>(null);
   const [detail, setDetail] = useState("");
   const { t } = useLanguageStore();
@@ -28,7 +28,7 @@ const AddressModal: React.FC<IAddressModalProps> = ({ onComplete, onClose }) => 
               placeholder={t("quote.detailAddressPlaceholder")}
               value={detail}
               onChange={(e) => setDetail(e.target.value)}
-              inputClassName="w-full border rounded px-3 py-2"
+              wrapperClassName="w-full"
             />
           </div>
           <div className="my-2">

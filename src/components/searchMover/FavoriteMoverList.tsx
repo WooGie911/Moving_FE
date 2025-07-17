@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { IMoverInfo, FavoriteMoverListProps } from "@/types/findMover";
+import { FavoriteMoverListProps } from "@/types/findMover";
 import Link from "next/link";
 import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";

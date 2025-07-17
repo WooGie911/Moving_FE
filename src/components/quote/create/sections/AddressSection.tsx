@@ -6,7 +6,7 @@ import {
   addressSectionClass,
   addressSectionLastClass,
 } from "@/constant/quoteStyles";
-import { IAddress, IAddressSectionProps } from "@/types/quote";
+import { IAddressSectionProps } from "@/types/quote";
 import { useLanguageStore } from "@/stores/languageStore";
 
 const AddressSection: React.FC<IAddressSectionProps> = ({ label, value, onClick }) => {

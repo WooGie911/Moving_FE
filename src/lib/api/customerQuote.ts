@@ -2,13 +2,19 @@ import {
   IPendingQuoteResponse,
   IReceivedQuoteResponse,
   IQuoteDetailResponse,
-  IConfirmEstimateRequest,
   IDesignateQuoteRequest,
   IQuoteHistoryResponse,
 } from "@/types/userQuote";
 import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/quote";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// 토큰 가져오기 함수
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
 
 const customerQuoteApi = {
   /**
@@ -16,7 +22,7 @@ const customerQuoteApi = {
    */
   createQuote: async (data: ICreateQuoteRequest): Promise<ICreateQuoteResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/quotes`, {
         method: "POST",
@@ -50,7 +56,7 @@ const customerQuoteApi = {
    */
   getActiveQuote: async (): Promise<IActiveQuoteResponse | null> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/quotes/active`, {
         headers: {
@@ -83,7 +89,7 @@ const customerQuoteApi = {
    */
   getPendingQuote: async (): Promise<IPendingQuoteResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/pending`, {
         headers: {
@@ -114,7 +120,7 @@ const customerQuoteApi = {
    */
   getReceivedQuotes: async (): Promise<IReceivedQuoteResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/received`, {
         headers: {
@@ -145,7 +151,7 @@ const customerQuoteApi = {
    */
   getPendingQuoteDetail: async (estimateId: number): Promise<IQuoteDetailResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/pending/${estimateId}`, {
         headers: {
@@ -178,7 +184,7 @@ const customerQuoteApi = {
    */
   getReceivedQuoteDetail: async (quoteId: number, estimateId: number): Promise<IQuoteDetailResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/received/${quoteId}/${estimateId}`, {
         headers: {
@@ -211,7 +217,7 @@ const customerQuoteApi = {
    */
   confirmEstimate: async (estimateId: number): Promise<any> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/confirm?estimateId=${estimateId}`, {
         method: "PATCH",
@@ -245,7 +251,7 @@ const customerQuoteApi = {
    */
   designateQuote: async (quoteId: number, data: IDesignateQuoteRequest): Promise<any> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/designate?quoteId=${quoteId}`, {
         method: "POST",
@@ -283,7 +289,7 @@ const customerQuoteApi = {
    */
   getQuoteHistory: async (): Promise<IQuoteHistoryResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/customer-quotes/history`, {
         headers: {

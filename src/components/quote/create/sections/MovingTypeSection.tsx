@@ -5,7 +5,7 @@ import SpeechBubble from "../SpeechBubble";
 import MovingTypeSmall from "@/assets/img/etc/smallmove.png";
 import MovingTypeHome from "@/assets/img/etc/homemove.png";
 import MovingTypeOffice from "@/assets/img/etc/officemove.png";
-import { TMovingType, IMovingTypeSectionProps } from "@/types/quote";
+import { IMovingTypeSectionProps } from "@/types/quote";
 import { useLanguageStore } from "@/stores/languageStore";
 
 const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect }) => {

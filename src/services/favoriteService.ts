@@ -1,4 +1,5 @@
 // 찜하기 관련 API 서비스
+import { getTokenFromCookie } from "@/utils/auth";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
 
 // API 응답 타입
@@ -19,10 +20,16 @@ export interface IFavoriteRequest {
   moverId: number;
 }
 
+// 토큰 가져오기 함수
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
+
 // API 호출 헬퍼 함수
 const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> => {
   try {
-    const token = localStorage.getItem("accessToken");
+    const token = await getAccessToken();
     const url = `${API_BASE_URL}${endpoint}`;
 
     console.log("찜하기 API 호출 정보:", {
