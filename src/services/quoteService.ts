@@ -1,5 +1,12 @@
 // 견적 관련 API 서비스
+import { getTokenFromCookie } from "@/utils/auth";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+
+// 토큰 가져오기 함수
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
 
 // API 응답 타입
 interface ApiResponse<T = any> {
@@ -51,7 +58,7 @@ export interface IQuoteRequest {
 // API 호출 헬퍼 함수
 const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> => {
   try {
-    const token = localStorage.getItem("accessToken");
+    const token = await getAccessToken();
     const url = `${API_BASE_URL}${endpoint}`;
 
     console.log("API 호출 정보:", {
