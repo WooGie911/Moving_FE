@@ -14,11 +14,21 @@ type TUser = {
   accessToken?: string;
 };
 
+type TSignInResponse = {
+  status: number;
+  user?: {
+    id: string;
+    userName: string;
+    userRole: string;
+  };
+  message: string;
+};
+
 interface IAuthContextType {
   user: TUser | null;
   isLoading: boolean;
   isLoggedIn: boolean;
-  login: (email: string, password: string) => Promise<{ user?: TUser; error?: string; message?: string }>;
+  login: (email: string, password: string) => Promise<TSignInResponse>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -27,7 +37,7 @@ const AuthContext = createContext<IAuthContextType>({
   user: null,
   isLoading: true,
   isLoggedIn: false,
-  login: async () => ({ error: "AuthProvider not found" }),
+  login: async () => ({ status: 0, message: "AuthProvider not found" }),
   logout: () => {},
   getUser: async () => {},
 });
@@ -82,9 +92,9 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
-      if (response.user.userRole === "CUSTOMER") {
+      if (response.user?.userRole === "CUSTOMER") {
         router.push("/searchMover");
-      } else if (response.user.userRole === "MOVER") {
+      } else if (response.user?.userRole === "MOVER") {
         router.push("/estimate/received");
       }
 
@@ -93,6 +103,8 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       console.error("로그인 실패:", error);
       setUser(null);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
