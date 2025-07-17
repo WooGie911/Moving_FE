@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
-import { QuoteInfo1, TMover } from "@/types/userQuote";
+import { IDetailPageMainSeactionProps, QuoteInfo1, TMover } from "@/types/userQuote";
 
 import { MoverInfo } from "./MoverInfo";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
@@ -10,31 +10,11 @@ import { ShareSection } from "./ShareSection";
 import { LastButtonSection } from "./received/LastButtonSection";
 import { LgButtonSection } from "./LgButtonSection";
 
-interface IProps {
-  moveType: "home" | "office" | "document";
-  isDesignated: boolean;
-  estimateId: string;
-  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
-  estimateTitle: string;
-  estimatePrice: number;
-  mover: TMover;
-  type: "pending" | "received";
-}
-
-export const DetailPageMainSeaction = ({
-  moveType,
-  isDesignated,
-  estimateId,
-  estimateState,
-  estimateTitle,
-  estimatePrice,
-  mover,
-  type,
-}: IProps) => {
+export const DetailPageMainSeaction = ({ data }: { data: IDetailPageMainSeactionProps }) => {
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
-
+  const { moveType, isDesignated, estimateId, estimateState, estimateTitle, estimatePrice, mover, type } = data;
   const allowedTypes = ["small", "home", "office"] as const;
   const safeMovingType = allowedTypes.includes(QuoteInfo1.movingType as any)
     ? (QuoteInfo1.movingType as "small" | "home" | "office")

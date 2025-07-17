@@ -1,11 +1,18 @@
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
+import { RequestDetailMain } from "@/components/estimate/(my)/request/[id]/RequestDetailMain";
+import { DetailPageImgSection } from "@/components/quote/(my)/DetailPageImgSection";
+import { mockMyEstimateData } from "@/types/moverEstimate";
 import React from "react";
-
 export const RequsetDetailPage = () => {
+  const data = mockMyEstimateData[0];
   return (
     <div>
       <QuoteAndEstimateTab userType="Detail" />
-      반려한견적
+      <div className="flex flex-col gap-[46px] md:gap-[82px]">
+        <DetailPageImgSection />
+        {/* 견적 상세 정보 - 기사가 보낸 견적서 */}
+        <RequestDetailMain data={data} />
+      </div>
     </div>
   );
 };

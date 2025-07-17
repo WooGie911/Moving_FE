@@ -219,3 +219,24 @@ export const QuoteInfo1: IQuoteProps = {
   startPoint: "서울시 중랑구 능동로 21길",
   endPoint: "경기도 수원시 팔달구 팔달로 123길",
 };
+export interface IDetailPageMainSeactionProps {
+  moveType: "home" | "office" | "document";
+  isDesignated: boolean;
+  estimateId: string;
+  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
+  estimateTitle: string;
+  estimatePrice: number;
+  mover: TMover;
+  type: "pending" | "received";
+}
+
+export const data1: IDetailPageMainSeactionProps = {
+  moveType: "home",
+  isDesignated: true,
+  estimateId: "1234567890",
+  estimateState: "PENDING",
+  estimateTitle: "고궹님의 물품을 안전스하게 운송해 드립니다.",
+  estimatePrice: 100000,
+  mover: mover1,
+  type: "pending",
+};
