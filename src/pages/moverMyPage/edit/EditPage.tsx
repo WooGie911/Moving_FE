@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { Button } from "@/components/common/button/Button";
 import { IEditBasicForm } from "@/types/user";
 import { useRouter } from "next/navigation";
+import userApi from "@/lib/api/user.api";
 
 const user = {
   email: "codeit@email.com",
@@ -19,14 +20,32 @@ const EditPage = () => {
   const form = useForm<IEditBasicForm>({
     mode: "onChange",
     defaultValues: {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
+      name: "",
+      email: "",
+      phone: "",
       currentPassword: "",
       newPassword: "",
       newPasswordConfirm: "",
     },
   });
+
+  // 유저 정보 불러와서 폼 초기값 세팅
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await userApi.getUser();
+      if (res.success && res.data) {
+        form.reset({
+          name: res.data.name || "",
+          email: res.data.email || "",
+          phone: res.data.phoneNumber || "",
+          currentPassword: "",
+          newPassword: "",
+          newPasswordConfirm: "",
+        });
+      }
+    }
+    fetchUser();
+  }, [form]);
 
   const {
     handleSubmit,
@@ -42,9 +61,23 @@ const EditPage = () => {
     watch("newPasswordConfirm"),
   ].every((v) => v && v.trim() !== "");
 
-  const onSubmit = (data: IEditBasicForm) => {
-    // TODO: 서버에 수정 요청
-    console.log(data);
+  const onSubmit = async (data: IEditBasicForm) => {
+    try {
+      const result = await userApi.updateMoverBasicInfo({
+        name: data.name,
+        phoneNumber: data.phone,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+      if (result.success) {
+        alert("기본정보가 성공적으로 수정되었습니다.");
+        router.push("/moverMyPage"); // 예시: 마이페이지로 이동
+      } else {
+        alert(result.message || "수정에 실패했습니다.");
+      }
+    } catch (e) {
+      alert("오류가 발생했습니다.");
+    }
   };
 
   return (
