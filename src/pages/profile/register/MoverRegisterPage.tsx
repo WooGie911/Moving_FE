@@ -1,19 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
+import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { REGION_OPTIONS, SERVICE_OPTIONS } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
 import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
+import userApi from "@/lib/api/user.api";
 
 const MoverRegisterPage = () => {
   const methods = useForm();
   const { watch, handleSubmit } = methods;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const nickname = watch("nickname");
   const career = watch("career");
@@ -21,6 +23,11 @@ const MoverRegisterPage = () => {
   const desc = watch("desc");
   const [services, setServices] = useState<string[]>(["소형이사"]);
   const [regions, setRegions] = useState<string[]>(["서울", "경기", "인천"]);
+  const [selectedImage, setSelectedImage] = useState({
+    name: "",
+    type: "",
+    dataUrl: uploadSkeleton.src,
+  });
 
   const allFilled =
     nickname?.trim() &&
@@ -32,9 +39,33 @@ const MoverRegisterPage = () => {
     services.length > 0 &&
     regions.length > 0;
 
-  const onSubmit = (data: any) => {
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    // 1. presigned URL 요청 및 s3 업로드
+    await userApi.uploadFilesToS3(file);
+
+    // 2. 미리보기 이미지와 메타데이터 저장
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage({
+        name: file.name,
+        type: file.type,
+        dataUrl: reader.result as string,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onSubmit = async () => {
     // TODO: 실제 저장 API 연동
-    console.log({ ...data, services, regions });
+    console.log({ services, regions, selectedImage, selectedImageName: selectedImage.name });
   };
 
   return (
@@ -58,9 +89,29 @@ const MoverRegisterPage = () => {
             {/* 프로필 이미지 */}
             <div className="flex flex-col gap-4">
               <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl">프로필 이미지</div>
-              <div className="flex h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]">
-                <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+              <div
+                className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
+                onClick={handleImageClick}
+              >
+                {selectedImage.name ? (
+                  <Image
+                    src={selectedImage.dataUrl}
+                    alt="선택된 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={uploadSkeleton}
+                    alt="기본 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
             </div>
 
             {/* 별명 */}

@@ -58,9 +58,8 @@ const MoverSignupPage = () => {
     try {
       if (isLoading) return;
       const response = await authApi.signUp(signUpData);
-      if (response.success) {
-        router.push("/");
-      } else {
+
+      if (response.status === 401) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,

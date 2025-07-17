@@ -58,9 +58,7 @@ const UserSignupPage = () => {
     try {
       if (isLoading) return;
       const response = await authApi.signUp(signUpData);
-      if (response.status === 200) {
-        router.push("/");
-      } else {
+      if (response.status === 401) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,

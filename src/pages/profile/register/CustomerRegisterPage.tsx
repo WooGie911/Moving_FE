@@ -1,32 +1,59 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
+import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { REGION_OPTIONS, SERVICE_OPTIONS } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
-
-interface ICustomerRegisterPageProps {
-  profileImage: string;
-  services: string[];
-  regions: string[];
-}
+import userApi from "@/lib/api/user.api";
 
 const CustomerRegisterPage = () => {
   const methods = useForm();
-  const { watch, handleSubmit } = methods;
+  const { handleSubmit } = methods;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [services, setServices] = useState<string[]>(["소형이사"]);
-  const [regions, setRegions] = useState<string[]>(["서울", "경기", "인천"]);
+  const [services, setServices] = useState<string[]>([]);
+  const [regions, setRegions] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState({
+    name: "",
+    type: "",
+    dataUrl: uploadSkeleton.src,
+  });
 
-  const allFilled = services.length > 0 && regions.length > 0;
-  const onSubmit = () => {
-    // TODO: 실제 저장 API 연동
-    console.log({ ...data, services, regions });
+  const allFilled = selectedImage && services.length > 0 && regions.length > 0;
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
   };
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    // 1. presigned URL 요청 및 s3 업로드
+    await userApi.uploadFilesToS3(file);
+
+    // 2. 미리보기 이미지와 메타데이터 저장
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage({
+        name: file.name,
+        type: file.type,
+        dataUrl: reader.result as string,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onSubmit = async () => {
+    // TODO: 실제 저장 API 연동
+    console.log({ services, regions, selectedImage, selectedImageName: selectedImage.name });
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-4 lg:mt-12 lg:max-w-[640px] lg:px-0 lg:pb-4">
@@ -46,9 +73,29 @@ const CustomerRegisterPage = () => {
             {/* 프로필 이미지 */}
             <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
               <div className="text-base leading-relaxed font-semibold text-zinc-800">프로필 이미지</div>
-              <div className="flex h-[100px] w-[100px] items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]">
-                <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+              <div
+                className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
+                onClick={handleImageClick}
+              >
+                {selectedImage ? (
+                  <Image
+                    src={selectedImage.dataUrl}
+                    alt="선택된 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={uploadSkeleton}
+                    alt="기본 프로필 이미지"
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
             </div>
 
             {/* 이용 서비스 */}
