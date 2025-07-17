@@ -19,7 +19,8 @@ type TSignInResponse = {
   user?: {
     id: string;
     userName: string;
-    userRole: string;
+    // TODO 이부분 서버 반환 이름도 currentRole로 바꿔야함
+    userRole: "CUSTOMER" | "MOVER";
   };
   message: string;
 };
@@ -67,6 +68,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     let userData = null;
     try {
       const response = await userApi.getUser();
+      console.log("response", response);
       if (response.success) {
         userData = response.data;
       }
@@ -92,7 +94,12 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
-      if (response.user?.userRole === "CUSTOMER") {
+      // console.log("response.user?.userRole", response.user);
+
+      // 프로필 등록 여부 확인 후 다이렉트 설정`
+      if (!response.user?.hasProfile) {
+        router.push("/profile/register");
+      } else if (response.user?.userRole === "CUSTOMER") {
         router.push("/searchMover");
       } else if (response.user?.userRole === "MOVER") {
         router.push("/estimate/received");
