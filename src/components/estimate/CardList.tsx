@@ -1,5 +1,5 @@
 "use client";
-import { IQuoteResponse } from "@/types/moverEstimate";
+import { ICardListProps, IQuoteResponse } from "@/types/moverEstimate";
 import React, { useState, useEffect } from "react";
 import { LabelArea } from "./LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
@@ -12,15 +12,6 @@ import edit from "@/assets/icon/edit/icon-edit.png";
 import { useModal } from "../common/modal/ModalContext";
 import { ModalChild } from "./received/ModalChild";
 import Link from "next/link";
-
-interface ICardListProps {
-  id: string | number;
-  data: IQuoteResponse;
-  isDesignated: boolean;
-  isConfirmed: boolean;
-  estimatePrice?: number;
-  type: "received" | "sent" | "rejected";
-}
 
 export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePrice }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();

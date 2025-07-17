@@ -13,14 +13,12 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSigninPage = () => {
   const { login, isLoading } = useAuth();
-  const router = useRouter();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
 
@@ -46,9 +44,7 @@ const MoverSigninPage = () => {
     try {
       if (isLoading) return;
       const response = await login(email, password);
-      if (response.status === 200) {
-        router.push("/");
-      } else {
+      if (response.status === 401) {
         open({
           title: "로그인 실패",
           children: <div>{response.message}</div>,

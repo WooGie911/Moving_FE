@@ -46,9 +46,7 @@ const UserSigninPage = () => {
     try {
       if (isLoading) return;
       const response = await login(email, password);
-      if (response.user) {
-        router.push("/");
-      } else {
+      if (response.status === 401) {
         open({
           title: "로그인 실패",
           children: <div>{response.message}</div>,

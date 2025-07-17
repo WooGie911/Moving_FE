@@ -45,13 +45,7 @@ export const RejectDetailMain = ({ data }: { data: IQuoteResponse }) => {
         </div>
 
         {/* 이사견적 상세정보들 */}
-        <DetailMoveInfo
-          movingType={data.movingType.toLowerCase() as "small" | "home" | "office"}
-          requestDate={data.createdAt.toLocaleDateString() || "견적 요청일 정보 없음"}
-          movingDate={data.movingDate.toLocaleDateString() || "이용일 정보 없음"}
-          startPoint={data.departureAddr + " " + data.departureDetail || "출발지 정보 없음"}
-          endPoint={data.arrivalAddr + " " + data.arrivalDetail || "도착지 정보 없음"}
-        />
+        <DetailMoveInfo {...(data as any)} movingType={data.movingType.toLowerCase() as "small" | "home" | "office"} />
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
