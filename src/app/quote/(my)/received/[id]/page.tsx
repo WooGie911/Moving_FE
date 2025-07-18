@@ -1,4 +1,4 @@
-import UserReceivedQuoteDetailPage from "@/pages/quote/(my)/received/[id]/page";
+import UserReceivedQuoteDetailPage from "@/pages/quote/(my)/received/[id]/UserReceicedQuoteDetialPage";
 import React from "react";
 
 const page = () => {
