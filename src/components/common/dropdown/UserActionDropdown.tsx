@@ -9,6 +9,7 @@ interface IUserActionDropdownProps {
   isOpen?: boolean;
   children?: React.ReactNode;
   name?: string;
+  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 // 공통 드롭다운 컨테이너 컴포넌트
@@ -54,7 +55,7 @@ const DropdownHeader = ({
   </div>
 );
 
-const UserActionDropdown = ({ type, onClose, isOpen, children, name }: IUserActionDropdownProps) => {
+const UserActionDropdown = ({ type, onClose, isOpen, children, name, triggerRef }: IUserActionDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // ESC 키로 닫기
@@ -77,7 +78,13 @@ const UserActionDropdown = ({ type, onClose, isOpen, children, name }: IUserActi
   // 외부 클릭으로 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isOpen) {
+      const target = event.target as Node;
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        triggerRef?.current &&
+        !triggerRef.current.contains(target)
+      ) {
         onClose?.();
       }
     };
@@ -89,12 +96,14 @@ const UserActionDropdown = ({ type, onClose, isOpen, children, name }: IUserActi
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, triggerRef]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="" ref={dropdownRef}>
       {type === "alert" ? (
-        <DropdownContainer className="w-72 lg:w-[359px]" rounded="rounded-24">
+        <DropdownContainer className="absolute -right-30 w-78 md:-right-7 lg:w-[359px]" rounded="rounded-24">
           <DropdownHeader title="알림" onClose={onClose} />
           {children}
         </DropdownContainer>
