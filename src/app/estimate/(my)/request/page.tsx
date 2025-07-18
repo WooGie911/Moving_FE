@@ -1,8 +1,6 @@
-import { RequsetPage } from "@/pages/estimate/(my)/request/RequsetPage";
+import { RequsetPage } from "@/pageComponents/estimate/(my)/request/RequsetPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <RequsetPage />;
-};
-
-export default page;
+}

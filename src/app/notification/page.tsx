@@ -3,7 +3,7 @@
 import { Button } from "@/components/common/button/Button";
 import { createTestNotification } from "@/lib/api/notification.api";
 
-const notificationTestPage = () => {
+export default function notificationTestPage() {
   const handleActionCreate = () => {
     createTestNotification();
   };
@@ -15,6 +15,4 @@ const notificationTestPage = () => {
       </Button>
     </div>
   );
-};
-
-export default notificationTestPage;
+}

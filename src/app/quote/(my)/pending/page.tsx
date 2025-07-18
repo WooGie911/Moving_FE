@@ -1,7 +1,6 @@
-import UserPendingQuotePage from "@/pages/quote/(my)/pending/UserPendingQuotePage";
+import UserPendingQuotePage from "@/pageComponents/quote/(my)/pending/UserPendingQuotePage";
 import React from "react";
 
-export const page = () => {
+export default function page() {
   return <UserPendingQuotePage />;
-};
-export default page;
+}
