@@ -1,8 +1,6 @@
+import SearchMoverDetailPage from "@/pageComponents/searchMover/[id]/SearchMoverDetailPage";
 import React from "react";
-import SearchMoverDetail from "@/pages/searchMover/[id]/SearchMoverDetailPage";
 
-const SearchMoverDetailPage = () => {
-  return <SearchMoverDetail />;
-};
-
-export default SearchMoverDetailPage;
+export default function page() {
+  return <SearchMoverDetailPage />;
+}

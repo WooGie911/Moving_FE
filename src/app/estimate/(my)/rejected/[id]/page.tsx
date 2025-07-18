@@ -1,8 +1,6 @@
-import { RejectedDetailPage } from "@/pages/estimate/(my)/rejected/[id]/RejectedDetailPage";
+import { RejectedDetailPage } from "@/pageComponents/estimate/(my)/rejected/[id]/RejectedDetailPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <RejectedDetailPage />;
-};
-
-export default page;
+}

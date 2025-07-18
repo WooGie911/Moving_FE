@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
 import profile from "@/assets/icon/auth/icon-profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.png";
@@ -6,6 +8,9 @@ import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 import { TUserRole } from "@/types/user.types";
+import NotificationList from "@/components/notification/NotificationList";
+import UserActionDropdown from "../dropdown/UserActionDropdown";
+import { useNotificationStore } from "@/stores/notificationStore";
 
 interface IGnbActionsProps {
   userRole: TUserRole;
@@ -16,6 +21,20 @@ interface IGnbActionsProps {
 }
 
 export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const notificationButtonRef = useRef<HTMLButtonElement>(null);
+  const hasUnread = useNotificationStore((state) => state.hasUnread);
+  const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
+
+  const handleNotificationClick = () => {
+    setIsNotificationOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    // 최초 1회만 전체 알림의 hasUnread, total 등 받아오기
+    fetchNotifications(1, 0);
+  }, [fetchNotifications]);
+
   return (
     <div className="flex items-center gap-4">
       {/* 언어 변경 버튼 */}
@@ -33,14 +52,27 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
       {userRole !== "GUEST" && (
         <>
           {/* 알림 버튼 */}
-          <button className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors" aria-label="알림">
+          <div className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors" aria-label="알림">
             <div className="relative h-6 w-6">
-              {/* 알림 아이콘 자리 - 이미지로 교체 예정 */}
-              <Image src={notification} alt="알림" width={24} height={24} />
-              {/* 알림 뱃지 (필요시) */}
-              <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></div>
+              <button
+                ref={notificationButtonRef}
+                onClick={handleNotificationClick}
+                className="cursor-pointer"
+                aria-label="알림"
+              >
+                <Image src={notification} alt="알림" width={24} height={24} />
+                {hasUnread && <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></div>}
+              </button>
+              <UserActionDropdown
+                type="alert"
+                onClose={() => setIsNotificationOpen(false)}
+                isOpen={isNotificationOpen}
+                triggerRef={notificationButtonRef}
+              >
+                <NotificationList />
+              </UserActionDropdown>
             </div>
-          </button>
+          </div>
 
           {/* 프로필 버튼 */}
           <button

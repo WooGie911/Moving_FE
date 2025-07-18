@@ -1,13 +1,15 @@
-import { ModalProvider } from "@/components/common/modal/ModalContext";
 import QueryProvider from "@/providers/QueryProvider";
 import AuthProvider from "@/providers/AuthProvider";
-import React from "react";
+import { ModalProvider } from "@/components/common/modal/ModalContext";
+import NotificationSSEProvider from "@/providers/NotificationSSEProvider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryProvider>
       <AuthProvider>
-        <ModalProvider>{children}</ModalProvider>
+        <ModalProvider>
+          <NotificationSSEProvider>{children}</NotificationSSEProvider>
+        </ModalProvider>
       </AuthProvider>
     </QueryProvider>
   );
