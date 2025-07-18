@@ -1,7 +1,5 @@
-import UserSignupPage from "@/pages/auth/userSignup/UserSignupPage";
+import UserSignupPage from "@/pageComponents/auth/userSignup/UserSignupPage";
 
-const page = () => {
+export default function page() {
   return <UserSignupPage />;
-};
-
-export default page;
+}

@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import QuoteCreatePage from "@/pages/quote/create/QuoteCreatePage";
-import QuoteEditPage from "@/pages/quote/edit/QuoteEditPage";
+
 import QuoteService from "@/services/quoteService";
+import QuoteCreatePage from "@/pageComponents/quote/create/QuoteCreatePage";
+import QuoteEditPage from "@/pageComponents/quote/edit/QuoteEditPage";
 
 export default function QuotePageWrapper() {
   const [hasActiveQuote, setHasActiveQuote] = useState<boolean | null>(null);

@@ -1,8 +1,6 @@
-import MoverSignupPage from "@/pages/auth/moverSignup/MoverSignupPage";
+import MoverSignupPage from "@/pageComponents/auth/moverSignup/MoverSignupPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <MoverSignupPage />;
-};
-
-export default page;
+}

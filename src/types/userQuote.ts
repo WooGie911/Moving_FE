@@ -32,7 +32,7 @@ export type TProfile = {
 
 export type TMover = {
   id: number | string;
-  name: String;
+  name: string;
   currentRole: "CUSTOMER" | "MOVER";
   profile: TProfile;
 };
