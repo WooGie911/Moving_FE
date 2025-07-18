@@ -58,9 +58,7 @@ const userApi = {
   },
 
   postProfile: async (profile: ICustomerProfileInput | IMoverProfileInput) => {
-    console.log(profile);
-
-    const response = await fetch(`http://localhost:5050/users/profile`, {
+    const response = await fetch(`${API_URL}/users/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
