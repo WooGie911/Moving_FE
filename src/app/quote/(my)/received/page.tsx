@@ -1,7 +1,6 @@
-import UserReceivedQuotePage from "@/pages/quote/(my)/received/UserReceivedQuotePage";
+import UserReceivedQuotePage from "@/pageComponents/quote/(my)/received/UserReceivedQuotePage";
 import React from "react";
 
-export const page = () => {
+export default function page() {
   return <UserReceivedQuotePage />;
-};
-export default page;
+}

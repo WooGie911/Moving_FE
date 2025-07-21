@@ -1,8 +1,6 @@
-import EditPage from "@/pages/moverMyPage/edit/EditPage";
+import EditPage from "@/pageComponents/moverMyPage/edit/EditPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <EditPage />;
-};
-
-export default page; 
+}

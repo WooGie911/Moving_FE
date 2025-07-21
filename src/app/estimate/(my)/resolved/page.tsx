@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import star_active from "@/assets/icon/star/icon-star-active-sm.png";
 import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.png";
 
+<<<<<<< HEAD
 import Image from "next/image";
 
 const StarRating = () => {
@@ -45,3 +46,8 @@ const StarRating = () => {
 };
 
 export default StarRating;
+=======
+export default function page() {
+  return <div>완료된 견적 페이지</div>;
+}
+>>>>>>> f665fa47731c56049f6094d1db2fa4e6f439a985

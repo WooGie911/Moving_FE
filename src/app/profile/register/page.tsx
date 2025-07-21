@@ -1,12 +1,12 @@
 "use client";
 
-import CustomerRegisterPage from "@/pages/profile/register/CustomerRegisterPage";
-import MoverRegisterPage from "@/pages/profile/register/MoverRegisterPage";
+import CustomerRegisterPage from "@/pageComponents/profile/register/CustomerRegisterPage";
+import MoverRegisterPage from "@/pageComponents/profile/register/MoverRegisterPage";
 import { useAuth } from "@/providers/AuthProvider";
 import React from "react";
 
 // 분기 처리?
-const Page = () => {
+export default function Page() {
   const { user } = useAuth();
 
   if (user?.currentRole === "CUSTOMER") {
@@ -14,6 +14,4 @@ const Page = () => {
   } else if (user?.currentRole === "MOVER") {
     return <MoverRegisterPage />;
   }
-};
-
-export default Page;
+}

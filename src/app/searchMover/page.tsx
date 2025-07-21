@@ -1,10 +1,8 @@
 "use client";
 
-import SearchMoverPage from "@/pages/searchMover/SearchMoverPage";
+import SearchMoverPage from "@/pageComponents/searchMover/SearchMoverPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <SearchMoverPage />;
-};
-
-export default page;
+}

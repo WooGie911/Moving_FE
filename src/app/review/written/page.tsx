@@ -1,7 +1,7 @@
 import React from "react";
 import ReviewCard from "@/components/review/written/ReviewCard";
 
-const WrittenReviewPage = () => {
+export default function page() {
   return (
     <div>
       <div>{/* 헤더영역 */}</div>
@@ -10,6 +10,4 @@ const WrittenReviewPage = () => {
       </div>
     </div>
   );
-};
-
-export default WrittenReviewPage;
+}

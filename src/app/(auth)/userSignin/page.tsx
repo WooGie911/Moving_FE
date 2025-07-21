@@ -1,8 +1,6 @@
-import UserSigninPage from "@/pages/auth/userSignin/UserSigninPage";
+import UserSigninPage from "@/pageComponents/auth/userSignin/UserSigninPage";
 import React from "react";
 
-const page = () => {
+export default function page() {
   return <UserSigninPage />;
-};
-
-export default page;
+}

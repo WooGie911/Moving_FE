@@ -4,7 +4,7 @@ import { DetailPageMainSeaction } from "@/components/quote/(my)/DetailPageMainSe
 import { mockPendingQuoteResponses } from "@/types/userQuote";
 import React from "react";
 
-export const UserPendingQuoteDetailPage = () => {
+const UserPendingQuoteDetailPage = () => {
   const quote = mockPendingQuoteResponses.quote;
   const estimate = mockPendingQuoteResponses.estimates[0];
   return (
@@ -17,4 +17,5 @@ export const UserPendingQuoteDetailPage = () => {
     </>
   );
 };
+
 export default UserPendingQuoteDetailPage;

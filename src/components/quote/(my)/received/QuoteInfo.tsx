@@ -25,14 +25,17 @@ export const QuoteInfo = ({
   };
 
   // Date 객체를 한국어 날짜 문자열로 변환하는 함수
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
-  };
+  // ✅ 수정된 formatDate 함수
+const formatDate = (date?: Date) => {
+  if (!date) return "";
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  });
+};
+
 
   // 주소와 상세주소를 결합하는 함수
   const formatAddress = (addr: string, detail: string | null) => {

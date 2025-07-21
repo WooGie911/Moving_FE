@@ -1,7 +1,5 @@
 import React from "react";
 
-const FavoriteMoverPage = () => {
+export default function page() {
   return <div>FavoriteMover</div>;
-};
-
-export default FavoriteMoverPage;
+}

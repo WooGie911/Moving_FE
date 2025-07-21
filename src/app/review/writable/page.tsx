@@ -1,7 +1,5 @@
 import React from "react";
 
-const WritableReviewPage = () => {
+export default function page() {
   return <div>writable review</div>;
-};
-
-export default WritableReviewPage;
+}
