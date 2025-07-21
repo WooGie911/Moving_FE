@@ -19,7 +19,15 @@ import {
 /**
  * ShareButton 컴포넌트(ShareButtonGroup에서만 사용)
  */
-export const ShareButton = ({ type, url = "", className = "", onSuccess, onError }: IShareButtonProps) => {
+export const ShareButton = ({
+  type,
+  url = "",
+  title,
+  description,
+  className = "",
+  onSuccess,
+  onError,
+}: IShareButtonProps) => {
   const deviceType = useWindowWidth();
   const isDesktop = deviceType === "desktop";
 
@@ -35,19 +43,10 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
     }
   };
 
-  // 현재 페이지 URL 생성
-  const getCurrentPageUrl = () => {
-    if (url) return url;
-    if (typeof window !== "undefined") {
-      return window.location.href;
-    }
-    return "";
-  };
-
   // 클립보드 복사
   const handleClipCopy = async () => {
     try {
-      const shareUrl = getCurrentPageUrl();
+      const shareUrl = url || getCurrentPageUrl();
       const success = await copyToClipboard(shareUrl);
 
       if (success) {
@@ -68,7 +67,7 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
   // 카카오톡 공유
   const handleKakaoShare = () => {
     try {
-      const shareUrl = getCurrentPageUrl();
+      const shareUrl = url || getCurrentPageUrl();
       shareToKakao(shareUrl);
       showShareSuccess("kakao");
       onSuccess?.();
@@ -82,11 +81,18 @@ export const ShareButton = ({ type, url = "", className = "", onSuccess, onError
   // 페이스북 공유
   const handleFacebookShare = () => {
     try {
-      const shareUrl = getCurrentPageUrl();
-      shareToFacebook(shareUrl);
+      const shareUrl = url || getCurrentPageUrl();
+
+      if (!shareUrl) {
+        console.error("공유할 URL이 없습니다!");
+        return;
+      }
+
+      shareToFacebook(shareUrl, title, description);
       showShareSuccess("facebook");
       onSuccess?.();
     } catch (error) {
+      console.error("페이스북 공유 에러:", error);
       const errorMessage = "페이스북 공유에 실패했습니다.";
       showShareError(errorMessage);
       onError?.(errorMessage);
