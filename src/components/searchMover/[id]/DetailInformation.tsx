@@ -38,6 +38,7 @@ const DetailInformation = ({ mover }: MoverProps) => {
         )}
 
         <ReviewAvg mover={mover} reviews={reviews} />
+
         <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
       </div>
       <div className="flex w-full flex-col lg:w-80 lg:gap-[22px]">
