@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import SearchMoverDetailPage from "@/pageComponents/searchMover/[id]/SearchMoverDetailPage";
+import SearchMoverDetailPage from "@/pageComponents/searchMover/SearchMoverDetailPage";
 
 // 동적 메타데이터 생성
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
