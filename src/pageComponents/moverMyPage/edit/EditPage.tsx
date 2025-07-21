@@ -1,37 +1,55 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { Button } from "@/components/common/button/Button";
 import { IEditBasicForm } from "@/types/user";
 import { useRouter } from "next/navigation";
-
-const user = {
-  email: "codeit@email.com",
-  name: "김코드",
-  phone: "010-1234-5678",
-};
+import userApi from "@/lib/api/user.api";
+import { useAuth } from "@/providers/AuthProvider";
+import { validationRules } from "@/utils/validators";
 
 const EditPage = () => {
   const router = useRouter();
+  const { getUser } = useAuth();
+  const [formError, setFormError] = useState<string | null>(null);
   const form = useForm<IEditBasicForm>({
     mode: "onChange",
     defaultValues: {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
+      name: "",
+      email: "",
+      phone: "",
       currentPassword: "",
       newPassword: "",
       newPasswordConfirm: "",
     },
   });
 
+  // 유저 정보 불러와서 폼 초기값 세팅
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await userApi.getUser();
+      if (res.success && res.data) {
+        form.reset({
+          name: res.data.name || "",
+          email: res.data.email || "",
+          phone: res.data.phoneNumber || "",
+          currentPassword: "",
+          newPassword: "",
+          newPasswordConfirm: "",
+        });
+      }
+    }
+    fetchUser();
+  }, [form]);
+
   const {
     handleSubmit,
     formState: { errors },
     watch,
+    getValues,
   } = form;
 
   const allFilled = [
@@ -42,9 +60,35 @@ const EditPage = () => {
     watch("newPasswordConfirm"),
   ].every((v) => v && v.trim() !== "");
 
-  const onSubmit = (data: IEditBasicForm) => {
-    // TODO: 서버에 수정 요청
-    console.log(data);
+  const requiredFilled = [
+    watch("name"),
+    watch("phone"),
+  ].every((v) => v && v.trim() !== "");
+
+  const onSubmit = async (data: IEditBasicForm) => {
+    try {
+      setFormError(null);
+      const req = {
+        name: data.name,
+        phoneNumber: data.phone,
+        currentPassword: data.currentPassword || undefined,
+        newPassword: data.newPassword || undefined,
+      };
+      const result = await userApi.updateMoverBasicInfo(req);
+      if (result.success) {
+        await getUser();
+        alert("기본정보가 성공적으로 수정되었습니다.");
+        router.push("/moverMyPage"); 
+      } else {
+        if (result.message?.includes("비밀번호")) {
+          form.setError("currentPassword", { message: result.message });
+        } else {
+          setFormError(result.message || "수정에 실패했습니다.");
+        }
+      }
+    } catch (e) {
+      setFormError("오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -58,7 +102,7 @@ const EditPage = () => {
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">이름</div>
                 <TextInput
                   name="name"
-                  rules={{ required: "이름은 필수입니다." }}
+                  rules={validationRules.name}
                   placeholder="이름을 입력해주세요"
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
@@ -77,7 +121,7 @@ const EditPage = () => {
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">전화번호</div>
                 <TextInput
                   name="phone"
-                  rules={{ required: "전화번호는 필수입니다." }}
+                  rules={validationRules.phoneNumber}
                   placeholder="전화번호를 입력해주세요"
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
@@ -90,8 +134,16 @@ const EditPage = () => {
                 <PasswordInput
                   name="currentPassword"
                   placeholder="현재 비밀번호를 입력해주세요"
-                  rules={{ required: "현재 비밀번호는 필수입니다." }}
+                  rules={{
+                    validate: (value) => {
+                      if (watch("newPassword") || watch("newPasswordConfirm")) {
+                        return value ? true : "현재 비밀번호를 입력해주세요";
+                      }
+                      return true;
+                    },
+                  }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
+                  errorClassName=""
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
               </div>
@@ -100,7 +152,15 @@ const EditPage = () => {
                 <PasswordInput
                   name="newPassword"
                   placeholder="새 비밀번호를 입력해주세요"
-                  rules={{ required: "새 비밀번호는 필수입니다." }}
+                  rules={{
+                    validate: (value) => {
+                      if (watch("currentPassword") || watch("newPasswordConfirm")) {
+                        if (!value) return "새 비밀번호를 입력해주세요";
+                        return validationRules.password.validate(value);
+                      }
+                      return true;
+                    },
+                  }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
                 />
@@ -111,9 +171,13 @@ const EditPage = () => {
                   name="newPasswordConfirm"
                   placeholder="새 비밀번호를 다시 한번 입력해주세요"
                   rules={{
-                    required: "새 비밀번호 확인은 필수입니다.",
-                    validate: (value) =>
-                      !value || value === form.getValues("newPassword") || "새 비밀번호가 일치하지 않습니다.",
+                    validate: (value) => {
+                      if (watch("currentPassword") || watch("newPassword")) {
+                        if (!value) return "새 비밀번호 확인을 입력해주세요";
+                        if (value !== getValues("newPassword")) return "새 비밀번호가 일치하지 않습니다.";
+                      }
+                      return true;
+                    },
                   }}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
@@ -130,13 +194,17 @@ const EditPage = () => {
               </button>
               <Button
                 variant="solid"
-                state={allFilled ? "default" : "disabled"}
+                state={requiredFilled ? "default" : "disabled"}
                 className="h-[54px] w-full rounded-xl bg-[#F9502E] p-4 text-base font-semibold text-white hover:bg-[#e04322] lg:h-[60px] lg:w-[240px]"
-                disabled={!allFilled}
+                disabled={!requiredFilled}
+                onClick={handleSubmit(onSubmit)}
               >
                 수정하기
               </Button>
             </div>
+            {formError && (
+              <div className="col-span-1 lg:col-span-2 text-red-500 text-sm mt-2">{formError}</div>
+            )}
           </form>
         </FormProvider>
       </div>
