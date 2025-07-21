@@ -1,14 +1,14 @@
 import React from "react";
 import type { IPaginationProps } from "@/types/pagination";
-import { usePagination } from "./usePagination";
-import PaginationButton from "./PaginationButton";
-import PaginationEllipsis from "./PaginationEllipsis";
 
 import leftActiveIcon from "@/assets/icon/arrow/icon-left-pn-black.png";
 import leftInactiveIcon from "@/assets/icon/arrow/icon-left-pn.png";
 import rightActiveIcon from "@/assets/icon/arrow/icon-right-pn-black.png";
 import rightInactiveIcon from "@/assets/icon/arrow/icon-right-pn.png";
 import Image from "next/image";
+import { usePagination } from "./usePagination";
+import PaginationButton from "./PaginationButton";
+import PaginationEllipsis from "./PaginationEllipsis";
 
 export default function Pagination({
   currentPage,
@@ -28,13 +28,8 @@ export default function Pagination({
   const navSizeClass = size === "lg" ? "w-[476px] h-12" : "w-[270px] h-[34px]";
 
   return (
-    <nav className={`flex justify-center items-center gap-1 ${navSizeClass} ${className}`} aria-label="pagination">
-      <PaginationButton
-        size={size}
-        disabled={isPrevDisabled}
-        onClick={() => onPageChange(currentPage - 1)}
-        isArrow
-      >
+    <nav className={`flex items-center justify-center gap-1 ${navSizeClass} ${className}`} aria-label="pagination">
+      <PaginationButton size={size} disabled={isPrevDisabled} onClick={() => onPageChange(currentPage - 1)} isArrow>
         <Image
           src={isPrevDisabled ? leftInactiveIcon : leftActiveIcon}
           alt="이전"
@@ -45,17 +40,12 @@ export default function Pagination({
       </PaginationButton>
       {pages.map((page, idx) =>
         typeof page === "number" ? (
-          <PaginationButton
-            key={page}
-            size={size}
-            active={page === currentPage}
-            onClick={() => onPageChange(page)}
-          >
+          <PaginationButton key={page} size={size} active={page === currentPage} onClick={() => onPageChange(page)}>
             {page}
           </PaginationButton>
         ) : (
           <PaginationEllipsis key={`ellipsis-${idx}`} size={size} />
-        )
+        ),
       )}
       <PaginationButton
         size={size}
@@ -74,4 +64,4 @@ export default function Pagination({
       </PaginationButton>
     </nav>
   );
-} 
+}

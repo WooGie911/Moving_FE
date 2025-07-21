@@ -35,10 +35,13 @@ export const ShareSection = () => {
   const handleKakaoShare = async () => {
     try {
       const currentUrl = getCurrentPageUrl();
-      await shareToKakao(currentUrl);
+      const title = "견적서 공유하기";
+      const description = "견적서 공유하기";
+
+      await shareToKakao(currentUrl, title, description);
       showShareSuccess("kakao");
     } catch (error) {
-      console.error("카카오톡 공유 오류:", error);
+      console.error("ShareSection - 카카오톡 공유 오류:", error);
       showShareError("카카오톡 공유에 실패했습니다.");
     }
   };
@@ -47,7 +50,7 @@ export const ShareSection = () => {
   const handleFacebookShare = () => {
     try {
       const currentUrl = getCurrentPageUrl();
-      shareToFacebook(currentUrl);
+      shareToFacebook(currentUrl, "견적서 공유하기", "견적서 공유하기");
       showShareSuccess("facebook");
     } catch (error) {
       console.error("페이스북 공유 오류:", error);
