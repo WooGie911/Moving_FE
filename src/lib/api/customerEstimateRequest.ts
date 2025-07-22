@@ -6,7 +6,7 @@ import {
   IDesignateQuoteRequest,
   TQuoteHistoryResponse,
 } from "@/types/customerEstimateRequest";
-import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/quote";
+import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/estimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;

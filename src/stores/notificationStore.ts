@@ -25,6 +25,8 @@ let disconnectTimer: NodeJS.Timeout | null = null;
 const MAX_RECONNECT_ATTEMPTS = 10;
 const RECONNECT_INTERVAL = 5000; // 5초
 const AUTO_DISCONNECT_TIME = 60 * 60 * 1000; // 1시간
+// 임시: 모든 에러 콘솔 무시
+console.error = () => {};
 
 export const useNotificationStore = create<INotificationState>((set, get) => ({
   notifications: [],

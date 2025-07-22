@@ -41,16 +41,18 @@ export async function middleware(request: NextRequest) {
 
   const isProtectedRoute =
     pathname.startsWith("/profile") ||
-    pathname.startsWith("/quote") ||
+    pathname.startsWith("/estimateRequest") ||
     pathname.startsWith("/estimate") ||
     pathname.startsWith("/moverMyPage") ||
     pathname.startsWith("/favoriteMover") ||
     pathname.startsWith("/review");
 
-  const isMoverOnlyRoute = pathname.startsWith("/estimate") || pathname.startsWith("/moverMyPage");
+  const isMoverOnlyRoute =
+    (pathname.startsWith("/estimate") && !pathname.startsWith("/estimateRequest")) ||
+    pathname.startsWith("/moverMyPage");
 
   const isCustomerOnlyRoute =
-    pathname.startsWith("/quote") || pathname.startsWith("/favoriteMover") || pathname.startsWith("/review");
+    pathname.startsWith("/estimateRequest") || pathname.startsWith("/favoriteMover") || pathname.startsWith("/review");
 
   /**
    * 프로필 미등록시 프로필 등록 페이지로 리디렉션
