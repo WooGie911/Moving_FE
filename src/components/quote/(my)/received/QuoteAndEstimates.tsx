@@ -2,7 +2,6 @@ import React from "react";
 import QuoteInfo from "./QuoteInfo";
 import { EstimateListSection } from "./EstimateListSection";
 import { TReceivedQuoteResponse } from "@/types/customerEstimateRequest";
-import { TEstimateRequestResponse } from "@/types/customerEstimateRequest";
 
 export const QuoteAndEstimates = ({ estimateRequest, estimates }: TReceivedQuoteResponse) => {
   const cardListData = estimates.map((estimate) => ({

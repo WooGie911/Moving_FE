@@ -29,7 +29,7 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
       {/* 기사님 별명과 찜 횟수 영역 */}
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-center gap-1">
-          <Image src={chat} alt="chat" width={20} height={20} />
+          {mover.isVeteran || mover.workedCount! >= 3 ? <Image src={chat} alt="chat" width={20} height={20} /> : ""}
           <p
             className={`text-black-300 text-[14px] leading-[24px] font-semibold md:leading-[26px] md:font-medium ${usedAtDetail ? "text-[16px] md:text-[18px]" : "text-[14px] md:text-[16px]"} `}
           >{`${mover.nickname} 기사님`}</p>

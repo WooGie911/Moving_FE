@@ -63,7 +63,7 @@ export const LabelAndTitleSection = ({
           <p
             className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
           >
-            {estimateState === "REJECTED" ? "반려견적" : estimateState}
+            {estimateState === "REJECTED" || estimateState === "AUTO_REJECTED" ? "반려견적" : estimateState}
           </p>
         )}
       </div>
