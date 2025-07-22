@@ -1,10 +1,10 @@
 import {
-  IPendingQuoteResponse,
-  IReceivedQuoteResponse,
-  IReceivedQuoteListResponse,
-  IQuoteDetailResponse,
+  TPendingQuoteResponse,
+  TReceivedQuoteResponse,
+  TReceivedQuoteListResponse,
+  TQuoteDetailResponse,
   IDesignateQuoteRequest,
-  IQuoteHistoryResponse,
+  TQuoteHistoryResponse,
 } from "@/types/userQuote";
 import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/quote";
 import { getTokenFromCookie } from "@/utils/auth";
@@ -88,11 +88,11 @@ const customerQuoteApi = {
   /**
    * 진행중인 견적 조회
    */
-  getPendingQuote: async (): Promise<IPendingQuoteResponse> => {
+  getPendingQuote: async (): Promise<TPendingQuoteResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/pending`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/pending`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -119,11 +119,11 @@ const customerQuoteApi = {
   /**
    * 완료된 견적 목록 조회
    */
-  getReceivedQuotes: async (): Promise<IReceivedQuoteListResponse> => {
+  getReceivedQuotes: async (): Promise<TReceivedQuoteListResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/received`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/received`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -150,11 +150,11 @@ const customerQuoteApi = {
   /**
    * 진행중인 견적 상세 조회
    */
-  getPendingQuoteDetail: async (estimateId: number): Promise<IQuoteDetailResponse> => {
+  getPendingQuoteDetail: async (estimateId: string): Promise<TQuoteDetailResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/pending/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/pending/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -183,11 +183,11 @@ const customerQuoteApi = {
   /**
    * 완료된 견적 상세 조회
    */
-  getReceivedQuoteDetail: async (quoteId: number, estimateId: number): Promise<IQuoteDetailResponse> => {
+  getReceivedQuoteDetail: async (quoteId: string, estimateId: string): Promise<TQuoteDetailResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/received/${quoteId}/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/received/${quoteId}/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -216,11 +216,11 @@ const customerQuoteApi = {
   /**
    * 견적 확정
    */
-  confirmEstimate: async (estimateId: number): Promise<any> => {
+  confirmEstimate: async (estimateId: string): Promise<any> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/confirm?estimateId=${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/confirm?estimateId=${estimateId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -250,11 +250,11 @@ const customerQuoteApi = {
   /**
    * 지정 견적 요청
    */
-  designateQuote: async (quoteId: number, data: IDesignateQuoteRequest): Promise<any> => {
+  designateQuote: async (quoteId: string, data: IDesignateQuoteRequest): Promise<any> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/designate?quoteId=${quoteId}`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/designate?quoteId=${quoteId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -288,11 +288,11 @@ const customerQuoteApi = {
   /**
    * 이용 내역 조회
    */
-  getQuoteHistory: async (): Promise<IQuoteHistoryResponse[]> => {
+  getQuoteHistory: async (): Promise<TQuoteHistoryResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/history`, {
+      const response = await fetch(`${API_URL}/customer-estimate-requests/history`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

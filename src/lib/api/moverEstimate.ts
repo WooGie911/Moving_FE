@@ -1,4 +1,3 @@
-
 import {
   ICreateEstimateRequest,
   IRejectEstimateRequest,
@@ -6,17 +5,24 @@ import {
   IDesignatedQuoteFilterOptions,
   IUpdateEstimateStatusRequest,
   IUpdateEstimateRequest,
-  IQuoteResponse,
-  IEstimateResponse,
-  IMyEstimateResponse,
-  IMyRejectedQuoteResponse,
+  TEstimateRequestResponse,
+  TEstimateResponse,
+  TMyEstimateResponse,
+  TMyRejectedEstimateResponse,
   ICreateEstimateResponse,
   IRejectEstimateResponse,
   IUpdateEstimateStatusResponse,
   IUpdateEstimateResponse,
 } from "@/types/moverEstimate";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// 토큰 가져오기 함수
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
 
 const moverEstimateApi = {
   /**
@@ -24,9 +30,9 @@ const moverEstimateApi = {
    */
   createEstimate: async (data: ICreateEstimateRequest): Promise<ICreateEstimateResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/request`, {
+      const response = await fetch(`${API_URL}/mover-estimates`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +66,7 @@ const moverEstimateApi = {
    */
   rejectEstimate: async (data: IRejectEstimateRequest): Promise<IRejectEstimateResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/mover-estimates/reject`, {
         method: "POST",
@@ -94,12 +100,11 @@ const moverEstimateApi = {
   /**
    * 서비스 가능 지역 견적 조회
    */
-  getRegionQuotes: async (params: IQuoteFilterOptions): Promise<IQuoteResponse[]> => {
+  getRegionQuotes: async (params: IQuoteFilterOptions): Promise<TEstimateRequestResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const query = new URLSearchParams();
-      query.append("availableRegion", params.availableRegion);
       if (params.sortBy) query.append("sortBy", params.sortBy);
       if (params.customerName) query.append("customerName", params.customerName);
       if (params.movingType) query.append("movingType", params.movingType);
@@ -135,11 +140,12 @@ const moverEstimateApi = {
   /**
    * 지정 견적 조회
    */
-  getDesignatedQuotes: async (params?: IDesignatedQuoteFilterOptions): Promise<IQuoteResponse[]> => {
+  getDesignatedQuotes: async (params?: IDesignatedQuoteFilterOptions): Promise<TEstimateRequestResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const query = new URLSearchParams();
+      if (params?.moverId) query.append("moverId", params.moverId);
       if (params?.sortBy) query.append("sortBy", params.sortBy);
       if (params?.customerName) query.append("customerName", params.customerName);
       if (params?.movingType) query.append("movingType", params.movingType);
@@ -177,15 +183,15 @@ const moverEstimateApi = {
     region: boolean;
     designated: boolean;
     availableRegion?: string;
-    sortBy?: "movingDate" | "createdAt";
+    sortBy?: "moveDate" | "createdAt";
     customerName?: string;
     movingType?: "SMALL" | "HOME" | "OFFICE";
   }): Promise<{
-    regionQuotes?: IQuoteResponse[];
-    designatedQuotes?: IQuoteResponse[];
+    regionQuotes?: TEstimateRequestResponse[];
+    designatedQuotes?: TEstimateRequestResponse[];
   }> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const query = new URLSearchParams();
       query.append("region", params.region.toString());
@@ -224,9 +230,9 @@ const moverEstimateApi = {
   /**
    * 견적 상세 조회
    */
-  getQuoteById: async (quoteId: number): Promise<IQuoteResponse> => {
+  getQuoteById: async (quoteId: string): Promise<TEstimateRequestResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/mover-estimates/${quoteId}`, {
         headers: {
@@ -259,11 +265,11 @@ const moverEstimateApi = {
   /**
    * 내가 보낸 견적서 조회
    */
-  getMyEstimates: async (): Promise<IMyEstimateResponse[]> => {
+  getMyEstimates: async (): Promise<TMyEstimateResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/request`, {
+      const response = await fetch(`${API_URL}/mover-estimates/my`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -292,11 +298,11 @@ const moverEstimateApi = {
   /**
    * 내가 반려한 견적 조회
    */
-  getMyRejectedQuotes: async (): Promise<IMyRejectedQuoteResponse[]> => {
+  getMyRejectedQuotes: async (): Promise<TMyRejectedEstimateResponse[]> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/reject`, {
+      const response = await fetch(`${API_URL}/mover-estimates/rejected`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -326,11 +332,11 @@ const moverEstimateApi = {
    * 견적 상태 업데이트
    */
   updateEstimateStatus: async (
-    estimateId: number,
+    estimateId: string,
     data: IUpdateEstimateStatusRequest,
   ): Promise<IUpdateEstimateStatusResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/mover-estimates/status?estimateId=${estimateId}`, {
         method: "PATCH",
@@ -364,9 +370,9 @@ const moverEstimateApi = {
   /**
    * 견적서 업데이트
    */
-  updateEstimate: async (estimateId: number, data: IUpdateEstimateRequest): Promise<IUpdateEstimateResponse> => {
+  updateEstimate: async (estimateId: string, data: IUpdateEstimateRequest): Promise<IUpdateEstimateResponse> => {
     try {
-      const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") || "" : "";
+      const accessToken = await getAccessToken();
 
       const response = await fetch(`${API_URL}/mover-estimates/estimate?estimateId=${estimateId}`, {
         method: "PATCH",
@@ -399,4 +405,3 @@ const moverEstimateApi = {
 };
 
 export default moverEstimateApi;
-
