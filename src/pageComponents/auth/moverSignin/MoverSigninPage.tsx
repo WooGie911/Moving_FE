@@ -43,8 +43,8 @@ const MoverSigninPage = () => {
   const onSubmit = async () => {
     try {
       if (isLoading) return;
-      const response = await login(email, password);
-      if (response.status === 401) {
+      const response = await login(email, password, "MOVER");
+      if (response.success === false) {
         open({
           title: "로그인 실패",
           children: <div>{response.message}</div>,

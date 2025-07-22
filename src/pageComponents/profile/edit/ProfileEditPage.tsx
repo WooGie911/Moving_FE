@@ -12,9 +12,12 @@ import { PasswordInput } from "@/components/common/input/PasswordInput";
 import userApi from "@/lib/api/user.api";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 export default function ProfileEditPage() {
   const router = useRouter();
+  const { open, close } = useModal();
+
   const [isLoading, setIsLoading] = useState(true);
   const [customerImage, setCustomerImage] = useState({
     name: "",
@@ -54,20 +57,52 @@ export default function ProfileEditPage() {
 
   // 프로필 수정
   const onSubmit = async () => {
-    const data = {
+    const data: {
+      name: string;
+      nickname: string;
+      email: string;
+      phoneNumber: string;
+      password: string;
+      customerImage: string;
+      preferredServices: string[];
+      currentArea: string;
+      newPassword?: string;
+    } = {
       name,
       nickname,
       email,
       phoneNumber: phone,
       password: currentPassword,
-      newPassword: newPassword,
       customerImage: customerImage.dataUrl,
       preferredServices: services,
       currentArea: regions,
     };
+
+    // 새 비밀번호가 입력되었을 때만 포함
+    if (newPassword && newPassword.trim()) {
+      data.newPassword = newPassword;
+    }
     const res = await userApi.updateCustomerBasicInfo(data);
     if (res.success) {
-      router.push("/searchMover");
+      open({
+        title: "프로필 수정 완료",
+        children: <div>프로필 수정이 완료되었습니다.</div>,
+        buttons: [
+          {
+            text: "확인",
+            onClick: () => {
+              close();
+              router.push("/searchMover");
+            },
+          },
+        ],
+      });
+    } else {
+      open({
+        title: "프로필 수정 실패",
+        children: <div>{res.message}</div>,
+        buttons: [{ text: "확인", onClick: () => close() }],
+      });
     }
   };
 
@@ -222,14 +257,20 @@ export default function ProfileEditPage() {
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   새 비밀번호
                 </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
+                <div className="text-sm text-gray-500">(선택사항)</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <PasswordInput
                   name="newPassword"
                   placeholder="새 비밀번호를 입력해 주세요"
                   rules={{
-                    ...validationRules.password,
+                    validate: (value: string) => {
+                      // 비밀번호를 입력했다면 유효성 검사 실행
+                      if (value && value.trim()) {
+                        return validationRules.password.validate(value);
+                      }
+                      return true; // 비어있으면 통과
+                    },
                     onChange: () => {
                       // 새 비밀번호가 변경될 때마다 확인 필드 재검증
                       const confirmValue = getValues("newPasswordConfirm");
@@ -248,18 +289,31 @@ export default function ProfileEditPage() {
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   새 비밀번호 확인
                 </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
+                <div className="text-sm text-gray-500">(선택사항)</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <PasswordInput
                   name="newPasswordConfirm"
                   placeholder="새 비밀번호를 다시 입력해 주세요"
                   rules={{
-                    required: "새 비밀번호 확인을 입력해주세요",
                     validate: (value: string) => {
                       const newPassword = getValues("newPassword");
-                      if (!newPassword) return "먼저 새 비밀번호를 입력해주세요";
-                      if (value !== newPassword) return "새 비밀번호와 일치하지 않습니다";
+
+                      // 새 비밀번호가 없으면 확인도 필요 없음
+                      if (!newPassword || !newPassword.trim()) {
+                        return true;
+                      }
+
+                      // 새 비밀번호가 있으면 확인 필드 필수
+                      if (!value || !value.trim()) {
+                        return "새 비밀번호 확인을 입력해주세요";
+                      }
+
+                      // 일치 여부 확인
+                      if (value !== newPassword) {
+                        return "새 비밀번호와 일치하지 않습니다";
+                      }
+
                       return true;
                     },
                   }}
