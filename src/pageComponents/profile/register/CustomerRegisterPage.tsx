@@ -73,7 +73,19 @@ const CustomerRegisterPage = () => {
     });
 
     if (response.success) {
-      router.push("/searchMover");
+      open({
+        title: "프로필 등록 완료",
+        children: <div>프로필 등록이 완료되었습니다.</div>,
+        buttons: [
+          {
+            text: "확인",
+            onClick: () => {
+              close();
+              router.push("/searchMover");
+            },
+          },
+        ],
+      });
     } else {
       open({
         title: "프로필 등록 실패",

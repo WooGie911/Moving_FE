@@ -127,7 +127,8 @@ const MoverList = () => {
                       <div className={`flex items-center ${mover.experience >= 10 ? "gap-1.5" : "gap-2"}`}>
                         <div className="flex items-center gap-0.5">
                           <Image src={star} alt="star-img" className="h-5 w-5" />
-                          <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span>
+                          {/* <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span> */}
+                          <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating}</span>
                           <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                         </div>
                         <span className="text-[#e6e6e6]">|</span>
@@ -193,9 +194,11 @@ const MoverList = () => {
                             <div className="flex items-center gap-2">
                               <div className="flex items-center gap-0.5">
                                 <Image src={star} alt="star-img" className="h-5 w-5" />
-                                <span className="text-[13px] leading-[22px] font-medium">
+                                {/* <span className="text-[13px] leading-[22px] font-medium">
                                   {mover.avgRating.toFixed(1)}
-                                </span>
+                                </span> */}
+
+                                <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating}</span>
                                 <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                               </div>
                               <span className="text-[#e6e6e6]">|</span>

@@ -85,7 +85,19 @@ const MoverRegisterPage = () => {
     const response = await userApi.postProfile(profileData);
 
     if (response.success) {
-      router.push("/estimate/received");
+      open({
+        title: "프로필 등록 완료",
+        children: <div>프로필 등록이 완료되었습니다.</div>,
+        buttons: [
+          {
+            text: "확인",
+            onClick: () => {
+              close();
+              router.push("/estimate/received");
+            },
+          },
+        ],
+      });
     } else {
       open({
         title: "프로필 등록 실패",

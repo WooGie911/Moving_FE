@@ -60,10 +60,7 @@ const EditPage = () => {
     watch("newPasswordConfirm"),
   ].every((v) => v && v.trim() !== "");
 
-  const requiredFilled = [
-    watch("name"),
-    watch("phone"),
-  ].every((v) => v && v.trim() !== "");
+  const requiredFilled = [watch("name"), watch("phone")].every((v) => v && v.trim() !== "");
 
   const onSubmit = async (data: IEditBasicForm) => {
     try {
@@ -78,7 +75,7 @@ const EditPage = () => {
       if (result.success) {
         await getUser();
         alert("기본정보가 성공적으로 수정되었습니다.");
-        router.push("/moverMyPage"); 
+        router.push("/moverMyPage");
       } else {
         if (result.message?.includes("비밀번호")) {
           form.setError("currentPassword", { message: result.message });
@@ -201,9 +198,7 @@ const EditPage = () => {
                 수정하기
               </Button>
             </div>
-            {formError && (
-              <div className="col-span-1 lg:col-span-2 text-red-500 text-sm mt-2">{formError}</div>
-            )}
+            {formError && <div className="col-span-1 mt-2 text-sm text-red-500 lg:col-span-2">{formError}</div>}
           </form>
         </FormProvider>
       </div>
