@@ -1,5 +1,5 @@
 "use client";
-import { ICardListProps, IQuoteResponse } from "@/types/moverEstimate";
+import { ICardListProps, IQuoteResponse, TEstimateRequestResponse } from "@/types/moverEstimate";
 import React, { useState, useEffect } from "react";
 import { LabelArea } from "./LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
@@ -38,7 +38,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
     }
   }, [isFormValid, currentModalType, updateButtons, close]);
 
-  const isPastDate = new Date(data.movingDate) < new Date();
+  const isPastDate = new Date(data.moveDate) < new Date();
   const isRejected = data.status === "REJECTED" || type === "rejected";
 
   const openRejectModal = () => {
@@ -85,7 +85,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
 
   return (
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
-      {isPastDate && (
+      {isPastDate && !isRejected && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           <p className="text-[18px] leading-[26px] font-semibold text-white">이사 완료된 견적 입니다.</p>
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
@@ -118,8 +118,9 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
             {/* 라벨과 확정견적/견적서시간/부분 */}
             <div className="flex w-full flex-row items-center justify-between">
               <LabelArea
-                movingType={data.movingType.toLowerCase() as "small" | "home" | "office" | "document"}
+                movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
                 isDesignated={isDesignated}
+                createdAt={data.createdAt}
               />
               {isConfirmed ? (
                 <div className="flex flex-row items-center justify-center gap-1">
@@ -133,7 +134,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
             <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-                {`${data.user.name} 고객님`}
+                {`${data.customer.name} 고객님`}
               </p>
             </div>
             {/* 이사 정보  부분*/}
@@ -142,7 +143,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.departureAddr.split(" ").slice(0, 2).join(" "))}
+                    {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
@@ -151,14 +152,14 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.arrivalAddr.split(" ").slice(0, 2).join(" "))}
+                    {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {`${data.movingDate.getFullYear()}년 ${data.movingDate.getMonth() + 1}월 ${data.movingDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.movingDate.getDay()]})`}
+                  {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
                 </p>
               </div>
             </div>
@@ -178,8 +179,9 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
           {/* 라벨과 확정견적/견적서시간/부분 */}
           <div className="flex w-full flex-row items-center justify-between">
             <LabelArea
-              movingType={data.movingType.toLowerCase() as "small" | "home" | "office" | "document"}
+              movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
               isDesignated={isDesignated}
+              createdAt={data.createdAt}
             />
             {isConfirmed ? (
               <div className="flex flex-row items-center justify-center gap-1">
@@ -193,7 +195,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
           <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
             <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-              {`${data.user.name} 고객님`}
+              {`${data.customer.name} 고객님`}
             </p>
           </div>
           {/* 이사 정보  부분*/}
@@ -202,7 +204,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress(data.departureAddr.split(" ").slice(0, 2).join(" "))}
+                  {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
                 </p>
               </div>
               <div className="flex flex-col justify-end pb-1">
@@ -211,14 +213,14 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress(data.arrivalAddr.split(" ").slice(0, 2).join(" "))}
+                  {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
                 </p>
               </div>
             </div>
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                {`${data.movingDate.getFullYear()}년 ${data.movingDate.getMonth() + 1}월 ${data.movingDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.movingDate.getDay()]})`}
+                {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
               </p>
             </div>
           </div>

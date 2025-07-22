@@ -14,10 +14,10 @@ export const RequsetPage = () => {
               <CardList
                 key={item.id}
                 id={item.id}
-                data={item.quote!}
+                data={item.estimateRequest!}
                 isDesignated={false}
                 isConfirmed={false}
-                estimatePrice={item.price}
+                estimatePrice={item.price!}
                 type="sent"
               />
             ))}

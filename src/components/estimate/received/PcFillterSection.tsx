@@ -30,7 +30,7 @@ export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFi
   };
 
   // 정렬 변경 핸들러
-  const handleSortChange = (sortBy: "movingDate" | "createdAt") => {
+  const handleSortChange = (sortBy: "moveDate" | "createdAt") => {
     onFiltersChange({ sortBy });
   };
 
