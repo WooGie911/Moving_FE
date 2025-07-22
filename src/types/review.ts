@@ -22,3 +22,19 @@ export interface IReviewForm {
   rating: number;
   content: string;
 }
+
+export interface IWrittenCardData {
+  id: string;
+  moverId: string;
+  profileImage: string | null;
+  nickname: string;
+  movingType: "SMALL" | "HOME" | "OFFICE";
+  isDesigned: boolean;
+  moverIntroduction: string;
+  departureAddr: string;
+  arrivalAddr: string;
+  movingDate: string;
+  rating: number;
+  content: string;
+  createdAt: Date;
+}

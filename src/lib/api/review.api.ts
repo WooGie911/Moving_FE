@@ -1,4 +1,4 @@
-import { IReview } from "@/types/findMover";
+import { IReview, IReviewListResponse } from "@/types/findMover";
 import { IWritableCardData } from "@/types/review";
 import { getTokenFromCookie } from "@/utils/auth";
 
@@ -50,6 +50,28 @@ const reviewApi = {
       page,
       pageSize,
     });
+  },
+
+  /**
+   * 3. 내가 쓴 리뷰 목록 조회
+   * @param customerId 유저 ID
+   * @param page 페이지 번호
+   * @param pageSize 페이지 크기
+   */
+  fetchWrittenReviews: async (
+    customerId: string,
+    page: number = 1,
+    pageSize: number = 4,
+  ): Promise<IReviewListResponse> => {
+    try {
+      const res = await fetch(`${API_URL}/reviews/written/${customerId}?page=${page}&pageSize=${pageSize}`);
+      if (!res.ok) throw new Error("내가 쓴 리뷰 목록 조회에 실패했습니다.");
+      const data = await res.json();
+      return data.data || { items: [], total: 0, page, pageSize };
+    } catch (error) {
+      console.error("내가 쓴 리뷰 목록 조회 실패:", error);
+      throw error;
+    }
   },
 };
 
