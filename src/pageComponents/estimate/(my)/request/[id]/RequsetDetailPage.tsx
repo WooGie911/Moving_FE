@@ -1,6 +1,6 @@
 import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
 import { RequestDetailMain } from "@/components/estimate/(my)/request/[id]/RequestDetailMain";
-import { DetailPageImgSection } from "@/components/quote/(my)/DetailPageImgSection";
+import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
 import { mockMyEstimateData } from "@/types/moverEstimate";
 import React from "react";
 export const RequsetDetailPage = () => {
