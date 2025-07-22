@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { LabelArea } from "../LabelArea";
-import { IQuoteResponse, TEstimateRequestResponse } from "@/types/moverEstimate";
+import { TEstimateRequestResponse } from "@/types/moverEstimate";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import Image from "next/image";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
