@@ -1,4 +1,4 @@
-import { getTokenFromCookie } from "@/utils/auth";
+import { getTokenFromCookie, setTokensToCookie, updateAccessToken } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,7 +20,7 @@ interface IMoverProfileInput {
   career: number;
   shortIntro: string;
   detailIntro: string;
-  currentArea: string;
+  currentAreas: string[];
   serviceTypes: string[];
 }
 
@@ -60,6 +60,7 @@ const userApi = {
     return presigned.fileUrl;
   },
 
+  // 프로필 등록 및 수정
   postProfile: async (profile: ICustomerProfileInput | IMoverProfileInput) => {
     const response = await fetch(`${API_URL}/users/profile`, {
       method: "POST",
@@ -69,7 +70,14 @@ const userApi = {
       },
       body: JSON.stringify(profile),
     });
-    return response.json();
+
+    const data = await response.json();
+
+    if (data.success && data.accessToken) {
+      await setTokensToCookie(data.accessToken); // 토큰 저장
+    }
+
+    return data;
   },
 
   updateMoverBasicInfo: async (data: {

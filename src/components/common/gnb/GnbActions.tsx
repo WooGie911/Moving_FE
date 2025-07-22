@@ -103,10 +103,10 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     };
   }, [isProfileOpen]);
 
-  useEffect(() => {
-    // 최초 1회만 전체 알림의 hasUnread, total 등 받아오기
-    fetchNotifications(1, 0);
-  }, [fetchNotifications]);
+  // useEffect(() => {
+  //   // 최초 1회만 전체 알림의 hasUnread, total 등 받아오기
+  //   fetchNotifications(1, 0);
+  // }, [fetchNotifications]);
 
   return (
     <div className="flex items-center gap-4">
@@ -142,7 +142,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                 isOpen={isNotificationOpen}
                 triggerRef={notificationButtonRef}
               >
-                <NotificationList />
+                {/* <NotificationList /> */}
               </UserActionDropdown>
             </div>
           </div>

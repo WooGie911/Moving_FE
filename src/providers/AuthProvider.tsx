@@ -32,7 +32,7 @@ interface IAuthContextType {
   isLoading: boolean;
   isLoggedIn: boolean;
   login: (email: string, password: string, userType: "CUSTOMER" | "MOVER") => Promise<TSignInResponse>;
-  signUp: (signUpData: ISignUpFormValues) => Promise<void>;
+  signUp: (signUpData: ISignUpFormValues) => Promise<TSignInResponse>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
