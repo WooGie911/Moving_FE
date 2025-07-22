@@ -36,20 +36,23 @@ const reviewApi = {
   },
 
   /**
-   * 2. 리뷰 작성 가능한 Quote 리스트 조회
+   * 2. 리뷰 작성 가능한 리스트 조회
    * @param page 페이지 번호
    * @param pageSize 페이지 크기
    */
-  fetchWritableQuotes: async (
+  fetchWritableReviews: async (
     page: number = 1,
     pageSize: number = 4,
   ): Promise<{ items: IWritableCardData[]; total: number; page: number; pageSize: number }> => {
-    return Promise.resolve({
-      items: [],
-      total: 0,
-      page,
-      pageSize,
-    });
+    try {
+      const res = await fetch(`${API_URL}/reviews/writable-estimateRequests?page=${page}&pageSize=${pageSize}`);
+      if (!res.ok) throw new Error("리뷰 작성 가능한 리스트 조회에 실패했습니다.");
+      const data = await res.json();
+      return data.data || { items: [], total: 0, page, pageSize };
+    } catch (error) {
+      console.error("리뷰 작성 가능한 리스트 조회 실패:", error);
+      throw error;
+    }
   },
 
   /**

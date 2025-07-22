@@ -24,8 +24,8 @@ const WritableReviewPage = () => {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["writableQuotes", page],
-    queryFn: () => reviewApi.fetchWritableQuotes(page),
+    queryKey: ["writableReviews", page],
+    queryFn: () => reviewApi.fetchWritableReviews(page),
     placeholderData: { items: [], total: 0, page, pageSize: 4 },
   });
 
@@ -33,7 +33,7 @@ const WritableReviewPage = () => {
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
       reviewApi.postReview(reviewId, rating, content),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["writableQuotes", page] });
+      queryClient.invalidateQueries({ queryKey: ["writableReviews", page] });
       close();
     },
     onError: (error) => {

@@ -59,15 +59,15 @@ const WrittenReviewPage = () => {
                 id={card.id}
                 profileImage={card.profileImage}
                 nickname={card.nickname}
-                movingType={card.movingType}
-                isDesigned={card.isDesigned}
                 moverIntroduction={card.moverIntroduction}
-                departureAddr={card.departureAddr}
-                arrivalAddr={card.arrivalAddr}
-                movingDate={card.movingDate}
+                isDesigned={card.isDesigned}
+                moveType={card.moveType as "SMALL" | "HOME" | "OFFICE"}
+                fromAddress={card.fromAddress}
+                toAddress={card.toAddress}
+                moveDate={card.moveDate}
                 rating={card.rating}
                 content={card.content}
-                createdAt={new Date(card.createdAt)}
+                createdAt={card.createdAt}
               />
             </button>
           ))}

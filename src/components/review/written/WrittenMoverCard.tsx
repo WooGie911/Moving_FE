@@ -15,12 +15,12 @@ type WrittenMoverCardProps = Omit<IWrittenCardData, "moverId">;
 const WrittenMoverCard = ({
   profileImage,
   nickname,
-  movingType,
+  moveType,
   isDesigned,
   moverIntroduction,
-  departureAddr,
-  arrivalAddr,
-  movingDate,
+  fromAddress,
+  toAddress,
+  moveDate,
   rating,
   content,
   createdAt,
@@ -28,7 +28,7 @@ const WrittenMoverCard = ({
   <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between">
     <div className="flex flex-col gap-y-1 md:gap-y-1">
       <div className="flex gap-2 md:hidden">
-        <MoveTypeLabel type={movingType.toLowerCase() as "small" | "home" | "office"} />
+        <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
         {isDesigned && <MoveTypeLabel type="document" />}
       </div>
       <div className="flex flex-row items-start justify-between">
@@ -48,7 +48,7 @@ const WrittenMoverCard = ({
           </div>
           <div className="hidden max-w-[180px] truncate text-sm text-gray-500 md:block">{moverIntroduction}</div>
           <div className="hidden md:my-1 md:flex md:gap-2">
-            <MoveTypeLabel type={movingType.toLowerCase() as "small" | "home" | "office"} />
+            <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
             {isDesigned && <MoveTypeLabel type="document" />}
           </div>
         </div>
@@ -59,17 +59,17 @@ const WrittenMoverCard = ({
           <div className="flex gap-3">
             <div className="flex flex-col items-start">
               <div className="text-gray-500">출발지</div>
-              <div className="text-black-500">{departureAddr}</div>
+              <div className="text-black-500">{fromAddress.city}</div>
             </div>
             <div className="flex flex-col items-start border-gray-100 px-3 md:border-x-2">
               <div className="text-gray-500">도착지</div>
-              <div className="text-black-500">{arrivalAddr}</div>
+              <div className="text-black-500">{toAddress.city}</div>
             </div>
           </div>
 
           <div className="flex flex-col items-start md:px-3">
             <div className="text-gray-500">이사일</div>
-            <div className="text-black-500">{movingDate}</div>
+            <div className="text-black-500">{moveDate.toLocaleDateString("ko-KR")}</div>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const WrittenMoverCard = ({
 
     <div className="flex justify-end text-[12px] text-gray-300 md:hidden">
       <span>작성일 </span>
-      <span>{createdAt.toLocaleDateString()}</span>
+      <span>{createdAt.toLocaleDateString("ko-KR")}</span>
     </div>
   </div>
 );

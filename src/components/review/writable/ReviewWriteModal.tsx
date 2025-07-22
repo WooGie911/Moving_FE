@@ -28,7 +28,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
         <div className="flex flex-col gap-y-5">
           <div className="flex flex-col gap-y-5">
             <div className="flex">
-              <MoveTypeLabel type={card.movingType.toLowerCase() as "small" | "home" | "office"} />
+              <MoveTypeLabel type={card.moveType.toLowerCase() as "small" | "home" | "office"} />
               {card.isDesigned && <MoveTypeLabel type="document" />}
             </div>
 
@@ -56,7 +56,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
                 <div className="flex gap-4">
                   <div>
                     <div className="text-gray-500">출발지</div>
-                    <div className="text-black-500">{card.departureAddr}</div>
+                    <div className="text-black-500">{card.fromAddress.city}</div>
                   </div>
                   <div>
                     <Image alt="화살표" width={13} height={10} src={arrowIcon} className="mt-8" />
@@ -64,13 +64,13 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
 
                   <div>
                     <div className="text-gray-500">도착지</div>
-                    <div className="text-black-500">{card.arrivalAddr}</div>
+                    <div className="text-black-500">{card.toAddress.city}</div>
                   </div>
                 </div>
 
                 <div className="border-gray-100">
                   <div className="text-gray-500">이사일</div>
-                  <div className="text-black-500">{card.movingDate}</div>
+                  <div className="text-black-500">{card.moveDate.toLocaleDateString("ko-KR")}</div>
                 </div>
               </div>
             </div>

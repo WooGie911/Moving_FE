@@ -15,22 +15,22 @@ export interface IMoverCardProps extends Omit<IWritableCardData, "id" | "isFavor
 const WritableMoverCard = ({
   profileImage,
   nickname,
-  movingType,
+  moveType,
   isDesigned,
   moverIntroduction,
-  departureAddr,
-  arrivalAddr,
-  movingDate,
+  fromAddress,
+  toAddress,
+  moveDate,
   price,
   onClickWrite,
 }: IMoverCardProps) => (
   <div className="mb-6 flex w-full max-w-[327px] min-w-[327px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] lg:h-[242px] lg:w-[1120px] lg:max-w-none lg:flex-row lg:justify-between">
     <div>
       <div className="flex gap-2 md:hidden">
-        <MoveTypeLabel type={movingType.toLowerCase() as "small" | "home" | "office"} />
+        <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
         {isDesigned && <MoveTypeLabel type="document" />}
       </div>
-      <div className="flex flex-row items-start justify-between mt-2">
+      <div className="mt-2 flex flex-row items-start justify-between">
         {/* 프로필 이미지 */}
         <Image
           src={profileImage || defaultProfile}
@@ -41,38 +41,40 @@ const WritableMoverCard = ({
         />
         {/* 텍스트 영역 */}
         <div className="order-1 ml-0 flex-1 md:order-2 md:ml-4">
-          <div className="flex flex-col md:flex-row gap-y-1 md:gap-1 md:items-center">
+          <div className="flex flex-col gap-y-1 md:flex-row md:items-center md:gap-1">
             <Image src={estimateIcon} alt="인증된 기사님" className="h-5 w-4" />
             <div className="text-lg font-bold">{nickname}</div>
           </div>
-          <div className="max-w-[180px] truncate text-[12px] md:text-[14px] text-gray-500 max-w-[200px] md:min-w-[350px] lg:min-w-[500px]">{moverIntroduction}</div>
+          <div className="max-w-[200px] truncate text-[12px] text-gray-500 md:min-w-[350px] md:text-[14px] lg:min-w-[500px]">
+            {moverIntroduction}
+          </div>
           <div className="hidden md:my-2 md:flex md:gap-2">
-            <MoveTypeLabel type={movingType.toLowerCase() as "small" | "home" | "office"} />
+            <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
             {isDesigned && <MoveTypeLabel type="document" />}
           </div>
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row md:justify-between">
-        <div className="mb-2 flex w-full flex-col gap-y-3 mt-3 md:flex-row md:gap-2">
+        <div className="mt-3 mb-2 flex w-full flex-col gap-y-3 md:flex-row md:gap-2">
           <div className="flex gap-3">
             <div className="text-[14px] md:text-[16px]">
               <div className="text-gray-500">출발지</div>
-              <div className="text-black-500">{departureAddr}</div>
+              <div className="text-black-500">{fromAddress.city}</div>
             </div>
-            <div className="border-gray-100 md:border-r-2 md:px-3 lg:border-l-2 text-[14px] md:text-[16px]">
+            <div className="border-gray-100 text-[14px] md:border-r-2 md:px-3 md:text-[16px] lg:border-l-2">
               <div className="text-gray-500">도착지</div>
-              <div className="text-black-500">{arrivalAddr}</div>
+              <div className="text-black-500">{toAddress.city}</div>
             </div>
           </div>
 
-          <div className="border-gray-100 md:border-r-2 md:px-3 lg:border-r-0 text-[14px] md:text-[16px]">
+          <div className="border-gray-100 text-[14px] md:border-r-2 md:px-3 md:text-[16px] lg:border-r-0">
             <div className="text-gray-500">이사일</div>
-            <div className="text-black-500">{movingDate}</div>
+            <div className="text-black-500">{moveDate.toLocaleDateString("ko-KR")}</div>
           </div>
         </div>
 
-        <div className="mt-4 flex min-w-[150px] items-center justify-between border-t-2 border-gray-200 pt-5 md:-mt-4 md:flex-col md:items-end md:border-none  lg:hidden">
+        <div className="mt-4 flex min-w-[150px] items-center justify-between border-t-2 border-gray-200 pt-5 md:-mt-4 md:flex-col md:items-end md:border-none lg:hidden">
           <div className="font-medium text-gray-500">견적 금액</div>
           <div className="text-right text-2xl font-bold">{price.toLocaleString()}원</div>
         </div>

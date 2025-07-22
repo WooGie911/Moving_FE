@@ -13,12 +13,12 @@ const WritableMoverCardList = ({ cards, onClickWrite }: IMoverCardListProps) => 
         key={card.id}
         profileImage={card.profileImage}
         nickname={card.nickname}
-        movingType={card.movingType}
+        moveType={card.moveType as "SMALL" | "HOME" | "OFFICE"}
         isDesigned={card.isDesigned}
         moverIntroduction={card.moverIntroduction}
-        departureAddr={card.departureAddr}
-        arrivalAddr={card.arrivalAddr}
-        movingDate={card.movingDate}
+        fromAddress={card.fromAddress}
+        toAddress={card.toAddress}
+        moveDate={card.moveDate}
         price={card.price}
         onClickWrite={() => onClickWrite(card)}
       />

@@ -2,16 +2,26 @@ export interface IWritableCardData {
   id: string;
   profileImage: string;
   nickname: string;
-  movingType: "SMALL" | "HOME" | "OFFICE";
+  moveType: "SMALL" | "HOME" | "OFFICE";
   isDesigned: boolean;
   moverIntroduction: string;
-  departureAddr: string;
-  arrivalAddr: string;
-  movingDate: string;
+  fromAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  };
+  toAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  };
+  moveDate: Date;
   price: number;
 }
 
-export interface IFetchWritableQuotesResult {
+export interface IFetchWritableReviewsResult {
   cards: IWritableCardData[];
   total: number;
   page: number;
@@ -28,12 +38,22 @@ export interface IWrittenCardData {
   moverId: string;
   profileImage: string | null;
   nickname: string;
-  movingType: "SMALL" | "HOME" | "OFFICE";
+  moveType: "SMALL" | "HOME" | "OFFICE";
   isDesigned: boolean;
   moverIntroduction: string;
-  departureAddr: string;
-  arrivalAddr: string;
-  movingDate: string;
+  fromAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  };
+  toAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  };
+  moveDate: Date;
   rating: number;
   content: string;
   createdAt: Date;
