@@ -20,7 +20,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading } = useAuth();
+  const { isLoading, signUp } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -50,14 +50,14 @@ const MoverSignupPage = () => {
       password: data.password,
       name: data.name,
       phoneNumber: data.phoneNumber,
-      currentRole: "MOVER" as const,
+      userType: "MOVER" as const,
     };
 
     try {
       if (isLoading) return;
-      const response = await authApi.signUp(signUpData);
+      const response = await signUp(signUpData);
 
-      if (response.status === 401) {
+      if (!response.success) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,

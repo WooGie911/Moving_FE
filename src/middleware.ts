@@ -15,19 +15,21 @@ export async function middleware(request: NextRequest) {
    * - accessToken이 존재하면 decode하여 role 추출
    * - 없으면 undefined
    */
-  let userRole: TUserRole | undefined;
-  let hasProfile: boolean | undefined;
+  let userType: TUserRole | undefined = undefined;
+  let nickname: string | undefined = undefined;
   let decodedToken: DecodedTokenPayload | null = null;
 
   if (accessToken) {
     try {
       decodedToken = await decodeAccessToken(accessToken);
-      userRole = decodedToken?.role as TUserRole;
-      hasProfile = decodedToken?.hasProfile as boolean;
+      userType = decodedToken?.userType as TUserRole;
+      nickname = decodedToken?.nickname as string;
     } catch (error) {
       console.error("❌ 토큰 디코딩 실패:", error);
     }
   }
+
+  console.log("nickname", nickname);
 
   // ✅ 인증 상태
   const isAuthenticated = !!accessToken;
@@ -53,15 +55,23 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/quote") || pathname.startsWith("/favoriteMover") || pathname.startsWith("/review");
 
   /**
+   * 프로필 미등록시 프로필 등록 페이지로 리디렉션
+   * (단, 이미 프로필 등록 페이지에 있는 경우 제외)
+   */
+  if (isProtectedRoute && !nickname && pathname !== "/profile/register") {
+    return NextResponse.redirect(new URL("/profile/register", request.url));
+  }
+
+  /**
    * ✅ 홈 페이지 접근 제어 (GUEST 전용)
    * 인증된 사용자가 홈에 접근하면 역할에 따라 리디렉션
    */
 
-  if (pathname === "/" && isAuthenticated && userRole) {
-    if (userRole === "CUSTOMER") {
+  if (pathname === "/" && isAuthenticated && userType) {
+    if (userType === "CUSTOMER") {
       return NextResponse.redirect(new URL("/searchMover", request.url));
     }
-    if (userRole === "MOVER") {
+    if (userType === "MOVER") {
       console.log("MOVER 접근");
       return NextResponse.redirect(new URL("/estimate/received", request.url));
     }
@@ -70,11 +80,11 @@ export async function middleware(request: NextRequest) {
   /**
    * ✅ 인증된 사용자가 로그인/회원가입 페이지 접근 시 역할별 페이지로 리디렉션
    */
-  if (isAuthRoute && isAuthenticated && userRole) {
-    if (userRole === "CUSTOMER") {
+  if (isAuthRoute && isAuthenticated && userType) {
+    if (userType === "CUSTOMER") {
       return NextResponse.redirect(new URL("/searchMover", request.url));
     }
-    if (userRole === "MOVER") {
+    if (userType === "MOVER") {
       return NextResponse.redirect(new URL("/estimate/received", request.url));
     }
   }
@@ -89,14 +99,14 @@ export async function middleware(request: NextRequest) {
   /**
    * ✅ 역할 기반 접근 제어
    */
-  if (isAuthenticated && userRole) {
+  if (isAuthenticated && userType) {
     // 기사 전용 페이지에 고객이 접근하는 경우
-    if (isMoverOnlyRoute && userRole === "CUSTOMER") {
+    if (isMoverOnlyRoute && userType === "CUSTOMER") {
       return NextResponse.redirect(new URL("/searchMover", request.url));
     }
 
     // 고객 전용 페이지에 기사가 접근하는 경우
-    if (isCustomerOnlyRoute && userRole === "MOVER") {
+    if (isCustomerOnlyRoute && userType === "MOVER") {
       return NextResponse.redirect(new URL("/estimate/received", request.url));
     }
   }

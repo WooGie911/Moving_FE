@@ -27,10 +27,10 @@ const MoverRegisterPage = () => {
 
   const nickname = watch("nickname");
   const career = watch("career");
-  const intro = watch("intro");
-  const desc = watch("desc");
-  const [services, setServices] = useState<number[]>([1]);
-  const [regions, setRegions] = useState<string[]>(["SEOUL", "GYEONGGI", "INCHEON"]);
+  const shortIntro = watch("shortIntro");
+  const detailIntro = watch("detailIntro");
+  const [services, setServices] = useState<string[]>(["SMALL"]);
+  const [region, setRegion] = useState<string>("SEOUL");
   const [selectedImage, setSelectedImage] = useState({
     name: "",
     type: "",
@@ -40,12 +40,12 @@ const MoverRegisterPage = () => {
   const allFilled =
     nickname?.trim() &&
     career?.trim() &&
-    intro?.trim() &&
-    intro.trim().length >= 8 &&
-    desc?.trim() &&
-    desc.trim().length >= 10 &&
+    shortIntro?.trim() &&
+    shortIntro?.trim().length >= 8 &&
+    detailIntro?.trim() &&
+    detailIntro?.trim().length >= 10 &&
     services.length > 0 &&
-    regions.length > 0;
+    region;
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -73,19 +73,19 @@ const MoverRegisterPage = () => {
 
   const onSubmit = async () => {
     const profileData = {
-      profileImage: selectedImage.dataUrl,
+      moverImage: selectedImage.dataUrl,
       nickname: nickname,
-      experience: Number(career),
-      introduction: intro,
-      description: desc,
-      serviceRegions: regions,
+      career: Number(career),
+      shortIntro: shortIntro,
+      detailIntro: detailIntro,
+      currentArea: region,
       serviceTypes: services,
     };
 
     const response = await userApi.postProfile(profileData);
 
     if (response.success) {
-      router.push("/searchMover");
+      router.push("/estimate/received");
     } else {
       open({
         title: "프로필 등록 실패",
@@ -154,8 +154,7 @@ const MoverRegisterPage = () => {
                   name="nickname"
                   placeholder="사이트에 노출될 별명을 입력해 주세요"
                   rules={validationRules.nickname}
-                  inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
-                  wrapperClassName="w-[327px] lg:w-[500px] h-[80px]"
+                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
               </div>
             </div>
@@ -175,8 +174,7 @@ const MoverRegisterPage = () => {
                   name="career"
                   placeholder="ex) 8"
                   rules={validationRules.career}
-                  inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
-                  wrapperClassName="w-[327px] lg:w-[500px]  h-[80px]"
+                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
               </div>
             </div>
@@ -193,11 +191,10 @@ const MoverRegisterPage = () => {
               </div>
               <div className="border-border-light w-[327px] border-b-1 lg:w-full lg:border-b-0">
                 <TextInput
-                  name="intro"
+                  name="shortIntro"
                   placeholder="한 줄 소개를 입력하세요"
                   rules={validationRules.intro}
-                  inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
-                  wrapperClassName="w-[327px] lg:w-[500px] h-[80px]"
+                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
               </div>
             </div>
@@ -217,11 +214,11 @@ const MoverRegisterPage = () => {
               </div>
               <div className="border-border-light w-[327px] border-b-1 lg:w-full">
                 <TextAreaInput
-                  name="desc"
+                  name="detailIntro"
                   placeholder="상세 설명을 입력하세요"
                   rules={validationRules.description}
                   textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
-                  wrapperClassName="w-[327px] lg:w-[500px]  h-[80px]"
+                  wrapperClassName="w-[327px] lg:w-[500px]  h-[100px]"
                 />
               </div>
             </div>
@@ -236,18 +233,16 @@ const MoverRegisterPage = () => {
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
                 {SERVICE_OPTIONS.map((service) => {
-                  const serviceNumber = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
+                  const serviceCode = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
                   return (
                     <CircleTextLabel
                       key={service}
                       text={service}
                       clickAble={true}
-                      isSelected={services.includes(serviceNumber)}
+                      isSelected={services.includes(serviceCode)}
                       onClick={() => {
                         setServices((prev) =>
-                          prev.includes(serviceNumber)
-                            ? prev.filter((s) => s !== serviceNumber)
-                            : [...prev, serviceNumber],
+                          prev.includes(serviceCode) ? prev.filter((s) => s !== serviceCode) : [...prev, serviceCode],
                         );
                       }}
                     />
@@ -256,32 +251,31 @@ const MoverRegisterPage = () => {
               </div>
             </div>
 
-            {/* 서비스 가능 지역 */}
+            {/* 현재 활동 지역 */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    서비스 가능 지역
+                    현재 활동 지역
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                     *
                   </div>
                 </div>
+                <span className="text-xs text-gray-400 lg:text-lg">* 현재 활동하고 있는 주요 지역을 선택해주세요</span>
               </div>
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
                 <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
-                  {REGION_OPTIONS.map((region) => {
-                    const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
+                  {REGION_OPTIONS.map((regionName) => {
+                    const regionValue = REGION_MAPPING[regionName as keyof typeof REGION_MAPPING];
                     return (
                       <CircleTextLabel
-                        key={region}
-                        text={region}
+                        key={regionName}
+                        text={regionName}
                         clickAble={true}
-                        isSelected={regions.includes(regionValue)}
+                        isSelected={region === regionValue}
                         onClick={() => {
-                          setRegions((prev) =>
-                            prev.includes(regionValue) ? prev.filter((r) => r !== regionValue) : [...prev, regionValue],
-                          );
+                          setRegion(regionValue);
                         }}
                       />
                     );

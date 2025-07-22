@@ -1,6 +1,7 @@
 export interface ISignInFormValues {
   email: string;
   password: string;
+  userType: "CUSTOMER" | "MOVER";
 }
 
 export interface ISignUpFormValues {
@@ -9,5 +10,5 @@ export interface ISignUpFormValues {
   phoneNumber: string;
   password: string;
   passwordCheck?: string;
-  currentRole: "CUSTOMER" | "MOVER";
+  userType: "CUSTOMER" | "MOVER";
 }

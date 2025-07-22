@@ -13,7 +13,7 @@ export const DevNavitgation = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   // 현재 유저 역할 결정
-  const currentRole = isLoggedIn ? user?.currentRole : "GUEST";
+  const currentRole = isLoggedIn ? user?.userType : "GUEST";
 
   // 현재 유저가 접근 가능한 라우트 그룹 필터링
   const filteredRouteGroups = ROUTE_GROUPS.filter((group) => group.allowedRoles?.includes(currentRole as TUserRole));
@@ -35,7 +35,7 @@ export const DevNavitgation = () => {
       email: "testCustomer@test.com",
       password: "1rhdiddl!",
     };
-    login(mockCustomer.email, mockCustomer.password);
+    login(mockCustomer.email, mockCustomer.password, "CUSTOMER");
   };
 
   // 테스트용 기사 로그인
@@ -44,7 +44,7 @@ export const DevNavitgation = () => {
       email: "testMover@test.com",
       password: "1rhdiddl!",
     };
-    login(mockMover.email, mockMover.password);
+    login(mockMover.email, mockMover.password, "MOVER");
   };
 
   // 개발 환경에서만 표시
