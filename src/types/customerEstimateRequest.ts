@@ -41,6 +41,8 @@ export type TMoverInfo = {
   serviceTypes: any;
   serviceAreas: any;
   isFavorite: boolean;
+  totalFavoriteCount: number; // 추가
+  Favorite?: any; // 추가
 };
 
 // 견적서 응답 타입 (백엔드와 일치)
@@ -242,6 +244,8 @@ export const mockPendingQuoteResponses: TPendingQuoteResponse = {
         serviceTypes: ["HOME", "SMALL"],
         serviceAreas: ["서울특별시"],
         isFavorite: false,
+        totalFavoriteCount: 7,
+        Favorite: [],
       },
     },
     {
@@ -267,6 +271,8 @@ export const mockPendingQuoteResponses: TPendingQuoteResponse = {
         serviceTypes: ["HOME", "OFFICE"],
         serviceAreas: ["서울특별시"],
         isFavorite: false,
+        totalFavoriteCount: 3,
+        Favorite: [],
       },
     },
   ],
@@ -323,6 +329,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME", "SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 12,
+          Favorite: [],
         },
       },
       {
@@ -348,6 +356,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 5,
+          Favorite: [],
         },
       },
       {
@@ -373,6 +383,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME", "OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],
@@ -426,6 +438,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 8,
+          Favorite: [],
         },
       },
       {
@@ -451,6 +465,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 2,
+          Favorite: [],
         },
       },
       {
@@ -476,6 +492,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -501,6 +519,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -526,6 +546,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 11,
+          Favorite: [],
         },
       },
     ],
@@ -579,6 +601,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -604,6 +628,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],
@@ -657,6 +683,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -682,6 +710,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -707,6 +737,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -732,6 +764,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -757,6 +791,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -782,6 +818,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],

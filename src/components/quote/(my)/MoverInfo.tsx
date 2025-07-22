@@ -38,7 +38,7 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
         {usedAtDetail ? (
           <div className="flex flex-row items-center justify-center gap-1">
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[18px] md:leading-[26px]">
-              토탈찜개수 필요
+              {mover.totalFavoriteCount === 0 || mover.totalFavoriteCount === undefined ? 0 : mover.totalFavoriteCount}
             </p>
             <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
               <Image src={mover.isFavorite ? like_black : like_white} alt="like" width={24} height={24} />
@@ -49,7 +49,9 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
             <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
               <Image src={mover.isFavorite ? like_red : like_white} alt="like" width={20} height={20} />
             </button>
-            <p className="text-[14px] leading-[24px] font-normal text-gray-500">토탈찜개수 필요</p>
+            <p className="text-[14px] leading-[24px] font-normal text-gray-500">
+              {mover.totalFavoriteCount === 0 || mover.totalFavoriteCount === undefined ? 0 : mover.totalFavoriteCount}
+            </p>
           </div>
         )}
       </div>
