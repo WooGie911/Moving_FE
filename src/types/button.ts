@@ -10,6 +10,7 @@ export type TShareType = "clip" | "kakao" | "facebook";
 
 // 버튼 Props 인터페이스
 export interface IButtonProps {
+  type?: "button" | "submit" | "reset";
   variant: "solid" | "outlined" | "like";
   state?: "default" | "disabled" | "active" | "done";
   children?: React.ReactNode;

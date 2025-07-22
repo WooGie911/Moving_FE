@@ -24,6 +24,7 @@ import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
  * @param style - 버튼 스타일
  */
 export const Button = ({
+  type = "button",
   variant,
   state = "default",
   children,
@@ -57,7 +58,7 @@ export const Button = ({
     const likeIconSize = 24;
     return (
       <button
-        type="button"
+        type={type}
         className={`text-2lg flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
         onClick={onClick}
         style={style}
@@ -76,7 +77,7 @@ export const Button = ({
 
   return (
     <button
-      type="button"
+      type={type}
       className={buttonClass}
       onClick={onClick}
       disabled={variant === "solid" ? state === "disabled" || disabled : false}
