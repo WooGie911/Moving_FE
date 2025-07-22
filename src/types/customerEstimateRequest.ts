@@ -7,14 +7,6 @@ export interface IEstimateRequestProps {
   endPoint: string;
 }
 
-// 서비스 타입 정의
-export type TServiceType = {
-  id: number;
-  name: string;
-  description: string | null;
-  iconUrl: string | null;
-};
-
 // 주소 타입 (백엔드와 일치)
 export type TAddress = {
   postalCode: string;
@@ -23,6 +15,11 @@ export type TAddress = {
   detail: string | null;
   region: string;
 };
+
+type TMoveType = "HOME" | "OFFICE" | "SMALL";
+
+// Favorite 타입 정의 (백엔드 기준)
+export type TFavorite = { id: string };
 
 // 기사님 정보 타입 (백엔드와 일치)
 export type TMoverInfo = {
@@ -38,11 +35,11 @@ export type TMoverInfo = {
   workedCount: number | null;
   averageRating: number | null;
   totalReviewCount: number | null;
-  serviceTypes: any;
-  serviceAreas: any;
+  serviceTypes: TMoveType[];
+  serviceAreas: string[];
   isFavorite: boolean;
-  totalFavoriteCount: number; // 추가
-  Favorite?: any; // 추가
+  totalFavoriteCount: number;
+  Favorite?: TFavorite[]; // any → TFavorite[]
 };
 
 // 견적서 응답 타입 (백엔드와 일치)
@@ -105,12 +102,21 @@ export interface IDesignateEstimateRequestRequest {
 
 // 견적 확정 응답 타입 (백엔드와 일치)
 export type TConfirmEstimateResponse = {
-  estimateRequest: any;
-  estimate: any;
+  estimateRequest: IEstimateRequest;
+  estimate: IEstimate;
 };
 
 // 지정 견적 요청 응답 타입 (백엔드와 일치)
-export type TDesignateEstimateRequest = any;
+export interface IDesignatedMover {
+  id: string;
+  estimateRequestId: string;
+  customerId: string;
+  moverId: string;
+  message: string;
+  status: string;
+  expiresAt: Date;
+}
+export type TDesignateEstimateRequest = IDesignatedMover;
 
 // 완료된 견적 목록을 위한 타입 (배열)
 export type TReceivedEstimateRequestListResponse = TReceivedEstimateRequestResponse[];
@@ -146,7 +152,7 @@ export interface IEstimateRequest {
   confirmedEstimateId: string | null;
   estimateCount: number;
   designatedEstimateCount: number;
-  serviceTypes?: TServiceType[];
+  serviceTypes?: TMoveType[];
 }
 
 export interface IEstimate {
