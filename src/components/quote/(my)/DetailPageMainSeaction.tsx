@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
 import info from "@/assets/icon/info/icon-info.png";
-import { IDetailPageMainSeactionProps, TMover } from "@/types/userQuote";
+import { IDetailPageMainSeactionProps, TMoverInfo } from "@/types/customerEstimateRequest";
 
 import { MoverInfo } from "./MoverInfo";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
@@ -12,14 +12,14 @@ import { LastButtonSection } from "./received/LastButtonSection";
 import { LgButtonSection } from "./LgButtonSection";
 import { Button } from "@/components/common/button/Button";
 
-export const DetailPageMainSeaction = ({ quote, estimate, type }: IDetailPageMainSeactionProps) => {
+export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDetailPageMainSeactionProps) => {
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
 
   const allowedTypes = ["small", "home", "office"] as const;
-  const safeMovingType = allowedTypes.includes(quote.movingType as any)
-    ? (quote.movingType as "small" | "home" | "office")
+  const safeMovingType = allowedTypes.includes(estimateRequest.moveType as any)
+    ? (estimateRequest.moveType as "small" | "home" | "office")
     : "small"; // 기본값
 
   return (
@@ -36,15 +36,15 @@ export const DetailPageMainSeaction = ({ quote, estimate, type }: IDetailPageMai
         {/* 라벨 ~ 타이틀, 기사님정보 영역 */}
         <LabelAndTitleSection
           type={"received"}
-          mover={estimate.mover as TMover}
+          mover={estimate.mover as TMoverInfo}
           isDesignated={estimate.isDesignated}
-          estimateState={estimate.status}
-          estimateTitle={estimate.description}
+          estimateState={estimate.status as "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED"}
+          estimateTitle={estimate.comment || ""}
           usedAtDetail={true}
         />
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 기사님 정보 */}
-        <MoverInfo mover={estimate.mover as TMover} usedAtDetail={true} />
+        <MoverInfo mover={estimate.mover as TMoverInfo} usedAtDetail={true} />
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 견적가 */}
         <div className="my-2 flex w-full flex-row items-center justify-between md:justify-start md:gap-15">
@@ -53,7 +53,20 @@ export const DetailPageMainSeaction = ({ quote, estimate, type }: IDetailPageMai
         </div>
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 이사견적 상세정보들 */}
-        <DetailMoveInfo {...quote} />
+        <DetailMoveInfo
+          id={estimateRequest.id}
+          movingType={estimateRequest.moveType as "SMALL" | "HOME" | "OFFICE"}
+          movingDate={estimateRequest.moveDate}
+          createdAt={estimateRequest.createdAt}
+          departureAddr={estimateRequest.fromAddress.city + " " + estimateRequest.fromAddress.district}
+          arrivalAddr={estimateRequest.toAddress.city + " " + estimateRequest.toAddress.district}
+          departureDetail={estimateRequest.fromAddress.detail}
+          arrivalDetail={estimateRequest.toAddress.detail}
+          status={estimateRequest.status}
+          confirmedEstimateId={null}
+          estimateCount={0}
+          designatedEstimateCount={0}
+        />
         {estimate.status === "REJECTED" || estimate.status === "EXPIRED" ? (
           <div className="my-2 flex w-full flex-col items-start justify-center gap-10">
             <Button

@@ -1,4 +1,4 @@
-import { IRequestQuoteProps } from "@/types/userQuote";
+import { IRequestQuoteProps } from "@/types/customerEstimateRequest";
 import React from "react";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import Image from "next/image";

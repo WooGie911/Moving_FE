@@ -5,7 +5,7 @@ import {
   TQuoteDetailResponse,
   IDesignateQuoteRequest,
   TQuoteHistoryResponse,
-} from "@/types/userQuote";
+} from "@/types/customerEstimateRequest";
 import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/quote";
 import { getTokenFromCookie } from "@/utils/auth";
 

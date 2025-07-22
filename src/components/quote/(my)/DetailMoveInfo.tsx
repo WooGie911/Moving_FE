@@ -1,4 +1,4 @@
-import { IQuote } from "@/types/userQuote";
+import { IQuote } from "@/types/customerEstimateRequest";
 import React from "react";
 
 export const DetailMoveInfo = ({

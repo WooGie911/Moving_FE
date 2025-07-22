@@ -1,5 +1,5 @@
 "use client";
-import { ICardListProps } from "@/types/userQuote";
+import { ICardListProps } from "@/types/customerEstimateRequest";
 import React, { useState } from "react";
 import { CardList } from "../CardList";
 import down from "@/assets/icon/arrow/icon-down-sm.png";

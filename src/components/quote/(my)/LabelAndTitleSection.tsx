@@ -2,12 +2,12 @@ import React from "react";
 import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
-import { TMover } from "@/types/userQuote";
+import { TMoverInfo } from "@/types/customerEstimateRequest";
 
 interface IProps {
-  mover: TMover;
+  mover: TMoverInfo;
   isDesignated: boolean;
-  estimateState: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED" | "SENT";
+  estimateState: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
   estimateTitle: string;
   type: "pending" | "received";
   usedAtDetail: boolean;
@@ -41,14 +41,14 @@ export const LabelAndTitleSection = ({
         {/* 이사타입과 지정견적 라벨 */}
         <div className="flex flex-row gap-2">
           {/* mover의 serviceTypes에 따라 여러 라벨 표시 */}
-          {mover.profile?.serviceTypes?.map((serviceType, index) => (
-            <MoveTypeLabel key={index} type={mapServiceTypeToMoveType(serviceType.service.name)} />
+          {mover.serviceTypes?.map((serviceType: string, index: number) => (
+            <MoveTypeLabel key={index} type={mapServiceTypeToMoveType(serviceType)} />
           ))}
           {isDesignated ? <MoveTypeLabel type="document" /> : ""}
         </div>
         {/* 확정견적인지 + 견적상태  모바일만 표시 */}
 
-        {estimateState === "PENDING" ? (
+        {estimateState === "PROPOSED" ? (
           <p
             className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
           >
@@ -69,13 +69,33 @@ export const LabelAndTitleSection = ({
       </div>
       <div className="flex w-full flex-row items-center justify-center gap-1">
         <h1
-          className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAtDetail ? "text-[18px] md:text-[24px]" : "text-[16px] md:text-[18px]"}`}
+          className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAtDetail ? "text-[18px] md:text-[24px]" : "truncate text-[16px] md:text-[18px]"}`}
+          title={estimateTitle}
         >
-          {estimateTitle}
+          {usedAtDetail
+            ? (() => {
+                const sentences = estimateTitle.split(".");
+                if (sentences.length >= 2) {
+                  const first = sentences[0].trim();
+                  const second = sentences[1].trim();
+                  return (
+                    <>
+                      {first}.
+                      <br />
+                      {second}
+                    </>
+                  );
+                } else {
+                  return estimateTitle;
+                }
+              })()
+            : estimateTitle.length > 30
+              ? `${estimateTitle.substring(0, 30)}...`
+              : estimateTitle}
         </h1>
         {type === "pending" ? (
           ""
-        ) : estimateState === "PENDING" ? (
+        ) : estimateState === "PROPOSED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">견적대기</p>

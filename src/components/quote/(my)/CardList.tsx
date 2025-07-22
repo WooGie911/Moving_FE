@@ -7,7 +7,7 @@ import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
-import { ICardListProps } from "@/types/userQuote";
+import { ICardListProps } from "@/types/customerEstimateRequest";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
 
@@ -44,12 +44,7 @@ export const CardList = ({
             className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${type === "pending" ? "border-border-light border-b-1" : ""} `}
           >
             {/* 좌측 프로필 이미지 */}
-            <Image
-              src={mover.profile.profileImage ? mover.profile.profileImage : defaultProfile}
-              alt="profile"
-              width={50}
-              height={50}
-            />
+            <Image src={mover.moverImage ? mover.moverImage : defaultProfile} alt="profile" width={50} height={50} />
             {/* 프로필 이미지 외 모든 프로필 정보*/}
             <MoverInfo mover={mover} usedAtDetail={false} />
           </div>
@@ -67,7 +62,7 @@ export const CardList = ({
       ) : (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
           <div className="flex w-full flex-row items-center justify-start gap-1 md:hidden">
-            {estimateState === "PENDING" ? (
+            {estimateState === "PROPOSED" ? (
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">견적대기</p>
             ) : estimateState === "ACCEPTED" ? (
               <div className="flex flex-row items-center justify-center gap-1">
