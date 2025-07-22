@@ -29,8 +29,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  console.log("nickname", nickname);
-
   // ✅ 인증 상태
   const isAuthenticated = !!accessToken;
 
@@ -58,8 +56,16 @@ export async function middleware(request: NextRequest) {
    * 프로필 미등록시 프로필 등록 페이지로 리디렉션
    * (단, 이미 프로필 등록 페이지에 있는 경우 제외)
    */
+
   if (isProtectedRoute && !nickname && pathname !== "/profile/register") {
     return NextResponse.redirect(new URL("/profile/register", request.url));
+  } else if (isProtectedRoute && nickname && pathname === "/profile/register") {
+    if (userType === "CUSTOMER") {
+      return NextResponse.redirect(new URL("/searchMover", request.url));
+    }
+    if (userType === "MOVER") {
+      return NextResponse.redirect(new URL("/estimate/received", request.url));
+    }
   }
 
   /**
