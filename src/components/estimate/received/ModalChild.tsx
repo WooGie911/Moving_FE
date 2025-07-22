@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { LabelArea } from "../LabelArea";
-import { IQuoteResponse } from "@/types/moverEstimate";
+import { IQuoteResponse, TEstimateRequestResponse } from "@/types/moverEstimate";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import Image from "next/image";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
-import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { TextInput } from "@/components/common/input/TextInput";
+import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { FormProvider, useForm } from "react-hook-form";
 
 interface IModalProps {
-  data: IQuoteResponse;
+  data: TEstimateRequestResponse;
   isDesignated: boolean;
   estimatePrice?: number;
   type: "received" | "sent" | "rejected";
@@ -18,7 +18,7 @@ interface IModalProps {
 
 export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalProps) => {
   const methods = useForm();
-  const { watch } = methods;
+  const { watch, setValue } = methods;
 
   // 폼 값들을 감시
   const estimatePrice = watch("estimatePrice");
@@ -42,14 +42,14 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
         {/* 라벨과 확정견적/견적서시간/부분 */}
         <div className="flex w-full flex-row items-center justify-between">
           <LabelArea
-            movingType={data.movingType.toLowerCase() as "small" | "home" | "office" | "document"}
+            movingType={data.moveType.toLowerCase() as "small" | "home" | "office"}
             isDesignated={isDesignated}
           />
         </div>
         {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
         <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
           <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-            {`${data.user.name} 고객님`}
+            {`${data.customer.name} 고객님`}
           </p>
         </div>
         {/* 이사 정보  부분*/}
@@ -58,7 +58,7 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                {shortenRegionInAddress(data.departureAddr.split(" ").slice(0, 2).join(" "))}
+                {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
               </p>
             </div>
             <div className="flex flex-col justify-end pb-1">
@@ -67,28 +67,31 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                {shortenRegionInAddress(data.arrivalAddr.split(" ").slice(0, 2).join(" "))}
+                {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
               </p>
             </div>
           </div>
           <div className="flex flex-col justify-between">
             <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
             <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-              {`${data.movingDate.getFullYear()}년 ${data.movingDate.getMonth() + 1}월 ${data.movingDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.movingDate.getDay()]})`}
+              {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
             </p>
           </div>
         </div>
         <div className="flex w-full flex-col gap-1">
           <FormProvider {...methods}>
             {/* 견적가 입력 부분 */}
-            <div className={`flex flex-col justify-between ${type === "rejected" ? "hidden" : ""}`}>
+            <div className={`flex w-full flex-col justify-between ${type === "rejected" ? "hidden" : ""}`}>
               <p className="text-[14px] leading-6 font-normal text-gray-500">견적가를 입력해 주세요.</p>
-              <PasswordInput name="estimatePrice" placeholder="견적가를 입력." />
+              <PasswordInput name="estimatePrice" placeholder="견적가를 입력해 주세요." wrapperClassName="w-full" />
+              {estimatePrice && !/^[0-9]*$/.test(estimatePrice) && (
+                <p className="pb-2 pl-2 text-sm text-red-500">숫자만 입력해 주세요.</p>
+              )}
             </div>
             {/* 코멘트 입력 부분 */}
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">코멘트를 입력해 주세요.</p>
-              <TextInput name="comment" placeholder="최소 10자 이상 입력해 주세요." />
+              <TextInput name="comment" placeholder="최소 10자 이상 입력해 주세요." wrapperClassName="w-full" />
             </div>
           </FormProvider>
         </div>

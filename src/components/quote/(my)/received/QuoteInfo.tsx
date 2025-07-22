@@ -1,15 +1,7 @@
-import { IQuote } from "@/types/userQuote";
+import { TEstimateRequestResponse } from "@/types/customerEstimateRequest";
 import React from "react";
 
-export const QuoteInfo = ({
-  movingType,
-  createdAt,
-  movingDate,
-  departureAddr,
-  arrivalAddr,
-  departureDetail,
-  arrivalDetail,
-}: IQuote) => {
+export const QuoteInfo = (props: TEstimateRequestResponse) => {
   // movingType에 따른 텍스트 변환 함수
   const getMovingTypeText = (type: string) => {
     switch (type.toLowerCase()) {
@@ -25,22 +17,26 @@ export const QuoteInfo = ({
   };
 
   // Date 객체를 한국어 날짜 문자열로 변환하는 함수
-  // ✅ 수정된 formatDate 함수
-const formatDate = (date?: Date) => {
-  if (!date) return "";
-  return date.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  });
-};
-
+  const formatDate = (date?: Date) => {
+    if (!date) return "";
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+  };
 
   // 주소와 상세주소를 결합하는 함수
   const formatAddress = (addr: string, detail: string | null) => {
     return detail ? `${addr} ${detail}` : addr;
   };
+
+  // fromAddress, toAddress에서 값 추출
+  const departureAddr = props.fromAddress.city + " " + props.fromAddress.district;
+  const arrivalAddr = props.toAddress.city + " " + props.toAddress.district;
+  const departureDetail = props.fromAddress.detail;
+  const arrivalDetail = props.toAddress.detail;
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 lg:w-[400px]">
@@ -49,7 +45,9 @@ const formatDate = (date?: Date) => {
         <h1 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
           견적 정보
         </h1>
-        <p className="hidden text-[14px] leading-[24px] font-normal text-gray-500 md:block">{formatDate(createdAt)}</p>
+        <p className="hidden text-[14px] leading-[24px] font-normal text-gray-500 md:block">
+          {formatDate(props.createdAt)}
+        </p>
       </div>
       {/* 견적 정보 부분 */}
       <div className="flex w-full flex-col items-center justify-center gap-2">
@@ -59,7 +57,7 @@ const formatDate = (date?: Date) => {
             이사유형
           </p>
           <p className="text-black-500 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
-            {getMovingTypeText(movingType)}
+            {getMovingTypeText(props.moveType)}
           </p>
         </div>
         {/* 출발지 및 도착지*/}
@@ -87,13 +85,13 @@ const formatDate = (date?: Date) => {
             이사날짜
           </p>
           <p className="text-black-500 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
-            {formatDate(movingDate)}
+            {formatDate(props.moveDate)}
           </p>
         </div>
       </div>
       {/* 모바일용 요청 날짜 */}
       <div className="flex w-full flex-row items-center justify-end">
-        <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:hidden">{formatDate(createdAt)}</p>
+        <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:hidden">{formatDate(props.createdAt)}</p>
       </div>
     </div>
   );

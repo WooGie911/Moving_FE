@@ -16,27 +16,32 @@ export const MoverReceivedPage = () => {
 
   // 필터링된 데이터
   const filteredData = useMemo(() => {
-    let filtered = [...mockQuoteResponseData];
+    // 두 배열을 합쳐서 하나의 배열로 만듦
+    const allData = [
+      ...(mockQuoteResponseData.regionEstimateRequests || []),
+      ...(mockQuoteResponseData.designatedEstimateRequests || []),
+    ];
+
+    let filtered = [...allData];
 
     // 검색어 필터링
     if (filters.searchKeyword) {
       filtered = filtered.filter(
         (item) =>
-          item.user.name.includes(filters.searchKeyword) ||
-          item.departureAddr.includes(filters.searchKeyword) ||
-          item.arrivalAddr.includes(filters.searchKeyword),
+          item.customer.name.includes(filters.searchKeyword) ||
+          item.fromAddress.region.includes(filters.searchKeyword) ||
+          item.toAddress.region.includes(filters.searchKeyword),
       );
     }
 
     // 이사 유형 필터링
     if (filters.movingTypes.length > 0) {
-      filtered = filtered.filter((item) => filters.movingTypes.includes(item.movingType));
+      filtered = filtered.filter((item) => filters.movingTypes.includes(item.moveType));
     }
 
     // 지정 견적 요청 필터링
     if (filters.isDesignatedOnly) {
-      // 실제로는 isDesignated 정보가 필요하지만, 목데이터에서는 모든 항목이 지정견적으로 설정
-      filtered = filtered.filter((item) => true); // 모든 항목이 지정견적으로 가정
+      filtered = filtered.filter((item) => item.isDesignated === true);
     }
 
     // 서비스 가능 지역 필터링
@@ -47,10 +52,16 @@ export const MoverReceivedPage = () => {
 
     // 정렬
     filtered.sort((a, b) => {
-      if (filters.sortBy === "movingDate") {
-        return new Date(a.movingDate).getTime() - new Date(b.movingDate).getTime();
+      if (filters.sortBy === "moveDate") {
+        // 이사빠른순: 이사일이 빠른 순서대로 정렬 (오름차순)
+        const dateA = new Date(a.moveDate).getTime();
+        const dateB = new Date(b.moveDate).getTime();
+        return dateA - dateB;
       } else {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        // 최신순: 생성일이 최신인 순서대로 정렬 (내림차순)
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA;
       }
     });
 
@@ -79,7 +90,14 @@ export const MoverReceivedPage = () => {
       <div className="flex w-full flex-col items-center justify-center">
         <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
           {filteredData.map((item) => (
-            <CardList key={item.id} id={item.id} data={item} isDesignated={false} isConfirmed={false} type="received" />
+            <CardList
+              key={item.id}
+              id={item.id}
+              data={item}
+              isDesignated={item.isDesignated || false}
+              isConfirmed={false}
+              type="received"
+            />
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { TMover } from "@/types/userQuote";
+import { TMoverInfo } from "@/types/customerEstimateRequest";
 import chat from "@/assets/icon/etc/icon-chat.png";
 import like_red from "@/assets/icon/like/icon-like-red.png";
 import like_white from "@/assets/icon/like/icon-like-white-lg.png";
@@ -9,7 +9,7 @@ import like_black from "@/assets/icon/like/icon-like-black.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
 
 interface IProps {
-  mover: TMover;
+  mover: TMoverInfo;
   usedAtDetail: boolean;
 }
 
@@ -29,27 +29,27 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
       {/* 기사님 별명과 찜 횟수 영역 */}
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-center gap-1">
-          <Image src={chat} alt="chat" width={20} height={20} />
+          {mover.isVeteran || mover.workedCount! >= 3 ? <Image src={chat} alt="chat" width={20} height={20} /> : ""}
           <p
             className={`text-black-300 text-[14px] leading-[24px] font-semibold md:leading-[26px] md:font-medium ${usedAtDetail ? "text-[16px] md:text-[18px]" : "text-[14px] md:text-[16px]"} `}
-          >{`${mover.profile.nickname} 기사님`}</p>
+          >{`${mover.nickname} 기사님`}</p>
         </div>
 
         {usedAtDetail ? (
           <div className="flex flex-row items-center justify-center gap-1">
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[18px] md:leading-[26px]">
-              {mover.profile.favoriteCount}
+              토탈찜개수 필요
             </p>
             <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
-              <Image src={isLiked ? like_black : like_white} alt="like" width={24} height={24} />
+              <Image src={mover.isFavorite ? like_black : like_white} alt="like" width={24} height={24} />
             </button>
           </div>
         ) : (
           <div className="flex flex-row items-center justify-center gap-1">
             <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
-              <Image src={isLiked ? like_red : like_white} alt="like" width={20} height={20} />
+              <Image src={mover.isFavorite ? like_red : like_white} alt="like" width={20} height={20} />
             </button>
-            <p className="text-[14px] leading-[24px] font-normal text-gray-500">{mover.profile.favoriteCount}</p>
+            <p className="text-[14px] leading-[24px] font-normal text-gray-500">토탈찜개수 필요</p>
           </div>
         )}
       </div>
@@ -57,19 +57,19 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
       <div className="flex w-full flex-row items-center justify-start">
         <div className="flex flex-row items-center justify-center gap-1">
           <Image src={star} alt="star" width={20} height={20} />
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.profile.avgRating}</p>
-          <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.profile.reviewCount})`}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.averageRating}</p>
+          <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
         </div>
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
         <div className="flex flex-row items-center justify-center gap-1">
           <p className="text-[14px] leading-[24px] font-normal text-gray-500">경력</p>
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.experience}년`}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}년`}</p>
         </div>
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
         <div className="flex flex-row items-center justify-center gap-1">
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.profile.completedCount}건`}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}건`}</p>
           <p className="text-[14px] leading-[24px] font-normal text-gray-500">확정</p>
         </div>
       </div>

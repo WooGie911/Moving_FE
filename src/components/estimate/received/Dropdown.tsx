@@ -7,12 +7,12 @@ import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
 
 interface DropdownProps {
-  value?: "movingDate" | "createdAt";
-  onChange?: (value: "movingDate" | "createdAt") => void;
+  value?: "moveDate" | "createdAt";
+  onChange?: (value: "moveDate" | "createdAt") => void;
 }
 
 export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
-  const [sortOption, setSortOption] = useState<string>(value === "movingDate" ? "이사 빠른순" : "요청일 빠른순");
+  const [sortOption, setSortOption] = useState<string>(value === "moveDate" ? "이사 빠른순" : "요청일 빠른순");
   const [isOptionModalOpen, setIsOptionModalOpen] = useState<boolean>(false);
 
   return (
@@ -40,7 +40,7 @@ export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
             className="flex h-10 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15"
             onClick={() => {
               setSortOption("이사 빠른순");
-              onChange?.("movingDate");
+              onChange?.("moveDate");
               setIsOptionModalOpen(false);
             }}
           >
