@@ -16,10 +16,26 @@ import { useAuth } from "@/providers/AuthProvider";
 const USER_ACTION_LIST = [
   {
     label: "프로필 수정",
-    href: "/user/profile",
+    href: "/profile/edit",
   },
   {
     label: "찜한 기사님",
+    href: "/user/favorite",
+  },
+  {
+    label: "이사 리뷰",
+    href: "/user/order",
+  },
+];
+
+// TODO :  이부분은 기사님쪽에 맞춰서 수정 필요
+const MOVER_USER_ACTION_LIST = [
+  {
+    label: "프로필 수정",
+    href: "/moverMyPage/edit",
+  },
+  {
+    label: "찜한 고객님",
     href: "/user/favorite",
   },
   {
@@ -168,11 +184,17 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
                   <span className="w-full px-2 py-2 text-left text-lg">{userName} 고객님</span>
                   <ul className="flex w-full flex-col">
-                    {USER_ACTION_LIST.map((item, index) => (
-                      <Link href={item.href} key={index} onClick={closeProfileModal}>
-                        <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
-                      </Link>
-                    ))}
+                    {userRole === "CUSTOMER"
+                      ? USER_ACTION_LIST.map((item, index) => (
+                          <Link href={item.href} key={index} onClick={closeProfileModal}>
+                            <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
+                          </Link>
+                        ))
+                      : MOVER_USER_ACTION_LIST.map((item, index) => (
+                          <Link href={item.href} key={index} onClick={closeProfileModal}>
+                            <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
+                          </Link>
+                        ))}
                   </ul>
                 </nav>
                 <button

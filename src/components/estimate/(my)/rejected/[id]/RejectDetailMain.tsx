@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import { DetailMoveInfo } from "../../../../quote/(my)/DetailMoveInfo";
-import { ShareSection } from "../../../../quote/(my)/ShareSection";
+import { DetailMoveInfo } from "../../../../estimateRequest/(my)/DetailMoveInfo";
+import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { IEstimateResponse, IQuoteResponse } from "@/types/moverEstimate";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 
