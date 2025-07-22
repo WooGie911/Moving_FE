@@ -16,7 +16,7 @@ import { useAuth } from "@/providers/AuthProvider";
 const USER_ACTION_LIST = [
   {
     label: "프로필 수정",
-    href: "/user/profile",
+    href: "/profile/edit",
   },
   {
     label: "찜한 기사님",

@@ -18,7 +18,7 @@ const SearchMoverPage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (deviceType === "desktop" && isLoggedIn && user?.currentRole === "CUSTOMER") {
+    if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
       setLoading(true);
       findMoverApi
         .fetchFavoriteMovers()
@@ -31,11 +31,11 @@ const SearchMoverPage = () => {
   }, [deviceType, isLoggedIn, user]);
 
   const shouldShowBookmarked =
-    deviceType === "desktop" && isLoggedIn && user?.currentRole === "CUSTOMER" && favoriteMovers.length > 0;
+    deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
 
   return (
     <div
-      className={`mx-auto flex justify-center max-w-[327px] md:max-w-[600px] lg:${shouldShowBookmarked ? "max-w-[1200px]" : "max-w-[820px]"}`}
+      className={`mx-auto flex max-w-[327px] justify-center md:max-w-[600px] lg:${shouldShowBookmarked ? "max-w-[1200px]" : "max-w-[820px]"}`}
     >
       <div className="flex flex-col items-center">
         {/* 제목 */}

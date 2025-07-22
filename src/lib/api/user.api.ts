@@ -1,4 +1,4 @@
-import { getTokenFromCookie, setTokensToCookie, updateAccessToken } from "@/utils/auth";
+import { getTokenFromCookie, setTokensToCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -8,10 +8,18 @@ const getAccessToken = async () => {
 };
 
 interface ICustomerProfileInput {
-  customerImage: string;
-  currentArea: string;
   nickname: string;
+  customerImage: string;
   preferredServices: string[];
+  currentArea: string;
+}
+
+interface ICustomerUpdateInput extends ICustomerProfileInput {
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 interface IMoverProfileInput {
@@ -60,7 +68,15 @@ const userApi = {
     return presigned.fileUrl;
   },
 
-  // 프로필 등록 및 수정
+  // 프로필 조회
+  getProfile: async () => {
+    const response = await fetch(`${API_URL}/users/profile`, {
+      headers: { Authorization: `Bearer ${await getAccessToken()}` },
+    });
+    return response.json();
+  },
+
+  // 프로필 등록
   postProfile: async (profile: ICustomerProfileInput | IMoverProfileInput) => {
     const response = await fetch(`${API_URL}/users/profile`, {
       method: "POST",
@@ -78,6 +94,20 @@ const userApi = {
     }
 
     return data;
+  },
+
+  // 일반 유저 프로필 수정
+  updateCustomerBasicInfo: async (data: ICustomerUpdateInput) => {
+    const response = await fetch(`${API_URL}/users/profile/customer`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    return response.json();
   },
 
   updateMoverBasicInfo: async (data: {
