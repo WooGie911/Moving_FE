@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Pagination from "@/components/common/Pagination";
 import { IReview } from "@/types/findMover";
 import { getMockReviewsForMover } from "@/lib/utils/mockReviewData";
 import Image from "next/image";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
 import { ReviewListProps } from "@/types/moverDetail";
+import Pagination from "@/components/common/pagination/Pagination";
 
 const PAGE_SIZE = 5;
 
@@ -65,8 +65,8 @@ const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
 
   if (!reviews.length) {
     return (
-      <div className="w-full ">
-        <p className="text-xl font-semibold mb-[51px]">리뷰</p>
+      <div className="w-full">
+        <p className="mb-[51px] text-xl font-semibold">리뷰</p>
         <div className="flex flex-col items-center">
           <p className="text-lg font-semibold">아직 등록된 리뷰가 없어요!</p>
           <p className="text-md text-[#999999]">가장 먼저 리뷰를 등록해보세요</p>

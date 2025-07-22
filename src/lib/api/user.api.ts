@@ -79,6 +79,25 @@ const userApi = {
 
     return data;
   },
+
+  updateMoverBasicInfo: async (data: {
+    name?: string;
+    phoneNumber?: string;
+    currentPassword?: string;
+    newPassword?: string;
+  }) => {
+    const accessToken = await getAccessToken();
+    const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    return response.json();
+  },
 };
 
 export default userApi;

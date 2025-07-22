@@ -38,7 +38,7 @@ export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, 
             </p>
           </div>
 
-          <div className="flex flex-col justify-end pb-1">
+          <div className="hidden justify-end pb-1 md:flex md:flex-col">
             <Image src={arrow} alt="arrow" width={16} height={16} />
           </div>
 
