@@ -11,9 +11,9 @@ import { Button } from "@/components/common/button/Button";
 import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
 import userApi from "@/lib/api/user.api";
-import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { validationRules } from "@/utils/validators";
+import { useRouter } from "next/navigation";
 
 const MoverRegisterPage = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const MoverRegisterPage = () => {
   const shortIntro = watch("shortIntro");
   const detailIntro = watch("detailIntro");
   const [services, setServices] = useState<string[]>(["SMALL"]);
-  const [region, setRegion] = useState<string>("SEOUL");
+  const [regions, setRegions] = useState<string[]>(["SEOUL"]);
   const [selectedImage, setSelectedImage] = useState({
     name: "",
     type: "",
@@ -45,7 +45,7 @@ const MoverRegisterPage = () => {
     detailIntro?.trim() &&
     detailIntro?.trim().length >= 10 &&
     services.length > 0 &&
-    region;
+    regions.length > 0;
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -78,7 +78,7 @@ const MoverRegisterPage = () => {
       career: Number(career),
       shortIntro: shortIntro,
       detailIntro: detailIntro,
-      currentArea: region,
+      currentAreas: regions,
       serviceTypes: services,
     };
 
@@ -251,18 +251,17 @@ const MoverRegisterPage = () => {
               </div>
             </div>
 
-            {/* 현재 활동 지역 */}
+            {/* 서비스 가능 지역 */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    현재 활동 지역
+                    서비스 가능 지역
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                     *
                   </div>
                 </div>
-                <span className="text-xs text-gray-400 lg:text-lg">* 현재 활동하고 있는 주요 지역을 선택해주세요</span>
               </div>
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
                 <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
@@ -273,9 +272,11 @@ const MoverRegisterPage = () => {
                         key={regionName}
                         text={regionName}
                         clickAble={true}
-                        isSelected={region === regionValue}
+                        isSelected={regions.includes(regionValue)}
                         onClick={() => {
-                          setRegion(regionValue);
+                          setRegions((prev) =>
+                            prev.includes(regionValue) ? prev.filter((r) => r !== regionValue) : [...prev, regionValue],
+                          );
                         }}
                       />
                     );

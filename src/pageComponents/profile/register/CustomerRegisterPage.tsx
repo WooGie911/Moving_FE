@@ -9,13 +9,14 @@ import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { REGION_OPTIONS, SERVICE_MAPPING, SERVICE_OPTIONS, REGION_MAPPING } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
 import userApi from "@/lib/api/user.api";
-import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { TextInput } from "@/components/common/input/TextInput";
 import { validationRules } from "@/utils/validators";
+import { useRouter } from "next/navigation";
 
 const CustomerRegisterPage = () => {
   const router = useRouter();
+
   const { open, close } = useModal();
 
   const methods = useForm({
@@ -98,23 +99,6 @@ const CustomerRegisterPage = () => {
           </div>
 
           <div className="flex w-full flex-col gap-5 lg:w-[640px]">
-            {/* 별명 */}
-            <div className="flex flex-col gap-4">
-              <div className="inline-flex items-center gap-1">
-                <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  별명
-                </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
-              </div>
-              <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
-                <TextInput
-                  name="nickname"
-                  placeholder="사이트에 노출될 별명을 입력해 주세요"
-                  rules={validationRules.nickname}
-                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
-                />
-              </div>
-            </div>
             {/* 프로필 이미지 */}
             <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
               <div className="text-base leading-relaxed font-semibold text-zinc-800">프로필 이미지</div>
@@ -141,6 +125,24 @@ const CustomerRegisterPage = () => {
                 )}
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+            </div>
+
+            {/* 별명 */}
+            <div className="flex flex-col gap-4">
+              <div className="inline-flex items-center gap-1">
+                <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
+                  별명
+                </div>
+                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
+              </div>
+              <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
+                <TextInput
+                  name="nickname"
+                  placeholder="사이트에 노출될 별명을 입력해 주세요"
+                  rules={validationRules.nickname}
+                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
+                />
+              </div>
             </div>
 
             {/* 이용 서비스 */}

@@ -17,9 +17,9 @@ export async function setServerSideTokens(accessToken: string) {
 
   const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-  // 쿠키 설정
+  // 쿠키 설정 - path를 "/"로 통일
   cookieStore.set("accessToken", accessToken, {
-    path: "/this-cookie-is-for-client-side",
+    path: "/",
     maxAge: accessTokenExpiresIn,
     sameSite: "strict",
   });
@@ -33,9 +33,9 @@ export async function updateAccessToken(accessToken: string) {
 
   const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-  // 액세스 토큰만 갱신
+  // 액세스 토큰만 갱신 - path를 "/"로 통일
   cookieStore.set("accessToken", accessToken, {
-    path: "/this-cookie-is-for-client-side",
+    path: "/",
     maxAge: accessTokenExpiresIn,
     sameSite: "strict",
   });
