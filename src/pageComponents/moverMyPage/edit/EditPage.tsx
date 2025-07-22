@@ -96,7 +96,7 @@ const EditPage = () => {
       <div className="mx-auto flex w-full max-w-[560px] flex-col gap-12 rounded-3xl bg-white px-4 py-10 lg:max-w-[1200px]">
         <div className="mb-4 text-2xl font-bold !text-black text-black">기본정보 수정</div>
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-x-12 gap-y-8 lg:grid-cols-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-x-40 gap-y-8 lg:grid-cols-2">
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-4">
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">이름</div>
@@ -112,7 +112,7 @@ const EditPage = () => {
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">이메일</div>
                 <TextInput
                   name="email"
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-neutral-400 !text-black pointer-events-none bg-gray-100"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-[#999999] pointer-events-none bg-gray-100"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                   placeholder="이메일을 입력해주세요"
                 />
@@ -142,9 +142,8 @@ const EditPage = () => {
                       return true;
                     },
                   }}
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
-                  errorClassName=""
-                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
+                  inputClassName="w-full lg:w-[500px] h-[54px] lg:h-[64px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] relative"
                 />
               </div>
               <div className="flex flex-col gap-4">
@@ -161,8 +160,8 @@ const EditPage = () => {
                       return true;
                     },
                   }}
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
-                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
+                  inputClassName="w-full lg:w-[500px] h-[54px] lg:h-[64px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] relative"
                 />
               </div>
               <div className="flex flex-col gap-4">
@@ -179,8 +178,8 @@ const EditPage = () => {
                       return true;
                     },
                   }}
-                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16 lg:pr-16"
-                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] w-full relative px-0"
+                  inputClassName="w-full lg:w-[500px] h-[54px] lg:h-[64px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base !text-black placeholder-neutral-400 pr-16"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px] relative"
                 />
               </div>
             </div>
@@ -214,7 +213,7 @@ const EditPage = () => {
         }
         @media (min-width: 1024px) {
           .relative [class*="absolute"][class*="right-"] {
-            right: 1.25rem !important; /* right-4 */
+            right: 1.25rem !important;
           }
         }
       `}</style>

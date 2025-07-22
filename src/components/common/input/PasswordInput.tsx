@@ -33,7 +33,12 @@ export const PasswordInput = ({
 
   const toggleIcon = (
     <button
-      onClick={() => setVisible(!visible)}
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setVisible(!visible);
+      }}
       className="flex h-6 w-6 items-center justify-center"
       aria-label={!visible ? "비밀번호 숨기기" : "비밀번호 보이기"}
     >
