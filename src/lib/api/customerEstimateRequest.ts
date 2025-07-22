@@ -92,7 +92,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/pending`, {
+      const response = await fetch(`${API_URL}/customer-quotes/pending`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -123,7 +123,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/received`, {
+      const response = await fetch(`${API_URL}/customer-quotes/received`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -154,7 +154,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/pending/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/pending/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -187,7 +187,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/received/${quoteId}/${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/received/${quoteId}/${estimateId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -220,7 +220,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/confirm?estimateId=${estimateId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/confirm?estimateId=${estimateId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -254,7 +254,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/designate?quoteId=${quoteId}`, {
+      const response = await fetch(`${API_URL}/customer-quotes/designate?estimateRequestId=${quoteId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -292,7 +292,7 @@ const customerQuoteApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-estimate-requests/history`, {
+      const response = await fetch(`${API_URL}/customer-quotes/history`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
