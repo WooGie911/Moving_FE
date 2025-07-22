@@ -5,7 +5,7 @@ import Image from "next/image";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
 import { ReviewListProps } from "@/types/moverDetail";
-import Pagination from "@/components/common/pagination";
+import Pagination from "@/components/common/pagination/Pagination";
 
 const PAGE_SIZE = 5;
 
