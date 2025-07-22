@@ -13,8 +13,8 @@ export const Gnb = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const userRole = user?.currentRole || "GUEST";
-  const userName = user?.name || "";
+  const userRole = user?.userType || "GUEST";
+  const userName = user?.nickname || user?.name || "";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

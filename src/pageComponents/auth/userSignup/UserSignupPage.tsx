@@ -13,16 +13,13 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
-import authApi from "@/lib/api/auth.api";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
-  const router = useRouter();
-  const { isLoading } = useAuth();
+  const { isLoading, signUp } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -52,13 +49,13 @@ const UserSignupPage = () => {
       password: data.password,
       name: data.name,
       phoneNumber: data.phoneNumber,
-      currentRole: "CUSTOMER" as const,
+      userType: "CUSTOMER" as const,
     };
 
     try {
       if (isLoading) return;
-      const response = await authApi.signUp(signUpData);
-      if (response.status === 401) {
+      const response = await signUp(signUpData);
+      if (!response.success) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,

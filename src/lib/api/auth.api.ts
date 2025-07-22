@@ -22,7 +22,7 @@ const authApi = {
 
     const responseData = await response.json();
 
-    if (responseData.status === 200) {
+    if (responseData.success) {
       setTokensToCookie(responseData.accessToken);
     }
 
@@ -41,7 +41,7 @@ const authApi = {
 
     const responseData = await response.json();
 
-    if (responseData.status === 200) {
+    if (responseData.success) {
       setTokensToCookie(responseData.accessToken);
     }
 

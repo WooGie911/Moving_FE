@@ -11,6 +11,22 @@ import { TUserRole } from "@/types/user.types";
 import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
+import { useAuth } from "@/providers/AuthProvider";
+
+const USER_ACTION_LIST = [
+  {
+    label: "프로필 수정",
+    href: "/user/profile",
+  },
+  {
+    label: "찜한 기사님",
+    href: "/user/favorite",
+  },
+  {
+    label: "이사 리뷰",
+    href: "/user/order",
+  },
+];
 
 interface IGnbActionsProps {
   userRole: TUserRole;
@@ -21,7 +37,14 @@ interface IGnbActionsProps {
 }
 
 export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
+  const { logout } = useAuth();
+
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const profileModalRef = useRef<HTMLDivElement>(null);
+
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const hasUnread = useNotificationStore((state) => state.hasUnread);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
@@ -29,6 +52,56 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
   const handleNotificationClick = () => {
     setIsNotificationOpen((prev) => !prev);
   };
+
+  // 프로필 버튼 클릭 시 프로필 모달창 열기
+  const handleProfileClick = () => {
+    setIsProfileOpen((prev) => !prev);
+  };
+
+  // 프로필 모달창 닫기
+  const closeProfileModal = () => {
+    setIsProfileOpen(false);
+  };
+
+  // 프로필 모달창 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        profileModalRef.current &&
+        !profileModalRef.current.contains(target) &&
+        profileButtonRef.current &&
+        !profileButtonRef.current.contains(target)
+      ) {
+        closeProfileModal();
+      }
+    };
+
+    if (isProfileOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileOpen]);
+
+  // ESC 키로 프로필 모달창 닫기
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isProfileOpen) {
+        closeProfileModal();
+      }
+    };
+
+    if (isProfileOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isProfileOpen]);
 
   useEffect(() => {
     // 최초 1회만 전체 알림의 hasUnread, total 등 받아오기
@@ -75,14 +148,42 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           </div>
 
           {/* 프로필 버튼 */}
-          <button
-            className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-            aria-label="프로필"
-          >
-            <Image src={profile} alt="프로필" width={24} height={24} />
-          </button>
-          {/* TODO : 추후 userRole에서 추출후 삽입 */}
-          {deviceType === "desktop" && <div>{userName}</div>}
+          <div className="relative">
+            <button
+              ref={profileButtonRef}
+              onClick={handleProfileClick}
+              className="flex cursor-pointer gap-3 p-2 text-black"
+              aria-label="프로필"
+            >
+              <Image src={profile} alt="프로필" width={24} height={24} />
+              <div className="hidden lg:block">{userName}</div>
+            </button>
+
+            {/* 프로필 모달창 */}
+            {isProfileOpen && (
+              <div
+                ref={profileModalRef}
+                className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
+              >
+                <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
+                  <span className="w-full px-2 py-2 text-left text-lg">{userName} 고객님</span>
+                  <ul className="flex w-full flex-col">
+                    {USER_ACTION_LIST.map((item, index) => (
+                      <Link href={item.href} key={index} onClick={closeProfileModal}>
+                        <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
+                      </Link>
+                    ))}
+                  </ul>
+                </nav>
+                <button
+                  className="w-full cursor-pointer px-3 py-3 text-xs text-gray-500 transition-colors hover:text-gray-700 lg:text-lg"
+                  onClick={() => logout()}
+                >
+                  로그아웃
+                </button>
+              </div>
+            )}
+          </div>
         </>
       )}
 

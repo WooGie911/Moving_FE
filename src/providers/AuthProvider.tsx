@@ -4,32 +4,35 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { usePathname, useRouter } from "next/navigation";
 import authApi from "@/lib/api/auth.api";
 import userApi from "@/lib/api/user.api";
+import { ISignUpFormValues } from "@/types/auth";
 
-// 사용자 타입 정의
+// 사용자 타입 정의 - API 응답에 맞게 수정
 type TUser = {
   id: string;
   name: string;
-  currentRole: "CUSTOMER" | "MOVER";
-  hasProfile: boolean;
-  accessToken?: string;
+  nickname: string | null;
+  userType: "CUSTOMER" | "MOVER";
+  customerImage?: string;
 };
 
 type TSignInResponse = {
-  status: number;
-  user?: {
+  user: {
     id: string;
-    userName: string;
-    // TODO 이부분 서버 반환 이름도 currentRole로 바꿔야함
-    userRole: "CUSTOMER" | "MOVER";
+    name: string;
+    nickname: string | null;
+    userType: "CUSTOMER" | "MOVER";
   };
+  success: boolean;
   message: string;
+  accessToken: string;
 };
 
 interface IAuthContextType {
   user: TUser | null;
   isLoading: boolean;
   isLoggedIn: boolean;
-  login: (email: string, password: string) => Promise<TSignInResponse>;
+  login: (email: string, password: string, userType: "CUSTOMER" | "MOVER") => Promise<TSignInResponse>;
+  signUp: (signUpData: ISignUpFormValues) => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -38,7 +41,13 @@ const AuthContext = createContext<IAuthContextType>({
   user: null,
   isLoading: true,
   isLoggedIn: false,
-  login: async () => ({ status: 0, message: "AuthProvider not found" }),
+  login: async () => ({
+    user: { id: "", name: "", nickname: null, userType: "CUSTOMER" },
+    success: false,
+    message: "AuthProvider not found",
+    accessToken: "",
+  }),
+  signUp: async () => {},
   logout: () => {},
   getUser: async () => {},
 });
@@ -61,31 +70,51 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
 
+  // 리다이렉트 로직을 별도 함수로 분리
+  const handleRedirectAfterAuth = (user: { nickname?: string | null; userType?: string }) => {
+    let targetPath = "";
+
+    if (!user?.nickname) {
+      targetPath = "/profile/register";
+    } else if (user?.userType === "CUSTOMER") {
+      targetPath = "/searchMover";
+    } else if (user?.userType === "MOVER") {
+      targetPath = "/estimate/received";
+    }
+
+    // 현재 경로와 다른 경우에만 리다이렉트
+    if (targetPath && pathname !== targetPath) {
+      router.push(targetPath);
+    }
+  };
+
   /**
    * 서버에서 현재 사용자 정보 조회
    */
   const getUser = async () => {
-    let userData = null;
     try {
       const response = await userApi.getUser();
-      console.log("response", response);
-      if (response.success) {
-        userData = response.data;
+
+      if (response.success && response.data) {
+        setUser(response.data);
+      } else {
+        setUser(null);
       }
     } catch (e) {
-      // 비회원은 userData = null
-      userData = null;
+      console.error("사용자 정보 조회 실패:", e);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-    setUser(userData);
   };
 
   /**
    * 로그인 함수
    */
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, userType: "CUSTOMER" | "MOVER") => {
     try {
       setIsLoading(true);
-      const response = await authApi.signIn({ email, password });
+      const response = await authApi.signIn({ email, password, userType });
 
       if (response?.error) {
         throw new Error(response.message || "로그인에 실패했습니다.");
@@ -94,20 +123,38 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
-      // console.log("response.user?.userRole", response.user);
-
-      // 프로필 등록 여부 확인 후 다이렉트 설정`
-      if (!response.user?.hasProfile) {
-        router.push("/profile/register");
-      } else if (response.user?.userRole === "CUSTOMER") {
-        router.push("/searchMover");
-      } else if (response.user?.userRole === "MOVER") {
-        router.push("/estimate/received");
-      }
+      // 현재 경로를 고려한 리다이렉트
+      handleRedirectAfterAuth(response.user);
 
       return response;
     } catch (error) {
       console.error("로그인 실패:", error);
+      setUser(null);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
+   * 회원가입 함수
+   */
+  const signUp = async (signUpData: ISignUpFormValues) => {
+    try {
+      setIsLoading(true);
+      const response = await authApi.signUp(signUpData);
+
+      if (response?.error) {
+        throw new Error(response.message || "회원가입에 실패했습니다.");
+      }
+
+      // 회원가입 성공 후 사용자 정보 조회
+      await getUser();
+
+      // 현재 경로를 고려한 리다이렉트
+      handleRedirectAfterAuth(response.user);
+    } catch (error) {
+      console.error("회원가입 실패:", error);
       setUser(null);
       throw error;
     } finally {
@@ -156,6 +203,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     isLoading,
     isLoggedIn: !!user,
     login,
+    signUp,
     logout,
     getUser,
   };

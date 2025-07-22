@@ -19,11 +19,11 @@ export const REGION_OPTIONS = [
   "제주",
 ];
 
-// 서비스 옵션 매핑
+// 서비스 옵션 매핑 - 새로운 API 스펙에 맞게 문자열로 변경
 export const SERVICE_MAPPING = {
-  소형이사: 1,
-  가정이사: 2,
-  사무실이사: 3,
+  소형이사: "SMALL",
+  가정이사: "HOME",
+  사무실이사: "OFFICE",
 } as const;
 
 // 지역 영어 매핑

@@ -13,7 +13,6 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
@@ -21,7 +20,6 @@ import { useModal } from "@/components/common/modal/ModalContext";
 const UserSigninPage = () => {
   const { login, isLoading } = useAuth();
   const deviceType = useWindowWidth();
-  const router = useRouter();
   const { open, close } = useModal();
 
   const form = useForm<ISignInFormValues>({
@@ -45,7 +43,7 @@ const UserSigninPage = () => {
   const onSubmit = async () => {
     try {
       if (isLoading) return;
-      const response = await login(email, password);
+      const response = await login(email, password, "CUSTOMER");
       if (response.status === 401) {
         open({
           title: "로그인 실패",

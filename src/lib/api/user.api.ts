@@ -8,17 +8,20 @@ const getAccessToken = async () => {
 };
 
 interface ICustomerProfileInput {
-  profileImage: string;
-  currentRegion: string;
-  userServices: number[];
+  customerImage: string;
+  currentArea: string;
+  nickname: string;
+  preferredServices: string[];
 }
 
 interface IMoverProfileInput {
-  profileImage: string;
-  nickname?: string;
-  experience?: number;
-  introduction?: string;
-  description?: string;
+  moverImage: string;
+  nickname: string;
+  career: number;
+  shortIntro: string;
+  detailIntro: string;
+  currentArea: string;
+  serviceTypes: string[];
 }
 
 const userApi = {

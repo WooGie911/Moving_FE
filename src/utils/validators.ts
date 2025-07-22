@@ -113,7 +113,7 @@ export const validationRules = {
   },
   email: {
     required: "이메일은 필수 입력입니다.",
-    validate: (value: string) => isValidEmail(value) || "올바른 이메일 형식이 아니거나 허용되지 않는 도메인입니다.",
+    validate: (value: string) => isValidEmail(value) || "올바른 이메일 형식이 아닙니다.",
   },
   phoneNumber: {
     required: "전화번호는 필수 입력입니다.",
