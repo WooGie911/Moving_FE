@@ -1,4 +1,4 @@
-import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
+import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { RejectDetailMain } from "@/components/estimate/(my)/rejected/[id]/RejectDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
@@ -7,7 +7,7 @@ export const RejectedDetailPage = () => {
   const data = mockMyRejectedEstimateData[0];
   return (
     <div>
-      <QuoteAndEstimateTab userType="Detail" />
+      <EstimateRequestAndEstimateTab userType="Detail" />
       <div className="flex flex-col gap-[46px] md:gap-[82px]">
         <DetailPageImgSection />
         {/* 견적 상세 정보 - 유저가 보낸 견적 중 내가 반려한 견적 */}

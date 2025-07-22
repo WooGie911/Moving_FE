@@ -1,6 +1,6 @@
-import UserPendingQuoteDetailPage from "@/pageComponents/estimateRequest/(my)/pending/[id]/UserPendingQuoteDetailPage";
+import UserPendingEstimateRequestDetailPage from "@/pageComponents/estimateRequest/(my)/pending/[id]/UserPendingEstimateRequestDetailPage";
 import React from "react";
 
 export default function page() {
-  return <UserPendingQuoteDetailPage />;
+  return <UserPendingEstimateRequestDetailPage />;
 }

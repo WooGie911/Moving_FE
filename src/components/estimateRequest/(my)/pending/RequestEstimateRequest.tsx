@@ -1,9 +1,15 @@
-import { IRequestQuoteProps } from "@/types/customerEstimateRequest";
+import { IEstimateRequestProps } from "@/types/customerEstimateRequest";
 import React from "react";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import Image from "next/image";
 
-export const RequestQuote = ({ movingType, requestDate, movingDate, startPoint, endPoint }: IRequestQuoteProps) => {
+export const RequestEstimateRequest = ({
+  movingType,
+  requestDate,
+  movingDate,
+  startPoint,
+  endPoint,
+}: IEstimateRequestProps) => {
   // movingType을 한국어로 변환하는 함수
   const getMovingTypeKorean = (movingType: string): string => {
     switch (movingType) {

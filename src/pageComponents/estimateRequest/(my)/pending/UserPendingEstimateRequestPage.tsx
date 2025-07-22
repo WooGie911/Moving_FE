@@ -1,8 +1,8 @@
 "use client";
-import { QuoteAndEstimateTab } from "@/components/common/tab/QuoteAndEstimateTab";
+import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { CardList } from "@/components/estimateRequest/(my)/CardList";
-import { RequestQuote } from "@/components/estimateRequest/(my)/pending/RequestQuote";
-import { mockPendingQuoteResponses, TMoverInfo } from "@/types/customerEstimateRequest";
+import { RequestEstimateRequest } from "@/components/estimateRequest/(my)/pending/RequestEstimateRequest";
+import { mockPendingEstimateRequestResponses, TMoverInfo } from "@/types/customerEstimateRequest";
 import customerQuoteApi from "@/lib/api/customerEstimateRequest";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
@@ -11,6 +11,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { getTokenFromCookie } from "@/utils/auth";
 import Image from "next/image";
 import noEstimate from "@/assets/img/etc/noEstimate.png";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
 // Date 객체를 한국어 날짜 형식으로 변환하는 함수
 const formatKoreanDate = (date: Date): string => {
   const year = date.getFullYear();
@@ -19,24 +20,13 @@ const formatKoreanDate = (date: Date): string => {
   return `${year}년 ${month}월 ${day}일`;
 };
 
-export const UserPendingQuotePage = () => {
-  const datas = mockPendingQuoteResponses;
+export const UserPendingEstimateRequestPage = () => {
+  const datas = mockPendingEstimateRequestResponses;
   const { user } = useAuth();
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["pendingQuotes"],
-    queryFn: () => customerQuoteApi.getPendingQuote(),
+    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
-  console.log("넘어온데이터:", data);
-  console.log("목데이터:", datas);
-
-  useEffect(() => {
-    const checkUserId = async () => {
-      const token = await getTokenFromCookie();
-      const payload = JSON.parse(atob(token!.split(".")[1]));
-      console.log("프론트 userId:", payload.userId);
-    };
-    checkUserId();
-  }, []);
 
   if (isPending) return <div>로딩 중...</div>; // 또는 로딩 스피너 컴포넌트
   if (!data) return null;
@@ -57,8 +47,8 @@ export const UserPendingQuotePage = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center">
-        <QuoteAndEstimateTab userType="User" />
-        <RequestQuote
+        <EstimateRequestAndEstimateTab userType="User" />
+        <RequestEstimateRequest
           movingType={data.estimateRequest.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
           requestDate={formatKoreanDateWithParen(createdAt)}
           movingDate={formatKoreanDateWithParen(movingDate)}
@@ -107,4 +97,4 @@ export const UserPendingQuotePage = () => {
     </>
   );
 };
-export default UserPendingQuotePage;
+export default UserPendingEstimateRequestPage;

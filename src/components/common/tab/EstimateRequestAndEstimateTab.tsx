@@ -19,7 +19,7 @@ interface IUserType {
   userType: "User" | "Mover" | "Detail" | "MoverReceived";
 }
 
-export const QuoteAndEstimateTab = ({ userType }: IUserType) => {
+export const EstimateRequestAndEstimateTab = ({ userType }: IUserType) => {
   const getTabList = () => {
     switch (userType) {
       case "User":

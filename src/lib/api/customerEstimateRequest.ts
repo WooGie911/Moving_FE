@@ -1,10 +1,9 @@
 import {
-  TPendingQuoteResponse,
-  TReceivedQuoteResponse,
-  TReceivedQuoteListResponse,
-  TQuoteDetailResponse,
-  IDesignateQuoteRequest,
-  TQuoteHistoryResponse,
+  TPendingEstimateRequestResponse,
+  TReceivedEstimateRequestResponse,
+  TReceivedEstimateRequestListResponse,
+  TEstimateRequestDetailResponse,
+  IDesignateEstimateRequestRequest,
 } from "@/types/customerEstimateRequest";
 import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/estimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
@@ -17,11 +16,11 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-const customerQuoteApi = {
+const customerEstimateRequestApi = {
   /**
    * 견적 요청 생성
    */
-  createQuote: async (data: ICreateQuoteRequest): Promise<ICreateQuoteResponse> => {
+  createEstimateRequest: async (data: ICreateQuoteRequest): Promise<ICreateQuoteResponse> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -55,7 +54,7 @@ const customerQuoteApi = {
   /**
    * 활성 견적 요청 조회
    */
-  getActiveQuote: async (): Promise<IActiveQuoteResponse | null> => {
+  getActiveEstimateRequest: async (): Promise<IActiveQuoteResponse | null> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -88,7 +87,7 @@ const customerQuoteApi = {
   /**
    * 진행중인 견적 조회
    */
-  getPendingQuote: async (): Promise<TPendingQuoteResponse> => {
+  getPendingEstimateRequest: async (): Promise<TPendingEstimateRequestResponse> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -119,7 +118,7 @@ const customerQuoteApi = {
   /**
    * 완료된 견적 목록 조회
    */
-  getReceivedQuotes: async (): Promise<TReceivedQuoteListResponse> => {
+  getReceivedEstimateRequests: async (): Promise<TReceivedEstimateRequestListResponse> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -150,7 +149,7 @@ const customerQuoteApi = {
   /**
    * 진행중인 견적 상세 조회
    */
-  getPendingQuoteDetail: async (estimateId: string): Promise<TQuoteDetailResponse> => {
+  getPendingEstimateRequestDetail: async (estimateId: string): Promise<TEstimateRequestDetailResponse> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -183,7 +182,10 @@ const customerQuoteApi = {
   /**
    * 완료된 견적 상세 조회
    */
-  getReceivedQuoteDetail: async (quoteId: string, estimateId: string): Promise<TQuoteDetailResponse> => {
+  getReceivedEstimateRequestDetail: async (
+    quoteId: string,
+    estimateId: string,
+  ): Promise<TEstimateRequestDetailResponse> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -250,7 +252,7 @@ const customerQuoteApi = {
   /**
    * 지정 견적 요청
    */
-  designateQuote: async (quoteId: string, data: IDesignateQuoteRequest): Promise<any> => {
+  designateEstimateRequest: async (quoteId: string, data: IDesignateEstimateRequestRequest): Promise<any> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -284,39 +286,6 @@ const customerQuoteApi = {
       throw error;
     }
   },
-
-  /**
-   * 이용 내역 조회
-   */
-  getQuoteHistory: async (): Promise<TQuoteHistoryResponse[]> => {
-    try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/customer-quotes/history`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 고객이 아닙니다.");
-        } else if (response.status === 404) {
-          return [];
-        } else {
-          throw new Error("이용 내역 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
-      return result.data;
-    } catch (error) {
-      console.error("이용 내역 조회 실패:", error);
-      throw error;
-    }
-  },
 };
 
-export default customerQuoteApi;
+export default customerEstimateRequestApi;

@@ -1,5 +1,5 @@
 // 백엔드 API 응답 구조에 맞는 타입 정의
-export interface IRequestQuoteProps {
+export interface IEstimateRequestProps {
   movingType: "home" | "office" | "small" | "document";
   requestDate: string;
   movingDate: string;
@@ -70,19 +70,19 @@ export type TEstimateRequestResponse = {
 };
 
 // 진행중인 견적 응답 타입 (백엔드와 일치)
-export type TPendingQuoteResponse = {
+export type TPendingEstimateRequestResponse = {
   estimateRequest: TEstimateRequestResponse;
   estimates: TEstimateResponse[];
 };
 
 // 완료된 견적 응답 타입 (백엔드와 일치)
-export type TReceivedQuoteResponse = {
+export type TReceivedEstimateRequestResponse = {
   estimateRequest: TEstimateRequestResponse;
   estimates: TEstimateResponse[];
 };
 
 // 견적 상세 조회 응답 타입 (백엔드와 일치)
-export type TQuoteDetailResponse = {
+export type TEstimateRequestDetailResponse = {
   id: string;
   price: number;
   comment: string | null;
@@ -98,7 +98,7 @@ export interface IConfirmEstimateRequest {
 }
 
 // 지정 견적 요청 타입
-export interface IDesignateQuoteRequest {
+export interface IDesignateEstimateRequestRequest {
   message: string;
   moverId: string;
 }
@@ -112,26 +112,8 @@ export type TConfirmEstimateResponse = {
 // 지정 견적 요청 응답 타입 (백엔드와 일치)
 export type TDesignateEstimateRequest = any;
 
-// 이용 내역 응답 타입 (백엔드와 일치)
-export type TQuoteHistoryResponse = {
-  id: string;
-  moveType: string;
-  moveDate: Date;
-  fromAddress: TAddress;
-  toAddress: TAddress;
-  description: string | null;
-  status: string;
-  confirmedEstimate: {
-    id: string;
-    price: number;
-    comment: string | null;
-    mover: TMoverInfo;
-  };
-  completedAt: Date;
-};
-
 // 완료된 견적 목록을 위한 타입 (배열)
-export type TReceivedQuoteListResponse = TReceivedQuoteResponse[];
+export type TReceivedEstimateRequestListResponse = TReceivedEstimateRequestResponse[];
 
 // 기존 타입들 (호환성 유지)
 export interface ICardListProps {
@@ -151,7 +133,7 @@ export interface IDetailPageMainSeactionProps {
 }
 
 // 기존 인터페이스들 (호환성을 위해 유지)
-export interface IQuote {
+export interface IEstimateRequest {
   id: string;
   movingType: "SMALL" | "HOME" | "OFFICE";
   movingDate: Date;
@@ -176,17 +158,17 @@ export interface IEstimate {
   mover: TMoverInfo;
 }
 
-export interface IPendingQuoteResponse {
-  quote: IQuote;
+export interface IPendingEstimateRequestResponse {
+  EstimateRequest: IEstimateRequest;
   estimates: IEstimate[];
 }
 
-export interface IReceivedQuoteResponse {
-  quote: IQuote;
+export interface IReceivedEstimateRequestResponse {
+  EstimateRequest: IEstimateRequest;
   estimates: IEstimate[];
 }
 
-export interface IQuoteDetailResponse {
+export interface IEstimateRequestDetailResponse {
   id: string;
   price: number;
   description: string;
@@ -195,8 +177,8 @@ export interface IQuoteDetailResponse {
   mover: TMoverInfo;
 }
 
-// IPendingQuoteResponse 예시 데이터 (백엔드 구조에 맞게 수정)
-export const mockPendingQuoteResponses: TPendingQuoteResponse = {
+// IPendingEstimateRequestResponse 예시 데이터 (백엔드 구조에 맞게 수정)
+export const mockPendingEstimateRequestResponses: TPendingEstimateRequestResponse = {
   estimateRequest: {
     id: "1",
     customerId: "user1",
@@ -278,8 +260,8 @@ export const mockPendingQuoteResponses: TPendingQuoteResponse = {
   ],
 };
 
-// TReceivedQuoteListResponse 예시 데이터 (백엔드 구조에 맞게 수정)
-export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
+// TReceivedEstimateRequestListResponse 예시 데이터 (백엔드 구조에 맞게 수정)
+export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestListResponse = [
   // 1번 견적 요청 (3개 견적)
   {
     estimateRequest: {

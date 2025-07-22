@@ -1,5 +1,5 @@
-import UserPendingQuotePage from "@/pageComponents/estimateRequest/(my)/pending/UserPendingQuotePage";
+import { UserPendingEstimateRequestPage } from "@/pageComponents/estimateRequest/(my)/pending/UserPendingEstimateRequestPage";
 
 export default function PendingQuotePage() {
-  return <UserPendingQuotePage />;
+  return <UserPendingEstimateRequestPage />;
 }

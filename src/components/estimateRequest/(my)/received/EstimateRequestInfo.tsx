@@ -1,7 +1,7 @@
 import { TEstimateRequestResponse } from "@/types/customerEstimateRequest";
 import React from "react";
 
-export const QuoteInfo = (props: TEstimateRequestResponse) => {
+export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
   // movingType에 따른 텍스트 변환 함수
   const getMovingTypeText = (type: string) => {
     switch (type.toLowerCase()) {
@@ -96,4 +96,4 @@ export const QuoteInfo = (props: TEstimateRequestResponse) => {
     </div>
   );
 };
-export default QuoteInfo;
+export default EstimateRequestInfo;
