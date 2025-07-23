@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import logo from "@/assets/img/logo/textlogo-lg.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +22,7 @@ const UserSigninPage = () => {
   const { login, isLoading } = useAuth();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
+  const t = useTranslations("auth");
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",
@@ -46,9 +48,9 @@ const UserSigninPage = () => {
       const response = await login(email, password, "CUSTOMER");
       if (response.status === 401) {
         open({
-          title: "로그인 실패",
+          title: t("loginFailed"),
           children: <div>{response.message}</div>,
-          buttons: [{ text: "확인", onClick: () => close() }],
+          buttons: [{ text: t("confirm"), onClick: () => close() }],
         });
       }
     } catch (error) {
@@ -65,8 +67,8 @@ const UserSigninPage = () => {
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
           <Link href="/moverSignin">
-            <span className="text-black-200 text-lg">기사님이신가요?</span>
-            <span className="text-primary-400 ml-2 text-lg font-semibold underline">기사님 전용 페이지</span>
+            <span className="text-black-200 text-lg">{t("areYouMover")}</span>
+            <span className="text-primary-400 ml-2 text-lg font-semibold underline">{t("moverPage")}</span>
           </Link>
         </div>
 
@@ -74,21 +76,21 @@ const UserSigninPage = () => {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
             <div className="mb-6 flex flex-col gap-2 font-normal">
-              <span className="text-black-400 text-md">이메일</span>
+              <span className="text-black-400 text-md">{t("email")}</span>
               <BaseInput
                 {...register("email", validationRules.email)}
                 error={errors.email?.message}
-                placeholder="이메일을 입력해주세요."
+                placeholder={t("emailPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
             </div>
 
             <div className="mb-6 flex flex-col gap-2">
-              <span className="text-black-400 text-md font-normal">비밀번호</span>
+              <span className="text-black-400 text-md font-normal">{t("password")}</span>
               <PasswordInput
                 {...register("password", validationRules.password)}
-                placeholder="비밀번호를 입력해주세요."
+                placeholder={t("passwordPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
