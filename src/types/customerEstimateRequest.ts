@@ -1,19 +1,11 @@
 // 백엔드 API 응답 구조에 맞는 타입 정의
-export interface IRequestQuoteProps {
+export interface IEstimateRequestProps {
   movingType: "home" | "office" | "small" | "document";
   requestDate: string;
   movingDate: string;
   startPoint: string;
   endPoint: string;
 }
-
-// 서비스 타입 정의
-export type TServiceType = {
-  id: number;
-  name: string;
-  description: string | null;
-  iconUrl: string | null;
-};
 
 // 주소 타입 (백엔드와 일치)
 export type TAddress = {
@@ -23,6 +15,11 @@ export type TAddress = {
   detail: string | null;
   region: string;
 };
+
+type TMoveType = "HOME" | "OFFICE" | "SMALL";
+
+// Favorite 타입 정의 (백엔드 기준)
+export type TFavorite = { id: string };
 
 // 기사님 정보 타입 (백엔드와 일치)
 export type TMoverInfo = {
@@ -38,9 +35,11 @@ export type TMoverInfo = {
   workedCount: number | null;
   averageRating: number | null;
   totalReviewCount: number | null;
-  serviceTypes: any;
-  serviceAreas: any;
+  serviceTypes: TMoveType[];
+  serviceAreas: string[];
   isFavorite: boolean;
+  totalFavoriteCount: number;
+  Favorite?: TFavorite[]; // any → TFavorite[]
 };
 
 // 견적서 응답 타입 (백엔드와 일치)
@@ -68,19 +67,19 @@ export type TEstimateRequestResponse = {
 };
 
 // 진행중인 견적 응답 타입 (백엔드와 일치)
-export type TPendingQuoteResponse = {
+export type TPendingEstimateRequestResponse = {
   estimateRequest: TEstimateRequestResponse;
   estimates: TEstimateResponse[];
 };
 
 // 완료된 견적 응답 타입 (백엔드와 일치)
-export type TReceivedQuoteResponse = {
+export type TReceivedEstimateRequestResponse = {
   estimateRequest: TEstimateRequestResponse;
   estimates: TEstimateResponse[];
 };
 
 // 견적 상세 조회 응답 타입 (백엔드와 일치)
-export type TQuoteDetailResponse = {
+export type TEstimateRequestDetailResponse = {
   id: string;
   price: number;
   comment: string | null;
@@ -96,40 +95,31 @@ export interface IConfirmEstimateRequest {
 }
 
 // 지정 견적 요청 타입
-export interface IDesignateQuoteRequest {
+export interface IDesignateEstimateRequestRequest {
   message: string;
   moverId: string;
 }
 
 // 견적 확정 응답 타입 (백엔드와 일치)
 export type TConfirmEstimateResponse = {
-  estimateRequest: any;
-  estimate: any;
+  estimateRequest: IEstimateRequest;
+  estimate: IEstimate;
 };
 
 // 지정 견적 요청 응답 타입 (백엔드와 일치)
-export type TDesignateEstimateRequest = any;
-
-// 이용 내역 응답 타입 (백엔드와 일치)
-export type TQuoteHistoryResponse = {
+export interface IDesignatedMover {
   id: string;
-  moveType: string;
-  moveDate: Date;
-  fromAddress: TAddress;
-  toAddress: TAddress;
-  description: string | null;
+  estimateRequestId: string;
+  customerId: string;
+  moverId: string;
+  message: string;
   status: string;
-  confirmedEstimate: {
-    id: string;
-    price: number;
-    comment: string | null;
-    mover: TMoverInfo;
-  };
-  completedAt: Date;
-};
+  expiresAt: Date;
+}
+export type TDesignateEstimateRequest = IDesignatedMover;
 
 // 완료된 견적 목록을 위한 타입 (배열)
-export type TReceivedQuoteListResponse = TReceivedQuoteResponse[];
+export type TReceivedEstimateRequestListResponse = TReceivedEstimateRequestResponse[];
 
 // 기존 타입들 (호환성 유지)
 export interface ICardListProps {
@@ -149,7 +139,7 @@ export interface IDetailPageMainSeactionProps {
 }
 
 // 기존 인터페이스들 (호환성을 위해 유지)
-export interface IQuote {
+export interface IEstimateRequest {
   id: string;
   movingType: "SMALL" | "HOME" | "OFFICE";
   movingDate: Date;
@@ -162,7 +152,7 @@ export interface IQuote {
   confirmedEstimateId: string | null;
   estimateCount: number;
   designatedEstimateCount: number;
-  serviceTypes?: TServiceType[];
+  serviceTypes?: TMoveType[];
 }
 
 export interface IEstimate {
@@ -174,17 +164,17 @@ export interface IEstimate {
   mover: TMoverInfo;
 }
 
-export interface IPendingQuoteResponse {
-  quote: IQuote;
+export interface IPendingEstimateRequestResponse {
+  EstimateRequest: IEstimateRequest;
   estimates: IEstimate[];
 }
 
-export interface IReceivedQuoteResponse {
-  quote: IQuote;
+export interface IReceivedEstimateRequestResponse {
+  EstimateRequest: IEstimateRequest;
   estimates: IEstimate[];
 }
 
-export interface IQuoteDetailResponse {
+export interface IEstimateRequestDetailResponse {
   id: string;
   price: number;
   description: string;
@@ -193,8 +183,8 @@ export interface IQuoteDetailResponse {
   mover: TMoverInfo;
 }
 
-// IPendingQuoteResponse 예시 데이터 (백엔드 구조에 맞게 수정)
-export const mockPendingQuoteResponses: TPendingQuoteResponse = {
+// IPendingEstimateRequestResponse 예시 데이터 (백엔드 구조에 맞게 수정)
+export const mockPendingEstimateRequestResponses: TPendingEstimateRequestResponse = {
   estimateRequest: {
     id: "1",
     customerId: "user1",
@@ -242,6 +232,8 @@ export const mockPendingQuoteResponses: TPendingQuoteResponse = {
         serviceTypes: ["HOME", "SMALL"],
         serviceAreas: ["서울특별시"],
         isFavorite: false,
+        totalFavoriteCount: 7,
+        Favorite: [],
       },
     },
     {
@@ -267,13 +259,15 @@ export const mockPendingQuoteResponses: TPendingQuoteResponse = {
         serviceTypes: ["HOME", "OFFICE"],
         serviceAreas: ["서울특별시"],
         isFavorite: false,
+        totalFavoriteCount: 3,
+        Favorite: [],
       },
     },
   ],
 };
 
-// TReceivedQuoteListResponse 예시 데이터 (백엔드 구조에 맞게 수정)
-export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
+// TReceivedEstimateRequestListResponse 예시 데이터 (백엔드 구조에 맞게 수정)
+export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestListResponse = [
   // 1번 견적 요청 (3개 견적)
   {
     estimateRequest: {
@@ -323,6 +317,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME", "SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 12,
+          Favorite: [],
         },
       },
       {
@@ -348,6 +344,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 5,
+          Favorite: [],
         },
       },
       {
@@ -373,6 +371,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME", "OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],
@@ -426,6 +426,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 8,
+          Favorite: [],
         },
       },
       {
@@ -451,6 +453,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 2,
+          Favorite: [],
         },
       },
       {
@@ -476,6 +480,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -501,6 +507,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -526,6 +534,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["OFFICE"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 11,
+          Favorite: [],
         },
       },
     ],
@@ -579,6 +589,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -604,6 +616,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["SMALL"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],
@@ -657,6 +671,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -682,6 +698,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -707,6 +725,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -732,6 +752,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -757,6 +779,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
       {
@@ -782,6 +806,8 @@ export const mockReceivedQuoteListResponses: TReceivedQuoteListResponse = [
           serviceTypes: ["HOME"],
           serviceAreas: ["서울특별시"],
           isFavorite: false,
+          totalFavoriteCount: 0,
+          Favorite: [],
         },
       },
     ],

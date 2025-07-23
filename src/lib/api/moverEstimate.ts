@@ -1,12 +1,11 @@
 import {
   ICreateEstimateRequest,
   IRejectEstimateRequest,
-  IQuoteFilterOptions,
-  IDesignatedQuoteFilterOptions,
+  IEstimateRequestFilterOptions,
+  IDesignatedEstimateRequestFilterOptions,
   IUpdateEstimateStatusRequest,
   IUpdateEstimateRequest,
   TEstimateRequestResponse,
-  TEstimateResponse,
   TMyEstimateResponse,
   TMyRejectedEstimateResponse,
   ICreateEstimateResponse,
@@ -100,7 +99,7 @@ const moverEstimateApi = {
   /**
    * 서비스 가능 지역 견적 조회
    */
-  getRegionQuotes: async (params: IQuoteFilterOptions): Promise<TEstimateRequestResponse[]> => {
+  getRegionEstimateRequests: async (params: IEstimateRequestFilterOptions): Promise<TEstimateRequestResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -140,7 +139,9 @@ const moverEstimateApi = {
   /**
    * 지정 견적 조회
    */
-  getDesignatedQuotes: async (params?: IDesignatedQuoteFilterOptions): Promise<TEstimateRequestResponse[]> => {
+  getDesignatedEstimateRequests: async (
+    params?: IDesignatedEstimateRequestFilterOptions,
+  ): Promise<TEstimateRequestResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -179,7 +180,7 @@ const moverEstimateApi = {
   /**
    * 지역/지정 견적 통합 조회
    */
-  getAllQuotes: async (params: {
+  getAllEstimateRequests: async (params: {
     region: boolean;
     designated: boolean;
     availableRegion?: string;
@@ -187,8 +188,8 @@ const moverEstimateApi = {
     customerName?: string;
     movingType?: "SMALL" | "HOME" | "OFFICE";
   }): Promise<{
-    regionQuotes?: TEstimateRequestResponse[];
-    designatedQuotes?: TEstimateRequestResponse[];
+    regionEstimateRequests?: TEstimateRequestResponse[];
+    designatedEstimateRequests?: TEstimateRequestResponse[];
   }> => {
     try {
       const accessToken = await getAccessToken();
@@ -230,11 +231,11 @@ const moverEstimateApi = {
   /**
    * 견적 상세 조회
    */
-  getQuoteById: async (quoteId: string): Promise<TEstimateRequestResponse> => {
+  getEstimateRequestById: async (estimateRequestId: string): Promise<TEstimateRequestResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/${quoteId}`, {
+      const response = await fetch(`${API_URL}/mover-estimates/${estimateRequestId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -298,7 +299,7 @@ const moverEstimateApi = {
   /**
    * 내가 반려한 견적 조회
    */
-  getMyRejectedQuotes: async (): Promise<TMyRejectedEstimateResponse[]> => {
+  getMyRejectedEstimateRequests: async (): Promise<TMyRejectedEstimateResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 

@@ -1,5 +1,5 @@
 "use client";
-import { ICardListProps, IQuoteResponse, TEstimateRequestResponse } from "@/types/moverEstimate";
+import { ICardListProps } from "@/types/moverEstimate";
 import React, { useState, useEffect } from "react";
 import { LabelArea } from "./LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";

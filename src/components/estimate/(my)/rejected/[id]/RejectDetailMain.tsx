@@ -2,10 +2,10 @@ import Image from "next/image";
 import React from "react";
 import { DetailMoveInfo } from "../../../../estimateRequest/(my)/DetailMoveInfo";
 import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
-import { IEstimateResponse, IQuoteResponse } from "@/types/moverEstimate";
+import { IEstimateRequestResponse } from "@/types/moverEstimate";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 
-export const RejectDetailMain = ({ data }: { data: IQuoteResponse }) => {
+export const RejectDetailMain = ({ data }: { data: IEstimateRequestResponse }) => {
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };

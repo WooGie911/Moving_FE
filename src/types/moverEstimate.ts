@@ -16,14 +16,14 @@ export interface IRejectEstimateRequest {
 }
 
 // 견적 조회 필터링 타입 (백엔드와 일치)
-export interface IQuoteFilterOptions {
+export interface IEstimateRequestFilterOptions {
   sortBy?: "moveDate" | "createdAt";
   customerName?: string;
   movingType?: "SMALL" | "HOME" | "OFFICE";
 }
 
 // 지정 견적 조회 필터링 타입 (백엔드와 일치)
-export interface IDesignatedQuoteFilterOptions {
+export interface IDesignatedEstimateRequestFilterOptions {
   moverId: string;
   sortBy?: "moveDate" | "createdAt";
   customerName?: string;
@@ -217,7 +217,7 @@ export interface ICardListProps {
 }
 
 // 견적 응답 예시 데이터 (백엔드 구조에 맞게 수정)
-export const mockQuoteResponseData: {
+export const mockEstimateRequestResponseData: {
   regionEstimateRequests?: TEstimateRequestResponse[];
   designatedEstimateRequests?: TEstimateRequestResponse[];
 } = {
@@ -719,7 +719,7 @@ export const mockMyRejectedEstimateData: TMyRejectedEstimateResponse[] = [
 ];
 
 // 기존 인터페이스들 (호환성을 위해 유지)
-export interface IQuoteResponse {
+export interface IEstimateRequestResponse {
   id: string;
   userId: string;
   movingType: "SMALL" | "HOME" | "OFFICE";
@@ -748,7 +748,7 @@ export interface IQuoteResponse {
 
 export interface IEstimateResponse {
   id: string;
-  quoteId: string;
+  estimateRequestsId: string;
   moverId: string;
   price: number | null;
   description: string;
@@ -756,7 +756,7 @@ export interface IEstimateResponse {
   isDesignated: boolean;
   createdAt: Date;
   updatedAt: Date;
-  quote?: IQuoteResponse;
+  estimateRequest?: IEstimateRequestResponse;
 }
 
 export interface IServiceType {
@@ -783,7 +783,7 @@ export interface IProfile {
 
 export interface IMyEstimateResponse {
   id: string;
-  quoteId: string;
+  estimateRequestId: string;
   moverId: string;
   price: number | null;
   description: string;
@@ -791,7 +791,7 @@ export interface IMyEstimateResponse {
   isDesignated: boolean;
   createdAt: Date;
   updatedAt: Date;
-  quote: IQuoteResponse;
+  EstimateRequest: IEstimateRequestResponse;
   mover: {
     id: string;
     name: string;
@@ -800,14 +800,14 @@ export interface IMyEstimateResponse {
   };
 }
 
-export interface IMyRejectedQuoteResponse {
+export interface IMyRejectedEstimateRequestResponse {
   id: string;
-  quoteId: string;
+  estimateRequestId: string;
   price: number | null;
   description: string;
   status: string;
   createdAt: Date;
-  quote: IQuoteResponse;
+  estimateRequest: IEstimateRequestResponse;
   mover: {
     id: string;
     name: string;
@@ -818,7 +818,7 @@ export interface IMyRejectedQuoteResponse {
 
 export interface ICreateEstimateResponse {
   id: string;
-  quoteId: string;
+  estimateRequestId: string;
   moverId: string;
   price: number;
   description: string;
@@ -828,7 +828,7 @@ export interface ICreateEstimateResponse {
 
 export interface IRejectEstimateResponse {
   id: string;
-  quoteId: string;
+  estimateRequestId: string;
   moverId: string;
   price: number | null;
   description: string;

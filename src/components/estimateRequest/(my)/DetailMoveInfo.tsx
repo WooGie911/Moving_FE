@@ -1,4 +1,4 @@
-import { IQuote } from "@/types/customerEstimateRequest";
+import { IEstimateRequest } from "@/types/customerEstimateRequest";
 import React from "react";
 
 export const DetailMoveInfo = ({
@@ -9,7 +9,7 @@ export const DetailMoveInfo = ({
   arrivalAddr,
   departureDetail,
   arrivalDetail,
-}: IQuote) => {
+}: IEstimateRequest) => {
   const formatKoreanDate = (date: Date | undefined): string => {
     if (!date) return "날짜 정보 없음";
     const year = date.getFullYear();

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { FilterAndSearchSection } from "@/components/estimate/received/FilterAndSearchSection";
-import { IFilterState, mockQuoteResponseData } from "@/types/moverEstimate";
+import { IFilterState, mockEstimateRequestResponseData } from "@/types/moverEstimate";
 import { CardList } from "@/components/estimate/CardList";
 
 export const MoverReceivedPage = () => {
@@ -18,8 +18,8 @@ export const MoverReceivedPage = () => {
   const filteredData = useMemo(() => {
     // 두 배열을 합쳐서 하나의 배열로 만듦
     const allData = [
-      ...(mockQuoteResponseData.regionEstimateRequests || []),
-      ...(mockQuoteResponseData.designatedEstimateRequests || []),
+      ...(mockEstimateRequestResponseData.regionEstimateRequests || []),
+      ...(mockEstimateRequestResponseData.designatedEstimateRequests || []),
     ];
 
     let filtered = [...allData];
