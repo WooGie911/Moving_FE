@@ -15,7 +15,7 @@ import {
 } from "@/types/moverEstimate";
 import { getTokenFromCookie } from "@/utils/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -31,7 +31,7 @@ const moverEstimateApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates`, {
+      const response = await fetch(`${API_URL}/mover-estimates/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,8 +181,8 @@ const moverEstimateApi = {
    * 지역/지정 견적 통합 조회
    */
   getAllEstimateRequests: async (params: {
-    region: boolean;
-    designated: boolean;
+    region?: boolean;
+    designated?: boolean;
     availableRegion?: string;
     sortBy?: "moveDate" | "createdAt";
     customerName?: string;
@@ -195,14 +195,14 @@ const moverEstimateApi = {
       const accessToken = await getAccessToken();
 
       const query = new URLSearchParams();
-      query.append("region", params.region.toString());
-      query.append("designated", params.designated.toString());
+      if (params.region !== undefined) query.append("region", params.region.toString());
+      if (params.designated !== undefined) query.append("designated", params.designated.toString());
       if (params.availableRegion) query.append("availableRegion", params.availableRegion);
       if (params.sortBy) query.append("sortBy", params.sortBy);
       if (params.customerName) query.append("customerName", params.customerName);
       if (params.movingType) query.append("movingType", params.movingType);
 
-      const response = await fetch(`${API_URL}/mover-estimates?${query.toString()}`, {
+      const response = await fetch(`${API_URL}/mover-estimates/list?${query.toString()}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -215,6 +215,10 @@ const moverEstimateApi = {
           throw new Error("유효하지 않은 입력값입니다.");
         } else if (response.status === 403) {
           throw new Error("현재 유저타입이 기사가 아닙니다.");
+        } else if (response.status === 404) {
+          return { regionEstimateRequests: [], designatedEstimateRequests: [] };
+        } else if (response.status === 500) {
+          throw new Error("서버 오류가 발생했습니다.");
         } else {
           throw new Error("견적 통합 조회에 실패했습니다.");
         }
@@ -270,7 +274,7 @@ const moverEstimateApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/my`, {
+      const response = await fetch(`${API_URL}/mover-estimates/my-estimates`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -303,7 +307,7 @@ const moverEstimateApi = {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/rejected`, {
+      const response = await fetch(`${API_URL}/mover-estimates/my-rejected`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

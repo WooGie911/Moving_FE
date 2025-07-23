@@ -2,10 +2,11 @@ import Image from "next/image";
 import React from "react";
 import { DetailMoveInfo } from "../../../../estimateRequest/(my)/DetailMoveInfo";
 import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
-import { IEstimateRequestResponse } from "@/types/moverEstimate";
+import { TEstimateRequestResponse } from "@/types/moverEstimate";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
+import { formatDateDot } from "@/utils/dateUtils";
 
-export const RejectDetailMain = ({ data }: { data: IEstimateRequestResponse }) => {
+export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) => {
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
@@ -26,7 +27,7 @@ export const RejectDetailMain = ({ data }: { data: IEstimateRequestResponse }) =
         {/* 유저 정보 */}
         <div className="border-border-light flex w-full flex-row items-center justify-between border-b-[0.5px] pt-3 pb-7">
           <p className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]">
-            {`${data.user.name} 고객님의 견적`}
+            {`${data.customer.name} 고객님의 견적`}
           </p>
         </div>
 
@@ -41,11 +42,24 @@ export const RejectDetailMain = ({ data }: { data: IEstimateRequestResponse }) =
           <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
             반려 일자
           </p>
-          <p className="text-primary-400 text-[12px] leading-[32px] font-bold md:text-[14px] md:font-bold">{`${data.updatedAt.toLocaleDateString()}`}</p>
+          <p className="text-primary-400 text-[12px] leading-[32px] font-bold md:text-[14px] md:font-bold">{`${formatDateDot(data.updatedAt)}`}</p>
         </div>
 
         {/* 이사견적 상세정보들 */}
-        <DetailMoveInfo {...(data as any)} movingType={data.movingType.toLowerCase() as "small" | "home" | "office"} />
+        <DetailMoveInfo
+          id={data.id}
+          movingType={data.moveType}
+          createdAt={data.createdAt}
+          movingDate={data.moveDate}
+          departureAddr={data.fromAddress.city + " " + data.fromAddress.district}
+          arrivalAddr={data.toAddress.city + " " + data.toAddress.district}
+          departureDetail={data.fromAddress.detail || ""}
+          arrivalDetail={data.toAddress.detail || ""}
+          status={data.status}
+          confirmedEstimateId={null} // 또는 적절한 값
+          estimateCount={0} // 또는 적절한 값
+          designatedEstimateCount={0} // 또는 적절한 값
+        />
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">

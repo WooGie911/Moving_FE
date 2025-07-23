@@ -1,14 +1,14 @@
 import {
   TPendingEstimateRequestResponse,
-  TReceivedEstimateRequestResponse,
   TReceivedEstimateRequestListResponse,
   TEstimateRequestDetailResponse,
   IDesignateEstimateRequestRequest,
 } from "@/types/customerEstimateRequest";
-import { ICreateQuoteRequest, ICreateQuoteResponse, IActiveQuoteResponse } from "@/types/estimateRequest";
+import { IActiveQuoteResponse } from "@/types/estimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -17,40 +17,6 @@ const getAccessToken = async () => {
 };
 
 const customerEstimateRequestApi = {
-  /**
-   * 견적 요청 생성
-   */
-  createEstimateRequest: async (data: ICreateQuoteRequest): Promise<ICreateQuoteResponse> => {
-    try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/quotes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("잘못된 입력값입니다.");
-        } else {
-          throw new Error("견적 요청 생성에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
-      return result.data;
-    } catch (error) {
-      console.error("견적 요청 생성 실패:", error);
-      throw error;
-    }
-  },
-
   /**
    * 활성 견적 요청 조회
    */
@@ -87,7 +53,7 @@ const customerEstimateRequestApi = {
   /**
    * 진행중인 견적 조회
    */
-  getPendingEstimateRequest: async (): Promise<TPendingEstimateRequestResponse> => {
+  getPendingEstimateRequest: async (): Promise<TPendingEstimateRequestResponse | null> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -98,12 +64,21 @@ const customerEstimateRequestApi = {
       });
 
       if (!response.ok) {
+        console.error("API Error:", {
+          status: response.status,
+          statusText: response.statusText,
+          url: response.url,
+        });
+
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else if (response.status === 404) {
-          throw new Error("진행중인 견적이 없습니다.");
+          return null; // 진행중인 견적이 없는 경우 null 반환
         } else {
-          throw new Error("진행중인 견적 조회에 실패했습니다.");
+          // 실제 에러 메시지를 받아오기
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Error response:", errorData);
+          throw new Error(errorData.error?.message || "진행중인 견적 조회에 실패했습니다.");
         }
       }
 
@@ -132,7 +107,10 @@ const customerEstimateRequestApi = {
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else if (response.status === 404) {
+          // 404는 "완료된 견적요청이 없습니다"를 의미하므로 빈 배열 반환
           return [];
+        } else if (response.status === 500) {
+          throw new Error("서버 오류가 발생했습니다.");
         } else {
           throw new Error("완료된 견적 조회에 실패했습니다.");
         }
@@ -142,6 +120,10 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("완료된 견적 조회 실패:", error);
+      console.error("에러 상세 정보:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+      });
       throw error;
     }
   },

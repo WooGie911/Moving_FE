@@ -59,7 +59,7 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
       <div className="flex w-full flex-row items-center justify-start">
         <div className="flex flex-row items-center justify-center gap-1">
           <Image src={star} alt="star" width={20} height={20} />
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.averageRating}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{mover.averageRating!.toFixed(1)}</p>
           <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
         </div>
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
