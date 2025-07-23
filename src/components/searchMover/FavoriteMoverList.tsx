@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FavoriteMoverListProps } from "@/types/findMover";
+import type { FavoriteMoverListProps } from "@/types/mover.types";
 import Link from "next/link";
 import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
@@ -48,7 +48,13 @@ const FavoriteMoverList = ({ movers }: FavoriteMoverListProps) => {
                 </div>
 
                 <div className="flex gap-2">
-                  <Image src={defaultProfileSm} alt="profile-img" width={50} height={50} />
+                  <Image
+                    src={mover.profileImage || defaultProfileSm}
+                    alt="profile-img"
+                    width={50}
+                    height={50}
+                    className="h-[50px] min-h-[50px] w-[50px] min-w-[50px] flex-shrink-0 rounded-[12px] object-cover"
+                  />
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1">
@@ -63,7 +69,9 @@ const FavoriteMoverList = ({ movers }: FavoriteMoverListProps) => {
                     <div className={`flex items-center ${mover.experience >= 10 ? "gap-1.5" : "gap-2"}`}>
                       <div className="flex items-center gap-0.5">
                         <Image src={star} alt="star-img" className="h-5 w-5" />
-                        <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span>
+                        <span className="text-[13px] leading-[22px] font-medium">
+                          {(mover.avgRating ?? 0).toFixed(1)}
+                        </span>
                         <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                       </div>
                       <span className="text-[#e6e6e6]">|</span>
