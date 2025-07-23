@@ -6,11 +6,36 @@ import ReviewList from "./ReviewList";
 import RequestButton from "./RequestButton";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
-import { MoverProps } from "@/types/moverDetail";
+import type { DetailInformationProps } from "@/types/mover.types";
+import estimateRequestApi from "@/lib/api/estimateRequest.api";
 
-const DetailInformation = ({ mover }: MoverProps) => {
+const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
   const [reviews, setReviews] = useState<any[]>([]);
+  const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(true);
   const deviceType = useWindowWidth();
+
+  React.useEffect(() => {
+    const fetchActiveQuote = async () => {
+      try {
+        setIsLoadingQuote(true);
+        const response = await estimateRequestApi.getActive();
+
+        if (response.success && response.data && response.data.id) {
+          setQuoteId(String(response.data.id));
+        } else {
+          setQuoteId(undefined);
+        }
+      } catch (error) {
+        console.error("[DetailInformation] 활성 견적 조회 실패:", error);
+        setQuoteId(undefined);
+      } finally {
+        setIsLoadingQuote(false);
+      }
+    };
+
+    fetchActiveQuote();
+  }, []);
 
   return (
     <div
@@ -42,7 +67,13 @@ const DetailInformation = ({ mover }: MoverProps) => {
         <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
       </div>
       <div className="flex w-full flex-col lg:w-80 lg:gap-[22px]">
-        <RequestButton mover={mover} />
+        {isLoadingQuote ? (
+          <div className="flex items-center justify-center py-4">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+          </div>
+        ) : (
+          <RequestButton mover={mover} quoteId={quoteId} onMoverUpdate={onMoverUpdate} />
+        )}
         {deviceType === "desktop" ? <ShareButtonGroup /> : ""}
       </div>
     </div>

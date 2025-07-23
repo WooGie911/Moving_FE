@@ -4,11 +4,11 @@ import React from "react";
 import badge from "@/assets/icon/etc/icon-chat.png";
 import like from "@/assets/icon/like/icon-like-black-lg.png";
 import star from "@/assets/icon/star/icon-star-active-lg.png";
-import { MoverWithReviewsProps } from "@/types/moverDetail";
+import type { MoverWithReviewsProps } from "@/types/mover.types";
 
-const MoverIntro = ({ mover, reviews }: MoverWithReviewsProps) => {
-  const total = reviews.length;
-  const avg = total > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / total : 0;
+const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
+  const total = mover.reviewCount;
+  const avg = mover.avgRating;
   return (
     <div>
       <div className="flex gap-2">

@@ -4,11 +4,11 @@ import React from "react";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import Image from "next/image";
-import { MoverWithReviewsProps } from "@/types/moverDetail";
+import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
-  const total = reviews.length;
-  const avg = total > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / total : 0;
+  const total = mover.reviewCount; 
+  const avg = mover.avgRating;
 
   // 점수별 개수 계산
   const reviewCounts = [5, 4, 3, 2, 1].reduce(
