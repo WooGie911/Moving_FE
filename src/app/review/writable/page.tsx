@@ -1,5 +1,5 @@
-import React from "react";
+import WritableReviewPage from "@/pageComponents/review/writable/WritableReviewPage";
 
-export default function page() {
-  return <div>writable review</div>;
+export default function writableReviewPage() {
+  return <WritableReviewPage />;
 }
