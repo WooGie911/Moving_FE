@@ -1,4 +1,5 @@
 import { getTokenFromCookie, setTokensToCookie } from "@/utils/auth";
+import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -34,12 +35,9 @@ interface IMoverProfileInput {
 
 const userApi = {
   getUser: async () => {
-    const response = await fetch(`${API_URL}/users`, {
-      headers: {
-        Authorization: `Bearer ${await getAccessToken()}`,
-      },
-    });
-    return response.json();
+    const response = await fetchWithAuth(`${API_URL}/users`);
+
+    return response;
   },
 
   uploadFilesToS3: async (file: File) => {
@@ -70,10 +68,8 @@ const userApi = {
 
   // 프로필 조회
   getProfile: async () => {
-    const response = await fetch(`${API_URL}/users/profile`, {
-      headers: { Authorization: `Bearer ${await getAccessToken()}` },
-    });
-    return response.json();
+    const response = await fetchWithAuth(`${API_URL}/users/profile`);
+    return response;
   },
 
   // 프로필 등록
