@@ -36,7 +36,7 @@ interface IMoverProfileInput {
 interface IMoverProfileUpdateInput {
   nickname?: string;
   moverImage?: string;
-  currentArea?: string;
+  currentAreas?: string[];
   serviceTypes?: string[];
   shortIntro?: string;
   detailIntro?: string;

@@ -164,13 +164,13 @@ export default function MoverEditPage() {
       // 서비스 타입을 API 형식으로 변환
       const serviceTypes = services.map(service => serviceTypeMapping[service]).filter(Boolean);
       
-      // 지역을 API 형식으로 변환
-      const currentArea = regions.map(region => regionTypeMapping[region]).filter(Boolean)[0];
+      // 지역을 API 형식으로 변환 (여러 지역 지원)
+      const currentAreas = regions.map(region => regionTypeMapping[region]).filter(Boolean);
 
       const req = {
         nickname: data.nickname,
         moverImage: imageUrl,
-        currentArea: currentArea,
+        currentAreas: currentAreas,
         serviceTypes: serviceTypes,
         shortIntro: data.intro,
         detailIntro: data.desc,
