@@ -1,7 +1,7 @@
 "use client";
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { CardList } from "@/components/estimate/CardList";
-import moverEstimateApi from "@/lib/api/moverEstimate";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";

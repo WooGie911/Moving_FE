@@ -2,7 +2,7 @@
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { RequestDetailMain } from "@/components/estimate/(my)/request/[id]/RequestDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
-import moverEstimateApi from "@/lib/api/moverEstimate";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";

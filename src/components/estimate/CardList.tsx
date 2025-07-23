@@ -12,7 +12,7 @@ import edit from "@/assets/icon/edit/icon-edit.png";
 import { useModal } from "../common/modal/ModalContext";
 import { ModalChild } from "./received/ModalChild";
 import Link from "next/link";
-import moverEstimateApi from "@/lib/api/moverEstimate";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -103,31 +103,22 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
         {
           text: currentModalType === "rejected" ? "반려하기" : "견적보내기",
           onClick: () => {
-            console.log("버튼 클릭됨!", { currentModalType, modalData, isFormValid });
             if (currentModalType === "rejected") {
               if (modalData.comment) {
-                console.log("반려 mutation 실행:", { estimateRequestId: id, comment: modalData.comment });
                 rejectEstimateMutation.mutate({
                   estimateRequestId: id,
                   comment: modalData.comment,
                 });
               } else {
-                console.log("반려 데이터 없음:", modalData);
               }
             } else {
               if (modalData.price && modalData.comment) {
-                console.log("견적 생성 mutation 실행:", {
-                  estimateRequestId: id,
-                  price: modalData.price,
-                  comment: modalData.comment,
-                });
                 createEstimateMutation.mutate({
                   estimateRequestId: id,
                   price: modalData.price,
                   comment: modalData.comment,
                 });
               } else {
-                console.log("견적 데이터 없음:", modalData);
               }
             }
           },

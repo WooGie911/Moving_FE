@@ -2,7 +2,7 @@
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { RejectDetailMain } from "@/components/estimate/(my)/rejected/[id]/RejectDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
-import moverEstimateApi from "@/lib/api/moverEstimate";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -15,7 +15,6 @@ export const RejectedDetailPage = () => {
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
   });
 
-  console.log("받는데이터", data);
   if (isPending) {
     return <div>로딩 중...</div>;
   }

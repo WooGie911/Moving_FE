@@ -20,7 +20,6 @@ const UserReceivedEstimateRequestPage = () => {
     return <div>에러가 발생했습니다. 다시 시도해주세요. </div>;
   }
   if (!data) return <div>데이터를 불러올 수 없습니다.</div>;
-  console.log("받아온데이터:", data);
 
   // 완료된 견적 요청이 없는 경우
   if (data.length === 0) {

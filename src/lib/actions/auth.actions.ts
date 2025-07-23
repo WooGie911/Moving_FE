@@ -21,7 +21,7 @@ export async function setServerSideTokens(accessToken: string) {
   cookieStore.set("accessToken", accessToken, {
     path: "/",
     maxAge: accessTokenExpiresIn,
-    sameSite: "strict",
+    sameSite: "none",
   });
 }
 
@@ -37,7 +37,7 @@ export async function updateAccessToken(accessToken: string) {
   cookieStore.set("accessToken", accessToken, {
     path: "/",
     maxAge: accessTokenExpiresIn,
-    sameSite: "strict",
+    sameSite: "none",
   });
 }
 
@@ -46,7 +46,6 @@ export async function clearServerSideTokens() {
 
   // 액세스 토큰 삭제
   cookieStore.delete("accessToken");
-
   // 리프레시 토큰 삭제
   cookieStore.delete("refreshToken");
 

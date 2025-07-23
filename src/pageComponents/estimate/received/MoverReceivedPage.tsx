@@ -4,7 +4,7 @@ import { FilterAndSearchSection } from "@/components/estimate/received/FilterAnd
 import { IFilterState, mockEstimateRequestResponseData } from "@/types/moverEstimate";
 import { CardList } from "@/components/estimate/CardList";
 import { useQuery } from "@tanstack/react-query";
-import moverEstimateApi from "@/lib/api/moverEstimate";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 
 export const MoverReceivedPage = () => {
   const { data, isPending, isError, error } = useQuery({
@@ -108,8 +108,10 @@ export const MoverReceivedPage = () => {
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="text-center">
-              <p className="mb-2 text-lg font-medium text-gray-600">받은 요청이 없습니다</p>
-              <p className="text-sm text-gray-500">새로운 견적 요청을 기다려보세요</p>
+              <p className="mb-2 text-lg font-medium text-gray-600">기사님의 서비스 가능 지역 내 수락 가능한 견적</p>
+              <p className="mb-2 text-lg font-medium text-gray-600">
+                혹은 기사님께 도착한 지정견적이 존재하지 않습니다.
+              </p>
             </div>
           </div>
         </div>

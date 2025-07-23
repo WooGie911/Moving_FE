@@ -21,7 +21,6 @@ export const UserPendingEstimateRequestPage = () => {
   if (isPending) return <div>로딩 중...</div>; // 또는 로딩 스피너 컴포넌트
   if (isError) return <div>에러가 발생했습니다.</div>;
 
-  console.log("데이터", data);
   if (!data || data.estimateRequest === null) {
     return (
       <div className="flex flex-col items-center justify-center">

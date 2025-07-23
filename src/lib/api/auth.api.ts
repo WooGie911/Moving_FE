@@ -62,6 +62,26 @@ const authApi = {
 
     return responseData;
   },
+
+  // 리프레쉬 토큰을 사용한 토큰 갱신
+  refreshToken: async () => {
+    const response = await fetch(`${API_URL}/auth/refresh-token`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      credentials: "include",
+    });
+
+    const responseData = await response.json();
+
+    // 토큰 갱신 성공 시 쿠키에 저장
+    if (responseData.success) {
+      setTokensToCookie(responseData.accessToken);
+    }
+
+    return responseData;
+  },
 };
 
 export default authApi;
