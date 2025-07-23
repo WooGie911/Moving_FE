@@ -12,7 +12,6 @@ import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
-import { SERVICE_TYPE_LIST } from "@/lib/utils/moverStaticData";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
 const REGION_OPTIONS = [
@@ -37,9 +36,9 @@ const REGION_OPTIONS = [
 
 // 서비스 타입 매핑
 const serviceTypeMapping: { [key: string]: string } = {
-  "소형이사": "1",
-  "가정이사": "2",
-  "사무실이사": "3",
+  "소형이사": "SMALL",
+  "가정이사": "HOME",
+  "사무실이사": "OFFICE",
 };
 
 // 지역 매핑
@@ -103,8 +102,13 @@ export default function MoverEditPage() {
         // 서비스 타입 설정
         if (res.data.serviceTypes) {
           const serviceNames = res.data.serviceTypes.map((type: string) => {
-            const service = SERVICE_TYPE_LIST.find(s => s.id === parseInt(type));
-            return service ? service.name : "";
+            // MoveType enum을 한글 이름으로 변환
+            const serviceNameMap: { [key: string]: string } = {
+              "SMALL": "소형이사",
+              "HOME": "가정이사", 
+              "OFFICE": "사무실이사"
+            };
+            return serviceNameMap[type] || "";
           }).filter(Boolean);
           setServices(serviceNames);
         }
@@ -207,19 +211,23 @@ export default function MoverEditPage() {
                   프로필 이미지
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-40 lg:w-40">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                    id="profile-image-input"
+                  />
+                  <label 
+                    htmlFor="profile-image-input"
+                    className="flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 transition-all hover:bg-neutral-200 lg:h-40 lg:w-40"
+                  >
                     {selectedImage.dataUrl ? (
                       <img src={selectedImage.dataUrl} alt="프로필 이미지" className="h-full w-full object-cover" />
                     ) : (
                       <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
                     )}
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                  />
+                  </label>
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
