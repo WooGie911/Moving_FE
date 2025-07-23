@@ -35,11 +35,11 @@ const MOVER_USER_ACTION_LIST = [
     href: "/moverMyPage/edit",
   },
   {
-    label: "찜한 고객님",
+    label: "여기는 추가해 주세용",
     href: "/user/favorite",
   },
   {
-    label: "이사 리뷰",
+    label: "여기는 추가해 주세용",
     href: "/user/order",
   },
 ];
@@ -182,7 +182,9 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                 className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
               >
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
-                  <span className="w-full px-2 py-2 text-left text-lg">{userName} 고객님</span>
+                  <span className="w-full px-2 py-2 text-left text-lg">
+                    {userName} {userRole === "CUSTOMER" ? "고객님" : "기사님"}
+                  </span>
                   <ul className="flex w-full flex-col">
                     {userRole === "CUSTOMER"
                       ? USER_ACTION_LIST.map((item, index) => (

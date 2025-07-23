@@ -5,6 +5,7 @@ export interface DecodedTokenPayload extends JWTPayload {
   userId: number;
   name: string;
   userType: "CUSTOMER" | "MOVER";
+  hasProfile: boolean;
 }
 
 export async function decodeAccessToken(token: string): Promise<DecodedTokenPayload | null> {
@@ -20,6 +21,7 @@ export async function decodeAccessToken(token: string): Promise<DecodedTokenPayl
       "userType" in payload &&
       "userId" in payload &&
       "name" in payload &&
+      "hasProfile" in payload &&
       typeof payload.userType === "string" &&
       (payload.userType === "CUSTOMER" || payload.userType === "MOVER")
     ) {

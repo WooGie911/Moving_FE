@@ -1,5 +1,15 @@
-import ProfileEditPage from "@/pageComponents/profile/edit/ProfileEditPage";
+"use client";
+
+import CustomerEditPage from "@/pageComponents/profile/edit/CustomerEditPage";
+import MoverEditPage from "@/pageComponents/profile/edit/MoverEditPage";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function EditPage() {
-  return <ProfileEditPage />;
+  const { user } = useAuth();
+
+  if (user?.userType === "CUSTOMER") {
+    return <CustomerEditPage />;
+  } else if (user?.userType === "MOVER") {
+    return <MoverEditPage />;
+  }
 }
