@@ -14,7 +14,7 @@ import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
 
-export default function ProfileEditPage() {
+export default function CustomerEditPage() {
   const router = useRouter();
   const { open, close } = useModal();
 
@@ -171,7 +171,6 @@ export default function ProfileEditPage() {
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   이름
                 </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
@@ -205,14 +204,14 @@ export default function ProfileEditPage() {
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   이메일
                 </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="email"
                   placeholder="이메일을 입력해 주세요"
                   rules={validationRules.email}
-                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
+                  inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-[#999999] pointer-events-none bg-gray-100"
+                  wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
               </div>
             </div>
@@ -360,6 +359,7 @@ export default function ProfileEditPage() {
                   <span className="text-base leading-relaxed font-semibold text-zinc-800">제공 서비스</span>
                   <span className="text-base leading-relaxed font-semibold text-red-500">*</span>
                 </div>
+                <span className="text-xs text-gray-400 lg:text-lg">* 견적 요청 시 이용 서비스를 선택할 수 있어요.</span>
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
                 {SERVICE_OPTIONS.map((service) => {
@@ -392,7 +392,7 @@ export default function ProfileEditPage() {
                     *
                   </div>
                 </div>
-                <span className="text-xs text-gray-400 lg:text-lg">*내가 사는 지역은 언제든 수정 가능해요!</span>
+                <span className="text-xs text-gray-400 lg:text-lg">* 견적 요청 시 지역을 설정할 수 있어요.</span>
               </div>
 
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">

@@ -9,8 +9,6 @@ import React from "react";
 export default function Page() {
   const { user } = useAuth();
 
-  console.log("user", user);
-
   if (user?.userType === "CUSTOMER" && !user?.nickname) {
     return <CustomerRegisterPage />;
   } else if (user?.userType === "MOVER" && !user?.nickname) {

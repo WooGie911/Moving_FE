@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
@@ -22,7 +22,7 @@ const MoverRegisterPage = () => {
   const methods = useForm({
     mode: "onChange", // 실시간 벨리데이션
   });
-  const { watch, handleSubmit } = methods;
+  const { watch, handleSubmit, reset } = methods;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const nickname = watch("nickname");
@@ -31,6 +31,7 @@ const MoverRegisterPage = () => {
   const detailIntro = watch("detailIntro");
   const [services, setServices] = useState<string[]>(["SMALL"]);
   const [regions, setRegions] = useState<string[]>(["SEOUL"]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState({
     name: "",
     type: "",
@@ -106,6 +107,46 @@ const MoverRegisterPage = () => {
       });
     }
   };
+
+  // 초기값 설정 (기존 기사 프로필이 있는 경우)
+  useEffect(() => {
+    const fetchMoverProfile = async () => {
+      try {
+        setIsLoading(true);
+        const res = await userApi.getProfile();
+        const profile = res.data;
+
+        // 유저에서 설정한 닉네임이 있는 경우
+        if (profile.nickname) {
+          reset({
+            nickname: profile.nickname ?? "",
+          });
+
+          setSelectedImage({
+            name: "",
+            type: "",
+            dataUrl: profile.moverImage || uploadSkeleton.src,
+          });
+
+          setServices(profile.serviceTypes ?? ["SMALL"]);
+          setRegions(profile.currentAreas ?? ["SEOUL"]);
+        }
+      } catch (e) {
+        console.error("기사 프로필 조회 실패", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMoverProfile();
+  }, [reset]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div>프로필 정보를 불러오는 중...</div>
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>

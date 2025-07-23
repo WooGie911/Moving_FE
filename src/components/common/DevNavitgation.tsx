@@ -32,7 +32,7 @@ export const DevNavitgation = () => {
   // 테스트용 유저 로그인
   const handleLogin = () => {
     const mockCustomer = {
-      email: "testCustomer@test.com",
+      email: "test3333@naver.com",
       password: "1rhdiddl!",
     };
     login(mockCustomer.email, mockCustomer.password, "CUSTOMER");
@@ -41,7 +41,7 @@ export const DevNavitgation = () => {
   // 테스트용 기사 로그인
   const handleMoverLogin = () => {
     const mockMover = {
-      email: "testMover@test.com",
+      email: "test3333@naver.com",
       password: "1rhdiddl!",
     };
     login(mockMover.email, mockMover.password, "MOVER");
