@@ -10,6 +10,9 @@ import Link from "next/link";
 import { ICardListProps } from "@/types/customerEstimateRequest";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
+import { useModal } from "@/components/common/modal/ModalContext";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
+import { useMutation } from "@tanstack/react-query";
 
 // 숫자를 천 단위로 쉼표를 추가하는 함수
 const formatNumber = (num: number): string => {
@@ -25,6 +28,51 @@ export const CardList = ({
   mover,
   type,
 }: ICardListProps) => {
+  const { open, close } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
+    mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
+    onSuccess: () => {
+      open({
+        title: "확정 성공",
+        children: <div className="py-4 text-center">견적이 확정되었습니다!</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+    onError: () => {
+      open({
+        title: "확정 실패",
+        children: <div className="py-4 text-center">확정에 실패했습니다.</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+  });
+
+  const handleConfirmEstimate = () => {
+    confirmEstimate(estimateId);
+  };
+
+  const openConfirmModal = () => {
+    open({
+      title: "견적 확정",
+      children: <div className="py-4 text-center">정말 이 견적을 확정하시겠습니까?</div>,
+      type: "bottomSheet",
+      buttons: [
+        {
+          text: isConfirming ? "확정 중..." : "확정",
+          onClick: handleConfirmEstimate,
+          disabled: isConfirming,
+        },
+        {
+          text: "취소",
+          onClick: () => close(),
+        },
+      ],
+    });
+  };
+
   const cardContent = (
     <div
       className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-5 md:max-w-[600px] lg:max-w-[558px]"}`}
@@ -90,7 +138,7 @@ export const CardList = ({
               width="w-[287px]"
               height="h-[54px]"
               rounded="rounded-[12px]"
-              onClick={() => console.log("견적 확정 모달 연결 예정")}
+              onClick={openConfirmModal}
             >
               견적 확정하기
             </Button>
@@ -120,7 +168,7 @@ export const CardList = ({
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={() => console.log("모달연결 예정")}
+                onClick={openConfirmModal}
               >
                 견적 확정하기
               </Button>

@@ -57,23 +57,25 @@ const FavoriteMoverList = ({ movers }: FavoriteMoverListProps) => {
                       </div>
                       <div className="flex items-center gap-[7px]">
                         <Image src={like} alt="like-img" className="h-3 w-[14px]" />
-                        <span className="text-[14px] font-normal text-gray-600">{mover.favoriteCount}</span>
+                        <span className="text-[14px] font-normal text-gray-600">{mover.favoriteCount || 0}</span>
                       </div>
                     </div>
                     <div className={`flex items-center ${mover.experience >= 10 ? "gap-1.5" : "gap-2"}`}>
                       <div className="flex items-center gap-0.5">
                         <Image src={star} alt="star-img" className="h-5 w-5" />
-                        <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span>
-                        <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
+                        <span className="text-[13px] leading-[22px] font-medium">
+                          {mover.avgRating ? mover.avgRating.toFixed(1) : "0.0"}
+                        </span>
+                        <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount || 0})</span>
                       </div>
                       <span className="text-[#e6e6e6]">|</span>
                       <div className="flex items-center gap-1">
                         <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">경력</span>
-                        <span className="text-[13px] leading-[22px] font-medium">{mover.experience}년</span>
+                        <span className="text-[13px] leading-[22px] font-medium">{mover.experience || 0}년</span>
                       </div>
                       <span className="text-[#e6e6e6]">|</span>
                       <div className="flex items-center gap-1">
-                        <span className="text-[13px] leading-[22px] font-medium">{mover.completedCount}건</span>
+                        <span className="text-[13px] leading-[22px] font-medium">{mover.completedCount || 0}건</span>
                         <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">확정</span>
                       </div>
                     </div>
