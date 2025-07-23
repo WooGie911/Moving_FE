@@ -1,9 +1,9 @@
 // 공통 컴포넌트 props
-export interface LoadingProps {
+export interface ILoadingProps {
   isLoading?: boolean;
 }
 
-export interface ErrorProps {
+export interface IErrorProps {
   error?: string | null;
   onRetry?: () => void;
 }

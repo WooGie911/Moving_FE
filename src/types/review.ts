@@ -58,11 +58,11 @@ export interface IApiReviewListResponse {
 }
 
 // 리뷰 관련 컴포넌트 props
-export interface ReviewsProps {
+export interface IReviewsProps {
   reviews: IReview[];
 }
 
-export interface ReviewListProps {
+export interface IReviewListProps {
   moverId: string;
   onReviewsFetched?: (reviews: IReview[]) => void;
 }

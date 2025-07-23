@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { IReview, IApiReview, ReviewListProps } from "@/types/review";
+import type { IReview, IApiReview, IReviewListProps } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
 import Image from "next/image";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
@@ -8,7 +8,7 @@ import Pagination from "@/components/common/pagination/Pagination";
 
 const PAGE_SIZE = 5;
 
-const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
+const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
