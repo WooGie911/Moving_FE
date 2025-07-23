@@ -12,14 +12,88 @@ import edit from "@/assets/icon/edit/icon-edit.png";
 import { useModal } from "../common/modal/ModalContext";
 import { ModalChild } from "./received/ModalChild";
 import Link from "next/link";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePrice }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();
   const [isFormValid, setIsFormValid] = useState(false);
   const [currentModalType, setCurrentModalType] = useState<"rejected" | "sent" | null>(null);
+  const [modalData, setModalData] = useState<{ price?: number; comment?: string }>({});
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-  const handleFormChange = (isValid: boolean) => {
+  // 견적 생성 mutation
+  const createEstimateMutation = useMutation({
+    mutationFn: (data: { estimateRequestId: string; price: number; comment: string }) =>
+      moverEstimateApi.createEstimate({
+        estimateRequestId: data.estimateRequestId,
+        price: data.price,
+        comment: data.comment,
+        moverId: user?.id || "",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequest"] });
+      setCurrentModalType(null); // useEffect 비활성화
+      // 성공 모달 표시
+      open({
+        title: "견적생성성공",
+        children: <div className="py-4 text-center">견적보내기에 성공했습니다</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+    onError: (error) => {
+      console.error("견적 생성 실패:", error);
+      setCurrentModalType(null); // useEffect 비활성화
+      // 실패 모달 표시
+      open({
+        title: "견적생성실패",
+        children: <div className="py-4 text-center">견적보내기에 실패했습니다</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+  });
+
+  // 견적 반려 mutation
+  const rejectEstimateMutation = useMutation({
+    mutationFn: (data: { estimateRequestId: string; comment: string }) =>
+      moverEstimateApi.rejectEstimate({
+        estimateRequestId: data.estimateRequestId,
+        comment: data.comment,
+        moverId: user?.id || "",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequest"] });
+      setCurrentModalType(null); // useEffect 비활성화
+      // 성공 모달 표시
+      open({
+        title: "견적반려성공",
+        children: <div className="py-4 text-center">견적반려에 성공했습니다</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+    onError: (error) => {
+      console.error("견적 반려 실패:", error);
+      setCurrentModalType(null); // useEffect 비활성화
+      // 실패 모달 표시
+      open({
+        title: "견적반려실패",
+        children: <div className="py-4 text-center">견적반려에 실패했습니다</div>,
+        type: "bottomSheet",
+        buttons: [{ text: "닫기", onClick: () => close() }],
+      });
+    },
+  });
+
+  const handleFormChange = (isValid: boolean, formData?: { price?: number; comment?: string }) => {
     setIsFormValid(isValid);
+    if (formData) {
+      setModalData(formData);
+    }
   };
 
   // 폼 상태가 변경될 때마다 버튼 업데이트
@@ -29,16 +103,34 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
         {
           text: currentModalType === "rejected" ? "반려하기" : "견적보내기",
           onClick: () => {
-            close();
+            if (currentModalType === "rejected") {
+              if (modalData.comment) {
+                rejectEstimateMutation.mutate({
+                  estimateRequestId: id,
+                  comment: modalData.comment,
+                });
+              } else {
+              }
+            } else {
+              if (modalData.price && modalData.comment) {
+                createEstimateMutation.mutate({
+                  estimateRequestId: id,
+                  price: modalData.price,
+                  comment: modalData.comment,
+                });
+              } else {
+              }
+            }
           },
           disabled: !isFormValid,
         },
       ];
       updateButtons(buttons);
     }
-  }, [isFormValid, currentModalType, updateButtons, close]);
+  }, [isFormValid, currentModalType, updateButtons, modalData, id, createEstimateMutation, rejectEstimateMutation]);
 
-  const isPastDate = new Date(data.moveDate) < new Date();
+  const moveDate = new Date(data.moveDate);
+  const isPastDate = moveDate < new Date();
   const isRejected = data.status === "REJECTED" || type === "rejected";
 
   const openRejectModal = () => {
@@ -55,9 +147,9 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
         {
           text: "반려하기",
           onClick: () => {
-            close();
+            // useEffect에서 처리됨
           },
-          disabled: true, // 초기에는 비활성화
+          disabled: !isFormValid, // 폼 유효성에 따라 활성화/비활성화
         },
       ],
     });
@@ -75,9 +167,9 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
         {
           text: "견적보내기",
           onClick: () => {
-            close();
+            // useEffect에서 처리됨
           },
-          disabled: true, // 초기에는 비활성화
+          disabled: !isFormValid, // 폼 유효성에 따라 활성화/비활성화
         },
       ],
     });
@@ -120,7 +212,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               <LabelArea
                 movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
                 isDesignated={isDesignated}
-                createdAt={data.createdAt}
+                createdAt={new Date(data.createdAt)}
               />
               {isConfirmed ? (
                 <div className="flex flex-row items-center justify-center gap-1">
@@ -159,7 +251,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
+                  {`${moveDate.getFullYear()}년 ${moveDate.getMonth() + 1}월 ${moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][moveDate.getDay()]})`}
                 </p>
               </div>
             </div>
@@ -181,7 +273,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
             <LabelArea
               movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
               isDesignated={isDesignated}
-              createdAt={data.createdAt}
+              createdAt={new Date(data.createdAt)}
             />
             {isConfirmed ? (
               <div className="flex flex-row items-center justify-center gap-1">
@@ -220,7 +312,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
+                {`${moveDate.getFullYear()}년 ${moveDate.getMonth() + 1}월 ${moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][moveDate.getDay()]})`}
               </p>
             </div>
           </div>

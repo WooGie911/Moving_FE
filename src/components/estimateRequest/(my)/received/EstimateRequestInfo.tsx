@@ -17,9 +17,10 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
   };
 
   // Date 객체를 한국어 날짜 문자열로 변환하는 함수
-  const formatDate = (date?: Date) => {
+  const formatDate = (date?: Date | string) => {
     if (!date) return "";
-    return date.toLocaleDateString("ko-KR", {
+    const d = typeof date === "string" ? new Date(date) : date;
+    return d.toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "long",
       day: "numeric",

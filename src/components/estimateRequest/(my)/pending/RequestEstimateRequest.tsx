@@ -26,6 +26,26 @@ export const RequestEstimateRequest = ({
     }
   };
 
+  // 견적신청일: YYYY년 MM월 DD일
+  const formatKoreanDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
+  // 이사일: YYYY년 MM월 DD일 (요일)
+  const formatKoreanDateWithDay = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const days = ["일", "월", "화", "수", "목", "금", "토"];
+    const dayOfWeek = days[date.getDay()];
+    return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+  };
+
   return (
     <>
       <div className="flex w-full max-w-300 flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:flex-row lg:justify-between lg:px-0">
@@ -33,7 +53,7 @@ export const RequestEstimateRequest = ({
           <h1 className="leading-2xl text-black-500 text-[20px] font-bold md:text-[24px]">
             {getMovingTypeKorean(movingType)}
           </h1>
-          <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`견적신청일: ${requestDate}`}</p>
+          <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`견적신청일: ${formatKoreanDate(requestDate)}`}</p>
         </div>
 
         <div className="flex w-full flex-col gap-1 md:flex-row md:justify-start md:gap-3">
@@ -57,7 +77,7 @@ export const RequestEstimateRequest = ({
           <div className="flex flex-row justify-between md:ml-7 md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {movingDate}
+              {formatKoreanDateWithDay(movingDate)}
             </p>
           </div>
         </div>

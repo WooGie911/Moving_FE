@@ -260,7 +260,6 @@ const EstimateRequestCreatePage = () => {
   );
 
   const handleConfirmQuote = useCallback(async () => {
-    console.log("수정/확정 버튼 클릭됨", form, activeStatus); // 클릭 이벤트 확인용
     if (!isFormValid()) {
       return;
     }

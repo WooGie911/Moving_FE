@@ -1,5 +1,6 @@
 import { IEstimateRequest } from "@/types/customerEstimateRequest";
 import React from "react";
+import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
 
 export const DetailMoveInfo = ({
   movingType,
@@ -10,14 +11,6 @@ export const DetailMoveInfo = ({
   departureDetail,
   arrivalDetail,
 }: IEstimateRequest) => {
-  const formatKoreanDate = (date: Date | undefined): string => {
-    if (!date) return "날짜 정보 없음";
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}년 ${month}월 ${day}일`;
-  };
-
   // movingType을 한글로 변환하는 함수
   const getMovingTypeText = (type: string) => {
     switch (type.toLowerCase()) {
@@ -39,7 +32,7 @@ export const DetailMoveInfo = ({
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">견적 요청일</p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {createdAt instanceof Date ? formatKoreanDate(createdAt) : `${createdAt}`}
+            {formatDateDot(createdAt)}
           </p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
@@ -51,7 +44,7 @@ export const DetailMoveInfo = ({
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">이용일</p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {movingDate instanceof Date ? formatKoreanDate(movingDate) : `${movingDate}`}
+            {formatDateWithDayAndTime(movingDate)}
           </p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">

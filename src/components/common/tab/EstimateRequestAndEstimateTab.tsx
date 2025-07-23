@@ -2,8 +2,8 @@ import { Tab } from "@/components/common/tab/Tab";
 import React from "react";
 
 const UserTab = [
-  { name: "대기 중인 견적", href: "/quote/pending" },
-  { name: "받았던 견적", href: "/quote/received" },
+  { name: "대기 중인 견적", href: "/estimateRequest/pending" },
+  { name: "받았던 견적", href: "/estimateRequest/received" },
 ];
 
 const MoverTab = [

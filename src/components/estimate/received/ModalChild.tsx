@@ -13,7 +13,7 @@ interface IModalProps {
   isDesignated: boolean;
   estimatePrice?: number;
   type: "received" | "sent" | "rejected";
-  onFormChange?: (isValid: boolean) => void;
+  onFormChange?: (isValid: boolean, formData?: { price?: number; comment?: string }) => void;
 }
 
 export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalProps) => {
@@ -32,7 +32,10 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
     const isValid = isEstimateValid && isCommentValid;
 
     if (onFormChange) {
-      onFormChange(isValid);
+      onFormChange(isValid, {
+        price: estimatePrice ? parseInt(estimatePrice) : undefined,
+        comment: comment,
+      });
     }
   }, [estimatePrice, comment, type, onFormChange]);
 
@@ -74,7 +77,7 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
           <div className="flex flex-col justify-between">
             <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
             <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-              {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
+              {`${new Date(data.moveDate).getFullYear()}년 ${new Date(data.moveDate).getMonth() + 1}월 ${new Date(data.moveDate).getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][new Date(data.moveDate).getDay()]})`}
             </p>
           </div>
         </div>

@@ -35,3 +35,20 @@ export const formatRelativeTime = (date: Date): string => {
     return date.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
   }
 };
+
+export function formatDateDot(date: Date | string) {
+  const d = new Date(date);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function formatDateWithDayAndTime(date: Date | string) {
+  const d = new Date(date);
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  const day = days[d.getDay()];
+  let hour = d.getHours();
+  const minute = String(d.getMinutes()).padStart(2, "0");
+  const ampm = hour < 12 ? "오전" : "오후";
+  if (hour === 0) hour = 12;
+  else if (hour > 12) hour -= 12;
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}(${day}) ${ampm} ${hour}:${minute}`;
+}

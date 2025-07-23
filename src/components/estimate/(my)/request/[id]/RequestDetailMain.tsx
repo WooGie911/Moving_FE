@@ -5,6 +5,7 @@ import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { TMyEstimateResponse } from "@/types/moverEstimate";
 import { LabelArea } from "../../../LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
+import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const formatNumber = (num: number): string => {
@@ -47,7 +48,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         <DetailMoveInfo
           id={data.estimateRequest.id}
           movingType={data.estimateRequest.moveType}
-          createdAt={data.estimateRequest.createdAt}
+          createdAt={formatDateDot(data.estimateRequest.createdAt)}
           movingDate={data.estimateRequest.moveDate}
           departureAddr={data.estimateRequest.fromAddress.city + " " + data.estimateRequest.fromAddress.district}
           arrivalAddr={data.estimateRequest.toAddress.city + " " + data.estimateRequest.toAddress.district}

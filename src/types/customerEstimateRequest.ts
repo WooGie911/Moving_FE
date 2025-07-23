@@ -142,8 +142,8 @@ export interface IDetailPageMainSeactionProps {
 export interface IEstimateRequest {
   id: string;
   movingType: "SMALL" | "HOME" | "OFFICE";
-  movingDate: Date;
-  createdAt: Date;
+  movingDate: Date | string;
+  createdAt: Date | string;
   departureAddr: string;
   arrivalAddr: string;
   arrivalDetail: string | null;
