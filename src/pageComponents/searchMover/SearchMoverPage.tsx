@@ -1,15 +1,14 @@
 "use client";
 
-import React from "react";
-import SearchBar from "@/components/searchMover/SearchBar";
-import FilterBar from "@/components/searchMover/FilterBar";
-import MoverList from "@/components/searchMover/MoverList";
-import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
+import React, { useEffect, useState } from "react";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
+import { IMoverInfo } from "@/types/mover.types";
 import findMoverApi from "@/lib/api/findMover.api";
-import { useEffect, useState } from "react";
-import { IMoverInfo } from "@/types/findMover";
+import MoverList from "@/components/searchMover/MoverList";
+import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
+import SearchBar from "@/components/searchMover/SearchBar";
+import FilterBar from "@/components/searchMover/FilterBar";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
