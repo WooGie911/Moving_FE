@@ -36,6 +36,7 @@ interface IAuthContextType {
   signUp: (signUpData: ISignUpFormValues) => Promise<TSignInResponse>;
   googleLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   kakaoLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
+  naverLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -58,6 +59,7 @@ const AuthContext = createContext<IAuthContextType>({
   }),
   googleLogin: async () => {},
   kakaoLogin: async () => {},
+  naverLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
 });
@@ -223,6 +225,20 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   };
 
   /**
+   * 네이버 로그인 함수
+   */
+  const naverLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      await authApi.naverLogin(userType);
+    } catch (error: unknown) {
+      console.error("네이버 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  /**
    * 새로고침 시 인증 상태 확인
    */
   useEffect(() => {
@@ -250,6 +266,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     signUp,
     googleLogin,
     kakaoLogin,
+    naverLogin,
     logout,
     getUser,
   };

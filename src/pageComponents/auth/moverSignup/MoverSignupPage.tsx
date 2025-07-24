@@ -19,7 +19,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp, googleLogin, kakaoLogin } = useAuth();
+  const { isLoading, signUp, googleLogin, kakaoLogin, naverLogin } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -200,7 +200,14 @@ const MoverSignupPage = () => {
               className="cursor-pointer"
               onClick={() => kakaoLogin("MOVER")}
             />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("MOVER")}
+            />
           </div>
 
           {deviceType === "tablet" && (

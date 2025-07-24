@@ -19,7 +19,7 @@ import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSigninPage = () => {
-  const { login, isLoading, googleLogin, kakaoLogin } = useAuth();
+  const { login, isLoading, googleLogin, kakaoLogin, naverLogin } = useAuth();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
   const t = useTranslations("auth");
@@ -148,7 +148,14 @@ const UserSigninPage = () => {
               className="cursor-pointer"
               onClick={() => kakaoLogin("CUSTOMER")}
             />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("CUSTOMER")}
+            />
           </div>
 
           {deviceType === "tablet" && (

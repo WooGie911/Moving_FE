@@ -18,7 +18,7 @@ import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSigninPage = () => {
-  const { login, isLoading, googleLogin, kakaoLogin } = useAuth();
+  const { login, isLoading, googleLogin, kakaoLogin, naverLogin } = useAuth();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
 
@@ -145,7 +145,14 @@ const MoverSigninPage = () => {
               className="cursor-pointer"
               onClick={() => kakaoLogin("MOVER")}
             />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("MOVER")}
+            />
           </div>
 
           {deviceType === "tablet" && (
