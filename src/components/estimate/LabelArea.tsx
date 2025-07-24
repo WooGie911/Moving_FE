@@ -1,6 +1,6 @@
 import React from "react";
-import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
 import { formatRelativeTime } from "@/utils/dateUtils";
+import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 
 interface ILabelAreaProps {
   movingType: "small" | "home" | "office" | "document";

@@ -5,6 +5,7 @@ import { TUserRole } from "@/types/user.types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
+import { getPathWithoutLocale } from "@/utils/locale";
 
 interface ILogoAndTabProps {
   deviceType: TDeviceType;
@@ -18,6 +19,9 @@ type TNavigationItem = {
 
 export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const pathname = usePathname();
+
+  const cleanPath = getPathWithoutLocale(pathname);
+
   const [navigationItems, setNavigationItems] = useState<TNavigationItem[]>([]);
 
   useEffect(() => {
@@ -44,8 +48,10 @@ export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
                 key={item.name}
                 href={item.href}
                 className={`text-2lg font-bold transition-colors ${
-                  pathname === "/" || pathname === item.href ? "text-black" : "text-gray-400"
-                }`}
+                  cleanPath === "/ko" || cleanPath === "/en" || cleanPath === "/zh" || cleanPath === item.href
+                    ? "text-black"
+                    : "text-gray-400"
+                } transition-colors hover:text-black`}
               >
                 {item.name}
               </Link>
