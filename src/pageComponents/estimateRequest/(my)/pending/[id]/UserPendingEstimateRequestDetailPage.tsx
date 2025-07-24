@@ -12,7 +12,7 @@ const UserPendingEstimateRequestDetailPage = () => {
   const { id } = useParams();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["pendingQuotes"],
+    queryKey: ["pendingEstimateRequests"],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
 

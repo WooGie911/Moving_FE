@@ -14,7 +14,7 @@ import { TMoverInfo } from "@/types/customerEstimateRequest";
 
 export const UserPendingEstimateRequestPage = () => {
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["pendingQuotes"],
+    queryKey: ["pendingEstimateRequests"],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
 
@@ -28,7 +28,7 @@ export const UserPendingEstimateRequestPage = () => {
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-              <Image src={noEstimate} alt="empty-quote" fill className="object-contain" />
+              <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" />
             </div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">진행중인 견적이 없습니다.</div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">새로운 견적을 요청해보세요.</div>
@@ -95,7 +95,7 @@ export const UserPendingEstimateRequestPage = () => {
           {estimates.length === 0 ? (
             <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
               <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-                <Image src={noEstimate} alt="empty-quote" fill className="object-contain" />
+                <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" />
               </div>
               <div className="text-[20px] leading-8 font-normal text-gray-400">기사님들이 열심히 확인중이예요.</div>
               <div className="text-[20px] leading-8 font-normal text-gray-400">곧 견적이 도착할 거예요.</div>
