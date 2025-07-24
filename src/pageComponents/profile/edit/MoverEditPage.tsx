@@ -13,6 +13,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
 const REGION_OPTIONS = [
@@ -74,13 +75,13 @@ export default function MoverEditPage() {
   const router = useRouter();
   const { getUser } = useAuth();
   const locale = useLocale();
+  const { open, close } = useModal();
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<{ file: File | null; dataUrl: string }>({
     file: null,
     dataUrl: "",
   });
-  const [formError, setFormError] = useState<string | null>(null);
 
   const methods = useForm({ defaultValues });
   const { watch, handleSubmit, setValue, reset } = methods;
@@ -155,7 +156,6 @@ export default function MoverEditPage() {
 
   const onSubmit = async (data: any) => {
     try {
-      setFormError(null);
       
       // 이미지 업로드 처리
       let imageUrl = selectedImage.dataUrl;
@@ -183,13 +183,32 @@ export default function MoverEditPage() {
       const result = await userApi.updateMoverProfile(req);
       if (result.success) {
         await getUser();
-        alert("프로필이 성공적으로 수정되었습니다.");
-        router.push(`/${locale}/moverMyPage`);
+        open({
+          title: "프로필 수정 완료",
+          children: <div>프로필 수정이 완료되었습니다.</div>,
+          buttons: [
+            {
+              text: "확인",
+              onClick: () => {
+                close();
+                router.push(`/${locale}/moverMyPage`);
+              },
+            },
+          ],
+        });
       } else {
-        setFormError(result.message || "수정에 실패했습니다.");
+        open({
+          title: "프로필 수정 실패",
+          children: <div>{result.message || "수정에 실패했습니다."}</div>,
+          buttons: [{ text: "확인", onClick: () => close() }],
+        });
       }
     } catch (e) {
-      setFormError("오류가 발생했습니다.");
+      open({
+        title: "프로필 수정 실패",
+        children: <div>오류가 발생했습니다.</div>,
+        buttons: [{ text: "확인", onClick: () => close() }],
+      });
     }
   };
 
@@ -367,7 +386,7 @@ export default function MoverEditPage() {
                   </div>
                 </div>
               </div>
-              {formError && <div className="text-sm text-red-500">{formError}</div>}
+
               <div className="flex w-full flex-col gap-2 lg:flex-row lg:gap-5">
                 <Button
                   variant="solid"
