@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import SearchBar from "@/components/searchMover/SearchBar";
 import FilterBar from "@/components/searchMover/FilterBar";
 import MoverList from "@/components/searchMover/MoverList";
@@ -14,6 +15,7 @@ import { IMoverInfo } from "@/types/findMover";
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
   const { user, isLoggedIn } = useAuth();
+  const t = useTranslations("mover");
   const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +43,7 @@ const SearchMoverPage = () => {
         {/* 제목 */}
         {deviceType === "desktop" ? (
           <div className="w-full py-8">
-            <h1 className="text-black-500 text-left font-bold lg:text-2xl">기사님 찾기</h1>
+            <h1 className="text-black-500 text-left font-bold lg:text-2xl">{t("title")}</h1>
           </div>
         ) : (
           <div className="py-[6px] md:py-[5px] lg:py-0"></div>
