@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { FilterAndSearchSection } from "@/components/estimate/received/FilterAndSearchSection";
-import { IFilterState, mockEstimateRequestResponseData } from "@/types/moverEstimate";
+import { IFilterState } from "@/types/moverEstimate";
 import { CardList } from "@/components/estimate/CardList";
 import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
