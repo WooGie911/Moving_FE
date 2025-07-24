@@ -11,6 +11,7 @@ import { ShareSection } from "./ShareSection";
 import { LastButtonSection } from "./received/LastButtonSection";
 import { LgButtonSection } from "./LgButtonSection";
 import { Button } from "@/components/common/button/Button";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
 
 export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDetailPageMainSeactionProps) => {
   const formatNumber = (num: number): string => {
@@ -58,8 +59,20 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
           movingType={estimateRequest.moveType as "SMALL" | "HOME" | "OFFICE"}
           movingDate={estimateRequest.moveDate}
           createdAt={estimateRequest.createdAt}
-          departureAddr={estimateRequest.fromAddress.city + " " + estimateRequest.fromAddress.district}
-          arrivalAddr={estimateRequest.toAddress.city + " " + estimateRequest.toAddress.district}
+          departureAddr={
+            shortenRegionInAddress(estimateRequest.fromAddress.region) +
+            " " +
+            estimateRequest.fromAddress.city +
+            " " +
+            estimateRequest.fromAddress.district
+          }
+          arrivalAddr={
+            shortenRegionInAddress(estimateRequest.toAddress.region) +
+            " " +
+            estimateRequest.toAddress.city +
+            " " +
+            estimateRequest.toAddress.district
+          }
           departureDetail={estimateRequest.fromAddress.detail}
           arrivalDetail={estimateRequest.toAddress.detail}
           status={estimateRequest.status}

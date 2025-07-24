@@ -55,8 +55,7 @@ export const RejectedPage = () => {
                 key={item.id}
                 data={item.estimateRequest}
                 id={item.id}
-                isDesignated={false}
-                isConfirmed={false}
+                isDesignated={item.isDesignated}
                 type="rejected"
               />
             ))}

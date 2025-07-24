@@ -15,7 +15,7 @@ export const MoverReceivedPage = () => {
         designated: true,
       }),
   });
-
+  console.log("받은 요청 데이터", data);
   // 필터 상태 관리
   const [filters, setFilters] = useState<IFilterState>({
     movingTypes: [],
@@ -32,16 +32,26 @@ export const MoverReceivedPage = () => {
     // 지정 견적과 서비스 가능 지역 필터링에 따라 데이터 선택
     if (filters.isDesignatedOnly && filters.isServiceAreaOnly) {
       // 둘 다 선택된 경우: 두 배열 모두 포함
-      filtered = [...(data?.designatedEstimateRequests || []), ...(data?.regionEstimateRequests || [])];
+      const designatedWithFlag = (data?.designatedEstimateRequests || []).map((item) => ({
+        ...item,
+        isDesignated: true,
+      }));
+      const regionWithFlag = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
+      filtered = [...designatedWithFlag, ...regionWithFlag];
     } else if (filters.isDesignatedOnly) {
       // 지정 견적만 선택된 경우
-      filtered = [...(data?.designatedEstimateRequests || [])];
+      filtered = (data?.designatedEstimateRequests || []).map((item) => ({ ...item, isDesignated: true }));
     } else if (filters.isServiceAreaOnly) {
       // 서비스 가능 지역만 선택된 경우
-      filtered = [...(data?.regionEstimateRequests || [])];
+      filtered = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
     } else {
       // 둘 다 선택되지 않은 경우: 기본적으로 모든 데이터 표시
-      filtered = [...(data?.designatedEstimateRequests || []), ...(data?.regionEstimateRequests || [])];
+      const designatedWithFlag = (data?.designatedEstimateRequests || []).map((item) => ({
+        ...item,
+        isDesignated: true,
+      }));
+      const regionWithFlag = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
+      filtered = [...designatedWithFlag, ...regionWithFlag];
     }
 
     // 검색어 필터링
@@ -133,14 +143,7 @@ export const MoverReceivedPage = () => {
       <div className="flex w-full flex-col items-center justify-center">
         <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
           {filteredData.map((item) => (
-            <CardList
-              key={item.id}
-              id={item.id}
-              data={item}
-              isDesignated={item.isDesignated || false}
-              isConfirmed={false}
-              type="received"
-            />
+            <CardList key={item.id} id={item.id} data={item} isDesignated={item.isDesignated} type="received" />
           ))}
         </div>
       </div>

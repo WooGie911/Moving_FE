@@ -210,7 +210,6 @@ export interface ICardListProps {
   id: string;
   data: TEstimateRequestResponse;
   isDesignated: boolean;
-  isConfirmed: boolean;
   estimatePrice?: number;
   mover?: TMover;
   type: "received" | "sent" | "rejected";

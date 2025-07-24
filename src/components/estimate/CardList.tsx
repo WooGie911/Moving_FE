@@ -16,7 +16,7 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
 
-export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePrice }: ICardListProps) => {
+export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();
   const [isFormValid, setIsFormValid] = useState(false);
   const [currentModalType, setCurrentModalType] = useState<"rejected" | "sent" | null>(null);
@@ -131,7 +131,6 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
 
   const moveDate = new Date(data.moveDate);
   const isPastDate = moveDate < new Date();
-  const isRejected = data.status === "REJECTED";
 
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
@@ -215,13 +214,11 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 createdAt={new Date(data.createdAt)}
                 type={type}
               />
-              {isConfirmed ? (
-                <div className="flex flex-row items-center justify-center gap-1">
+              {data.status === "APPROVED" && (
+                <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                   <Image src={confirm} alt="confirm" width={16} height={16} />
                   <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
                 </div>
-              ) : (
-                ""
               )}
             </div>
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
@@ -236,7 +233,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
+                    {shortenRegionInAddress(data.fromAddress.region + " " + data.fromAddress.city)}
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
@@ -245,7 +242,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
+                    {shortenRegionInAddress(data.toAddress.region + " " + data.toAddress.city)}
                   </p>
                 </div>
               </div>
@@ -277,13 +274,11 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               createdAt={new Date(data.createdAt)}
               type={type}
             />
-            {isConfirmed ? (
-              <div className="flex flex-row items-center justify-center gap-1">
+            {data.status === "APPROVED" && (
+              <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                 <Image src={confirm} alt="confirm" width={16} height={16} />
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
               </div>
-            ) : (
-              ""
             )}
           </div>
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}

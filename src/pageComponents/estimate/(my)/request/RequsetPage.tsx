@@ -51,8 +51,7 @@ export const RequsetPage = () => {
                 key={item.id}
                 id={item.id}
                 data={item.estimateRequest!}
-                isDesignated={false}
-                isConfirmed={false}
+                isDesignated={item.isDesignated}
                 estimatePrice={item.price!}
                 type="sent"
               />
