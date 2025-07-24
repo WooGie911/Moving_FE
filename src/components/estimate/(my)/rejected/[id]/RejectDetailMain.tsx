@@ -5,6 +5,7 @@ import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { TEstimateRequestResponse } from "@/types/moverEstimate";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { formatDateDot } from "@/utils/dateUtils";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
 
 export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) => {
   const formatNumber = (num: number): string => {
@@ -51,8 +52,16 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
           movingType={data.moveType}
           createdAt={data.createdAt}
           movingDate={data.moveDate}
-          departureAddr={data.fromAddress.city + " " + data.fromAddress.district}
-          arrivalAddr={data.toAddress.city + " " + data.toAddress.district}
+          departureAddr={
+            shortenRegionInAddress(data.fromAddress.region) +
+            " " +
+            data.fromAddress.city +
+            " " +
+            data.fromAddress.district
+          }
+          arrivalAddr={
+            shortenRegionInAddress(data.toAddress.region) + " " + data.toAddress.city + " " + data.toAddress.district
+          }
           departureDetail={data.fromAddress.detail || ""}
           arrivalDetail={data.toAddress.detail || ""}
           status={data.status}

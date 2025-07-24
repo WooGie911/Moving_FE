@@ -1,4 +1,5 @@
 import { TEstimateRequestResponse } from "@/types/customerEstimateRequest";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
 import React from "react";
 
 export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
@@ -34,8 +35,10 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
   };
 
   // fromAddress, toAddress에서 값 추출
-  const departureAddr = props.fromAddress.city + " " + props.fromAddress.district;
-  const arrivalAddr = props.toAddress.city + " " + props.toAddress.district;
+  const departureAddr =
+    shortenRegionInAddress(props.fromAddress.region) + " " + props.fromAddress.city + " " + props.fromAddress.district;
+  const arrivalAddr =
+    shortenRegionInAddress(props.toAddress.region) + " " + props.toAddress.city + " " + props.toAddress.district;
   const departureDetail = props.fromAddress.detail;
   const arrivalDetail = props.toAddress.detail;
 

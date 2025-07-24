@@ -6,6 +6,7 @@ import { TMyEstimateResponse } from "@/types/moverEstimate";
 import { LabelArea } from "../../../LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const formatNumber = (num: number): string => {
@@ -24,6 +25,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         <LabelArea
           movingType={data.estimateRequest.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
           isDesignated={data.isDesignated}
+          type="detail"
         />
 
         {/* 유저 정보 */}
@@ -50,10 +52,26 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           movingType={data.estimateRequest.moveType}
           createdAt={formatDateDot(data.estimateRequest.createdAt)}
           movingDate={data.estimateRequest.moveDate}
-          departureAddr={data.estimateRequest.fromAddress.city + " " + data.estimateRequest.fromAddress.district}
-          arrivalAddr={data.estimateRequest.toAddress.city + " " + data.estimateRequest.toAddress.district}
-          departureDetail={data.estimateRequest.fromAddress.detail || ""}
-          arrivalDetail={data.estimateRequest.toAddress.detail || ""}
+          departureAddr={
+            shortenRegionInAddress(data.estimateRequest.fromAddress.region) +
+            " " +
+            data.estimateRequest.fromAddress.city +
+            " " +
+            data.estimateRequest.fromAddress.district +
+            " " +
+            data.estimateRequest.fromAddress.detail
+          }
+          arrivalAddr={
+            shortenRegionInAddress(data.estimateRequest.toAddress.region) +
+            " " +
+            data.estimateRequest.toAddress.city +
+            " " +
+            data.estimateRequest.toAddress.district +
+            " " +
+            data.estimateRequest.toAddress.detail
+          }
+          departureDetail={""}
+          arrivalDetail={""}
           status={data.estimateRequest.status}
           confirmedEstimateId={null}
           estimateCount={0}

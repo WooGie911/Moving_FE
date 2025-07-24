@@ -72,14 +72,18 @@ export const UserPendingEstimateRequestPage = () => {
                 : estimateRequest.moveDate.toISOString()
             }
             startPoint={shortenRegionInAddress(
-              estimateRequest.fromAddress.city +
+              shortenRegionInAddress(estimateRequest.fromAddress.region) +
+                " " +
+                estimateRequest.fromAddress.city +
                 " " +
                 estimateRequest.fromAddress.district +
                 " " +
                 estimateRequest.fromAddress.detail,
             )}
             endPoint={shortenRegionInAddress(
-              estimateRequest.toAddress.city +
+              shortenRegionInAddress(estimateRequest.toAddress.region) +
+                " " +
+                estimateRequest.toAddress.city +
                 " " +
                 estimateRequest.toAddress.district +
                 " " +
