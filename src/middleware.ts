@@ -47,6 +47,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  console.log("accessToken", accessToken);
+
   const isAuthenticated = !!accessToken;
 
   // ✅ 루트 경로 접근 제어 (next-intl보다 먼저 처리)
@@ -87,8 +89,13 @@ export async function middleware(request: NextRequest) {
     (pathname.startsWith("/estimate") && !pathname.startsWith("/estimateRequest")) ||
     pathname.startsWith("/moverMyPage");
 
-  // ✅ 프로필 등록 강제 이동
+  // ✅ 일반 로그인 프로필 등록 강제 이동
   if (isProtectedRoute && !hasProfile && pathname !== "/profile/register") {
+    return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
+  }
+
+  // ✅ 소셜 로그인 프로필 등록 강제 이동
+  if (!hasProfile && (pathname === "/searchMover" || pathname === "/estimate/received")) {
     return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 

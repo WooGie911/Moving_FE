@@ -23,6 +23,7 @@ export type TSignInResponse = {
     userType: "CUSTOMER" | "MOVER";
   };
   success: boolean;
+  status?: number;
   message: string;
   accessToken: string;
 };
@@ -34,6 +35,7 @@ interface IAuthContextType {
   login: (email: string, password: string, userType: "CUSTOMER" | "MOVER") => Promise<TSignInResponse>;
   signUp: (signUpData: ISignUpFormValues) => Promise<TSignInResponse>;
   googleLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
+  kakaoLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -55,6 +57,7 @@ const AuthContext = createContext<IAuthContextType>({
     accessToken: "",
   }),
   googleLogin: async () => {},
+  kakaoLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
 });
@@ -202,6 +205,23 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       throw error;
     }
   };
+
+  /**
+   * 카카오 로그인 함수
+   */
+  const kakaoLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
+      await authApi.kakaoLogin(userType);
+      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
+    } catch (error: unknown) {
+      console.error("카카오 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
   /**
    * 새로고침 시 인증 상태 확인
    */
@@ -229,6 +249,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     login,
     signUp,
     googleLogin,
+    kakaoLogin,
     logout,
     getUser,
   };

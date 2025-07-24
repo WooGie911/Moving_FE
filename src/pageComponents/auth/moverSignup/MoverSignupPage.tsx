@@ -19,7 +19,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp, googleLogin } = useAuth();
+  const { isLoading, signUp, googleLogin, kakaoLogin } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -56,7 +56,7 @@ const MoverSignupPage = () => {
       if (isLoading) return;
       const response = await signUp(signUpData);
 
-      if (!response.success) {
+      if (response.status !== 200) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,
@@ -192,7 +192,14 @@ const MoverSignupPage = () => {
               className="cursor-pointer"
               onClick={() => googleLogin("MOVER")}
             />
-            <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={kakao}
+              alt="kakao"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => kakaoLogin("MOVER")}
+            />
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>
 

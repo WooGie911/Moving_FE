@@ -88,6 +88,12 @@ const authApi = {
     // 전체 페이지를 구글 OAuth로 리디렉션
     window.location.href = `${API_URL}/auth/google?userType=${userType}`;
   },
+
+  // 카카오 로그인 (페이지 리디렉션 방식)
+  kakaoLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 카카오 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/kakao?userType=${userType}`;
+  },
 };
 
 export default authApi;
