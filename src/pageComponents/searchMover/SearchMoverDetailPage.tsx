@@ -3,6 +3,7 @@
 import DetailInformation from "@/components/searchMover/[id]/DetailInformation";
 import TopBar from "@/components/searchMover/[id]/TopBar";
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import findMoverApi from "@/lib/api/findMover.api";
 import { IMoverInfo } from "@/types/findMover";
@@ -10,6 +11,7 @@ import { IMoverInfo } from "@/types/findMover";
 const SearchMoverDetailPage = () => {
   const { id } = useParams() as { id: string };
   const [mover, setMover] = useState<IMoverInfo | null>(null);
+  const t = useTranslations("mover");
 
   useEffect(() => {
     if (id) {
@@ -17,7 +19,7 @@ const SearchMoverDetailPage = () => {
     }
   }, [id]);
 
-  if (!mover) return <div>로딩중...</div>;
+  if (!mover) return <div>{t("loading")}</div>;
 
   return (
     <>
