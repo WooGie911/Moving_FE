@@ -131,7 +131,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
 
   const moveDate = new Date(data.moveDate);
   const isPastDate = moveDate < new Date();
-  const isRejected = data.status === "REJECTED" || type === "rejected";
+  const isRejected = data.status === "REJECTED";
 
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
@@ -177,7 +177,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
 
   return (
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
-      {isPastDate && !isRejected && (
+      {isPastDate && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           <p className="text-[18px] leading-[26px] font-semibold text-white">이사 완료된 견적 입니다.</p>
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
@@ -194,7 +194,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
           </Link>
         </div>
       )}
-      {isRejected && (
+      {type === "rejected" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           <p className="text-[18px] leading-[26px] font-semibold text-white">반려된 요청 입니다.</p>
         </div>
@@ -213,6 +213,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
                 movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
                 isDesignated={isDesignated}
                 createdAt={new Date(data.createdAt)}
+                type={type}
               />
               {isConfirmed ? (
                 <div className="flex flex-row items-center justify-center gap-1">
@@ -274,6 +275,7 @@ export const CardList = ({ data, isDesignated, isConfirmed, type, id, estimatePr
               movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
               isDesignated={isDesignated}
               createdAt={new Date(data.createdAt)}
+              type={type}
             />
             {isConfirmed ? (
               <div className="flex flex-row items-center justify-center gap-1">
