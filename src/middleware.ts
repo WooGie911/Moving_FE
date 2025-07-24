@@ -2,9 +2,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decodeAccessToken, DecodedTokenPayload } from "./utils/decodeAccessToken";
 import { TUserRole } from "./types/user.types";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+
+// next-intl 미들웨어 생성
+const intlMiddleware = createMiddleware(routing);
 
 // ✅ 미들웨어 엔트리 함수
 export async function middleware(request: NextRequest) {
+  // next-intl 미들웨어 먼저 실행
+  const intlResponse = await intlMiddleware(request);
+
+  // next-intl이 리다이렉트를 처리한 경우 그대로 반환
+  if (intlResponse) {
+    return intlResponse;
+  }
+
   const { pathname } = request.nextUrl;
 
   // ✅ 쿠키에서 토큰 가져오기
@@ -130,7 +143,8 @@ export async function middleware(request: NextRequest) {
 
 // ✅ 미들웨어 적용 경로 설정
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)", // API, static, favicon 제외 전체 경로에 적용
-  ],
+  // Match all pathnames except for
+  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
+  // - … the ones containing a dot (e.g. `favicon.ico`)
+  matcher: "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
 };

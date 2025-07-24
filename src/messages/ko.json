@@ -72,5 +72,153 @@
     "contact": "문의"
   },
   "serviceAvailableCountry": "*현재 서비스 가능 국가는 대한민국입니다.",
-  "addressSearchScriptNotLoaded": "주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요."
+  "addressSearchScriptNotLoaded": "주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.",
+  "landing": {
+    "title": "이사업체, 어떻게 고르세요?",
+    "subtitle": "무빙은 여러 견적을 한눈에 비교해 이사업체 선정 과정을 간편하게 바꿔드려요",
+    "getQuote": "원하는 이사 서비스를 요청하고 견적을 받아보세요",
+    "learnMore": "여러 업체의 견적을 한눈에 비교하고 선택해요",
+    "features": {
+      "title": "왜 무빙을 선택해야 할까요?",
+      "professional": "전문 이사업체",
+      "professionalDesc": "검증된 전문 이사업체만 선별하여 안전한 서비스를 제공합니다",
+      "transparent": "투명한 견적",
+      "transparentDesc": "숨겨진 비용 없이 명확하고 공정한 견적을 제공합니다",
+      "support": "24/7 고객 지원",
+      "supportDesc": "이사 전후 언제든지 도움을 받을 수 있습니다"
+    }
+  },
+  "auth": {
+    "signin": "로그인",
+    "signup": "회원가입",
+    "signout": "로그아웃",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "userSignin": "고객 로그인",
+    "userSignup": "고객 회원가입",
+    "moverSignin": "기사 로그인",
+    "moverSignup": "기사 회원가입"
+  },
+  "profile": {
+    "title": "프로필",
+    "edit": "프로필 수정",
+    "name": "이름",
+    "phone": "전화번호",
+    "address": "주소",
+    "register": "프로필 등록",
+    "complete": "프로필 완료"
+  },
+  "search": {
+    "title": "이사업체 검색",
+    "searchPlaceholder": "지역, 업체명으로 검색",
+    "filter": "필터",
+    "sort": "정렬",
+    "rating": "평점",
+    "price": "가격",
+    "distance": "거리",
+    "findMover": "기사님 찾기",
+    "moverList": "기사님 리스트",
+    "favoriteMover": "찜한 기사님"
+  },
+  "mover": {
+    "title": "기사님 찾기",
+    "loading": "로딩중...",
+    "customer": "고객님",
+    "notification": "알림",
+    "user": "사용자"
+  },
+  "dropdown": {
+    "selectPlaceholder": "선택해주세요",
+    "sortPlaceholder": "정렬 선택",
+    "close": "닫기",
+    "upArrow": "위쪽 화살표",
+    "downArrow": "아래쪽 화살표",
+    "selected": "선택됨",
+    "notSelected": "선택되지 않음",
+    "filterActive": "필터 활성화",
+    "filterInactive": "필터 비활성화"
+  },
+  "tabs": {
+    "pendingQuote": "대기 중인 견적",
+    "receivedQuote": "받았던 견적",
+    "sentQuote": "보낸 견적 조회",
+    "rejectedRequest": "반려 요청",
+    "quoteDetail": "견적 상세",
+    "receivedRequest": "받은 요청"
+  },
+  "edit": {
+    "title": "기본정보 수정",
+    "name": "이름",
+    "namePlaceholder": "이름을 입력해주세요",
+    "email": "이메일",
+    "emailPlaceholder": "이메일을 입력해주세요",
+    "phone": "전화번호",
+    "phonePlaceholder": "전화번호를 입력해주세요",
+    "currentPassword": "현재 비밀번호",
+    "currentPasswordPlaceholder": "현재 비밀번호를 입력해주세요",
+    "currentPasswordRequired": "현재 비밀번호를 입력해주세요",
+    "newPassword": "새 비밀번호",
+    "newPasswordPlaceholder": "새 비밀번호를 입력해주세요",
+    "newPasswordRequired": "새 비밀번호를 입력해주세요",
+    "confirmNewPassword": "새 비밀번호 확인",
+    "confirmNewPasswordPlaceholder": "새 비밀번호를 다시 한번 입력해주세요",
+    "confirmNewPasswordRequired": "새 비밀번호 확인을 입력해주세요",
+    "passwordMismatch": "새 비밀번호가 일치하지 않습니다.",
+    "cancel": "취소",
+    "save": "수정하기",
+    "successMessage": "기본정보가 성공적으로 수정되었습니다.",
+    "errorMessage": "수정에 실패했습니다.",
+    "generalError": "오류가 발생했습니다."
+  },
+  "auth": {
+    "signin": "로그인",
+    "signup": "회원가입",
+    "signout": "로그아웃",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "userSignin": "고객 로그인",
+    "userSignup": "고객 회원가입",
+    "moverSignin": "기사 로그인",
+    "moverSignup": "기사 회원가입",
+    "emailPlaceholder": "이메일을 입력해주세요.",
+    "passwordPlaceholder": "비밀번호를 입력해주세요.",
+    "loginFailed": "로그인 실패",
+    "confirm": "확인",
+    "areYouMover": "기사님이신가요?",
+    "moverPage": "기사님 전용 페이지",
+    "loginInProgress": "로그인 중...",
+    "notMemberYet": "아직 무빙 회원이 아니신가요?",
+    "snsLogin": "SNS 계정으로 간편 로그인"
+  },
+  "landing": {
+    "title": "이사업체, 어떻게 고르세요?",
+    "subtitle": "무빙은 여러 견적을 한눈에 비교해 이사업체 선정 과정을 간편하게 바꿔드려요",
+    "getQuote": "원하는 이사 서비스를 요청하고 견적을 받아보세요",
+    "learnMore": "여러 업체의 견적을 한눈에 비교하고 선택해요",
+    "selectionProcess": "번거로운 선정과정, 이사 유형부터 선택해요",
+    "complexMoving": "복잡한 이사 준비, 무빙 하나면 끝!",
+    "features": {
+      "title": "왜 무빙을 선택해야 할까요?",
+      "professional": "전문 이사업체",
+      "professionalDesc": "검증된 전문 이사업체만 선별하여 안전한 서비스를 제공합니다",
+      "transparent": "투명한 견적",
+      "transparentDesc": "숨겨진 비용 없이 명확하고 공정한 견적을 제공합니다",
+      "support": "24/7 고객 지원",
+      "supportDesc": "이사 전후 언제든지 도움을 받을 수 있습니다"
+    }
+  },
+  "moveTypes": {
+    "small": "소형이사",
+    "home": "가정이사",
+    "office": "사무실이사",
+    "document": "지정 견적 요청"
+  }
 }

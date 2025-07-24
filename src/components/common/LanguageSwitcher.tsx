@@ -1,57 +1,95 @@
 "use client";
 
-import { useLanguageStore } from "@/stores/languageStore";
-import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import iconDown from "@/assets/icon/arrow/icon-down.png";
+import iconUp from "@/assets/icon/arrow/icon-up.png";
 
-export const LanguageSwitcher = () => {
-  const { language, setLanguage, t } = useLanguageStore();
+export function LanguageSwitcher() {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const t = useTranslations("common");
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const languages = [
-    { code: "ko", name: t("한국어") },
-    { code: "en", name: t("English") },
-    { code: "zh", name: t("中文") },
-  ];
+  // 외부 클릭으로 드롭다운 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
-  const handleLanguageChange = (languageCode: string) => {
-    setLanguage(languageCode as "ko" | "en" | "zh");
-    setIsOpen(false);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // ESC 키로 드롭다운 닫기
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
+  const getCurrentLanguageText = () => {
+    return locale === "ko" ? t("korean") : locale === "en" ? t("english") : t("chinese");
   };
 
-  const currentLanguageName = languages.find((lang) => lang.code === language)?.name || "한국어";
-
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+        className={`focus:ring-primary-400 flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-offset-1 focus:outline-none ${
+          isOpen
+            ? "border-primary-400 bg-primary-50 text-primary-400"
+            : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+        }`}
       >
-        <span>{currentLanguageName}</span>
-        <svg
-          className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <span>{getCurrentLanguageText()}</span>
+        <Image
+          src={isOpen ? iconUp : iconDown}
+          alt={isOpen ? "위쪽 화살표" : "아래쪽 화살표"}
+          width={12}
+          height={12}
+          className="transition-transform duration-200"
+        />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-32 rounded-md border border-gray-300 bg-white shadow-lg">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => handleLanguageChange(lang.code)}
-              className={`block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 ${
-                language === lang.code ? "bg-blue-50 text-blue-700" : "text-gray-700"
+        <div className="absolute top-full right-0 z-50 mt-1 min-w-[120px] rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+          {routing.locales.map((loc) => (
+            <Link
+              key={loc}
+              href={pathname}
+              locale={loc}
+              onClick={() => setIsOpen(false)}
+              className={`block px-3 py-2 text-sm transition-colors ${
+                locale === loc ? "bg-primary-100 text-primary-400 font-medium" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
-              {lang.name}
-            </button>
+              {loc === "ko" ? t("korean") : loc === "en" ? t("english") : t("chinese")}
+            </Link>
           ))}
         </div>
       )}
     </div>
   );
-};
+}
