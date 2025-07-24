@@ -1,6 +1,5 @@
 "use client";
 
-import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
 import React, { useState } from "react";
 import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";

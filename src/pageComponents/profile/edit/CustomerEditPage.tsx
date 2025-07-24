@@ -171,6 +171,7 @@ export default function CustomerEditPage() {
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   이름
                 </div>
+                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput

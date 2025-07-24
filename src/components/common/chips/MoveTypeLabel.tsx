@@ -6,7 +6,7 @@ import office from "../../../assets/icon/etc/icon-office.png";
 import document from "../../../assets/icon/document/icon-document.png";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
-const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
+export const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
   const t = useTranslations("moveTypes");
 
   const MOVE_TYPE_LABELS = {
