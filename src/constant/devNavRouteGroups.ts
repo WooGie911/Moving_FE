@@ -32,7 +32,7 @@ export const ROUTE_GROUPS: IRouteGroup[] = [
     title: "프로필",
     routes: [
       { name: "프로필 등록", path: "/profile/register" },
-      { name: "일반 유저 프로필 수정", path: "/profile/edit" },
+      { name: "프로필 수정", path: "/profile/edit" },
     ],
     allowedRoles: ["CUSTOMER", "MOVER"],
   },

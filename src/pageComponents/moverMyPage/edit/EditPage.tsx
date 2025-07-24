@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
@@ -17,6 +17,7 @@ const EditPage = () => {
   const { getUser } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
   const t = useTranslations("edit");
+  const locale = useLocale();
   const form = useForm<IEditBasicForm>({
     mode: "onChange",
     defaultValues: {
@@ -77,7 +78,7 @@ const EditPage = () => {
       if (result.success) {
         await getUser();
         alert(t("successMessage"));
-        router.push("/moverMyPage");
+        router.push(`/${locale}/moverMyPage`);
       } else {
         if (result.message?.includes("비밀번호")) {
           form.setError("currentPassword", { message: result.message });

@@ -11,6 +11,7 @@ import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
@@ -72,6 +73,7 @@ const defaultValues = {
 export default function MoverEditPage() {
   const router = useRouter();
   const { getUser } = useAuth();
+  const locale = useLocale();
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<{ file: File | null; dataUrl: string }>({
@@ -182,7 +184,7 @@ export default function MoverEditPage() {
       if (result.success) {
         await getUser();
         alert("프로필이 성공적으로 수정되었습니다.");
-        router.push("/moverMyPage");
+        router.push(`/${locale}/moverMyPage`);
       } else {
         setFormError(result.message || "수정에 실패했습니다.");
       }

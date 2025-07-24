@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { Button } from "@/components/common/button/Button";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
@@ -10,6 +11,7 @@ const MoverMyPage = () => {
   const router = useRouter();
   const { getUser } = useAuth();
   const [profile, setProfile] = useState<any>(null);
+  const locale = useLocale();
 
   useEffect(() => {
     async function fetchProfile() {
@@ -71,7 +73,7 @@ const MoverMyPage = () => {
               <Button
                 variant="solid"
                 className="h-[54px] w-full rounded-xl bg-[#F9502E] p-4 text-base font-semibold text-white hover:bg-[#e04322]"
-                onClick={() => router.push("/moverMyPage/edit")}
+                onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
               >
                 기본정보 수정
               </Button>
@@ -79,7 +81,7 @@ const MoverMyPage = () => {
               <Button
                 variant="outlined"
                 className="h-[54px] w-full rounded-xl border-[#F9502E] p-4 text-base font-semibold text-[#F9502E] hover:bg-[#F9502E] hover:text-white"
-                onClick={() => router.push("/profile/edit")}
+                onClick={() => router.push(`/${locale}/profile/edit`)}
               >
                 프로필 수정
               </Button>
