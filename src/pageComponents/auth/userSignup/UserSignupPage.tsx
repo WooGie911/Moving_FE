@@ -19,7 +19,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp } = useAuth();
+  const { isLoading, signUp, googleLogin } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -183,7 +183,14 @@ const UserSignupPage = () => {
         <div className="flex w-full flex-col items-center justify-center gap-8">
           <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("CUSTOMER")}
+            />
             <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>

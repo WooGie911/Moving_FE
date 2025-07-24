@@ -19,7 +19,7 @@ import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSigninPage = () => {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, googleLogin } = useAuth();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
   const t = useTranslations("auth");
@@ -46,7 +46,7 @@ const UserSigninPage = () => {
     try {
       if (isLoading) return;
       const response = await login(email, password, "CUSTOMER");
-      if (response.status === 401) {
+      if (response.success === false) {
         open({
           title: t("loginFailed"),
           children: <div>{response.message}</div>,
@@ -131,7 +131,14 @@ const UserSigninPage = () => {
         <div className="flex w-full flex-col items-center justify-center gap-8">
           <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("CUSTOMER")}
+            />
             <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
             <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
           </div>

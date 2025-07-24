@@ -15,7 +15,7 @@ type TUser = {
   customerImage?: string;
 };
 
-type TSignInResponse = {
+export type TSignInResponse = {
   user: {
     id: string;
     name: string;
@@ -33,6 +33,7 @@ interface IAuthContextType {
   isLoggedIn: boolean;
   login: (email: string, password: string, userType: "CUSTOMER" | "MOVER") => Promise<TSignInResponse>;
   signUp: (signUpData: ISignUpFormValues) => Promise<TSignInResponse>;
+  googleLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -47,7 +48,13 @@ const AuthContext = createContext<IAuthContextType>({
     message: "AuthProvider not found",
     accessToken: "",
   }),
-  signUp: async () => {},
+  signUp: async () => ({
+    user: { id: "", name: "", nickname: null, userType: "CUSTOMER" },
+    success: false,
+    message: "AuthProvider not found",
+    accessToken: "",
+  }),
+  googleLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
 });
@@ -153,6 +160,8 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       // 현재 경로를 고려한 리다이렉트
       handleRedirectAfterAuth(response.user);
+
+      return response;
     } catch (error) {
       console.error("회원가입 실패:", error);
       setUser(null);
@@ -179,6 +188,21 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   };
 
   /**
+   * 구글 로그인 함수
+   */
+  const googleLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
+      await authApi.googleLogin(userType);
+      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
+    } catch (error: unknown) {
+      console.error("구글 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+  /**
    * 새로고침 시 인증 상태 확인
    */
   useEffect(() => {
@@ -204,6 +228,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     isLoggedIn: !!user,
     login,
     signUp,
+    googleLogin,
     logout,
     getUser,
   };
