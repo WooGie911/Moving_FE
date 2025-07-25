@@ -191,13 +191,50 @@
     "moverSignup": "司机注册"
   },
   "profile": {
-    "title": "个人资料",
-    "edit": "编辑资料",
+    "customerTitle": "注册个人资料",
+    "moverTitle": "注册搬家工人资料",
+    "customerEdit": "编辑个人资料",
+    "moverEdit": "编辑搬家工人资料",
+    "start": "开始",
+    "optional": "（可选）",
+    "cancel": "取消",
+    "edit": "编辑",
+
+    "customerRegisterInfo": "请输入额外信息以完成注册。",
+    "moverRegisterInfo": "请输入额外信息以完成注册。",
+
+    "profileImg": "个人资料图片",
+
     "name": "姓名",
-    "phone": "电话",
-    "address": "地址",
-    "register": "注册资料",
-    "complete": "完成资料"
+    "namePlaceholder": "例如：张三",
+    "nickname": "昵称",
+    "nicknamePlaceholder": "请输入将在网站上显示的昵称",
+    "email": "电子邮箱",
+    "phone": "电话号码",
+    "phonePlaceholder": "请输入您的电话号码。",
+
+    "career": "工作经验",
+
+    "currentPassword": "当前密码",
+    "currentPasswordPlaceholder": "请输入当前密码",
+    "newPassword": "新密码",
+    "newPasswordPlaceholder": "请输入新密码",
+    "newPasswordConfirm": "确认新密码",
+    "newPasswordConfirmPlaceholder": "请再次输入新密码",
+    "newPasswordConfirmError": "新密码不一致",
+
+    "shortIntro": "一句话介绍",
+    "shortIntroPlaceholder": "请输入一句话介绍",
+    "detailIntro": "详细介绍",
+    "detailIntroPlaceholder": "请输入详细介绍",
+
+    "serviceTypes": "提供的服务",
+    "customerServiceTypes": "使用的服务",
+    "customerServiceTypesInfo": "可以选择多个服务，随时修改！",
+
+    "currentArea": "所在地区",
+    "currentAreaInfo": "可以随时修改所在地区！",
+    "currentAreas": "服务范围"
   },
   "search": {
     "title": "搜索搬家公司",
@@ -265,25 +302,45 @@
     "signin": "登录",
     "signup": "注册",
     "signout": "退出登录",
+
     "email": "邮箱",
+    "emailPlaceholder": "请输入邮箱。",
     "password": "密码",
+    "passwordPlaceholder": "请输入密码。",
+    "passwordCheck": "确认密码",
+    "passwordCheckPlaceholder": "请再次输入密码。",
+    "passwordCheckRequired": "请输入密码。",
+    "passwordMismatch": "两次输入的密码不一致。",
     "confirmPassword": "确认密码",
-    "forgotPassword": "忘记密码？",
-    "noAccount": "没有账户？",
-    "hasAccount": "已有账户？",
+
+    "name": "姓名",
+    "namePlaceholder": "请输入姓名。",
+    "phoneNumber": "电话号码",
+    "phoneNumberPlaceholder": "请输入电话号码。",
+
+    "login": "登录",
+    "loginInProgress": "登录中...",
+    "signupInProgress": "注册中...",
+    "loginFailed": "登录失败",
+
     "userSignin": "客户登录",
     "userSignup": "客户注册",
     "moverSignin": "司机登录",
     "moverSignup": "司机注册",
-    "emailPlaceholder": "请输入邮箱。",
-    "passwordPlaceholder": "请输入密码。",
-    "loginFailed": "登录失败",
-    "confirm": "确认",
+
+    "areYouCustomer": "您是客户吗？",
+    "customerPage": "客户页面",
     "areYouMover": "您是司机吗？",
     "moverPage": "司机页面",
-    "loginInProgress": "登录中...",
+
+    "alreadyMember": "已经是Moving会员了吗？",
     "notMemberYet": "还不是Moving会员？",
-    "snsLogin": "使用SNS账户轻松登录"
+    "noAccount": "没有账户？",
+    "hasAccount": "已有账户？",
+
+    "forgotPassword": "忘记密码？",
+    "snsLogin": "使用SNS账户轻松登录",
+    "confirm": "确认"
   },
   "landing": {
     "title": "如何选择搬家公司？",
@@ -308,6 +365,7 @@
     "office": "办公室搬家",
     "document": "指定报价请求"
   },
+
   "estimate": {
     "loading": "加载中...",
     "error": "发生错误。请重试。",
@@ -393,5 +451,54 @@
     "minutesAgo": "分钟前",
     "hoursAgo": "小时前",
     "daysAgo": "天前"
+
+  "validation": {
+    "required": {
+      "name": "请输入姓名。",
+      "nickname": "请输入昵称。",
+      "email": "邮箱是必填项。",
+      "phoneNumber": "电话号码是必填项。",
+      "password": "密码是必填项。",
+      "passwordCheck": "确认密码是必填项。",
+      "career": "请输入工作经验年限。",
+      "intro": "请输入一句话简介。",
+      "description": "请输入详细说明。"
+    },
+    "invalid": {
+      "name": "姓名需为1到10个字符，只能包含中文或英文字符。",
+      "nickname": "昵称需为1到10个字符，只能包含中文或英文字符。",
+      "email": "邮箱格式不正确。",
+      "phoneNumber": "电话号码格式不正确。（例如：01012345678）",
+      "password": "密码需至少8位，并包含字母、数字和特殊字符。",
+      "passwordCheck": "两次输入的密码不一致。",
+      "career": "工作经验必须是大于等于0的数字。（例如：8）",
+      "intro": "简介需至少8个字符。",
+      "description": "说明需至少10个字符。"
+    }
+  },
+  "service": {
+    "소형이사": "小型搬家",
+    "가정이사": "家庭搬家",
+    "사무실이사": "办公室搬家"
+  },
+  "region": {
+    "서울": "首尔",
+    "경기": "京畿",
+    "인천": "仁川",
+    "강원": "江原",
+    "충북": "忠北",
+    "충남": "忠南",
+    "세종": "世宗",
+    "대전": "大田",
+    "전북": "全北",
+    "전남": "全南",
+    "광주": "光州",
+    "경북": "庆北",
+    "경남": "庆南",
+    "대구": "大邱",
+    "울산": "蔚山",
+    "부산": "釜山",
+    "제주": "济州"
+
   }
 }

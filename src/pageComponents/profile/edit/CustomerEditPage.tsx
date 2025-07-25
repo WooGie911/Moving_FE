@@ -7,16 +7,25 @@ import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Image from "next/image";
 import { TextInput } from "@/components/common/input/TextInput";
 import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
-import { validationRules } from "@/utils/validators";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import userApi from "@/lib/api/user.api";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { useValidationRules } from "@/hooks/useValidationRules";
+import { useLocale } from "next-intl";
+import { useTranslations } from "use-intl";
 
 export default function CustomerEditPage() {
   const router = useRouter();
   const { open, close } = useModal();
+  const validationRules = useValidationRules();
+
+  const locale = useLocale();
+
+  const t = useTranslations("profile");
+  const regionT = useTranslations("region");
+  const serviceT = useTranslations("service");
 
   const [isLoading, setIsLoading] = useState(true);
   const [customerImage, setCustomerImage] = useState({
@@ -154,7 +163,7 @@ export default function CustomerEditPage() {
         {/* 헤더 */}
         <div className="border-border-light flex max-w-[327px] flex-col border-b-1 pb-4 lg:max-w-[1100px]">
           <span className="text-2lg justify-center leading-relaxed font-bold text-neutral-800 lg:text-3xl">
-            프로필 수정
+            {t("customerTitle")}
           </span>
         </div>
 
@@ -169,14 +178,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  이름
+                  {t("name")}
                 </div>
                 <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="name"
-                  placeholder="이름을 입력해 주세요"
+                  placeholder={t("namePlaceholder")}
                   rules={validationRules.name}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -186,14 +195,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  별명
+                  {t("nickname")}
                 </div>
                 <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="nickname"
-                  placeholder="사이트에 노출될 별명을 입력해 주세요"
+                  placeholder={t("nicknamePlaceholder")}
                   rules={validationRules.nickname}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -203,13 +212,13 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  이메일
+                  {t("email")}
                 </div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="email"
-                  placeholder="이메일을 입력해 주세요"
+                  placeholder={t("emailPlaceholder")}
                   rules={validationRules.email}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-[#999999] pointer-events-none bg-gray-100"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
@@ -221,14 +230,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  전화번호
+                  {t("phone")}
                 </div>
                 <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="phone"
-                  placeholder="전화번호를 입력해 주세요"
+                  placeholder={t("phonePlaceholder")}
                   rules={validationRules.phoneNumber}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -238,14 +247,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  현재 비밀번호
+                  {t("currentPassword")}
                 </div>
                 <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <PasswordInput
                   name="currentPassword"
-                  placeholder="현재 비밀번호를 입력해 주세요"
+                  placeholder={t("currentPasswordPlaceholder")}
                   rules={validationRules.password}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -255,14 +264,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  새 비밀번호
+                  {t("newPassword")}
                 </div>
-                <div className="text-sm text-gray-500">(선택사항)</div>
+                <div className="text-sm text-gray-500">{t("optional")}</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <PasswordInput
                   name="newPassword"
-                  placeholder="새 비밀번호를 입력해 주세요"
+                  placeholder={t("newPasswordPlaceholder")}
                   rules={{
                     validate: (value: string) => {
                       // 비밀번호를 입력했다면 유효성 검사 실행
@@ -287,14 +296,14 @@ export default function CustomerEditPage() {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  새 비밀번호 확인
+                  {t("newPasswordConfirm")}
                 </div>
-                <div className="text-sm text-gray-500">(선택사항)</div>
+                <div className="text-sm text-gray-500">{t("optional")}</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <PasswordInput
                   name="newPasswordConfirm"
-                  placeholder="새 비밀번호를 다시 입력해 주세요"
+                  placeholder={t("newPasswordConfirmPlaceholder")}
                   rules={{
                     validate: (value: string) => {
                       const newPassword = getValues("newPassword");
@@ -306,12 +315,12 @@ export default function CustomerEditPage() {
 
                       // 새 비밀번호가 있으면 확인 필드 필수
                       if (!value || !value.trim()) {
-                        return "새 비밀번호 확인을 입력해주세요";
+                        return t("newPasswordConfirmPlaceholder");
                       }
 
                       // 일치 여부 확인
                       if (value !== newPassword) {
-                        return "새 비밀번호와 일치하지 않습니다";
+                        return t("newPasswordConfirmError");
                       }
 
                       return true;
@@ -327,7 +336,7 @@ export default function CustomerEditPage() {
           <div className="flex w-full flex-col gap-5 lg:w-[500px]">
             {/* 프로필 이미지 */}
             <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
-              <div className="text-base leading-relaxed font-semibold text-zinc-800">프로필 이미지</div>
+              <div className="text-base leading-relaxed font-semibold text-zinc-800">{t("profileImg")}</div>
               <div
                 className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
                 onClick={handleImageClick}
@@ -357,10 +366,12 @@ export default function CustomerEditPage() {
             <div className="border-border-light flex flex-col gap-6 border-b-1 pb-6">
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
-                  <span className="text-base leading-relaxed font-semibold text-zinc-800">제공 서비스</span>
+                  <span className="text-base leading-relaxed font-semibold text-zinc-800">
+                    {t("customerServiceTypes")}
+                  </span>
                   <span className="text-base leading-relaxed font-semibold text-red-500">*</span>
                 </div>
-                <span className="text-xs text-gray-400 lg:text-lg">* 견적 요청 시 이용 서비스를 선택할 수 있어요.</span>
+                <span className="text-xs text-gray-400 lg:text-lg">* {t("customerServiceTypesInfo")}</span>
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
                 {SERVICE_OPTIONS.map((service) => {
@@ -368,7 +379,7 @@ export default function CustomerEditPage() {
                   return (
                     <CircleTextLabel
                       key={service}
-                      text={service}
+                      text={serviceT(service)}
                       clickAble={true}
                       isSelected={services.includes(serviceCode)}
                       onClick={() => {
@@ -387,23 +398,23 @@ export default function CustomerEditPage() {
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    내가 사는 지역
+                    {t("currentArea")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                     *
                   </div>
                 </div>
-                <span className="text-xs text-gray-400 lg:text-lg">* 견적 요청 시 지역을 설정할 수 있어요.</span>
+                <span className="text-xs text-gray-400 lg:text-lg">* {t("currentAreaInfo")}</span>
               </div>
 
               <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
-                <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
+                <div className={`grid w-full gap-2 lg:gap-3.5 ${locale === "en" ? "grid-cols-3" : "grid-cols-5"}`}>
                   {REGION_OPTIONS.map((region) => {
                     const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
                     return (
                       <CircleTextLabel
                         key={region}
-                        text={region}
+                        text={regionT(region)}
                         clickAble={true}
                         isSelected={regions === regionValue}
                         onClick={() => {
@@ -426,7 +437,7 @@ export default function CustomerEditPage() {
                 className="order-2 items-center justify-center rounded-2xl border !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline outline-1 outline-offset-[-1px] lg:order-1"
                 onClick={() => window.history.back()}
               >
-                <div className="justify-center text-center">취소</div>
+                <div className="justify-center text-center">{t("cancel")}</div>
               </Button>
               <Button
                 variant="solid"
@@ -437,7 +448,7 @@ export default function CustomerEditPage() {
                 disabled={!allFilled}
                 state={allFilled ? "default" : "disabled"}
               >
-                <div className="justify-center text-center">수정하기</div>
+                <div className="justify-center text-center">{t("edit")}</div>
               </Button>
             </div>
           </div>
