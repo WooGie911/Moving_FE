@@ -166,6 +166,10 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
   const moveDate = new Date(data.moveDate);
   const isPastDate = moveDate < new Date();
 
+  // 견적 개수 확인 (최대 5개)
+  const estimateCount = data.estimates?.length || 0;
+  const isMaxEstimates = estimateCount >= 5;
+
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
     setCurrentModalType("rejected");
@@ -364,15 +368,16 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               </Button>
               <Button
                 variant="solid"
-                state="default"
+                state={isMaxEstimates ? "disabled" : "default"}
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={openSendEstimateModal}
+                onClick={isMaxEstimates ? undefined : openSendEstimateModal}
+                disabled={isMaxEstimates}
               >
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <p>{t("sendEstimateTitle")} </p>
-                  <Image src={edit} alt="arrow" width={24} height={24} />
+                  <p>{isMaxEstimates ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
+                  {!isMaxEstimates && <Image src={edit} alt="arrow" width={24} height={24} />}
                 </div>
               </Button>
               <Button

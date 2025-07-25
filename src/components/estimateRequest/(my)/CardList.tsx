@@ -31,6 +31,7 @@ export const CardList = ({
   const { open, close } = useModal();
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations("estimateRequest");
+  const tCommon = useTranslations("common");
   const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
     mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
     onSuccess: () => {
@@ -62,12 +63,12 @@ export const CardList = ({
       type: "bottomSheet",
       buttons: [
         {
-          text: isConfirming ? t("loading") : t("confirmed"),
+          text: isConfirming ? tCommon("loading") : tCommon("confirm"),
           onClick: handleConfirmEstimate,
           disabled: isConfirming,
         },
         {
-          text: t("cancel", { ns: "common" }),
+          text: tCommon("cancel"),
           onClick: () => close(),
         },
       ],
@@ -135,13 +136,18 @@ export const CardList = ({
           <div className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden">
             <Button
               variant="solid"
-              state="default"
+              state={estimateState === "PROPOSED" ? "default" : "disabled"}
               width="w-[287px]"
               height="h-[54px]"
               rounded="rounded-[12px]"
-              onClick={openConfirmModal}
+              onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
+              disabled={estimateState !== "PROPOSED"}
             >
-              {t("confirmEstimateButton")}
+              {estimateState === "PROPOSED"
+                ? t("confirmEstimateButton")
+                : estimateState === "ACCEPTED"
+                  ? t("alreadyConfirmed")
+                  : t("otherEstimateConfirmed")}
             </Button>
             <Link href={`/estimateRequest/pending/${estimateId}`}>
               <Button variant="outlined" state="default" width="w-[287px]" height="h-[54px]" rounded="rounded-[12px]">
@@ -165,13 +171,18 @@ export const CardList = ({
               </Link>
               <Button
                 variant="solid"
-                state="default"
+                state={estimateState === "PROPOSED" ? "default" : "disabled"}
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={openConfirmModal}
+                onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
+                disabled={estimateState !== "PROPOSED"}
               >
-                {t("confirmEstimateButton")}
+                {estimateState === "PROPOSED"
+                  ? t("confirmEstimateButton")
+                  : estimateState === "ACCEPTED"
+                    ? t("alreadyConfirmed")
+                    : t("otherEstimateConfirmed")}
               </Button>
             </div>
           </div>
