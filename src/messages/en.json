@@ -227,5 +227,27 @@
     "home": "Home Moving",
     "office": "Office Moving",
     "document": "Designated Quote Request"
+  },
+  "validation": {
+    "required": {
+      "name": "Please enter your name.",
+      "nickname": "Please enter your nickname.",
+      "email": "Email is required.",
+      "phoneNumber": "Phone number is required.",
+      "password": "Password is required.",
+      "career": "Please enter your years of experience.",
+      "intro": "Please enter a one-line introduction.",
+      "description": "Please enter a detailed description."
+    },
+    "invalid": {
+      "name": "Name must be 1 to 10 characters long and contain only Korean or English letters.",
+      "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
+      "email": "Invalid email format.",
+      "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
+      "password": "Password must be at least 8 characters long and include letters, numbers, and special characters.",
+      "career": "Career must be a number greater than or equal to 0. (e.g., 8)",
+      "intro": "One-line introduction must be at least 8 characters long.",
+      "description": "Detailed description must be at least 10 characters long."
+    }
   }
 }

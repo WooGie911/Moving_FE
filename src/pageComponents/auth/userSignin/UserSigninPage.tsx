@@ -15,14 +15,17 @@ import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
-import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { useValidationRules } from "@/hooks/useValidationRules";
 
 const UserSigninPage = () => {
   const { login, isLoading, googleLogin, kakaoLogin, naverLogin } = useAuth();
+
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
+
   const t = useTranslations("auth");
+  const validationRules = useValidationRules();
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",

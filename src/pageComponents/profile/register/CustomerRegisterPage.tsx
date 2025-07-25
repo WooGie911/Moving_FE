@@ -11,11 +11,12 @@ import { Button } from "@/components/common/button/Button";
 import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { TextInput } from "@/components/common/input/TextInput";
-import { validationRules } from "@/utils/validators";
 import { useRouter } from "next/navigation";
+import { useValidationRules } from "@/hooks/useValidationRules";
 
 const CustomerRegisterPage = () => {
   const router = useRouter();
+  const validationRules = useValidationRules();
 
   const { open, close } = useModal();
 

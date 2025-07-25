@@ -12,12 +12,13 @@ import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
 import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { validationRules } from "@/utils/validators";
 import { useRouter } from "next/navigation";
+import { useValidationRules } from "@/hooks/useValidationRules";
 
 const MoverRegisterPage = () => {
   const router = useRouter();
   const { open, close } = useModal();
+  const validationRules = useValidationRules();
 
   const methods = useForm({
     mode: "onChange", // 실시간 벨리데이션
