@@ -7,25 +7,27 @@ import { mockMyEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
+import { useTranslations } from "next-intl";
 export const RequsetDetailPage = () => {
+  const t = useTranslations("estimate");
   const { id: estimateId } = useParams();
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["MyEstimates"],
     queryFn: () => moverEstimateApi.getMyEstimates(),
   });
   if (isPending) {
-    return <div>로딩 중...</div>;
+    return <div>{t("loading")}</div>;
   }
   if (isError) {
-    console.error("API 에러:", error);
-    return <div>에러가 발생했습니다. 다시 시도해주세요.</div>;
+    console.error(`${t("apiError")}`, error);
+    return <div>{t("error")}</div>;
   }
 
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === estimateId) : null;
 
   if (!mydata) {
-    return <div>해당 견적을 찾을 수 없습니다.</div>;
+    return <div>{t("estimateNotFound")}</div>;
   }
 
   return (

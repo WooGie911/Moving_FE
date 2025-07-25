@@ -8,6 +8,7 @@ import like_white from "@/assets/icon/like/icon-like-white-lg.png";
 import like_black from "@/assets/icon/like/icon-like-black.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
+import { useTranslations } from "next-intl";
 
 interface IProps {
   mover: TMoverInfo;
@@ -16,6 +17,7 @@ interface IProps {
 
 export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
   const [isLiked, setIsLiked] = useState(false);
+  const t = useTranslations("estimateRequest");
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -33,7 +35,7 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
           {mover.isVeteran || mover.workedCount! >= 10 ? <Image src={chat} alt="chat" width={20} height={20} /> : ""}
           <p
             className={`text-black-300 text-[14px] leading-[24px] font-semibold md:leading-[26px] md:font-medium ${usedAtDetail ? "text-[16px] md:text-[18px]" : "text-[14px] md:text-[16px]"} `}
-          >{`${mover.nickname} 기사님`}</p>
+          >{`${mover.nickname} ${t("driverSuffix")}`}</p>
         </div>
 
         {usedAtDetail ? (
@@ -61,14 +63,14 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
         <div className="flex flex-row items-center justify-center gap-1">
-          <p className="text-[14px] leading-[24px] font-normal text-gray-500">경력</p>
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}년`}</p>
+          <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("experience")}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("years")}`}</p>
         </div>
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
         <div className="flex flex-row items-center justify-center gap-1">
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}건`}</p>
-          <p className="text-[14px] leading-[24px] font-normal text-gray-500">확정</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("cases")}`}</p>
+          <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("confirmed")}</p>
         </div>
       </div>
     </div>

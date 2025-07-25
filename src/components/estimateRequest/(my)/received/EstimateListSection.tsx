@@ -7,16 +7,18 @@ import downLg from "@/assets/icon/arrow/icon-down-lg.png";
 import up from "@/assets/icon/arrow/icon-up-sm.png";
 import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export const EstimateListSection = ({ estimateList }: { estimateList: ICardListProps[] }) => {
   const [option, setOption] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const t = useTranslations("estimateRequest");
 
   // 필터링된 리스트 생성
   const filteredList =
-    option === "" || option === "전체"
+    option === "" || option === t("all")
       ? estimateList
-      : option === "확정견적"
+      : option === t("confirmedEstimate")
         ? estimateList.filter((item) => item.estimateState === "ACCEPTED")
         : estimateList; // 옵션이 더 있다면 else if 추가
 
@@ -25,7 +27,7 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
       {/* 목록 과 견적서 개수 */}
       <div className="flex w-full flex-row items-center justify-start gap-2">
         <h1 className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-          견적서 목록
+          {t("estimateList")}
         </h1>
         <p className="text-primary-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
           {filteredList.length}
@@ -40,7 +42,7 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
           <p
             className={`text-black-400 text-[14px] leading-[24px] font-medium lg:text-[16px] lg:leading-[26px] ${option === "" ? "text-black-400" : "text-primary-400"}`}
           >
-            {option === "" ? "전체" : option}
+            {option === "" ? t("all") : option}
           </p>
 
           <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
@@ -57,20 +59,20 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
             <div
               className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
               onClick={() => {
-                setOption("전체");
+                setOption(t("all"));
                 setIsOpen(false);
               }}
             >
-              전체
+              {t("all")}
             </div>
             <div
               className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
               onClick={() => {
-                setOption("확정견적");
+                setOption(t("confirmedEstimate"));
                 setIsOpen(false);
               }}
             >
-              확정견적
+              {t("confirmedEstimate")}
             </div>
           </div>
         )}

@@ -2,6 +2,7 @@ import { IEstimateRequestProps } from "@/types/customerEstimateRequest";
 import React from "react";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export const RequestEstimateRequest = ({
   movingType,
@@ -10,40 +11,77 @@ export const RequestEstimateRequest = ({
   startPoint,
   endPoint,
 }: IEstimateRequestProps) => {
-  // movingType을 한국어로 변환하는 함수
-  const getMovingTypeKorean = (movingType: string): string => {
+  const t = useTranslations("estimateRequest");
+  const tMoveTypes = useTranslations("moveTypes");
+
+  // movingType을 다국어로 변환하는 함수
+  const getMovingTypeTranslated = (movingType: string): string => {
     switch (movingType) {
       case "small":
-        return "소형이사";
+        return tMoveTypes("small");
       case "office":
-        return "사무실이사";
+        return tMoveTypes("office");
       case "home":
-        return "가정이사";
+        return tMoveTypes("home");
       case "document":
-        return "문서이사";
+        return tMoveTypes("document");
       default:
         return movingType;
     }
   };
 
-  // 견적신청일: YYYY년 MM월 DD일
-  const formatKoreanDate = (dateStr: string) => {
+  // 견적신청일: 다국어 날짜 포맷
+  const formatRequestDate = (dateStr: string) => {
     const date = new Date(dateStr);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    return `${year}년 ${month}월 ${day}일`;
+
+    // 다국어 날짜 포맷
+    const yearSuffix = t("dateFormat.year");
+    const monthSuffix = t("dateFormat.month");
+    const daySuffix = t("dateFormat.day");
+
+    // 영어인 경우 MM/DD/YYYY 형식
+    if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
+      return `${month}/${day}/${year}`;
+    }
+    // 한국어, 중국어인 경우 YYYY년 MM월 DD일 형식
+    else {
+      return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix}`;
+    }
   };
 
-  // 이사일: YYYY년 MM월 DD일 (요일)
-  const formatKoreanDateWithDay = (dateStr: string) => {
+  // 이사일: 다국어 날짜 포맷
+  const formatDateWithDay = (dateStr: string) => {
     const date = new Date(dateStr);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    const days = ["일", "월", "화", "수", "목", "금", "토"];
-    const dayOfWeek = days[date.getDay()];
-    return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+    const weekdays = [
+      t("weekdays.sunday"),
+      t("weekdays.monday"),
+      t("weekdays.tuesday"),
+      t("weekdays.wednesday"),
+      t("weekdays.thursday"),
+      t("weekdays.friday"),
+      t("weekdays.saturday"),
+    ];
+    const dayOfWeek = weekdays[date.getDay()];
+
+    // 다국어 날짜 포맷 - 언어별로 다른 형식 적용
+    const yearSuffix = t("dateFormat.year");
+    const monthSuffix = t("dateFormat.month");
+    const daySuffix = t("dateFormat.day");
+
+    // 영어인 경우 MM/DD/YYYY 형식
+    if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
+      return `${month}/${day}/${year} (${dayOfWeek})`;
+    }
+    // 한국어, 중국어인 경우 YYYY년 MM월 DD일 형식
+    else {
+      return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${dayOfWeek})`;
+    }
   };
 
   return (
@@ -51,14 +89,14 @@ export const RequestEstimateRequest = ({
       <div className="flex w-full max-w-300 flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:flex-row lg:justify-between lg:px-0">
         <div className="flex w-full flex-col items-start justify-center">
           <h1 className="leading-2xl text-black-500 text-[20px] font-bold md:text-[24px]">
-            {getMovingTypeKorean(movingType)}
+            {getMovingTypeTranslated(movingType)}
           </h1>
-          <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`견적신청일: ${formatKoreanDate(requestDate)}`}</p>
+          <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`${t("requestDate")} ${formatRequestDate(requestDate)}`}</p>
         </div>
 
         <div className="flex w-full flex-col gap-1 md:flex-row md:justify-start md:gap-3">
           <div className="flex flex-row justify-between md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
+            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
               {startPoint}
             </p>
@@ -69,15 +107,15 @@ export const RequestEstimateRequest = ({
           </div>
 
           <div className="flex flex-row justify-between md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
+            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
               {endPoint}
             </p>
           </div>
           <div className="flex flex-row justify-between md:ml-7 md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
+            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {formatKoreanDateWithDay(movingDate)}
+              {formatDateWithDay(movingDate)}
             </p>
           </div>
         </div>

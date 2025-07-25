@@ -5,8 +5,10 @@ import { IFilterState } from "@/types/moverEstimate";
 import { CardList } from "@/components/estimate/CardList";
 import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
+import { useTranslations } from "next-intl";
 
 export const MoverReceivedPage = () => {
+  const t = useTranslations("estimate");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["receivedEstimateRequest"],
     queryFn: () =>
@@ -96,14 +98,15 @@ export const MoverReceivedPage = () => {
 
   // 로딩 상태
   if (isPending) {
-    return <div>로딩 중...</div>;
+    return <div>{t("loading")}</div>;
   }
 
   // 에러 상태
   if (isError) {
-    console.error("API 에러:", error);
-    return <div>에러가 발생했습니다. 다시 시도해주세요.</div>;
+    console.error(`${t("apiError")}`, error);
+    return <div>{t("error")}</div>;
   }
+  console.log(data);
 
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
@@ -111,16 +114,14 @@ export const MoverReceivedPage = () => {
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
         <div className="flex w-full justify-start">
           <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
-            받은요청
+            {t("receivedRequests")}
           </div>
         </div>
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="text-center">
-              <p className="mb-2 text-lg font-medium text-gray-600">기사님의 서비스 가능 지역 내 수락 가능한 견적</p>
-              <p className="mb-2 text-lg font-medium text-gray-600">
-                혹은 기사님께 도착한 지정견적이 존재하지 않습니다.
-              </p>
+              <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage1")}</p>
+              <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage2")}</p>
             </div>
           </div>
         </div>
@@ -133,7 +134,7 @@ export const MoverReceivedPage = () => {
       {/* 최상단 탭 */}
       <div className="flex w-full justify-start">
         <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
-          받은요청
+          {t("receivedRequests")}
         </div>
       </div>
       {/* 상단 인풋 영역 */}

@@ -5,6 +5,7 @@ import downLg from "@/assets/icon/arrow/icon-down-lg.png";
 import up from "@/assets/icon/arrow/icon-up-sm.png";
 import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface DropdownProps {
   value?: "moveDate" | "createdAt";
@@ -12,7 +13,10 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
-  const [sortOption, setSortOption] = useState<string>(value === "moveDate" ? "이사 빠른순" : "요청일 빠른순");
+  const t = useTranslations("estimate");
+  const [sortOption, setSortOption] = useState<string>(
+    value === "moveDate" ? t("sortByMoveDate") : t("sortByRequestDate"),
+  );
   const [isOptionModalOpen, setIsOptionModalOpen] = useState<boolean>(false);
 
   return (
@@ -22,7 +26,7 @@ export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
         onClick={() => setIsOptionModalOpen(!isOptionModalOpen)}
       >
         <p className={`text-[14px] leading-[24px] font-medium text-gray-400 lg:text-[16px] lg:leading-[26px]`}>
-          {sortOption === "" ? "이사빠른순" : sortOption}
+          {sortOption === "" ? t("sortByMoveDateDefault") : sortOption}
         </p>
 
         <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
@@ -39,22 +43,22 @@ export const Dropdown = ({ value = "createdAt", onChange }: DropdownProps) => {
           <div
             className="flex h-10 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15"
             onClick={() => {
-              setSortOption("이사 빠른순");
+              setSortOption(t("sortByMoveDate"));
               onChange?.("moveDate");
               setIsOptionModalOpen(false);
             }}
           >
-            이사 빠른순
+            {t("sortByMoveDate")}
           </div>
           <div
             className="flex h-10 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15"
             onClick={() => {
-              setSortOption("요청일 빠른순");
+              setSortOption(t("sortByRequestDate"));
               onChange?.("createdAt");
               setIsOptionModalOpen(false);
             }}
           >
-            요청일 빠른순
+            {t("sortByRequestDate")}
           </div>
         </div>
       )}
