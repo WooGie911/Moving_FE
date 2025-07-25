@@ -54,6 +54,7 @@ const authApi = {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       method: "POST",
+      credentials: "include",
     });
 
     const responseData = await response.json();

@@ -183,7 +183,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
             {isProfileOpen && (
               <div
                 ref={profileModalRef}
-                className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
+                className="absolute top-full right-0 z-50 mt-2 w-[248px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
               >
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
                   <span className="w-full px-2 py-2 text-left text-lg">
