@@ -4,6 +4,11 @@ import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
+
 const reviewApi = {
   /**
    * 1. 리뷰 작성 (PATCH)
@@ -13,13 +18,11 @@ const reviewApi = {
    */
   postReview: async (reviewId: string, rating: number, content: string): Promise<IReview | null> => {
     try {
-      const accessToken = await getTokenFromCookie();
-      if (!accessToken) throw new Error("로그인이 필요합니다.");
       const res = await fetch(`${API_URL}/reviews/${reviewId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${await getAccessToken()}`,
         },
         body: JSON.stringify({ rating, content }),
       });
@@ -45,7 +48,12 @@ const reviewApi = {
     pageSize: number = 4,
   ): Promise<{ items: IWritableCardData[]; total: number; page: number; pageSize: number }> => {
     try {
-      const res = await fetch(`${API_URL}/reviews/writable-estimateRequests?page=${page}&pageSize=${pageSize}`);
+      const res = await fetch(`${API_URL}/reviews/writable-estimateRequests?page=${page}&pageSize=${pageSize}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${await getAccessToken()}`,
+        },
+      });
       if (!res.ok) throw new Error("리뷰 작성 가능한 리스트 조회에 실패했습니다.");
       const data = await res.json();
       return data.data || { items: [], total: 0, page, pageSize };
@@ -67,7 +75,12 @@ const reviewApi = {
     pageSize: number = 4,
   ): Promise<IReviewListResponse> => {
     try {
-      const res = await fetch(`${API_URL}/reviews/written/${customerId}?page=${page}&pageSize=${pageSize}`);
+      const res = await fetch(`${API_URL}/reviews/customer/${customerId}?page=${page}&pageSize=${pageSize}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${await getAccessToken()}`,
+        },
+      });
       if (!res.ok) throw new Error("내가 쓴 리뷰 목록 조회에 실패했습니다.");
       const data = await res.json();
       return data.data || { items: [], total: 0, page, pageSize };
