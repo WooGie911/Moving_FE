@@ -116,28 +116,45 @@
     "customerEdit": "Edit Profile",
     "moverEdit": "Edit Mover Profile",
     "start": "Start",
+    "optional": "(Optional)",
+    "cancel": "Cancel",
+    "edit": "Edit",
 
-    "customerRegisterInfo": "Please enter additional information to complete registration.",
-    "moverRegisterInfo": "Please enter additional information to complete registration.",
+    "customerRegisterInfo": "Please provide additional information to complete your registration.",
+    "moverRegisterInfo": "Please provide additional information to complete your registration.",
 
     "profileImg": "Profile Image",
+
     "name": "Name",
+    "namePlaceholder": "ex) John Doe",
     "nickname": "Nickname",
-    "nicknamePlaceholder": "Enter the nickname to be displayed on the site",
-    "career": "Career",
+    "nicknamePlaceholder": "Enter the nickname that will be displayed on the site",
+    "email": "Email",
     "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number.",
+
+    "career": "Career",
+
+    "currentPassword": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter a new password",
+    "newPasswordConfirm": "Confirm New Password",
+    "newPasswordConfirmPlaceholder": "Re-enter your new password",
+    "newPasswordConfirmError": "Passwords do not match",
+
     "shortIntro": "One-line Introduction",
-    "shortIntroPlaceholder": "Enter a short introduction",
+    "shortIntroPlaceholder": "Enter a brief introduction",
     "detailIntro": "Detailed Description",
     "detailIntroPlaceholder": "Enter a detailed description",
 
     "serviceTypes": "Provided Services",
-    "customerServiceTypes": "Used Services",
-    "customerServiceTypesInfo": "You can select multiple services and edit anytime!",
+    "customerServiceTypes": "Services Used",
+    "customerServiceTypesInfo": "You can select multiple services and edit them anytime!",
 
-    "currentArea": "Your Living Area",
-    "currentAreaInfo": "You can edit your area at any time!",
-    "currentAreas": "Available Service Areas"
+    "currentArea": "My Area",
+    "currentAreaInfo": "You can edit your area anytime!",
+    "currentAreas": "Service Areas"
   },
   "search": {
     "title": "Search Moving Companies",

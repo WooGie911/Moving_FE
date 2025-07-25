@@ -109,21 +109,38 @@
     "moverSignup": "司机注册"
   },
   "profile": {
-    "customerTitle": "注册资料",
-    "moverTitle": "搬家师傅注册资料",
-    "customerEdit": "编辑资料",
-    "moverEdit": "编辑搬家师傅资料",
+    "customerTitle": "注册个人资料",
+    "moverTitle": "注册搬家工人资料",
+    "customerEdit": "编辑个人资料",
+    "moverEdit": "编辑搬家工人资料",
     "start": "开始",
+    "optional": "（可选）",
+    "cancel": "取消",
+    "edit": "编辑",
 
-    "customerRegisterInfo": "请输入其他信息以完成注册。",
-    "moverRegisterInfo": "请输入其他信息以完成注册。",
+    "customerRegisterInfo": "请输入额外信息以完成注册。",
+    "moverRegisterInfo": "请输入额外信息以完成注册。",
 
-    "profileImg": "个人头像",
+    "profileImg": "个人资料图片",
+
     "name": "姓名",
+    "namePlaceholder": "例如：张三",
     "nickname": "昵称",
     "nicknamePlaceholder": "请输入将在网站上显示的昵称",
-    "career": "工作经验",
+    "email": "电子邮箱",
     "phone": "电话号码",
+    "phonePlaceholder": "请输入您的电话号码。",
+
+    "career": "工作经验",
+
+    "currentPassword": "当前密码",
+    "currentPasswordPlaceholder": "请输入当前密码",
+    "newPassword": "新密码",
+    "newPasswordPlaceholder": "请输入新密码",
+    "newPasswordConfirm": "确认新密码",
+    "newPasswordConfirmPlaceholder": "请再次输入新密码",
+    "newPasswordConfirmError": "新密码不一致",
+
     "shortIntro": "一句话介绍",
     "shortIntroPlaceholder": "请输入一句话介绍",
     "detailIntro": "详细介绍",
@@ -131,11 +148,11 @@
 
     "serviceTypes": "提供的服务",
     "customerServiceTypes": "使用的服务",
-    "customerServiceTypesInfo": "可以多选服务，随时可修改！",
+    "customerServiceTypesInfo": "可以选择多个服务，随时修改！",
 
-    "currentArea": "我的所在地区",
-    "currentAreaInfo": "你可以随时修改所在地区！",
-    "currentAreas": "可服务区域"
+    "currentArea": "所在地区",
+    "currentAreaInfo": "可以随时修改所在地区！",
+    "currentAreas": "服务范围"
   },
   "search": {
     "title": "搜索搬家公司",

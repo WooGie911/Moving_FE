@@ -113,16 +113,33 @@
     "customerEdit": "프로필 수정",
     "moverEdit": "기사님 프로필 수정",
     "start": "시작하기",
+    "optional": "(선택사항)",
+    "cancel": "취소",
+    "edit": "수정",
 
     "customerRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
     "moverRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
 
     "profileImg": "프로필 이미지",
+
     "name": "이름",
+    "namePlaceholder": "ex) 김철수 ",
     "nickname": "별명",
     "nicknamePlaceholder": "사이트에 노출될 별명을 입력해 주세요",
-    "career": "경력",
+    "email": "이메일",
     "phone": "전화번호",
+    "phonePlaceholder": "전화번호를 입력해 주세요.",
+
+    "career": "경력",
+
+    "currentPassword": "현재 비밀번호",
+    "currentPasswordPlaceholder": "현재 비밀번호를 입력해 주세요",
+    "newPassword": "새 비밀번호",
+    "newPasswordPlaceholder": "새 비밀번호를 입력해 주세요",
+    "newPasswordConfirm": "새 비밀번호 확인",
+    "newPasswordConfirmPlaceholder": "새 비밀번호 확인을 입력해주세요",
+    "newPasswordConfirmError": "새 비밀번호와 일치하지 않습니다",
+
     "shortIntro": "한 줄 소개",
     "shortIntroPlaceholder": "한 줄 소개를 입력하세요",
     "detailIntro": "상세 설명",
@@ -136,7 +153,6 @@
     "currentAreaInfo": "내가 사는 지역은 언제든 수정 가능해요!",
     "currentAreas": "서비스 가능 지역"
   },
-
   "search": {
     "title": "이사업체 검색",
     "searchPlaceholder": "지역, 업체명으로 검색",
