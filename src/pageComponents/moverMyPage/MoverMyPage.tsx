@@ -17,7 +17,7 @@ import ReviewList from "@/components/searchMover/[id]/ReviewList";
 import { getMockReviewsForMover } from "@/lib/utils/mockReviewData";
 import { IMoverInfo, IReview } from "@/types/findMover";
 
-interface ExtendedMoverInfo extends IMoverInfo {
+interface IMoverInfoExtended extends IMoverInfo {
   moverImage?: string;
   isVeteran?: boolean;
   shortIntro?: string;
@@ -31,7 +31,7 @@ interface ExtendedMoverInfo extends IMoverInfo {
 const MoverMyPage = () => {
   const router = useRouter();
   const locale = useLocale();
-  const [profile, setProfile] = useState<ExtendedMoverInfo | null>(null);
+  const [profile, setProfile] = useState<IMoverInfoExtended | null>(null);
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -160,10 +160,10 @@ const MoverMyPage = () => {
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col justify-start items-start gap-3">
-                  <div className="self-stretch justify-start text-zinc-800 text-lg font-semibold font-['Pretendard'] leading-relaxed">
+                  <div className="self-stretch justify-start text-zinc-800 text-lg font-semibold leading-relaxed">
                     {profile.shortIntro}
                   </div>
-                  <div className="self-stretch justify-start text-zinc-500 text-base font-normal font-['Pretendard'] leading-relaxed">
+                  <div className="self-stretch justify-start text-zinc-500 text-base font-normal leading-relaxed">
                     {profile.detailIntro}
                   </div>
                 </div>
