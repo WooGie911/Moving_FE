@@ -182,25 +182,45 @@
     "signin": "로그인",
     "signup": "회원가입",
     "signout": "로그아웃",
+
     "email": "이메일",
+    "emailPlaceholder": "이메일을 입력해주세요.",
     "password": "비밀번호",
+    "passwordPlaceholder": "비밀번호를 입력해주세요.",
+    "passwordCheck": "비밀번호 확인",
+    "passwordCheckPlaceholder": "비밀번호를 다시 입력해주세요.",
+    "passwordCheckRequired": "비밀번호를 입력해주세요",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다.",
     "confirmPassword": "비밀번호 확인",
-    "forgotPassword": "비밀번호를 잊으셨나요?",
-    "noAccount": "계정이 없으신가요?",
-    "hasAccount": "이미 계정이 있으신가요?",
+
+    "name": "이름",
+    "namePlaceholder": "이름을 입력해 주세요",
+    "phoneNumber": "전화번호",
+    "phoneNumberPlaceholder": "전화번호를 입력해주세요.",
+
+    "login": "로그인",
+    "loginInProgress": "로그인 중...",
+    "signupInProgress": "회원가입 중...",
+    "loginFailed": "로그인 실패",
+
     "userSignin": "고객 로그인",
     "userSignup": "고객 회원가입",
     "moverSignin": "기사 로그인",
     "moverSignup": "기사 회원가입",
-    "emailPlaceholder": "이메일을 입력해주세요.",
-    "passwordPlaceholder": "비밀번호를 입력해주세요.",
-    "loginFailed": "로그인 실패",
-    "confirm": "확인",
+
+    "areYouCustomer": "고객님이신가요?",
+    "customerPage": "고객님 전용 페이지",
     "areYouMover": "기사님이신가요?",
     "moverPage": "기사님 전용 페이지",
-    "loginInProgress": "로그인 중...",
+
+    "alreadyMember": "이미 무빙 회원이신가요?",
     "notMemberYet": "아직 무빙 회원이 아니신가요?",
-    "snsLogin": "SNS 계정으로 간편 로그인"
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "snsLogin": "SNS 계정으로 간편 로그인",
+    "confirm": "확인"
   },
   "landing": {
     "title": "이사업체, 어떻게 고르세요?",
@@ -232,6 +252,7 @@
       "email": "이메일은 필수 입력입니다.",
       "phoneNumber": "전화번호는 필수 입력입니다.",
       "password": "비밀번호는 필수 입력입니다.",
+      "passwordCheck": "비밀번호 확인은 필수 입력입니다.",
       "career": "경력을 입력해주세요",
       "intro": "한줄 소개를 입력해주세요",
       "description": "상세 설명을 입력해주세요"
@@ -242,6 +263,7 @@
       "email": "올바른 이메일 형식이 아닙니다.",
       "phoneNumber": "올바른 전화번호 형식이 아닙니다. (예: 01012345678)",
       "password": "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 각각 포함해야 합니다.",
+      "passwordCheck": "비밀번호가 일치하지 않습니다.",
       "career": "경력은 0 이상의 숫자로 입력해주세요. (예: 8)",
       "intro": "한 줄 소개는 8자 이상 입력해주세요.",
       "description": "상세 설명은 10자 이상 입력해주세요."

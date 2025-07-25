@@ -185,25 +185,45 @@
     "signin": "Sign In",
     "signup": "Sign Up",
     "signout": "Sign Out",
+
     "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?",
-    "userSignin": "Customer Sign In",
-    "userSignup": "Customer Sign Up",
-    "moverSignin": "Mover Sign In",
-    "moverSignup": "Mover Sign Up",
     "emailPlaceholder": "Please enter your email.",
+    "password": "Password",
     "passwordPlaceholder": "Please enter your password.",
-    "loginFailed": "Login Failed",
-    "confirm": "Confirm",
+    "passwordCheck": "Confirm Password",
+    "passwordCheckPlaceholder": "Please re-enter your password.",
+    "passwordCheckRequired": "Please enter your password.",
+    "passwordMismatch": "Passwords do not match.",
+    "confirmPassword": "Confirm Password",
+
+    "name": "Name",
+    "namePlaceholder": "Please enter your name.",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Please enter your phone number.",
+
+    "login": "Login",
+    "loginInProgress": "Logging in...",
+    "signupInProgress": "Signing up...",
+    "loginFailed": "Login failed",
+
+    "userSignin": "Customer Login",
+    "userSignup": "Customer Sign Up",
+    "moverSignin": "Mover Login",
+    "moverSignup": "Mover Sign Up",
+
+    "areYouCustomer": "Are you a customer?",
+    "customerPage": "Customer Page",
     "areYouMover": "Are you a mover?",
     "moverPage": "Mover Page",
-    "loginInProgress": "Logging in...",
+
+    "alreadyMember": "Already a Moving member?",
     "notMemberYet": "Not a Moving member yet?",
-    "snsLogin": "Easy login with SNS account"
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+
+    "forgotPassword": "Forgot your password?",
+    "snsLogin": "Login easily with your SNS account",
+    "confirm": "Confirm"
   },
   "landing": {
     "title": "How do you choose a moving company?",
@@ -235,6 +255,7 @@
       "email": "Email is required.",
       "phoneNumber": "Phone number is required.",
       "password": "Password is required.",
+      "passwordCheck": "Password confirmation is required.",
       "career": "Please enter your years of experience.",
       "intro": "Please enter a one-line introduction.",
       "description": "Please enter a detailed description."
@@ -244,10 +265,11 @@
       "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
       "email": "Invalid email format.",
       "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
-      "password": "Password must be at least 8 characters long and include letters, numbers, and special characters.",
-      "career": "Career must be a number greater than or equal to 0. (e.g., 8)",
-      "intro": "One-line introduction must be at least 8 characters long.",
-      "description": "Detailed description must be at least 10 characters long."
+      "password": "Password must be at least 8 characters and include letters, numbers, and special characters.",
+      "passwordCheck": "Passwords do not match.",
+      "career": "Experience must be a number greater than or equal to 0. (e.g., 8)",
+      "intro": "Introduction must be at least 8 characters long.",
+      "description": "Description must be at least 10 characters long."
     }
   }
 }

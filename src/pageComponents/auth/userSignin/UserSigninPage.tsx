@@ -114,17 +114,17 @@ const UserSigninPage = () => {
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span className="ml-2">로그인 중...</span>
+                    <span className="ml-2">{t("loginInProgress")}</span>
                   </div>
                 ) : (
-                  "로그인"
+                  t("login")
                 )}
               </button>
               {/* 회원가입 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
-                <span className="text-black-200 text-lg">아직 무빙 회원이 아니신가요?</span>
+                <span className="text-black-200 text-lg">{t("notMemberYet")}</span>
                 <Link href="/userSignup">
-                  <span className="text-primary-400 text-lg font-semibold underline">회원가입</span>
+                  <span className="text-primary-400 text-lg font-semibold underline">{t("signup")}</span>
                 </Link>
               </div>
             </div>
@@ -133,7 +133,7 @@ const UserSigninPage = () => {
 
         {/* 소셜 로그인 및 마스코트 캐릭터 배치*/}
         <div className="flex w-full flex-col items-center justify-center gap-8">
-          <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
+          <span className="text-black-200 text-lg">{t("snsLogin")}</span>
           <div className="flex items-center gap-8">
             <Image
               src={google}

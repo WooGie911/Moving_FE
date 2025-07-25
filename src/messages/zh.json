@@ -183,25 +183,45 @@
     "signin": "登录",
     "signup": "注册",
     "signout": "退出登录",
+
     "email": "邮箱",
+    "emailPlaceholder": "请输入邮箱。",
     "password": "密码",
+    "passwordPlaceholder": "请输入密码。",
+    "passwordCheck": "确认密码",
+    "passwordCheckPlaceholder": "请再次输入密码。",
+    "passwordCheckRequired": "请输入密码。",
+    "passwordMismatch": "两次输入的密码不一致。",
     "confirmPassword": "确认密码",
-    "forgotPassword": "忘记密码？",
-    "noAccount": "没有账户？",
-    "hasAccount": "已有账户？",
+
+    "name": "姓名",
+    "namePlaceholder": "请输入姓名。",
+    "phoneNumber": "电话号码",
+    "phoneNumberPlaceholder": "请输入电话号码。",
+
+    "login": "登录",
+    "loginInProgress": "登录中...",
+    "signupInProgress": "注册中...",
+    "loginFailed": "登录失败",
+
     "userSignin": "客户登录",
     "userSignup": "客户注册",
     "moverSignin": "司机登录",
     "moverSignup": "司机注册",
-    "emailPlaceholder": "请输入邮箱。",
-    "passwordPlaceholder": "请输入密码。",
-    "loginFailed": "登录失败",
-    "confirm": "确认",
+
+    "areYouCustomer": "您是客户吗？",
+    "customerPage": "客户页面",
     "areYouMover": "您是司机吗？",
     "moverPage": "司机页面",
-    "loginInProgress": "登录中...",
+
+    "alreadyMember": "已经是Moving会员了吗？",
     "notMemberYet": "还不是Moving会员？",
-    "snsLogin": "使用SNS账户轻松登录"
+    "noAccount": "没有账户？",
+    "hasAccount": "已有账户？",
+
+    "forgotPassword": "忘记密码？",
+    "snsLogin": "使用SNS账户轻松登录",
+    "confirm": "确认"
   },
   "landing": {
     "title": "如何选择搬家公司？",
@@ -230,22 +250,24 @@
     "required": {
       "name": "请输入姓名。",
       "nickname": "请输入昵称。",
-      "email": "邮箱为必填项。",
-      "phoneNumber": "电话号码为必填项。",
-      "password": "密码为必填项。",
+      "email": "邮箱是必填项。",
+      "phoneNumber": "电话号码是必填项。",
+      "password": "密码是必填项。",
+      "passwordCheck": "确认密码是必填项。",
       "career": "请输入工作经验年限。",
       "intro": "请输入一句话简介。",
       "description": "请输入详细说明。"
     },
     "invalid": {
-      "name": "姓名必须为1到10个字符，只能包含韩文或英文。",
-      "nickname": "昵称必须为1到10个字符，只能包含韩文或英文。",
+      "name": "姓名需为1到10个字符，只能包含中文或英文字符。",
+      "nickname": "昵称需为1到10个字符，只能包含中文或英文字符。",
       "email": "邮箱格式不正确。",
       "phoneNumber": "电话号码格式不正确。（例如：01012345678）",
-      "password": "密码至少为8位，并包含字母、数字和特殊字符。",
-      "career": "工作经验必须为大于等于0的数字。（例如：8）",
-      "intro": "一句话简介必须不少于8个字符。",
-      "description": "详细说明必须不少于10个字符。"
+      "password": "密码需至少8位，并包含字母、数字和特殊字符。",
+      "passwordCheck": "两次输入的密码不一致。",
+      "career": "工作经验必须是大于等于0的数字。（例如：8）",
+      "intro": "简介需至少8个字符。",
+      "description": "说明需至少10个字符。"
     }
   }
 }
