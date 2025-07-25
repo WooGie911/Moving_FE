@@ -3,6 +3,7 @@ import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
+import { useTranslations } from "next-intl";
 
 interface IProps {
   mover: TMoverInfo;
@@ -35,6 +36,7 @@ export const LabelAndTitleSection = ({
   type,
   usedAtDetail = false,
 }: IProps) => {
+  const t = useTranslations("estimateRequest");
   return (
     <div className="border-border-light flex w-full flex-col gap-3">
       <div className="flex w-full flex-row items-center justify-between">
@@ -52,18 +54,18 @@ export const LabelAndTitleSection = ({
           <p
             className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
           >
-            견적대기
+            {t("estimateWaiting")}
           </p>
         ) : estimateState === "ACCEPTED" ? (
           <div className={`flex flex-row items-center justify-end gap-1 ${type === "received" ? "md:hidden" : ""}`}>
             <Image src={confirm} alt="confirm" width={16} height={16} />
-            <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
+            <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
           </div>
         ) : (
           <p
             className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
           >
-            {estimateState === "REJECTED" || estimateState === "AUTO_REJECTED" ? "반려견적" : estimateState}
+            {estimateState === "REJECTED" || estimateState === "AUTO_REJECTED" ? t("rejectedEstimate") : estimateState}
           </p>
         )}
       </div>
@@ -98,20 +100,20 @@ export const LabelAndTitleSection = ({
         ) : estimateState === "PROPOSED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">견적대기</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
             </div>
           </div>
         ) : estimateState === "ACCEPTED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
               <Image src={confirm} alt="confirm" width={16} height={16} />
-              <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
+              <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
             </div>
           </div>
         ) : (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">반려견적</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("rejectedEstimate")}</p>
             </div>
           </div>
         )}

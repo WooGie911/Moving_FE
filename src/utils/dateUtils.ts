@@ -41,13 +41,24 @@ export function formatDateDot(date: Date | string) {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function formatDateWithDayAndTime(date: Date | string) {
+export function formatDateWithDayAndTime(
+  date: Date | string,
+  weekdays?: string[],
+  timeFormat?: { am: string; pm: string },
+) {
   const d = new Date(date);
-  const days = ["일", "월", "화", "수", "목", "금", "토"];
+
+  // 기본값 설정 (하위 호환성을 위해)
+  const defaultWeekdays = ["일", "월", "화", "수", "목", "금", "토"];
+  const defaultTimeFormat = { am: "오전", pm: "오후" };
+
+  const days = weekdays || defaultWeekdays;
+  const timeFormatObj = timeFormat || defaultTimeFormat;
+
   const day = days[d.getDay()];
   let hour = d.getHours();
   const minute = String(d.getMinutes()).padStart(2, "0");
-  const ampm = hour < 12 ? "오전" : "오후";
+  const ampm = hour < 12 ? timeFormatObj.am : timeFormatObj.pm;
   if (hour === 0) hour = 12;
   else if (hour > 12) hour -= 12;
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}(${day}) ${ampm} ${hour}:${minute}`;
