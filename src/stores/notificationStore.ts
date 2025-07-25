@@ -45,7 +45,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       disconnectTimer = null;
     }
     // SSE 연결
-    eventSource = new EventSourcePolyfill(`${process.env.NEXT_PUBLIC_API_URL}/sse/notification`, {
+    eventSource = new EventSourcePolyfill(`${process.env.NEXT_PUBLIC_API_URL}/sse/notifications`, {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     });
@@ -53,15 +53,19 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     disconnectTimer = setTimeout(() => {
       get().disconnectSSE();
     }, AUTO_DISCONNECT_TIME);
-    // 메시지 수신
-    eventSource.onmessage = function (event) {
+    // 메시지 수신 
+    eventSource.addEventListener("notification", (event) => {
       try {
-        const data = JSON.parse(event.data);
-        get().addNotification(data);
+        const messageEvent = event as MessageEvent;
+        const data = JSON.parse(messageEvent.data);
+        if (data.notification) {
+          get().addNotification(data.notification);
+          set(() => ({ hasUnread: data.unreadCount > 0 }));
+        }
       } catch (e) {
         console.error(e);
       }
-    };
+    });
     // 에러 발생 시 재연결
     eventSource.onerror = function () {
       if (eventSource) {
@@ -121,7 +125,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       return {
         notifications: newNotifications,
         hasMore: newNotifications.length < res.data.total,
-        hasUnread: res.data.hasUnread,
+        hasUnread: res.data.hasUnread, 
         total: res.data.total,
       };
     });
