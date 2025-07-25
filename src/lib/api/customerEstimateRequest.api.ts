@@ -4,11 +4,10 @@ import {
   TEstimateRequestDetailResponse,
   IDesignateEstimateRequestRequest,
 } from "@/types/customerEstimateRequest";
-import { IActiveQuoteResponse } from "@/types/estimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = "http://localhost:5050";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -17,39 +16,6 @@ const getAccessToken = async () => {
 };
 
 const customerEstimateRequestApi = {
-  /**
-   * 활성 견적 요청 조회
-   */
-  getActiveEstimateRequest: async (): Promise<IActiveQuoteResponse | null> => {
-    try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/quotes/active`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (response.status === 404) {
-        return null;
-      }
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else {
-          throw new Error("활성 견적 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
-      return result.data;
-    } catch (error) {
-      console.error("활성 견적 조회 실패:", error);
-      throw error;
-    }
-  },
-
   /**
    * 진행중인 견적 조회
    */
