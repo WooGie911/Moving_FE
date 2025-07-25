@@ -19,7 +19,7 @@
     "completeSelection": "完成选择",
     "editAnswer": "修改"
   },
-  "quote": {
+  "estimateRequest": {
     "title": "报价请求",
     "editTitle": "编辑报价",
     "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
@@ -28,14 +28,14 @@
     "addressQuestion": "请选择搬家区域。",
     "departure": "出发地",
     "arrival": "目的地",
-    "confirmQuote": "确认报价",
+    "confirmEstimateRequest": "确认报价",
     "editQuestion": "可通过以下按钮进行修改或删除。",
     "editButton": "编辑",
     "deleteButton": "删除",
     "deleteConfirmTitle": "删除报价",
     "deleteConfirmMessage": "您确定要删除这个报价吗？删除的报价无法恢复。",
-    "confirmQuoteTitle": "确认报价",
-    "confirmQuoteMessage": "您的报价请求已成功发送。您要确认这个报价吗？",
+    "confirmEstimateRequestTitle": "确认报价",
+    "confirmEstimateRequestMessage": "您的报价请求已成功发送。您要确认这个报价吗？",
     "movingTypes": {
       "small": "小型搬家",
       "smallDesc": "单间、两室、20坪以下",
@@ -65,7 +65,9 @@
     "jibunLabel": "地段",
     "roadAddressPlaceholder": "请输入道路名地址",
     "jibunAddressPlaceholder": "请输入地段地址",
-    "editAnswer": "修改"
+    "editAnswer": "修改",
+    "selectDeparture": "选择出发地",
+    "selectArrival": "选择目的地"
   },
   "navigation": {
     "home": "首页",

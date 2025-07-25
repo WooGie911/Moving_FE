@@ -13,14 +13,13 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
-import authApi from "@/lib/api/auth.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp } = useAuth();
+  const { isLoading, signUp, googleLogin, kakaoLogin, naverLogin } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -57,7 +56,7 @@ const MoverSignupPage = () => {
       if (isLoading) return;
       const response = await signUp(signUpData);
 
-      if (!response.success) {
+      if (response.status !== 200) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,
@@ -185,9 +184,30 @@ const MoverSignupPage = () => {
         <div className="flex w-full flex-col items-center justify-center gap-8">
           <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
-            <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("MOVER")}
+            />
+            <Image
+              src={kakao}
+              alt="kakao"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => kakaoLogin("MOVER")}
+            />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("MOVER")}
+            />
           </div>
 
           {deviceType === "tablet" && (

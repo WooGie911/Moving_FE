@@ -82,6 +82,24 @@ const authApi = {
 
     return responseData;
   },
+
+  // 구글 로그인 (페이지 리디렉션 방식)
+  googleLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 구글 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/google?userType=${userType}`;
+  },
+
+  // 카카오 로그인 (페이지 리디렉션 방식)
+  kakaoLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 카카오 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/kakao?userType=${userType}`;
+  },
+
+  // 네이버 로그인 (페이지 리디렉션 방식)
+  naverLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 네이버 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/naver?userType=${userType}`;
+  },
 };
 
 export default authApi;

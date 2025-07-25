@@ -19,7 +19,7 @@
     "completeSelection": "Complete Selection",
     "editAnswer": "Edit"
   },
-  "quote": {
+  "estimateRequest": {
     "title": "Quote Request",
     "editTitle": "Edit Quote",
     "intro": "Just provide a few pieces of information and you can receive up to 5 quotes :)",
@@ -28,14 +28,14 @@
     "addressQuestion": "Please select the moving area.",
     "departure": "Departure",
     "arrival": "Arrival",
-    "confirmQuote": "Confirm Quote",
+    "confirmEstimateRequest": "Confirm Quote",
     "editQuestion": "You can Edit or Delete it through the button below.",
     "editButton": "Edit",
     "deleteButton": "Delete",
     "deleteConfirmTitle": "Delete Quote",
     "deleteConfirmMessage": "Are you sure you want to delete this quote? Deleted quotes cannot be recovered.",
-    "confirmQuoteTitle": "Confirm Quote",
-    "confirmQuoteMessage": "Your quote request has been sent successfully. Would you like to confirm the quote?",
+    "confirmEstimateRequestTitle": "Confirm Quote",
+    "confirmEstimateRequestMessage": "Your quote request has been sent successfully. Would you like to confirm the quote?",
     "movingTypes": {
       "small": "Small Moving",
       "smallDesc": "Studio, 2-room, under 20 pyeong",
@@ -65,7 +65,11 @@
     "jibunLabel": "Jibun",
     "roadAddressPlaceholder": "Please enter the road name address",
     "jibunAddressPlaceholder": "Please enter the jibun address",
-    "editAnswer": "Edit"
+    "editAnswer": "Edit",
+    "selectDeparture": "Select Departure",
+    "selectArrival": "Select Arrival",
+    "confirmTitle": "Confirm Estimate Request",
+    "confirmMessage": "Would you like to request an estimate with the information you entered?"
   },
   "navigation": {
     "home": "Home",

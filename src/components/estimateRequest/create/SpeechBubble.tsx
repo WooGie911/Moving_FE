@@ -2,20 +2,30 @@ import React from "react";
 import { ISpeechBubbleProps } from "@/types/estimateRequest";
 import { useLanguageStore } from "@/stores/languageStore";
 
-const baseBubbleClass =
-  "lg:text-2lg inline-block max-w-full gap-2 rounded-3xl px-5 py-3 text-md leading-6 font-medium md:gap-4 mb-2 shadow-sm";
+// 공통 스타일 변수
+const SPEECH_BUBBLE_STYLES = {
+  base: "lg:text-2lg inline-block max-w-full gap-2 rounded-3xl px-5 py-3 text-md leading-6 font-medium md:gap-4 mb-2 shadow-sm",
+  question: "text-black-400 self-start rounded-tl-none bg-gray-50",
+  answerLatest: "self-end rounded-tr-none bg-primary-400 text-gray-50",
+  answerPrevious: "self-end rounded-tr-none bg-primary-100 text-primary-400",
+  editButton:
+    "hover:text-primary-400 mt-1 mr-2 text-xs leading-6 font-medium text-gray-500 underline transition-colors lg:mt-[6px] lg:text-base",
+} as const;
 
-const SpeechBubble = ({ type, children, isLatest = false, onEdit }: ISpeechBubbleProps) => {
+const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest = false, onEdit }) => {
+  const { t } = useLanguageStore();
   const isQuestion = type === "question";
   const isAnswer = type === "answer";
-  const { t } = useLanguageStore();
 
-  // answer 중에서 최신 질문 이후의 답변이 아니면 연한 배경
-  const answerBg = isLatest ? "bg-primary-400 text-gray-50" : "bg-primary-100 text-primary-400";
+  // 답변 배경색 결정
+  const getAnswerBackground = () => {
+    return isLatest ? SPEECH_BUBBLE_STYLES.answerLatest : SPEECH_BUBBLE_STYLES.answerPrevious;
+  };
 
+  // 말풍선 클래스 조합
   const bubbleClass = [
-    baseBubbleClass,
-    isQuestion ? "text-black-400 self-start rounded-tl-none bg-gray-50" : `self-end rounded-tr-none ${answerBg}`,
+    SPEECH_BUBBLE_STYLES.base,
+    isQuestion ? SPEECH_BUBBLE_STYLES.question : getAnswerBackground(),
   ].join(" ");
 
   return (
@@ -28,13 +38,11 @@ const SpeechBubble = ({ type, children, isLatest = false, onEdit }: ISpeechBubbl
       >
         {children}
       </div>
-      {/* answer 중 최신 질문 이후의 답변이 아닌 경우에만 수정하기 노출 */}
+
+      {/* 수정하기 버튼 - 답변이고 최신이 아니고 수정 함수가 있을 때만 표시 */}
       {isAnswer && !isLatest && onEdit && (
-        <button
-          className="hover:text-primary-400 mt-1 mr-2 text-xs leading-6 font-medium text-gray-500 underline transition-colors lg:mt-[6px] lg:text-base"
-          onClick={onEdit}
-        >
-          {t("quote.editAnswer")}
+        <button className={SPEECH_BUBBLE_STYLES.editButton} onClick={onEdit}>
+          {t("estimateRequest.editAnswer")}
         </button>
       )}
     </div>

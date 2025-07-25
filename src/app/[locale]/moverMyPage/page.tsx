@@ -1,3 +1,5 @@
+import MoverMyPageComponent from "@/pageComponents/moverMyPage/MoverMyPageComponent";
+
 export default function page() {
-  return <div>moverMyPage</div>;
+  return <MoverMyPageComponent />;
 }

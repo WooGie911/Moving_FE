@@ -33,6 +33,17 @@ interface IMoverProfileInput {
   serviceTypes: string[];
 }
 
+interface IMoverProfileUpdateInput {
+  nickname?: string;
+  moverImage?: string;
+  currentAreas?: string[];
+  serviceTypes?: string[];
+  shortIntro?: string;
+  detailIntro?: string;
+  career?: number;
+  isVeteran?: boolean;
+}
+
 const userApi = {
   getUser: async () => {
     const response = await fetchWithAuth(`${API_URL}/users`);
@@ -114,6 +125,20 @@ const userApi = {
   }) => {
     const accessToken = await getAccessToken();
     const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    return response.json();
+  },
+
+  updateMoverProfile: async (data: IMoverProfileUpdateInput) => {
+    const accessToken = await getAccessToken();
+    const response = await fetch(`${API_URL}/users/profile/mover`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

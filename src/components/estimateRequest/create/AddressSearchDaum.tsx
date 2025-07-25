@@ -7,11 +7,21 @@ declare global {
     daum?: {
       Postcode: IDaumPostcodeConstructor;
     };
-  } // 실제 전역 객체
+  }
 }
 
+// 공통 스타일 변수
+const ADDRESS_SEARCH_STYLES = {
+  container: "space-y-2",
+  button:
+    "border-primary-400 text-primary-400 h-[54px] w-full items-center rounded-2xl border px-6 text-left text-base leading-[26px] font-semibold transition-colors focus:outline-none",
+  description: "text-md text-gray-500",
+} as const;
+
+// Daum 주소 검색 스크립트 로드
 const loadDaumPostcodeScript = () => {
   if (document.getElementById("daum-postcode-script")) return;
+
   const script = document.createElement("script");
   script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
   script.async = true;
@@ -21,17 +31,19 @@ const loadDaumPostcodeScript = () => {
 
 const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) => {
   const { t } = useLanguageStore();
+
   useEffect(() => {
     if (!window.daum?.Postcode) {
       loadDaumPostcodeScript();
     }
   }, []);
 
-  const handleClick = () => {
+  const handleAddressSearch = () => {
     if (!window.daum?.Postcode) {
       alert(t("addressSearchScriptNotLoaded"));
       return;
     }
+
     new window.daum.Postcode({
       oncomplete: function (data: IDaumAddressData) {
         onComplete?.({
@@ -45,15 +57,11 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
   };
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={handleClick}
-        className="border-primary-400 text-primary-400 h-[54px] w-full items-center rounded-2xl border px-6 text-left text-base leading-[26px] font-semibold transition-colors focus:outline-none"
-      >
-        {t("quote.searchAddress")}
+    <div className={ADDRESS_SEARCH_STYLES.container}>
+      <button type="button" onClick={handleAddressSearch} className={ADDRESS_SEARCH_STYLES.button}>
+        {t("estimateRequest.searchAddress")}
       </button>
-      <span className="text-md text-gray-500">{t("serviceAvailableCountry")}</span>
+      <span className={ADDRESS_SEARCH_STYLES.description}>{t("serviceAvailableCountry")}</span>
     </div>
   );
 };
