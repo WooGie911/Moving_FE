@@ -453,7 +453,7 @@
     "minutesAgo": " minutes ago",
     "hoursAgo": " hours ago",
     "daysAgo": " days ago"
-
+  },
   "validation": {
     "required": {
       "name": "Please enter your name.",
@@ -501,6 +501,5 @@
     "울산": "Ulsan",
     "부산": "Busan",
     "제주": "Jeju"
-
   }
 }
