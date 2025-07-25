@@ -111,13 +111,50 @@
     "moverSignup": "Mover Sign Up"
   },
   "profile": {
-    "title": "Profile",
-    "edit": "Edit Profile",
+    "customerTitle": "Register Profile",
+    "moverTitle": "Register Mover Profile",
+    "customerEdit": "Edit Profile",
+    "moverEdit": "Edit Mover Profile",
+    "start": "Start",
+    "optional": "(Optional)",
+    "cancel": "Cancel",
+    "edit": "Edit",
+
+    "customerRegisterInfo": "Please provide additional information to complete your registration.",
+    "moverRegisterInfo": "Please provide additional information to complete your registration.",
+
+    "profileImg": "Profile Image",
+
     "name": "Name",
-    "phone": "Phone",
-    "address": "Address",
-    "register": "Register Profile",
-    "complete": "Complete Profile"
+    "namePlaceholder": "ex) John Doe",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Enter the nickname that will be displayed on the site",
+    "email": "Email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number.",
+
+    "career": "Career",
+
+    "currentPassword": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter a new password",
+    "newPasswordConfirm": "Confirm New Password",
+    "newPasswordConfirmPlaceholder": "Re-enter your new password",
+    "newPasswordConfirmError": "Passwords do not match",
+
+    "shortIntro": "One-line Introduction",
+    "shortIntroPlaceholder": "Enter a brief introduction",
+    "detailIntro": "Detailed Description",
+    "detailIntroPlaceholder": "Enter a detailed description",
+
+    "serviceTypes": "Provided Services",
+    "customerServiceTypes": "Services Used",
+    "customerServiceTypesInfo": "You can select multiple services and edit them anytime!",
+
+    "currentArea": "My Area",
+    "currentAreaInfo": "You can edit your area anytime!",
+    "currentAreas": "Service Areas"
   },
   "search": {
     "title": "Search Moving Companies",
@@ -185,25 +222,45 @@
     "signin": "Sign In",
     "signup": "Sign Up",
     "signout": "Sign Out",
+
     "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password?",
-    "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?",
-    "userSignin": "Customer Sign In",
-    "userSignup": "Customer Sign Up",
-    "moverSignin": "Mover Sign In",
-    "moverSignup": "Mover Sign Up",
     "emailPlaceholder": "Please enter your email.",
+    "password": "Password",
     "passwordPlaceholder": "Please enter your password.",
-    "loginFailed": "Login Failed",
-    "confirm": "Confirm",
+    "passwordCheck": "Confirm Password",
+    "passwordCheckPlaceholder": "Please re-enter your password.",
+    "passwordCheckRequired": "Please enter your password.",
+    "passwordMismatch": "Passwords do not match.",
+    "confirmPassword": "Confirm Password",
+
+    "name": "Name",
+    "namePlaceholder": "Please enter your name.",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Please enter your phone number.",
+
+    "login": "Login",
+    "loginInProgress": "Logging in...",
+    "signupInProgress": "Signing up...",
+    "loginFailed": "Login failed",
+
+    "userSignin": "Customer Login",
+    "userSignup": "Customer Sign Up",
+    "moverSignin": "Mover Login",
+    "moverSignup": "Mover Sign Up",
+
+    "areYouCustomer": "Are you a customer?",
+    "customerPage": "Customer Page",
     "areYouMover": "Are you a mover?",
     "moverPage": "Mover Page",
-    "loginInProgress": "Logging in...",
+
+    "alreadyMember": "Already a Moving member?",
     "notMemberYet": "Not a Moving member yet?",
-    "snsLogin": "Easy login with SNS account"
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+
+    "forgotPassword": "Forgot your password?",
+    "snsLogin": "Login easily with your SNS account",
+    "confirm": "Confirm"
   },
   "landing": {
     "title": "How do you choose a moving company?",
@@ -227,5 +284,53 @@
     "home": "Home Moving",
     "office": "Office Moving",
     "document": "Designated Quote Request"
+  },
+  "validation": {
+    "required": {
+      "name": "Please enter your name.",
+      "nickname": "Please enter your nickname.",
+      "email": "Email is required.",
+      "phoneNumber": "Phone number is required.",
+      "password": "Password is required.",
+      "passwordCheck": "Password confirmation is required.",
+      "career": "Please enter your years of experience.",
+      "intro": "Please enter a one-line introduction.",
+      "description": "Please enter a detailed description."
+    },
+    "invalid": {
+      "name": "Name must be 1 to 10 characters long and contain only Korean or English letters.",
+      "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
+      "email": "Invalid email format.",
+      "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
+      "password": "Password must be at least 8 characters and include letters, numbers, and special characters.",
+      "passwordCheck": "Passwords do not match.",
+      "career": "Experience must be a number greater than or equal to 0. (e.g., 8)",
+      "intro": "Introduction must be at least 8 characters long.",
+      "description": "Description must be at least 10 characters long."
+    }
+  },
+  "service": {
+    "소형이사": "Small Move",
+    "가정이사": "Home Move",
+    "사무실이사": "Office Move"
+  },
+  "region": {
+    "서울": "Seoul",
+    "경기": "Gyeonggi",
+    "인천": "Incheon",
+    "강원": "Gangwon",
+    "충북": "Chungbuk",
+    "충남": "Chungnam",
+    "세종": "Sejong",
+    "대전": "Daejeon",
+    "전북": "Jeonbuk",
+    "전남": "Jeonnam",
+    "광주": "Gwangju",
+    "경북": "Gyeongbuk",
+    "경남": "Gyeongnam",
+    "대구": "Daegu",
+    "울산": "Ulsan",
+    "부산": "Busan",
+    "제주": "Jeju"
   }
 }

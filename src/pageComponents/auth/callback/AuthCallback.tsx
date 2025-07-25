@@ -44,13 +44,11 @@ export default function AuthCallback() {
 
         {/* 로딩 텍스트 */}
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-gray-800">로그인 처리 중</h2>
           <div className="flex items-center justify-center space-x-1">
             <div className="h-2 w-2 animate-bounce rounded-full bg-[#f9502e]"></div>
             <div className="h-2 w-2 animate-bounce rounded-full bg-[#f9502e]" style={{ animationDelay: "0.1s" }}></div>
             <div className="h-2 w-2 animate-bounce rounded-full bg-[#f9502e]" style={{ animationDelay: "0.2s" }}></div>
           </div>
-          <p className="mt-4 text-gray-600">잠시만 기다려주세요...</p>
         </div>
       </div>
     </div>

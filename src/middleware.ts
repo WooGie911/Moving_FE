@@ -47,8 +47,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  console.log("accessToken", accessToken);
-
   const isAuthenticated = !!accessToken;
 
   // ✅ 루트 경로 접근 제어 (next-intl보다 먼저 처리)

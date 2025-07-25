@@ -108,13 +108,50 @@
     "moverSignup": "기사 회원가입"
   },
   "profile": {
-    "title": "프로필",
-    "edit": "프로필 수정",
+    "customerTitle": "프로필 등록",
+    "moverTitle": "기사님 프로필 등록",
+    "customerEdit": "프로필 수정",
+    "moverEdit": "기사님 프로필 수정",
+    "start": "시작하기",
+    "optional": "(선택사항)",
+    "cancel": "취소",
+    "edit": "수정",
+
+    "customerRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
+    "moverRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
+
+    "profileImg": "프로필 이미지",
+
     "name": "이름",
+    "namePlaceholder": "ex) 김철수 ",
+    "nickname": "별명",
+    "nicknamePlaceholder": "사이트에 노출될 별명을 입력해 주세요",
+    "email": "이메일",
     "phone": "전화번호",
-    "address": "주소",
-    "register": "프로필 등록",
-    "complete": "프로필 완료"
+    "phonePlaceholder": "전화번호를 입력해 주세요.",
+
+    "career": "경력",
+
+    "currentPassword": "현재 비밀번호",
+    "currentPasswordPlaceholder": "현재 비밀번호를 입력해 주세요",
+    "newPassword": "새 비밀번호",
+    "newPasswordPlaceholder": "새 비밀번호를 입력해 주세요",
+    "newPasswordConfirm": "새 비밀번호 확인",
+    "newPasswordConfirmPlaceholder": "새 비밀번호 확인을 입력해주세요",
+    "newPasswordConfirmError": "새 비밀번호와 일치하지 않습니다",
+
+    "shortIntro": "한 줄 소개",
+    "shortIntroPlaceholder": "한 줄 소개를 입력하세요",
+    "detailIntro": "상세 설명",
+    "detailIntroPlaceholder": "상세 설명을 입력하세요",
+
+    "serviceTypes": "제공 서비스",
+    "customerServiceTypes": "이용 서비스",
+    "customerServiceTypesInfo": "이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!",
+
+    "currentArea": "내가 사는 지역",
+    "currentAreaInfo": "내가 사는 지역은 언제든 수정 가능해요!",
+    "currentAreas": "서비스 가능 지역"
   },
   "search": {
     "title": "이사업체 검색",
@@ -182,25 +219,45 @@
     "signin": "로그인",
     "signup": "회원가입",
     "signout": "로그아웃",
+
     "email": "이메일",
+    "emailPlaceholder": "이메일을 입력해주세요.",
     "password": "비밀번호",
+    "passwordPlaceholder": "비밀번호를 입력해주세요.",
+    "passwordCheck": "비밀번호 확인",
+    "passwordCheckPlaceholder": "비밀번호를 다시 입력해주세요.",
+    "passwordCheckRequired": "비밀번호를 입력해주세요",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다.",
     "confirmPassword": "비밀번호 확인",
-    "forgotPassword": "비밀번호를 잊으셨나요?",
-    "noAccount": "계정이 없으신가요?",
-    "hasAccount": "이미 계정이 있으신가요?",
+
+    "name": "이름",
+    "namePlaceholder": "이름을 입력해 주세요",
+    "phoneNumber": "전화번호",
+    "phoneNumberPlaceholder": "전화번호를 입력해주세요.",
+
+    "login": "로그인",
+    "loginInProgress": "로그인 중...",
+    "signupInProgress": "회원가입 중...",
+    "loginFailed": "로그인 실패",
+
     "userSignin": "고객 로그인",
     "userSignup": "고객 회원가입",
     "moverSignin": "기사 로그인",
     "moverSignup": "기사 회원가입",
-    "emailPlaceholder": "이메일을 입력해주세요.",
-    "passwordPlaceholder": "비밀번호를 입력해주세요.",
-    "loginFailed": "로그인 실패",
-    "confirm": "확인",
+
+    "areYouCustomer": "고객님이신가요?",
+    "customerPage": "고객님 전용 페이지",
     "areYouMover": "기사님이신가요?",
     "moverPage": "기사님 전용 페이지",
-    "loginInProgress": "로그인 중...",
+
+    "alreadyMember": "이미 무빙 회원이신가요?",
     "notMemberYet": "아직 무빙 회원이 아니신가요?",
-    "snsLogin": "SNS 계정으로 간편 로그인"
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "snsLogin": "SNS 계정으로 간편 로그인",
+    "confirm": "확인"
   },
   "landing": {
     "title": "이사업체, 어떻게 고르세요?",
@@ -224,5 +281,54 @@
     "home": "가정이사",
     "office": "사무실이사",
     "document": "지정 견적 요청"
+  },
+  "validation": {
+    "required": {
+      "name": "이름을 입력해주세요",
+      "nickname": "별명을 입력해주세요",
+      "email": "이메일은 필수 입력입니다.",
+      "phoneNumber": "전화번호는 필수 입력입니다.",
+      "password": "비밀번호는 필수 입력입니다.",
+      "passwordCheck": "비밀번호 확인은 필수 입력입니다.",
+      "career": "경력을 입력해주세요",
+      "intro": "한줄 소개를 입력해주세요",
+      "description": "상세 설명을 입력해주세요"
+    },
+    "invalid": {
+      "name": "이름은 1~10자의 한글, 영문만 입력 가능합니다.",
+      "nickname": "별명은 1~10자의 한글, 영문만 입력 가능합니다.",
+      "email": "올바른 이메일 형식이 아닙니다.",
+      "phoneNumber": "올바른 전화번호 형식이 아닙니다. (예: 01012345678)",
+      "password": "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 각각 포함해야 합니다.",
+      "passwordCheck": "비밀번호가 일치하지 않습니다.",
+      "career": "경력은 0 이상의 숫자로 입력해주세요. (예: 8)",
+      "intro": "한 줄 소개는 8자 이상 입력해주세요.",
+      "description": "상세 설명은 10자 이상 입력해주세요."
+    }
+  },
+
+  "service": {
+    "소형이사": "소형이사",
+    "가정이사": "가정이사",
+    "사무실이사": "사무실이사"
+  },
+  "region": {
+    "서울": "서울",
+    "경기": "경기",
+    "인천": "인천",
+    "강원": "강원",
+    "충북": "충북",
+    "충남": "충남",
+    "세종": "세종",
+    "대전": "대전",
+    "전북": "전북",
+    "전남": "전남",
+    "광주": "광주",
+    "경북": "경북",
+    "경남": "경남",
+    "대구": "대구",
+    "울산": "울산",
+    "부산": "부산",
+    "제주": "제주"
   }
 }
