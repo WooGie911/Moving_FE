@@ -8,22 +8,20 @@ import parse from "html-react-parser";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import { markAsRead } from "@/lib/api/notification.api";
 import { useRouter } from "next/navigation";
 import { INotification } from "@/types/notification.types";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
-export default function NotificationList() {
-  const { notifications, hasMore, fetchNotifications } = useNotificationStore();
+export default function NotificationList({ onClose }: { onClose?: () => void }) {
+  const notifications = useNotificationStore((state) => state.notifications);
+  const hasMore = useNotificationStore((state) => state.hasMore);
+  const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
+  const markAsRead = useNotificationStore((state) => state.markAsRead);
   const limit = 4;
   const loadingRef = useRef(false);
   const router = useRouter();
-
-  useEffect(() => {
-    fetchNotifications(limit, 0);
-  }, []);
 
   const { ref, inView } = useInView({ threshold: 0.2 });
 
@@ -40,7 +38,7 @@ export default function NotificationList() {
     }
   }, [inView, hasMore, loadMore]);
 
-  // 알림 클릭 핸들러
+  // 알림 클릭 핸들러 -> 읽음처리 후 이동.
   const handleClick = async (notification: INotification) => {
     try {
       await markAsRead(notification.id);

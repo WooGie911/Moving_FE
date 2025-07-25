@@ -25,8 +25,6 @@ let disconnectTimer: NodeJS.Timeout | null = null;
 const MAX_RECONNECT_ATTEMPTS = 10;
 const RECONNECT_INTERVAL = 5000; // 5초
 const AUTO_DISCONNECT_TIME = 60 * 60 * 1000; // 1시간
-// 임시: 모든 에러 콘솔 무시
-console.error = () => {};
 
 export const useNotificationStore = create<INotificationState>((set, get) => ({
   notifications: [],
@@ -111,7 +109,15 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   fetchNotifications: async (limit = 3, offset = 0) => {
     const res = await getNotifications(limit, offset);
     set((state) => {
-      const newNotifications = offset === 0 ? res.data.items : [...state.notifications, ...res.data.items];
+      let newNotifications;
+      if (offset === 0) {
+        newNotifications = res.data.items;
+      } else {
+        // 중복 제거: 이미 있는 id는 추가하지 않음
+        const existingIds = new Set(state.notifications.map((n) => n.id));
+        const filtered = res.data.items.filter((n) => !existingIds.has(n.id));
+        newNotifications = [...state.notifications, ...filtered];
+      }
       return {
         notifications: newNotifications,
         hasMore: newNotifications.length < res.data.total,
@@ -122,14 +128,16 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   },
   markAsRead: async (id: string) => {
     await readNotification(id);
-    set((state) => ({
-      notifications: state.notifications.map((n) => (n.id === id ? { ...n, unread: false } : n)),
-    }));
+    await get().fetchNotifications(); // 최신 상태로 동기화
   },
   markAllAsRead: async () => {
     await readAllNotifications();
-    set((state) => ({
-      notifications: state.notifications.map((n) => (n.unread ? { ...n, unread: false } : n)),
-    }));
+    set((state) => {
+      const updatedNotifications = state.notifications.map((n) => (n.isRead ? n : { ...n, isRead: true }));
+      return {
+        notifications: updatedNotifications,
+        hasUnread: false,
+      };
+    });
   },
 }));
