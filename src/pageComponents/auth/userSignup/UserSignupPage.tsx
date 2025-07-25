@@ -19,7 +19,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp } = useAuth();
+  const { isLoading, signUp, googleLogin, kakaoLogin, naverLogin } = useAuth();
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -55,7 +55,7 @@ const UserSignupPage = () => {
     try {
       if (isLoading) return;
       const response = await signUp(signUpData);
-      if (!response.success) {
+      if (response.status !== 200) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,
@@ -183,9 +183,30 @@ const UserSignupPage = () => {
         <div className="flex w-full flex-col items-center justify-center gap-8">
           <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
-            <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("CUSTOMER")}
+            />
+            <Image
+              src={kakao}
+              alt="kakao"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => kakaoLogin("CUSTOMER")}
+            />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("CUSTOMER")}
+            />
           </div>
 
           {deviceType === "tablet" && (
