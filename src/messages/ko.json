@@ -108,14 +108,35 @@
     "moverSignup": "기사 회원가입"
   },
   "profile": {
-    "title": "프로필",
-    "edit": "프로필 수정",
+    "customerTitle": "프로필 등록",
+    "moverTitle": "기사님 프로필 등록",
+    "customerEdit": "프로필 수정",
+    "moverEdit": "기사님 프로필 수정",
+    "start": "시작하기",
+
+    "customerRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
+    "moverRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
+
+    "profileImg": "프로필 이미지",
     "name": "이름",
+    "nickname": "별명",
+    "nicknamePlaceholder": "사이트에 노출될 별명을 입력해 주세요",
+    "career": "경력",
     "phone": "전화번호",
-    "address": "주소",
-    "register": "프로필 등록",
-    "complete": "프로필 완료"
+    "shortIntro": "한 줄 소개",
+    "shortIntroPlaceholder": "한 줄 소개를 입력하세요",
+    "detailIntro": "상세 설명",
+    "detailIntroPlaceholder": "상세 설명을 입력하세요",
+
+    "serviceTypes": "제공 서비스",
+    "customerServiceTypes": "이용 서비스",
+    "customerServiceTypesInfo": "이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!",
+
+    "currentArea": "내가 사는 지역",
+    "currentAreaInfo": "내가 사는 지역은 언제든 수정 가능해요!",
+    "currentAreas": "서비스 가능 지역"
   },
+
   "search": {
     "title": "이사업체 검색",
     "searchPlaceholder": "지역, 업체명으로 검색",
@@ -268,5 +289,30 @@
       "intro": "한 줄 소개는 8자 이상 입력해주세요.",
       "description": "상세 설명은 10자 이상 입력해주세요."
     }
+  },
+
+  "service": {
+    "소형이사": "소형이사",
+    "가정이사": "가정이사",
+    "사무실이사": "사무실이사"
+  },
+  "region": {
+    "서울": "서울",
+    "경기": "경기",
+    "인천": "인천",
+    "강원": "강원",
+    "충북": "충북",
+    "충남": "충남",
+    "세종": "세종",
+    "대전": "대전",
+    "전북": "전북",
+    "전남": "전남",
+    "광주": "광주",
+    "경북": "경북",
+    "경남": "경남",
+    "대구": "대구",
+    "울산": "울산",
+    "부산": "부산",
+    "제주": "제주"
   }
 }

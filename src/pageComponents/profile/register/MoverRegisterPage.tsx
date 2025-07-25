@@ -6,7 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
-import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
+import { REGION_OPTIONS, SERVICE_OPTIONS, REGION_MAPPING } from "@/constant/profile";
 import { Button } from "@/components/common/button/Button";
 import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
@@ -14,11 +14,18 @@ import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
+import { useLocale, useTranslations } from "next-intl";
 
 const MoverRegisterPage = () => {
   const router = useRouter();
   const { open, close } = useModal();
   const validationRules = useValidationRules();
+
+  const locale = useLocale();
+
+  const t = useTranslations("profile");
+  const serviceT = useTranslations("service");
+  const regionT = useTranslations("region");
 
   const methods = useForm({
     mode: "onChange", // 실시간 벨리데이션
@@ -155,9 +162,9 @@ const MoverRegisterPage = () => {
         {/* 헤더 */}
         <div className="border-border-light flex max-w-[327px] flex-col border-b-1 pb-4 lg:max-w-[1100px]">
           <span className="text-2lg justify-center leading-relaxed font-bold text-neutral-800 lg:text-3xl">
-            기사님 프로필 등록
+            {t("moverTitle")}
           </span>
-          <span className="text-black-200 py-2 text-xs lg:text-xl">추가 정보를 입력하여 회원가입을 완료해주세요.</span>
+          <span className="text-black-200 py-2 text-xs lg:text-xl">{t("moverRegisterInfo")}</span>
         </div>
 
         {/* 폼 컨테이너 */}
@@ -169,7 +176,7 @@ const MoverRegisterPage = () => {
           <div className="flex w-full flex-col gap-5 lg:w-[500px]">
             {/* 프로필 이미지 */}
             <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
-              <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl">프로필 이미지</div>
+              <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl">{t("profileImg")}</div>
               <div
                 className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
                 onClick={handleImageClick}
@@ -199,14 +206,14 @@ const MoverRegisterPage = () => {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  별명
+                  {t("nickname")}
                 </div>
                 <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
               </div>
               <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
                 <TextInput
                   name="nickname"
-                  placeholder="사이트에 노출될 별명을 입력해 주세요"
+                  placeholder={t("nicknamePlaceholder")}
                   rules={validationRules.nickname}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -217,7 +224,7 @@ const MoverRegisterPage = () => {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  경력
+                  {t("career")}
                 </div>
                 <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                   *
@@ -237,7 +244,7 @@ const MoverRegisterPage = () => {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  한 줄 소개
+                  {t("shortIntro")}
                 </div>
                 <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                   *
@@ -246,7 +253,7 @@ const MoverRegisterPage = () => {
               <div className="border-border-light w-[327px] border-b-1 lg:w-full lg:border-b-0">
                 <TextInput
                   name="shortIntro"
-                  placeholder="한 줄 소개를 입력하세요"
+                  placeholder={t("shortIntroPlaceholder")}
                   rules={validationRules.intro}
                   wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
                 />
@@ -260,7 +267,7 @@ const MoverRegisterPage = () => {
             <div className="flex flex-col gap-4">
               <div className="inline-flex items-center gap-1">
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  상세 설명
+                  {t("detailIntro")}
                 </div>
                 <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                   *
@@ -269,7 +276,7 @@ const MoverRegisterPage = () => {
               <div className="border-border-light w-[327px] border-b-1 lg:w-full">
                 <TextAreaInput
                   name="detailIntro"
-                  placeholder="상세 설명을 입력하세요"
+                  placeholder={t("detailIntroPlaceholder")}
                   rules={validationRules.description}
                   textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
                   wrapperClassName="w-[327px] lg:w-[500px]  h-[100px]"
@@ -281,27 +288,24 @@ const MoverRegisterPage = () => {
             <div className="border-border-light flex flex-col gap-6 border-b-1 pb-6">
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
-                  <span className="text-base leading-relaxed font-semibold text-zinc-800">제공 서비스</span>
+                  <span className="text-base leading-relaxed font-semibold text-zinc-800">{t("serviceTypes")}</span>
                   <span className="text-base leading-relaxed font-semibold text-red-500">*</span>
                 </div>
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {SERVICE_OPTIONS.map((service) => {
-                  const serviceCode = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
-                  return (
-                    <CircleTextLabel
-                      key={service}
-                      text={service}
-                      clickAble={true}
-                      isSelected={services.includes(serviceCode)}
-                      onClick={() => {
-                        setServices((prev) =>
-                          prev.includes(serviceCode) ? prev.filter((s) => s !== serviceCode) : [...prev, serviceCode],
-                        );
-                      }}
-                    />
-                  );
-                })}
+                {SERVICE_OPTIONS.map((serviceCode) => (
+                  <CircleTextLabel
+                    key={serviceCode}
+                    text={serviceT(serviceCode)}
+                    clickAble={true}
+                    isSelected={services.includes(serviceCode)}
+                    onClick={() => {
+                      setServices((prev) =>
+                        prev.includes(serviceCode) ? prev.filter((s) => s !== serviceCode) : [...prev, serviceCode],
+                      );
+                    }}
+                  />
+                ))}
               </div>
             </div>
 
@@ -310,21 +314,21 @@ const MoverRegisterPage = () => {
               <div className="flex flex-col gap-2">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    서비스 가능 지역
+                    {t("currentAreas")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
                     *
                   </div>
                 </div>
               </div>
-              <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
-                <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
+              <div className={"flex w-[300px] flex-col gap-4 lg:w-[450px]"}>
+                <div className={`grid w-full gap-2 lg:gap-3.5 ${locale === "en" ? "grid-cols-3" : "grid-cols-5"}`}>
                   {REGION_OPTIONS.map((regionName) => {
                     const regionValue = REGION_MAPPING[regionName as keyof typeof REGION_MAPPING];
                     return (
                       <CircleTextLabel
                         key={regionName}
-                        text={regionName}
+                        text={regionT(regionName)}
                         clickAble={true}
                         isSelected={regions.includes(regionValue)}
                         onClick={() => {
@@ -350,7 +354,7 @@ const MoverRegisterPage = () => {
                 disabled={!allFilled}
                 state={allFilled ? "default" : "disabled"}
               >
-                <div className="justify-center text-center">시작하기</div>
+                <div className="justify-center text-center">{t("start")}</div>
               </Button>
             </div>
           </div>

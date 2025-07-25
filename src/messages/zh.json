@@ -109,13 +109,33 @@
     "moverSignup": "司机注册"
   },
   "profile": {
-    "title": "个人资料",
-    "edit": "编辑资料",
+    "customerTitle": "注册资料",
+    "moverTitle": "搬家师傅注册资料",
+    "customerEdit": "编辑资料",
+    "moverEdit": "编辑搬家师傅资料",
+    "start": "开始",
+
+    "customerRegisterInfo": "请输入其他信息以完成注册。",
+    "moverRegisterInfo": "请输入其他信息以完成注册。",
+
+    "profileImg": "个人头像",
     "name": "姓名",
-    "phone": "电话",
-    "address": "地址",
-    "register": "注册资料",
-    "complete": "完成资料"
+    "nickname": "昵称",
+    "nicknamePlaceholder": "请输入将在网站上显示的昵称",
+    "career": "工作经验",
+    "phone": "电话号码",
+    "shortIntro": "一句话介绍",
+    "shortIntroPlaceholder": "请输入一句话介绍",
+    "detailIntro": "详细介绍",
+    "detailIntroPlaceholder": "请输入详细介绍",
+
+    "serviceTypes": "提供的服务",
+    "customerServiceTypes": "使用的服务",
+    "customerServiceTypesInfo": "可以多选服务，随时可修改！",
+
+    "currentArea": "我的所在地区",
+    "currentAreaInfo": "你可以随时修改所在地区！",
+    "currentAreas": "可服务区域"
   },
   "search": {
     "title": "搜索搬家公司",
@@ -269,5 +289,29 @@
       "intro": "简介需至少8个字符。",
       "description": "说明需至少10个字符。"
     }
+  },
+  "service": {
+    "소형이사": "小型搬家",
+    "가정이사": "家庭搬家",
+    "사무실이사": "办公室搬家"
+  },
+  "region": {
+    "서울": "首尔",
+    "경기": "京畿",
+    "인천": "仁川",
+    "강원": "江原",
+    "충북": "忠北",
+    "충남": "忠南",
+    "세종": "世宗",
+    "대전": "大田",
+    "전북": "全北",
+    "전남": "全南",
+    "광주": "光州",
+    "경북": "庆北",
+    "경남": "庆南",
+    "대구": "大邱",
+    "울산": "蔚山",
+    "부산": "釜山",
+    "제주": "济州"
   }
 }

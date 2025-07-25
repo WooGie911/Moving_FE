@@ -111,13 +111,33 @@
     "moverSignup": "Mover Sign Up"
   },
   "profile": {
-    "title": "Profile",
-    "edit": "Edit Profile",
+    "customerTitle": "Register Profile",
+    "moverTitle": "Register Mover Profile",
+    "customerEdit": "Edit Profile",
+    "moverEdit": "Edit Mover Profile",
+    "start": "Start",
+
+    "customerRegisterInfo": "Please enter additional information to complete registration.",
+    "moverRegisterInfo": "Please enter additional information to complete registration.",
+
+    "profileImg": "Profile Image",
     "name": "Name",
-    "phone": "Phone",
-    "address": "Address",
-    "register": "Register Profile",
-    "complete": "Complete Profile"
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Enter the nickname to be displayed on the site",
+    "career": "Career",
+    "phone": "Phone Number",
+    "shortIntro": "One-line Introduction",
+    "shortIntroPlaceholder": "Enter a short introduction",
+    "detailIntro": "Detailed Description",
+    "detailIntroPlaceholder": "Enter a detailed description",
+
+    "serviceTypes": "Provided Services",
+    "customerServiceTypes": "Used Services",
+    "customerServiceTypesInfo": "You can select multiple services and edit anytime!",
+
+    "currentArea": "Your Living Area",
+    "currentAreaInfo": "You can edit your area at any time!",
+    "currentAreas": "Available Service Areas"
   },
   "search": {
     "title": "Search Moving Companies",
@@ -271,5 +291,29 @@
       "intro": "Introduction must be at least 8 characters long.",
       "description": "Description must be at least 10 characters long."
     }
+  },
+  "service": {
+    "소형이사": "Small Move",
+    "가정이사": "Home Move",
+    "사무실이사": "Office Move"
+  },
+  "region": {
+    "서울": "Seoul",
+    "경기": "Gyeonggi",
+    "인천": "Incheon",
+    "강원": "Gangwon",
+    "충북": "Chungbuk",
+    "충남": "Chungnam",
+    "세종": "Sejong",
+    "대전": "Daejeon",
+    "전북": "Jeonbuk",
+    "전남": "Jeonnam",
+    "광주": "Gwangju",
+    "경북": "Gyeongbuk",
+    "경남": "Gyeongnam",
+    "대구": "Daegu",
+    "울산": "Ulsan",
+    "부산": "Busan",
+    "제주": "Jeju"
   }
 }
