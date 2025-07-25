@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import MovingTypeCard from "../card/MovingTypeCard";
 import SpeechBubble from "../SpeechBubble";
@@ -8,46 +8,49 @@ import MovingTypeOffice from "@/assets/img/etc/officemove.png";
 import { IMovingTypeSectionProps } from "@/types/estimateRequest";
 import { useLanguageStore } from "@/stores/languageStore";
 
+// 이사 타입 데이터
+const MOVING_TYPES = [
+  {
+    type: "small",
+    image: MovingTypeSmall,
+  },
+  {
+    type: "home",
+    image: MovingTypeHome,
+  },
+  {
+    type: "office",
+    image: MovingTypeOffice,
+  },
+] as const;
+
 const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect }) => {
   const { t } = useLanguageStore();
 
+  // 이미지 컴포넌트들을 메모이제이션
+  const movingTypeCards = useMemo(() => {
+    return MOVING_TYPES.map(({ type, image }) => ({
+      type,
+      card: (
+        <MovingTypeCard
+          key={type}
+          selected={value === type}
+          label={t(`estimateRequest.movingTypes.${type}`)}
+          description={t(`estimateRequest.movingTypes.${type}Desc`)}
+          image={
+            <div className="relative h-30 w-30">
+              <Image src={image} alt={t(`estimateRequest.movingTypes.${type}`)} fill className="object-contain" />
+            </div>
+          }
+          onClick={() => onSelect(type)}
+        />
+      ),
+    }));
+  }, [value, t, onSelect]);
+
   return (
     <SpeechBubble type="question">
-      <div className="flex flex-col gap-4 lg:flex-row">
-        <MovingTypeCard
-          selected={value === "small"}
-          label={t("quote.movingTypes.small")}
-          description={t("quote.movingTypes.smallDesc")}
-          image={
-            <div className="relative h-30 w-30">
-              <Image src={MovingTypeSmall} alt={t("quote.movingTypes.small")} fill className="object-contain" />
-            </div>
-          }
-          onClick={() => onSelect("small")}
-        />
-        <MovingTypeCard
-          selected={value === "home"}
-          label={t("quote.movingTypes.home")}
-          description={t("quote.movingTypes.homeDesc")}
-          image={
-            <div className="relative h-30 w-30">
-              <Image src={MovingTypeHome} alt={t("quote.movingTypes.home")} fill className="object-contain" />
-            </div>
-          }
-          onClick={() => onSelect("home")}
-        />
-        <MovingTypeCard
-          selected={value === "office"}
-          label={t("quote.movingTypes.office")}
-          description={t("quote.movingTypes.officeDesc")}
-          image={
-            <div className="relative h-30 w-30">
-              <Image src={MovingTypeOffice} alt={t("quote.movingTypes.office")} fill className="object-contain" />
-            </div>
-          }
-          onClick={() => onSelect("office")}
-        />
-      </div>
+      <div className="flex flex-col gap-4 lg:flex-row">{movingTypeCards.map(({ card }) => card)}</div>
     </SpeechBubble>
   );
 };

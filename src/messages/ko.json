@@ -17,7 +17,7 @@
     "next": "다음",
     "previous": "이전"
   },
-  "quote": {
+  "estimateRequest": {
     "title": "견적요청",
     "editTitle": "견적 수정",
     "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
@@ -26,14 +26,14 @@
     "addressQuestion": "이사 지역을 선택해주세요.",
     "departure": "출발지",
     "arrival": "도착지",
-    "confirmQuote": "견적 확정하기",
+    "confirmEstimateRequest": "견적 확정하기",
     "editQuestion": "아래 버튼을 통해 수정 또는 삭제할 수 있습니다.",
     "editButton": "수정하기",
     "deleteButton": "삭제하기",
     "deleteConfirmTitle": "견적 삭제",
     "deleteConfirmMessage": "정말로 이 견적을 삭제하시겠습니까? 삭제된 견적은 복구할 수 없습니다.",
-    "confirmQuoteTitle": "견적 확정",
-    "confirmQuoteMessage": "견적 요청이 성공적으로 전송되었습니다. 견적을 확정하시겠습니까?",
+    "confirmEstimateRequestTitle": "견적 확정",
+    "confirmEstimateRequestMessage": "견적 요청이 성공적으로 전송되었습니다. 견적을 확정하시겠습니까?",
     "movingTypes": {
       "small": "소형 이사",
       "smallDesc": "원룸, 투룸, 20평대 미만",
@@ -62,7 +62,11 @@
     "jibunLabel": "지번",
     "roadAddressPlaceholder": "도로명 주소를 입력해주세요",
     "jibunAddressPlaceholder": "지번 주소를 입력해주세요",
-    "editAnswer": "수정하기"
+    "editAnswer": "수정하기",
+    "selectDeparture": "출발지 선택하기",
+    "selectArrival": "도착지 선택하기",
+    "confirmTitle": "견적 요청 확인",
+    "confirmMessage": "입력하신 정보로 견적을 요청하시겠습니까?"
   },
   "navigation": {
     "home": "홈",

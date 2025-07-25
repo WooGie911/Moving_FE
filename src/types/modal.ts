@@ -2,7 +2,7 @@ export interface IModalButton {
   text: string;
   onClick: () => void;
   disabled?: boolean;
-  variant?: "solid" | "outline";
+  variant?: "solid" | "outline" | "outlined";
 }
 
 export interface IModalOptions {
