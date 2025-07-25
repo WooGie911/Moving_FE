@@ -7,7 +7,7 @@ const maskName = (fullName: string): string => {
   return firstName + maskedPart;
 };
 
-export const generateMockReviews = (moverId: number, count: number = 50): any[] => {
+export const generateMockReviews = (moverId: number, count: number = 100): any[] => {
   const customerNames = [
     "김철수",
     "이영희",
@@ -54,7 +54,7 @@ export const generateMockReviews = (moverId: number, count: number = 50): any[] 
     const quoteId = Math.floor(Math.random() * 1000) + 1;
     const estimateId = Math.floor(Math.random() * 1000) + 1;
     const id = i + 1;
-    const rating = Math.floor(Math.random() * 2) + 4;
+    const rating = Math.floor(Math.random() * 5) + 1; // 1-5점 평점
     const content = contents[Math.floor(Math.random() * contents.length)];
     const status = "COMPLETED";
     const isPublic = true;
@@ -82,5 +82,5 @@ export const generateMockReviews = (moverId: number, count: number = 50): any[] 
 };
 
 export const getMockReviewsForMover = (moverId: number): any[] => {
-  return generateMockReviews(moverId, 50);
+  return generateMockReviews(moverId, 100);
 };
