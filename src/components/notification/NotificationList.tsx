@@ -8,10 +8,9 @@ import parse from "html-react-parser";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import { readNotification } from "@/lib/api/notification.api";
+import { markAsRead } from "@/lib/api/notification.api";
 import { useRouter } from "next/navigation";
 import { INotification } from "@/types/notification.types";
-
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -44,11 +43,12 @@ export default function NotificationList() {
   // 알림 클릭 핸들러
   const handleClick = async (notification: INotification) => {
     try {
-      await readNotification(notification.id);
+      await markAsRead(notification.id);
+      onClose?.();
+      router.push(notification.path);
     } catch (e) {
-      // 에러 무시하고 이동
+      console.error(e);
     }
-    router.push(notification.actionUrl);
   };
 
   if (notifications.length === 0) {
@@ -61,13 +61,13 @@ export default function NotificationList() {
 
   return (
     <div className="text-black-400 max-h-[215px] w-full overflow-y-auto">
-      {notifications.map((notification, idx) => (
-        notification.actionUrl ? (
+      {notifications.map((notification, idx) =>
+        notification.path ? (
           <div
             key={`${notification.id}-${idx}`}
             className={`flex cursor-pointer flex-col items-start p-4 hover:bg-gray-50 ${
-              idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
-            }`}
+              notification.isRead ? "bg-gray-100" : ""
+            } ${idx !== notifications.length - 1 ? "border-b border-gray-200" : ""}`}
             onClick={() => handleClick(notification)}
           >
             <div className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</div>
@@ -83,8 +83,8 @@ export default function NotificationList() {
             <div className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</div>
             <div className="mt-1 text-xs text-gray-400">{dayjs(notification.createdAt).fromNow()}</div>
           </div>
-        )
-      ))}
+        ),
+      )}
       {hasMore && <div ref={ref} style={{ height: 40 }} />}
       {!hasMore && <div className="py-2 text-center text-xs text-gray-400">모든 알림을 불러왔습니다.</div>}
     </div>
