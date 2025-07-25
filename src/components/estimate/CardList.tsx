@@ -47,10 +47,11 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     onError: (error) => {
       console.error("견적 생성 실패:", error);
       setCurrentModalType(null); // useEffect 비활성화
-      // 실패 모달 표시
+      // 실패 모달 표시 - 구체적인 에러 메시지 포함
+      const errorMessage = error instanceof Error ? error.message : "견적보내기에 실패했습니다";
       open({
         title: "견적생성실패",
-        children: <div className="py-4 text-center">견적보내기에 실패했습니다</div>,
+        children: <div className="py-4 text-center">{errorMessage}</div>,
         type: "bottomSheet",
         buttons: [{ text: "닫기", onClick: () => close() }],
       });
@@ -79,10 +80,11 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     onError: (error) => {
       console.error("견적 반려 실패:", error);
       setCurrentModalType(null); // useEffect 비활성화
-      // 실패 모달 표시
+      // 실패 모달 표시 - 구체적인 에러 메시지 포함
+      const errorMessage = error instanceof Error ? error.message : "견적반려에 실패했습니다";
       open({
         title: "견적반려실패",
-        children: <div className="py-4 text-center">견적반려에 실패했습니다</div>,
+        children: <div className="py-4 text-center">{errorMessage}</div>,
         type: "bottomSheet",
         buttons: [{ text: "닫기", onClick: () => close() }],
       });

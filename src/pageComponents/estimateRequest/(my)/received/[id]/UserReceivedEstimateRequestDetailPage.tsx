@@ -2,7 +2,7 @@
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
 import { DetailPageMainSeaction } from "@/components/estimateRequest/(my)/DetailPageMainSeaction";
-import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";

@@ -15,7 +15,6 @@ export const MoverReceivedPage = () => {
         designated: true,
       }),
   });
-  console.log("받은 요청 데이터", data);
   // 필터 상태 관리
   const [filters, setFilters] = useState<IFilterState>({
     movingTypes: [],

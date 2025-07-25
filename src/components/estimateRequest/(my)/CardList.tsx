@@ -10,7 +10,7 @@ import { ICardListProps } from "@/types/customerEstimateRequest";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
 import { useModal } from "@/components/common/modal/ModalContext";
-import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation } from "@tanstack/react-query";
 
 // 숫자를 천 단위로 쉼표를 추가하는 함수
@@ -74,7 +74,7 @@ export const CardList = ({
 
   const cardContent = (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-5 md:max-w-[600px] lg:max-w-[558px]"}`}
+      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1">
         <LabelAndTitleSection
