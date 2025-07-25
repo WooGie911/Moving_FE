@@ -25,10 +25,11 @@ export default function Pagination({
   const isNextDisabled = currentPage === totalPages;
 
   const iconSizeClass = size === "lg" ? "w-12 h-12" : "w-[34px] h-[34px]";
+  // 고정 너비 설정 - 페이지 수에 관계없이 일정한 너비 유지
   const navSizeClass = size === "lg" ? "w-[476px] h-12" : "w-[270px] h-[34px]";
 
   return (
-    <nav className={`flex items-center justify-center gap-1 ${navSizeClass} ${className}`} aria-label="pagination">
+    <nav className={`flex items-center justify-center gap-1 ${navSizeClass} ${className} mx-auto`} aria-label="pagination">
       <PaginationButton size={size} disabled={isPrevDisabled} onClick={() => onPageChange(currentPage - 1)} isArrow>
         <Image
           src={isPrevDisabled ? leftInactiveIcon : leftActiveIcon}

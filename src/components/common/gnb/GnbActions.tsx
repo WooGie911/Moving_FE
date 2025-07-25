@@ -32,7 +32,11 @@ const USER_ACTION_LIST = [
 const MOVER_USER_ACTION_LIST = [
   {
     label: "프로필 수정",
-    href: "/moverMyPage/edit",
+    href: "/profile/edit",
+  },
+  {
+    label: "마이페이지",
+    href: "/moverMyPage",
   },
   {
     label: "여기는 추가해 주세용",

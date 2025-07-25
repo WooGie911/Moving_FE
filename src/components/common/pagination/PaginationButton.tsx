@@ -25,7 +25,7 @@ export default function PaginationButton({
     <button
       type="button"
       className={clsx(
-        "flex items-center justify-center rounded transition-colors bg-white",
+        "flex items-center justify-center rounded transition-colors bg-white min-w-0",
         size === "sm" ? "w-8 h-8 text-sm" : "w-12 h-12 text-lg",
         isArrow
           ? isRightArrow

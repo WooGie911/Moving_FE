@@ -84,6 +84,13 @@ export class FavoriteService {
       method: "DELETE",
     });
   }
+
+  // 찜하기 상태 확인
+  static async getFavoriteStatus(moverId: number): Promise<ApiResponse<IFavoriteStatus>> {
+    return apiCall<IFavoriteStatus>(`/favorites/${moverId}/status`, {
+      method: "GET",
+    });
+  }
 }
 
 export default FavoriteService;
