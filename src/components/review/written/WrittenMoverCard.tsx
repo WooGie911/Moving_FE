@@ -69,7 +69,7 @@ const WrittenMoverCard = ({
 
           <div className="flex flex-col items-start md:px-3">
             <div className="text-gray-500">이사일</div>
-            <div className="text-black-500">{moveDate.toLocaleDateString("ko-KR")}</div>
+            <div className="text-black-500">{new Date(moveDate).toLocaleDateString("ko-KR")}</div>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const WrittenMoverCard = ({
 
     <div className="flex justify-end text-[12px] text-gray-300 md:hidden">
       <span>작성일 </span>
-      <span>{createdAt.toLocaleDateString("ko-KR")}</span>
+      <span>{new Date(createdAt).toLocaleDateString("ko-KR")}</span>
     </div>
   </div>
 );

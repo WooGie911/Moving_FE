@@ -52,7 +52,7 @@ const WritableReviewPage = () => {
       title: "리뷰 쓰기",
       type: modalType,
       children: card ? (
-        <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.id, data)} isSubmitting={isPending} />
+        <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
       ) : null,
     });
   };
