@@ -1,5 +1,6 @@
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 interface SelectMovingTypeProps {
   selectedTypes: string[];
@@ -7,10 +8,12 @@ interface SelectMovingTypeProps {
 }
 
 export const SelectMovingType = ({ selectedTypes, onTypeChange }: SelectMovingTypeProps) => {
+  const t = useTranslations("estimate");
+
   const movingTypes = [
-    { text: "소형이사", value: "SMALL" },
-    { text: "가정이사", value: "HOME" },
-    { text: "사무실이사", value: "OFFICE" },
+    { text: t("movingTypesFilter.small"), value: "SMALL" },
+    { text: t("movingTypesFilter.home"), value: "HOME" },
+    { text: t("movingTypesFilter.office"), value: "OFFICE" },
   ];
 
   return (

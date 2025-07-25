@@ -4,6 +4,7 @@ import { SelectMovingType } from "./SelectMovingType";
 import { SelectCheckBox } from "./SelectCheckBox";
 import { Dropdown } from "./Dropdown";
 import { IFilterState } from "@/types/moverEstimate";
+import { useTranslations } from "next-intl";
 
 interface IPcFillterSectionProps {
   filters: IFilterState;
@@ -12,6 +13,7 @@ interface IPcFillterSectionProps {
 }
 
 export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFillterSectionProps) => {
+  const t = useTranslations("estimate");
   // 이사 유형 변경 핸들러
   const handleTypeChange = (type: string) => {
     const newTypes = filters.movingTypes.includes(type)
@@ -39,7 +41,7 @@ export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFi
       {/* 이사유형 선택 라벨*/}
       <SelectMovingType selectedTypes={filters.movingTypes} onTypeChange={handleTypeChange} />
       <div className="flex w-full flex-row items-center justify-start pt-6">
-        <p className="text-black-500 text-[18px] leading-[26px] font-semibold">{`전체 ${totalCount}건`}</p>
+        <p className="text-black-500 text-[18px] leading-[26px] font-semibold">{`${t("totalCount")} ${totalCount}${t("countUnit")}`}</p>
       </div>
       <div className="flex w-full flex-row items-center justify-between">
         <SelectCheckBox

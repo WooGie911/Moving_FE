@@ -5,8 +5,10 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 export const RejectedPage = () => {
+  const t = useTranslations("estimate");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["MyRejectedEstimates"],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
@@ -14,13 +16,13 @@ export const RejectedPage = () => {
 
   // 로딩 상태
   if (isPending) {
-    return <div>로딩 중...</div>;
+    return <div>{t("loading")}</div>;
   }
 
   // 에러 상태
   if (isError) {
-    console.error("API 에러:", error);
-    return <div>에러가 발생했습니다. 다시 시도해주세요.</div>;
+    console.error(`${t("apiError")}`, error);
+    return <div>{t("error")}</div>;
   }
 
   // 데이터가 없는 경우
@@ -32,8 +34,8 @@ export const RejectedPage = () => {
           <div className="flex w-full flex-col items-center justify-center">
             <div className="mb-[66px] flex w-full max-w-[1200px] flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
               <div className="text-center">
-                <p className="mb-2 text-lg font-medium text-gray-600">반려한 견적이 없습니다</p>
-                <p className="text-sm text-gray-500">반려한 견적이 없습니다</p>
+                <p className="mb-2 text-lg font-medium text-gray-600">{t("noRejectedEstimates")}</p>
+                <p className="text-sm text-gray-500">{t("noRejectedEstimates")}</p>
               </div>
             </div>
           </div>

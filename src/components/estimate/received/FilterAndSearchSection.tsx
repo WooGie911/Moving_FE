@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { SmallFilterSection } from "./SmallFilterSection";
 import { PcFillterSection } from "./PcFillterSection";
 import { IFilterState } from "@/types/moverEstimate";
+import { useTranslations } from "next-intl";
 
 // 필터 상태 타입
 
@@ -15,6 +16,7 @@ interface FilterAndSearchSectionProps {
 }
 
 export const FilterAndSearchSection = ({ filters, onFiltersChange, totalCount }: FilterAndSearchSectionProps) => {
+  const t = useTranslations("estimate");
   const methods = useForm({
     defaultValues: {
       search: filters.searchKeyword,
@@ -36,7 +38,7 @@ export const FilterAndSearchSection = ({ filters, onFiltersChange, totalCount }:
       {/* 하단 인풋 영역 */}
       <div className="flex w-full flex-col gap-4 md:gap-7 lg:gap-6">
         <FormProvider {...methods}>
-          <SearchInput name="search" placeholder="어떤 고객님을 찾고 계세요?" />
+          <SearchInput name="search" placeholder={t("searchPlaceholder")} />
         </FormProvider>
         <div className="lg:hidden">
           <SmallFilterSection filters={filters} onFiltersChange={onFiltersChange} totalCount={totalCount} />

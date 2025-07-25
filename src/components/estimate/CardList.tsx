@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { LabelArea } from "./LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
-import { formatRelativeTime } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import { Button } from "../common/button/Button";
@@ -15,6 +14,7 @@ import Link from "next/link";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
+import { useTranslations, useLocale } from "next-intl";
 
 export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();
@@ -23,6 +23,38 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
   const [modalData, setModalData] = useState<{ price?: number; comment?: string }>({});
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const t = useTranslations("estimate");
+  const locale = useLocale();
+
+  // 다국어 날짜 포맷 함수
+  const formatDateWithWeekday = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const weekday = [
+      t("weekdays.sunday"),
+      t("weekdays.monday"),
+      t("weekdays.tuesday"),
+      t("weekdays.wednesday"),
+      t("weekdays.thursday"),
+      t("weekdays.friday"),
+      t("weekdays.saturday"),
+    ][date.getDay()];
+
+    // 언어별 날짜 형식
+    const yearSuffix = t("dateFormat.year");
+    const monthSuffix = t("dateFormat.month");
+    const daySuffix = t("dateFormat.day");
+
+    // 영어인 경우 MM/DD/YYYY 형식
+    if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
+      return `${month}/${day}/${year} (${weekday})`;
+    }
+    // 한국어, 중국어인 경우 YYYY년 MM월 DD일 형식
+    else {
+      return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
+    }
+  };
 
   // 견적 생성 mutation
   const createEstimateMutation = useMutation({
@@ -38,22 +70,22 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       setCurrentModalType(null); // useEffect 비활성화
       // 성공 모달 표시
       open({
-        title: "견적생성성공",
-        children: <div className="py-4 text-center">견적보내기에 성공했습니다</div>,
+        title: t("createEstimateSuccessTitle"),
+        children: <div className="py-4 text-center">{t("createEstimateSuccessMessage")}</div>,
         type: "bottomSheet",
-        buttons: [{ text: "닫기", onClick: () => close() }],
+        buttons: [{ text: t("close"), onClick: () => close() }],
       });
     },
     onError: (error) => {
       console.error("견적 생성 실패:", error);
       setCurrentModalType(null); // useEffect 비활성화
       // 실패 모달 표시 - 구체적인 에러 메시지 포함
-      const errorMessage = error instanceof Error ? error.message : "견적보내기에 실패했습니다";
+      const errorMessage = error instanceof Error ? error.message : t("createEstimateFailMessage");
       open({
-        title: "견적생성실패",
+        title: t("createEstimateFailTitle"),
         children: <div className="py-4 text-center">{errorMessage}</div>,
         type: "bottomSheet",
-        buttons: [{ text: "닫기", onClick: () => close() }],
+        buttons: [{ text: t("close"), onClick: () => close() }],
       });
     },
   });
@@ -71,22 +103,22 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       setCurrentModalType(null); // useEffect 비활성화
       // 성공 모달 표시
       open({
-        title: "견적반려성공",
-        children: <div className="py-4 text-center">견적반려에 성공했습니다</div>,
+        title: t("rejectEstimateSuccessTitle"),
+        children: <div className="py-4 text-center">{t("rejectEstimateSuccessMessage")}</div>,
         type: "bottomSheet",
-        buttons: [{ text: "닫기", onClick: () => close() }],
+        buttons: [{ text: t("close"), onClick: () => close() }],
       });
     },
     onError: (error) => {
       console.error("견적 반려 실패:", error);
       setCurrentModalType(null); // useEffect 비활성화
       // 실패 모달 표시 - 구체적인 에러 메시지 포함
-      const errorMessage = error instanceof Error ? error.message : "견적반려에 실패했습니다";
+      const errorMessage = error instanceof Error ? error.message : t("rejectEstimateFailMessage");
       open({
-        title: "견적반려실패",
+        title: t("rejectEstimateFailTitle"),
         children: <div className="py-4 text-center">{errorMessage}</div>,
         type: "bottomSheet",
-        buttons: [{ text: "닫기", onClick: () => close() }],
+        buttons: [{ text: t("close"), onClick: () => close() }],
       });
     },
   });
@@ -103,7 +135,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     if (currentModalType) {
       const buttons = [
         {
-          text: currentModalType === "rejected" ? "반려하기" : "견적보내기",
+          text: currentModalType === "rejected" ? t("reject") : t("sendEstimate"),
           onClick: () => {
             if (currentModalType === "rejected") {
               if (modalData.comment) {
@@ -139,14 +171,14 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     setCurrentModalType("rejected");
 
     open({
-      title: "반려요청",
+      title: t("rejectRequest"),
       children: (
         <ModalChild data={data} isDesignated={isDesignated} type={"rejected"} onFormChange={handleFormChange} />
       ),
       type: "bottomSheet",
       buttons: [
         {
-          text: "반려하기",
+          text: t("reject"),
           onClick: () => {
             // useEffect에서 처리됨
           },
@@ -161,12 +193,12 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     setCurrentModalType("sent");
 
     open({
-      title: "견적 보내기",
+      title: t("sendEstimateTitle"),
       children: <ModalChild data={data} isDesignated={isDesignated} type={"sent"} onFormChange={handleFormChange} />,
       type: "bottomSheet",
       buttons: [
         {
-          text: "견적보내기",
+          text: t("sendEstimate"),
           onClick: () => {
             // useEffect에서 처리됨
           },
@@ -180,7 +212,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
       {isPastDate && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-          <p className="text-[18px] leading-[26px] font-semibold text-white">이사 완료된 견적 입니다.</p>
+          <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
             <Button
               variant="outlined"
@@ -190,14 +222,14 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               rounded="rounded-[12px]"
               className="bg-primary-100"
             >
-              견적 상세 보기
+              {t("viewEstimateDetail")}
             </Button>
           </Link>
         </div>
       )}
       {type === "rejected" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-          <p className="text-[18px] leading-[26px] font-semibold text-white">반려된 요청 입니다.</p>
+          <p className="text-[18px] leading-[26px] font-semibold text-white">{t("rejectedRequestMessage")}</p>
         </div>
       )}
 
@@ -219,21 +251,21 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               {data.status === "APPROVED" && (
                 <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                   <Image src={confirm} alt="confirm" width={16} height={16} />
-                  <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
+                  <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
                 </div>
               )}
             </div>
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
             <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-                {`${data.customer.name} 고객님`}
+                {`${data.customer.name}${t("customerSuffix")}`}
               </p>
             </div>
             {/* 이사 정보  부분*/}
             <div className="flex w-full flex-col gap-1 md:flex-row md:justify-between md:pt-2">
               <div className="flex flex-row gap-3">
                 <div className="flex flex-col justify-between">
-                  <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
+                  <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                     {shortenRegionInAddress(data.fromAddress.region + " " + data.fromAddress.city)}
                   </p>
@@ -242,25 +274,26 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                   <Image src={arrow} alt="arrow" width={16} height={16} />
                 </div>
                 <div className="flex flex-col justify-between">
-                  <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
+                  <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                     {shortenRegionInAddress(data.toAddress.region + " " + data.toAddress.city)}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col justify-between">
-                <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
+                <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {`${moveDate.getFullYear()}년 ${moveDate.getMonth() + 1}월 ${moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][moveDate.getDay()]})`}
+                  {formatDateWithWeekday(moveDate)}
                 </p>
               </div>
             </div>
             {/* 견적금액 부분 - rejected 타입일 때는 숨김 */}
             {type !== "rejected" && (
               <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
-                <p className="text-black-400 text-[16px] leading-[26px] font-medium">견적금액</p>
+                <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
                 <p className="text-black-400 text-[24px] leading-[32px] font-bold">
-                  {estimatePrice?.toLocaleString()}원
+                  {estimatePrice?.toLocaleString()}
+                  {t("currency")}
                 </p>
               </div>
             )}
@@ -279,21 +312,21 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
             {data.status === "APPROVED" && (
               <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                 <Image src={confirm} alt="confirm" width={16} height={16} />
-                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
+                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             )}
           </div>
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
           <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
             <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-              {`${data.customer.name} 고객님`}
+              {`${data.customer.name}${t("customerSuffix")}`}
             </p>
           </div>
           {/* 이사 정보  부분*/}
           <div className="flex w-full flex-col gap-1 md:flex-row md:justify-between md:pt-2">
             <div className="flex flex-row gap-3">
               <div className="flex flex-col justify-between">
-                <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
+                <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                   {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
                 </p>
@@ -302,16 +335,16 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 <Image src={arrow} alt="arrow" width={16} height={16} />
               </div>
               <div className="flex flex-col justify-between">
-                <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
+                <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                   {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
                 </p>
               </div>
             </div>
             <div className="flex flex-col justify-between">
-              <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
+              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                {`${moveDate.getFullYear()}년 ${moveDate.getMonth() + 1}월 ${moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][moveDate.getDay()]})`}
+                {formatDateWithWeekday(moveDate)}
               </p>
             </div>
           </div>
@@ -327,7 +360,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 onClick={openRejectModal}
                 className="hidden md:block"
               >
-                반려하기
+                {t("reject")}
               </Button>
               <Button
                 variant="solid"
@@ -338,7 +371,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 onClick={openSendEstimateModal}
               >
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <p>견적 보내기 </p>
+                  <p>{t("sendEstimateTitle")} </p>
                   <Image src={edit} alt="arrow" width={24} height={24} />
                 </div>
               </Button>
@@ -351,13 +384,16 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 onClick={openRejectModal}
                 className="md:hidden"
               >
-                반려하기
+                {t("reject")}
               </Button>
             </div>
           ) : type === "sent" ? (
             <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
-              <p className="text-black-400 text-[16px] leading-[26px] font-medium">견적금액</p>
-              <p className="text-black-400 text-[24px] leading-[32px] font-bold">{estimatePrice?.toLocaleString()}원</p>
+              <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
+              <p className="text-black-400 text-[24px] leading-[32px] font-bold">
+                {estimatePrice?.toLocaleString()}
+                {t("currency")}
+              </p>
             </div>
           ) : (
             ""
