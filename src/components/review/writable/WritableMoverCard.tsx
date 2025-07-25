@@ -8,7 +8,7 @@ import estimateIcon from "@/assets/icon/etc/icon-estimate.png";
 import { IWritableCardData } from "@/types/review";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.png";
 
-export interface IMoverCardProps extends Omit<IWritableCardData, "id" | "isFavorite"> {
+export interface IMoverCardProps extends Omit<IWritableCardData, "id" | "isFavorite" | "reviewId"> {
   onClickWrite: () => void;
 }
 
@@ -70,7 +70,7 @@ const WritableMoverCard = ({
 
           <div className="border-gray-100 text-[14px] md:border-r-2 md:px-3 md:text-[16px] lg:border-r-0">
             <div className="text-gray-500">이사일</div>
-            <div className="text-black-500">{moveDate.toLocaleDateString("ko-KR")}</div>
+            <div className="text-black-500">{new Date(moveDate).toLocaleDateString("ko-KR")}</div>
           </div>
         </div>
 
