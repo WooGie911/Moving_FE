@@ -10,7 +10,7 @@ import { IEditBasicForm } from "@/types/user";
 import { useRouter } from "next/navigation";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
-import { validationRules } from "@/utils/validators";
+import { useValidationRules } from "@/hooks/useValidationRules";
 
 const EditPage = () => {
   const router = useRouter();
@@ -18,6 +18,7 @@ const EditPage = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const t = useTranslations("edit");
   const locale = useLocale();
+  const validationRules = useValidationRules();
   const form = useForm<IEditBasicForm>({
     mode: "onChange",
     defaultValues: {

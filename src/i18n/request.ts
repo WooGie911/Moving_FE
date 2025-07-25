@@ -1,6 +1,15 @@
 import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { routing } from "./routing";
+import en from "../messages/en.json";
+import ko from "../messages/ko.json";
+import zh from "../messages/zh.json";
+
+const messagesMap = {
+  en,
+  ko,
+  zh,
+};
 
 export default getRequestConfig(async ({ requestLocale }) => {
   // 일반적으로 `[locale]` 세그먼트에 해당
@@ -9,6 +18,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: messagesMap[locale as keyof typeof messagesMap],
   };
 });
