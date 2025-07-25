@@ -1,8 +1,7 @@
 "use client";
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { EstimateRequestAndEstimates } from "@/components/estimateRequest/(my)/received/EstimateRequestAndEstimates";
-import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
-import { mockReceivedEstimateRequestListResponses } from "@/types/customerEstimateRequest";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";

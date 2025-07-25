@@ -7,6 +7,7 @@ import like_red from "@/assets/icon/like/icon-like-red.png";
 import like_white from "@/assets/icon/like/icon-like-white-lg.png";
 import like_black from "@/assets/icon/like/icon-like-black.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
+import Favorite from "@/components/common/button/Favorite";
 
 interface IProps {
   mover: TMoverInfo;
@@ -37,21 +38,16 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
 
         {usedAtDetail ? (
           <div className="flex flex-row items-center justify-center gap-1">
-            <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[18px] md:leading-[26px]">
-              {mover.totalFavoriteCount === 0 || mover.totalFavoriteCount === undefined ? 0 : mover.totalFavoriteCount}
-            </p>
-            <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
-              <Image src={mover.isFavorite ? like_black : like_white} alt="like" width={24} height={24} />
-            </button>
+            <Favorite
+              isFavorited={mover.isFavorite}
+              heartPosition="right"
+              favoriteCount={mover.totalFavoriteCount}
+              moverId={mover.id}
+            />
           </div>
         ) : (
           <div className="flex flex-row items-center justify-center gap-1">
-            <button className="flex cursor-pointer flex-row items-center justify-center" onClick={handleLikeClick}>
-              <Image src={mover.isFavorite ? like_red : like_white} alt="like" width={20} height={20} />
-            </button>
-            <p className="text-[14px] leading-[24px] font-normal text-gray-500">
-              {mover.totalFavoriteCount === 0 || mover.totalFavoriteCount === undefined ? 0 : mover.totalFavoriteCount}
-            </p>
+            <Favorite isFavorited={mover.isFavorite} favoriteCount={mover.totalFavoriteCount} moverId={mover.id} />
           </div>
         )}
       </div>

@@ -7,7 +7,7 @@ import React, { useEffect } from "react";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import Image from "next/image";
 import noEstimate from "@/assets/img/etc/noEstimate.png";
-import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { TMoverInfo } from "@/types/customerEstimateRequest";

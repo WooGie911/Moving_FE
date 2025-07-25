@@ -15,8 +15,8 @@ import {
 } from "@/types/moverEstimate";
 import { getTokenFromCookie } from "@/utils/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-// const API_URL = "http://localhost:5050";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -45,7 +45,9 @@ const moverEstimateApi = {
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
+          // 서버에서 보낸 구체적인 에러 메시지 사용
+          const errorData = await response.json();
+          throw new Error(errorData.message || "유효하지 않은 입력값입니다.");
         } else if (response.status === 403) {
           throw new Error("현재 유저타입이 기사가 아닙니다.");
         } else {
@@ -81,7 +83,9 @@ const moverEstimateApi = {
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
+          // 서버에서 보낸 구체적인 에러 메시지 사용
+          const errorData = await response.json();
+          throw new Error(errorData.message || "유효하지 않은 입력값입니다.");
         } else if (response.status === 403) {
           throw new Error("현재 유저타입이 기사가 아닙니다.");
         } else {
