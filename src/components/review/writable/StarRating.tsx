@@ -23,6 +23,7 @@ const StarRating = ({ rating, setRating }: StarRatingProps) => {
           {[0, 1, 2, 3, 4].map((index) => (
             <button
               key={index}
+              type="button"
               className="relative h-[28px] w-[28px] cursor-pointer lg:h-[36px] lg:w-[36px]"
               onClick={() => handleStarClick(index)}
             >
