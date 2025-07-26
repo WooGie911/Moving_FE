@@ -3,16 +3,8 @@ import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
+import { ILabelAndTitleSectionProps } from "@/types/estimateRequest";
 import { useTranslations } from "next-intl";
-
-interface IProps {
-  mover: TMoverInfo;
-  isDesignated: boolean;
-  estimateState: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
-  estimateTitle: string;
-  type: "pending" | "received";
-  usedAtDetail: boolean;
-}
 
 // 서비스 타입 이름을 MoveTypeLabel 타입으로 매핑하는 함수
 const mapServiceTypeToMoveType = (serviceName: string): "small" | "home" | "office" | "document" => {
@@ -35,7 +27,7 @@ export const LabelAndTitleSection = ({
   estimateTitle,
   type,
   usedAtDetail = false,
-}: IProps) => {
+}: ILabelAndTitleSectionProps) => {
   const t = useTranslations("estimateRequest");
   return (
     <div className="border-border-light flex w-full flex-col gap-3">

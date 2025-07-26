@@ -20,7 +20,7 @@ const AddressSection: React.FC<IAddressSectionProps> = ({ label, value, onClick 
             )}
           </div>
         ) : (
-          <span className="text-base leading-[26px] font-medium text-gray-400">
+          <span className="text-primary-400 text-base leading-[26px] font-medium">
             {t(`estimateRequest.select${label.charAt(0).toUpperCase() + label.slice(1)}`)}
           </span>
         )}

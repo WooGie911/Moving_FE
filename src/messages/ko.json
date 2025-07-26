@@ -15,7 +15,8 @@
     "close": "닫기",
     "back": "뒤로",
     "next": "다음",
-    "previous": "이전"
+    "previous": "이전",
+    "success": "완료"
   },
   "estimateRequest": {
     "title": "견적요청",
@@ -114,6 +115,8 @@
     "deleteButton": "삭제하기",
     "deleteConfirmTitle": "견적 삭제",
     "deleteConfirmMessage": "정말로 이 견적을 삭제하시겠습니까? 삭제된 견적은 복구할 수 없습니다.",
+    "updateConfirmTitle": "견적 수정",
+    "updateConfirmMessage": "정말로 이 견적을 수정하시겠습니까?",
     "confirmEstimateRequestTitle": "견적 확정",
     "confirmEstimateRequestMessage": "견적 요청이 성공적으로 전송되었습니다. 견적을 확정하시겠습니까?",
     "movingTypes": {
@@ -148,7 +151,12 @@
     "selectDeparture": "출발지 선택하기",
     "selectArrival": "도착지 선택하기",
     "confirmTitle": "견적 요청 확인",
-    "confirmMessage": "입력하신 정보로 견적을 요청하시겠습니까?"
+    "confirmMessage": "입력하신 정보로 견적을 요청하시겠습니까?",
+    "createSuccess": "견적 요청이 성공적으로 생성되었습니다!",
+    "editSuccess": "견적 요청이 성공적으로 수정되었습니다!",
+    "deleteSuccess": "견적 요청이 성공적으로 삭제되었습니다!",
+    "editConfirmMessage": "이 항목을 수정하시겠습니까?",
+    "editConfirmTitle": "항목 수정"
   },
   "navigation": {
     "home": "홈",

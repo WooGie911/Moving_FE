@@ -55,7 +55,6 @@ export const UserPendingEstimateRequestPage = () => {
 
   const estimateRequest = data.estimateRequest;
   const estimates = data.estimates ?? [];
-  console.log(data);
   // estimateRequest가 null이 아님을 타입가드로 보장
   return (
     <>

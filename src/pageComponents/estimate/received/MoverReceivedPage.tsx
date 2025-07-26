@@ -106,7 +106,6 @@ export const MoverReceivedPage = () => {
     console.error(`${t("apiError")}`, error);
     return <div>{t("error")}</div>;
   }
-  console.log(data);
 
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
