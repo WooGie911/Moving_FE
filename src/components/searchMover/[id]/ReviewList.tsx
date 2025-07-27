@@ -1,47 +1,73 @@
 import React, { useEffect, useState } from "react";
-import { IReview } from "@/types/findMover";
-import { getMockReviewsForMover } from "@/lib/utils/mockReviewData";
+import { IReceivedReview } from "@/types/findMover";
+import reviewApi from "@/lib/api/review.api";
+import { ReviewListProps } from "@/types/moverDetail";
 import Image from "next/image";
+import Pagination from "@/components/common/pagination/Pagination";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
-import { ReviewListProps } from "@/types/moverDetail";
-import Pagination from "@/components/common/pagination/Pagination";
 
 const PAGE_SIZE = 5;
 
 const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
-  const [reviews, setReviews] = useState<IReview[]>([]);
+  const [reviews, setReviews] = useState<IReceivedReview[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!moverId) return;
-
-    setLoading(true);
-
-    // Mock 데이터 사용
-    const mockReviews = getMockReviewsForMover(moverId);
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const endIndex = startIndex + PAGE_SIZE;
-    const paginatedReviews = mockReviews.slice(startIndex, endIndex);
-
-    setReviews(paginatedReviews);
-    setTotalPages(Math.ceil(mockReviews.length / PAGE_SIZE));
-
-    if (onReviewsFetched) {
-      onReviewsFetched(mockReviews); // 전체 리뷰 데이터 전달
+    if (!moverId) {
+      return;
     }
 
-    setLoading(false);
+    let isMounted = true;
+
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await reviewApi.fetchReceivedReviews(String(moverId), currentPage, PAGE_SIZE);
+        
+        if (!isMounted) return;
+        
+        if (response && response.items) {
+          setReviews(response.items);
+          setTotalPages(Math.ceil(response.total / PAGE_SIZE));
+
+          if (onReviewsFetched) {
+            onReviewsFetched(response.items);
+          }
+        } else {
+          setReviews([]);
+          setTotalPages(1);
+        }
+      } catch (err) {
+        console.error("리뷰 조회 실패:", err);
+        if (isMounted) {
+          setError("리뷰를 불러오는데 실패했습니다.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchReviews();
+
+    return () => {
+      isMounted = false;
+    };
   }, [moverId, currentPage, onReviewsFetched]);
 
   // 날짜 포맷팅 함수
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 2자리, 앞에 0
-    const day = String(date.getDate()).padStart(2, "0"); // 2자리, 앞에 0
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -52,12 +78,30 @@ const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
     ));
   };
 
+  // 이름 마스킹 함수 (첫 글자만 보이고 나머지는 *로 표시)
+  const maskName = (name: string) => {
+    if (!name || name.length <= 1) return name;
+    return name.charAt(0) + '*'.repeat(name.length - 1);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="flex flex-col items-center gap-3">
           <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
           <div className="text-lg text-gray-500">리뷰를 불러오는 중...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full">
+        <p className="mb-[51px] text-xl font-semibold">리뷰</p>
+        <div className="flex flex-col items-center">
+          <p className="text-lg font-semibold text-red-500">{error}</p>
+          <p className="text-md text-[#999999]">잠시 후 다시 시도해주세요</p>
         </div>
       </div>
     );
@@ -83,7 +127,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
             <li className="py-5 md:py-6">
               <div className="mb-4 flex flex-col gap-2 md:mb-6">
                 <div className="flex items-center gap-3 md:gap-[14px]">
-                  <span className="text-md md:text-2lg font-normal">{review.user.name}</span>
+                  <span className="text-md md:text-2lg font-normal">{maskName(review.nickname)}</span>
                   <div className="text-[#E6E6E6]">|</div>
                   <span className="text-md md:text-2lg text-[#ABABAB]">{formatDate(review.createdAt)}</span>
                 </div>

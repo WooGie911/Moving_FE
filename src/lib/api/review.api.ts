@@ -1,8 +1,11 @@
-import { IReview, IReviewListResponse } from "@/types/findMover";
+import { IReview, IReviewListResponse, IReceivedReviewListResponse } from "@/types/findMover";
 import { IWritableCardData } from "@/types/review";
 import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+if (!API_URL) {
+  throw new Error("NEXT_PUBLIC_API_URL 환경변수가 설정되지 않았습니다.");
+}
 
 const getAccessToken = async () => {
   const accessToken = await getTokenFromCookie();
@@ -86,6 +89,52 @@ const reviewApi = {
       return data.data || { items: [], total: 0, page, pageSize };
     } catch (error) {
       console.error("내가 쓴 리뷰 목록 조회 실패:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * 4. 기사님이 받은 리뷰 목록 조회
+   */
+  fetchReceivedReviews: async (
+    moverId: string,
+    page: number = 1,
+    pageSize: number = 5,
+  ): Promise<IReceivedReviewListResponse> => {
+    try {
+      const res = await fetch(`${API_URL}/reviews/mover/${moverId}?page=${page}&pageSize=${pageSize}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("기사님이 받은 리뷰 목록 조회에 실패했습니다.");
+      const data = await res.json();
+      return data.data || { items: [], total: 0, page, pageSize };
+    } catch (error) {
+      console.error("기사님이 받은 리뷰 목록 조회 실패:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * 5. 기사님의 전체 리뷰 통계 조회
+   */
+  fetchMoverReviewStats: async (moverId: string): Promise<{
+    averageRating: number;
+    totalReviewCount: number;
+    ratingDistribution: { [key: number]: number };
+  }> => {
+    try {
+      const res = await fetch(`${API_URL}/reviews/mover/${moverId}/stats`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("기사님 리뷰 통계 조회에 실패했습니다.");
+      const data = await res.json();
+      return data.data || { averageRating: 0, totalReviewCount: 0, ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } };
+    } catch (error) {
+      console.error("기사님 리뷰 통계 조회 실패:", error);
       throw error;
     }
   },

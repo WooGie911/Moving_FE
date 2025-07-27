@@ -51,8 +51,58 @@ export interface IReview {
   };
 }
 
+// 실제 API 응답 구조에 맞는 리뷰 타입
+export interface IReceivedReview {
+  id: string;
+  estimateRequestId: string | null;
+  customerId: string;
+  moverId: string;
+  profileImage: string | null;
+  nickname: string;
+  moveType: "SMALL" | "HOME" | "OFFICE" | null;
+  isDesigned: boolean;
+  moverIntroduction: string | null;
+  fromAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  } | null;
+  toAddress: {
+    city: string;
+    district: string;
+    detail: string;
+    region: string;
+  } | null;
+  moveDate: string | null;
+  rating: number;
+  content: string;
+  createdAt: string;
+  estimate: {
+    id: string;
+    price: number;
+    comment: string | null;
+    status: string;
+    isDesignated: boolean;
+    validUntil: string;
+    workingHours: number;
+    includesPackaging: boolean;
+    insuranceAmount: number;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+}
+
 export interface IReviewListResponse {
   items: IReview[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+// 실제 API 응답 구조에 맞는 리뷰 리스트 응답 타입
+export interface IReceivedReviewListResponse {
+  items: IReceivedReview[];
   total: number;
   page: number;
   pageSize: number;
