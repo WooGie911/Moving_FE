@@ -50,8 +50,8 @@ export const LandingPage = () => {
       </div>
 
       <div className="mb-[61px] flex flex-col md:mb-[108.5px] lg:mt-[115px] lg:mb-[124.5px] lg:flex-row lg:items-center lg:justify-center">
-        <p className="mt-[53px] mb-[34px] ml-8 text-xl font-bold md:mt-[69px] md:mb-10 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
-          <span className="block lg:mb-2">{t("selectionProcess")}</span>
+        <p className="mt-[53px] mb-[34px] ml-8 text-xl font-bold whitespace-pre-line md:mt-[69px] md:mb-10 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
+          {t("selectionProcess")}
         </p>
         <div className="overflow-hidden">
           <Image src={moveTypeImg} alt="move type" className="slow-pulse object-cover" />
@@ -60,14 +60,14 @@ export const LandingPage = () => {
 
       <div className="relative flex">
         <Image src={bannerImg} alt="explain-banner" className="lg:mb-[61px] lg:max-w-[1200px]" />
-        <p className="absolute top-[5%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[18.3%] lg:left-[53.0%] lg:text-start">
+        <p className="absolute top-[5%]  whitespace-pre-line right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[18.3%] lg:left-[53.0%] lg:text-start">
           {t("getQuote")}
         </p>
       </div>
 
       <div className="relative flex">
         <Image src={bottomImg} alt="bottom-banner" />
-        <p className="absolute top-[10%] left-[5%] flex max-w-[calc(100%-32px)] flex-col items-start text-xl font-bold md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[20%]">
+        <p className="absolute  whitespace-pre-line top-[10%] left-[5%] flex max-w-[calc(100%-32px)] flex-col items-start text-xl font-bold md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[8%]">
           {t("learnMore")}
         </p>
       </div>
