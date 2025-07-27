@@ -28,7 +28,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: ReviewListProps) => {
         setLoading(true);
         setError(null);
         
-        const response = await reviewApi.fetchReceivedReviews(String(moverId), currentPage, PAGE_SIZE);
+        const response = await reviewApi.fetchReceivedReviews(moverId, currentPage, PAGE_SIZE);
         
         if (!isMounted) return;
         

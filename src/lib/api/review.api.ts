@@ -97,12 +97,12 @@ const reviewApi = {
    * 4. 기사님이 받은 리뷰 목록 조회
    */
   fetchReceivedReviews: async (
-    moverId: string,
+    moverId: number,
     page: number = 1,
     pageSize: number = 5,
   ): Promise<IReceivedReviewListResponse> => {
     try {
-      const res = await fetch(`${API_URL}/reviews/mover/${moverId}?page=${page}&pageSize=${pageSize}`, {
+      const res = await fetch(`${API_URL}/reviews/mover/${String(moverId)}?page=${page}&pageSize=${pageSize}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -119,13 +119,13 @@ const reviewApi = {
   /**
    * 5. 기사님의 전체 리뷰 통계 조회
    */
-  fetchMoverReviewStats: async (moverId: string): Promise<{
+  fetchMoverReviewStats: async (moverId: number): Promise<{
     averageRating: number;
     totalReviewCount: number;
     ratingDistribution: { [key: number]: number };
   }> => {
     try {
-      const res = await fetch(`${API_URL}/reviews/mover/${moverId}/stats`, {
+      const res = await fetch(`${API_URL}/reviews/mover/${String(moverId)}/stats`, {
         headers: {
           "Content-Type": "application/json",
         },

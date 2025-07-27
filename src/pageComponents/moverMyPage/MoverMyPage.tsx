@@ -28,31 +28,75 @@ interface IMoverInfoExtended extends IMoverInfo {
   currentAreas?: string[];
 }
 
+interface TReviewStats {
+  averageRating: number;
+  totalReviewCount: number;
+}
+
+// 초기값 정의
+const initialProfile: IMoverInfoExtended = {
+  id: 0,
+  userId: 0,
+  nickname: "",
+  profileImage: null,
+  experience: 0,
+  introduction: "",
+  description: "",
+  completedCount: 0,
+  avgRating: 0,
+  reviewCount: 0,
+  favoriteCount: 0,
+  lastActivityAt: null,
+  user: {
+    id: 0,
+    name: "",
+    email: "",
+  },
+  serviceRegions: [],
+  serviceTypes: [],
+  moverImage: "",
+  isVeteran: false,
+  shortIntro: "",
+  detailIntro: "",
+  workedCount: 0,
+  career: 0,
+  totalFavoriteCount: 0,
+  currentAreas: [],
+};
+
+const initialReviewStats: TReviewStats = {
+  averageRating: 0,
+  totalReviewCount: 0,
+};
+
+type TLoadingState = "idle" | "loading" | "success" | "error";
+
 const MoverMyPage = () => {
   const router = useRouter();
   const locale = useLocale();
-  const [profile, setProfile] = useState<IMoverInfoExtended | null>(null);
+  const [profile, setProfile] = useState<IMoverInfoExtended>(initialProfile);
   const [reviews, setReviews] = useState<IReceivedReview[]>([]);
-  const [reviewStats, setReviewStats] = useState<{ averageRating: number; totalReviewCount: number } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [reviewStats, setReviewStats] = useState<TReviewStats>(initialReviewStats);
+  const [loadingState, setLoadingState] = useState<TLoadingState>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        setIsLoading(true);
-        setError(null);
+        setLoadingState("loading");
+        setErrorMessage("");
         const res = await userApi.getProfile();
         if (res.success && res.data) {
           setProfile(res.data);
+          setLoadingState("success");
         } else {
-          setError("프로필을 불러오는데 실패했습니다.");
+          setErrorMessage("프로필을 불러오는데 실패했습니다.");
+          setLoadingState("error");
         }
       } catch (err) {
-        setError("프로필을 불러오는데 실패했습니다.");
+        setErrorMessage("프로필을 불러오는데 실패했습니다.");
+        setLoadingState("error");
         console.error("프로필 조회 오류:", err);
-      } finally {
-        setIsLoading(false);
       }
     }
     fetchProfile();
@@ -65,11 +109,11 @@ const MoverMyPage = () => {
 
   // 리뷰 통계 데이터 가져오기
   useEffect(() => {
-    if (!profile?.id) return;
+    if (!profile.id || profile.id === 0) return;
 
     const fetchReviewStats = async () => {
       try {
-        const stats = await reviewApi.fetchMoverReviewStats(String(profile.id));
+        const stats = await reviewApi.fetchMoverReviewStats(profile.id);
         setReviewStats({
           averageRating: stats.averageRating,
           totalReviewCount: stats.totalReviewCount
@@ -87,9 +131,7 @@ const MoverMyPage = () => {
     };
 
     fetchReviewStats();
-  }, [profile?.id, reviews.length]);
-
-
+  }, [profile.id, reviews.length]);
 
   const getServiceName = (serviceType: string): string => {
     const serviceNameMap: { [key: string]: string } = {
@@ -100,7 +142,8 @@ const MoverMyPage = () => {
     return serviceNameMap[serviceType] || serviceType;
   };
 
-  if (isLoading) {
+  // 로딩 상태에 따른 렌더링
+  if (loadingState === "loading") {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-white">
         <div className="text-lg">로딩 중...</div>
@@ -108,11 +151,11 @@ const MoverMyPage = () => {
     );
   }
 
-  if (error) {
+  if (loadingState === "error") {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-white">
         <div className="text-center">
-          <div className="text-lg text-red-500 mb-4">{error}</div>
+          <div className="text-lg text-red-500 mb-4">{errorMessage}</div>
           <button 
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
@@ -124,7 +167,8 @@ const MoverMyPage = () => {
     );
   }
 
-  if (!profile) {
+  // 프로필이 초기값이거나 ID가 없는 경우
+  if (!profile.id || profile.id === 0) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-white">
         <div className="text-lg">프로필 정보를 찾을 수 없습니다.</div>
@@ -170,7 +214,7 @@ const MoverMyPage = () => {
                       {profile.isVeteran && (
                         <Image src={chatIcon} alt="veteran-icon" className="w-6 h-6" />
                       )}
-                      <div className="justify-center text-zinc-800 text-2xl font-semibold leading-loose">{profile.nickname}</div>
+                      <div className="justify-center text-gray-600 text-2xl font-semibold leading-loose">{profile.nickname}</div>
                     </div>
                     <div className="inline-flex justify-start items-center gap-1">
                       <Favorite
@@ -179,7 +223,7 @@ const MoverMyPage = () => {
                         moverId={String(profile.id)}
                         favoritedColor="text-black"
                         unfavoritedColor="text-black"
-                        textColor="text-zinc-500"
+                        textColor="text-gray-500"
                         heartPosition="left"
                         onFavoriteChange={() => {}}
                       />
@@ -187,10 +231,10 @@ const MoverMyPage = () => {
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col justify-start items-start gap-3">
-                  <div className="self-stretch justify-start text-zinc-800 text-lg font-semibold leading-relaxed">
+                  <div className="self-stretch justify-start text-gray-600 text-lg font-semibold leading-relaxed">
                     {profile.shortIntro}
                   </div>
-                  <div className="self-stretch justify-start text-zinc-500 text-base font-normal leading-relaxed">
+                  <div className="self-stretch justify-start text-gray-500 text-base font-normal leading-relaxed">
                     {profile.detailIntro}
                   </div>
                 </div>
@@ -238,24 +282,24 @@ const MoverMyPage = () => {
                 </button>
               </div>
               
-              <div className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-zinc-100" />
+              <div className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-gray-200" />
               <div className="self-stretch flex flex-col justify-start items-start gap-4">
                 <div className="self-stretch justify-start text-neutral-800 text-xl font-semibold leading-loose">활동 현황</div>
-                <div className="self-stretch h-28 px-40 bg-neutral-50 rounded-2xl outline outline-1 outline-offset-[-1px] outline-zinc-100 inline-flex justify-between items-center">
+                <div className="self-stretch h-28 px-40 bg-neutral-50 rounded-2xl outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-between items-center">
                   <div className="w-14 inline-flex flex-col justify-start items-center gap-1">
-                    <div className="self-stretch text-center justify-start text-zinc-800 text-base font-normal leading-relaxed">진행</div>
+                                          <div className="self-stretch text-center justify-start text-gray-600 text-base font-normal leading-relaxed">진행</div>
                     <div className="self-stretch text-center justify-center text-red-500 text-xl font-bold leading-loose">{String(profile.workedCount || 0)}건</div>
                   </div>
                   <div className="w-24 inline-flex flex-col justify-start items-center gap-1">
-                    <div className="text-center justify-start text-zinc-800 text-base font-normal leading-relaxed">리뷰</div>
+                    <div className="text-center justify-start text-gray-600 text-base font-normal leading-relaxed">리뷰</div>
                     <div className="inline-flex justify-start items-center gap-1.5">
                       <div className="justify-center text-red-500 text-xl font-bold leading-loose">
-                        {reviewStats ? reviewStats.averageRating.toFixed(1) : "0.0"}
+                        {reviewStats.averageRating.toFixed(1)}
                       </div>
                     </div>
                   </div>
                   <div className="w-16 inline-flex flex-col justify-start items-center gap-1">
-                    <div className="self-stretch text-center justify-start text-zinc-800 text-base font-normal leading-relaxed whitespace-nowrap">총 경력</div>
+                    <div className="self-stretch text-center justify-start text-gray-600 text-base font-normal leading-relaxed whitespace-nowrap">총 경력</div>
                     <div className="self-stretch text-center justify-center text-red-500 text-xl font-bold leading-loose">{String(profile.career)}년</div>
                   </div>
                 </div>
@@ -291,27 +335,17 @@ const MoverMyPage = () => {
                 ))}
               </div>
             </div>
-            <div className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-zinc-100" />
+            <div className="w-full h-0 outline outline-1 outline-offset-[-0.50px] outline-gray-200" />
             <div className="self-stretch flex flex-col justify-start items-start gap-10">
               <div className="w-full [&>div>div>div]:flex [&>div>div>div]:flex-col [&>div>div>div]:gap-6 [&>div>div>div]:md:flex-row [&>div>div>div]:md:items-start [&>div>div>div]:md:justify-between [&>div>div>div]:lg:flex-row [&>div>div>div]:lg:items-start [&>div>div>div]:lg:justify-between [&>div>div>div>*:last-child]:md:ml-auto [&>div>div>div>*:last-child]:lg:ml-auto [&>div>div>div>*:last-child]:w-full [&>div>div>div>*:last-child]:md:w-[284px] [&>div>div>div>*:last-child]:lg:w-[284px]">
                 <ReviewAvg mover={profile} reviews={reviews} />
               </div>
               
               <div className="w-full">
-                {profile?.id ? (
-                  <ReviewList 
-                    moverId={String(profile.id)} 
-                    onReviewsFetched={handleReviewsFetched} 
-                  />
-                ) : (
-                  <div className="w-full">
-                    <p className="mb-[51px] text-xl font-semibold">리뷰</p>
-                    <div className="flex flex-col items-center">
-                      <p className="text-lg font-semibold">프로필 정보를 불러올 수 없습니다.</p>
-                      <p className="text-md text-[#999999]">로그인 상태를 확인해주세요</p>
-                    </div>
-                  </div>
-                )}
+                <ReviewList 
+                  moverId={profile.id} 
+                  onReviewsFetched={handleReviewsFetched} 
+                />
               </div>
             </div>
           </div>

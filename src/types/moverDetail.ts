@@ -19,7 +19,7 @@ export interface ReceivedReviewsProps {
 export interface MoverWithReceivedReviewsProps extends MoverProps, ReceivedReviewsProps {}
 
 export interface ReviewListProps {
-  moverId: string | undefined;
+  moverId: number;
   onReviewsFetched?: (reviews: IReceivedReview[]) => void;
 }
 

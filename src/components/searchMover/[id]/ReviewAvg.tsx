@@ -7,14 +7,14 @@ import Image from "next/image";
 import { MoverWithReceivedReviewsProps } from "@/types/moverDetail";
 import reviewApi from "@/lib/api/review.api";
 
-interface ReviewStats {
+interface TReviewStats {
   averageRating: number;
   totalReviewCount: number;
   ratingDistribution: { [key: number]: number };
 }
 
 const ReviewAvg = ({ mover, reviews }: MoverWithReceivedReviewsProps) => {
-  const [stats, setStats] = useState<ReviewStats | null>(null);
+  const [stats, setStats] = useState<TReviewStats | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
