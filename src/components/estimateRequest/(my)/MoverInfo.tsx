@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
+import { IMoverInfoProps } from "@/types/estimateRequest";
 import chat from "@/assets/icon/etc/icon-chat.png";
 import like_red from "@/assets/icon/like/icon-like-red.png";
 import like_white from "@/assets/icon/like/icon-like-white-lg.png";
@@ -10,20 +11,13 @@ import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
 import { useTranslations } from "next-intl";
 
-interface IProps {
-  mover: TMoverInfo;
-  usedAtDetail: boolean;
-}
-
-export const MoverInfo = ({ mover, usedAtDetail = false }: IProps) => {
+export const MoverInfo = ({ mover, usedAtDetail = false }: IMoverInfoProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const t = useTranslations("estimateRequest");
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     setIsLiked(!isLiked);
-    console.log(isLiked);
-    console.log("찜하기 기능 추가하기");
     //todo 하트 버튼 클릭 시 찜하기 API 연동
   };
 

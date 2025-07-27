@@ -8,6 +8,7 @@ import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import LanguageSync from "./LanguageSync";
 
 const pretendard = localFont({
   src: "../../assets/font/PretendardVariable.woff2",
@@ -67,6 +68,8 @@ export default async function LocaleLayout({
       </head>
       <body className={`${pretendard.variable} antialiased`}>
         <NextIntlClientProvider>
+          {/* 언어 동기화 */}
+          <LanguageSync locale={locale} />
           <Providers>
             <Gnb />
             {children}

@@ -17,7 +17,8 @@
     "next": "下一步",
     "previous": "上一步",
     "completeSelection": "完成选择",
-    "editAnswer": "修改"
+    "editAnswer": "修改",
+    "success": "完成"
   },
   "estimateRequest": {
     "title": "报价请求",
@@ -111,18 +112,22 @@
     "departure": "出发地",
     "arrival": "目的地",
     "confirmEstimateRequest": "确认报价",
+    "createSuccess": "报价请求已成功创建！",
+    "confirmQuestion": "您确定要确认这个报价吗？",
     "editQuestion": "可通过以下按钮进行修改或删除。",
     "editButton": "编辑",
     "deleteButton": "删除",
     "deleteConfirmTitle": "删除报价",
     "deleteConfirmMessage": "您确定要删除这个报价吗？删除的报价无法恢复。",
+    "updateConfirmTitle": "更新报价",
+    "updateConfirmMessage": "您确定要更新这个报价吗？",
     "confirmEstimateRequestTitle": "确认报价",
     "confirmEstimateRequestMessage": "您的报价请求已成功发送。您要确认这个报价吗？",
     "movingTypes": {
       "small": "小型搬家",
-      "smallDesc": "单间、两室、20坪以下",
+      "smallDesc": "单间、两室、约66平方米以下",
       "home": "家庭搬家",
-      "homeDesc": "三室、20坪以上",
+      "homeDesc": "三室、66㎡以上",
       "office": "办公室搬家",
       "officeDesc": "办公室、商业空间",
       "store": "商店搬家",
@@ -149,7 +154,15 @@
     "jibunAddressPlaceholder": "请输入地段地址",
     "editAnswer": "修改",
     "selectDeparture": "选择出发地",
-    "selectArrival": "选择目的地"
+    "selectArrival": "选择目的地",
+    "confirmTitle": "确认报价请求",
+    "confirmMessage": "您要使用输入的信息请求报价吗？",
+    "editSuccess": "报价请求已成功更新！",
+    "deleteSuccess": "报价请求已成功删除！",
+    "completeSelection": "完成选择",
+    "editConfirmMessage": "您要编辑此项目吗？",
+    "editConfirmTitle": "编辑项目",
+    "moverEstimateSubmitted": "当司机提交了报价时无法修改。请查看报价并做出决定。"
   },
   "navigation": {
     "home": "首页",
