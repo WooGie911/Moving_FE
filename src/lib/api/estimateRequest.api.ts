@@ -1,29 +1,7 @@
-import { IFormState } from "@/types/estimateRequest";
-
-// --- 타입 정의 ---
-interface IEstimateRequestPayload {
-  movingType: "SMALL" | "HOME" | "OFFICE";
-  movingDate: string;
-  departure: {
-    roadAddress: string;
-    detailAddress?: string;
-    zonecode: string;
-    jibunAddress: string;
-    extraAddress: string;
-  };
-  arrival: {
-    roadAddress: string;
-    detailAddress?: string;
-    zonecode: string;
-    jibunAddress: string;
-    extraAddress: string;
-  };
-  description?: string;
-}
+import { IFormState, IEstimateRequestPayload } from "@/types/estimateRequest";
 
 export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayload {
   try {
-    console.log("toEstimateRequestPayload 진입", form);
     const payload: IEstimateRequestPayload = {
       movingType: form.movingType.toUpperCase() as "SMALL" | "HOME" | "OFFICE",
       movingDate: form.movingDate.split("T")[0],
@@ -41,9 +19,13 @@ export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayl
         jibunAddress: form.arrival.jibunAddress || "",
         extraAddress: form.arrival.extraAddress || "",
       },
-      ...((form as any).description ? { description: (form as any).description } : {}),
     };
-    console.log("toEstimateRequestPayload 반환", payload);
+
+    // description이 있는 경우에만 추가
+    if ("description" in form && typeof form.description === "string" && form.description) {
+      payload.description = form.description;
+    }
+
     return payload;
   } catch (e) {
     console.error("toEstimateRequestPayload 내부 에러", e, form);
@@ -64,9 +46,8 @@ const estimateRequestApi = {
    */
   create: async (form: IFormState) => {
     const payload = toEstimateRequestPayload(form);
-    console.log("견적 요청 payload", payload);
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimate-requests`, {
+    const res = await fetch(`${API_URL}/estimateRequests/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +64,7 @@ const estimateRequestApi = {
    */
   getActive: async () => {
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimate-requests/active`, {
+    const res = await fetch(`${API_URL}/estimateRequests/active`, {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
@@ -96,12 +77,10 @@ const estimateRequestApi = {
    * 활성 견적 요청 수정
    */
   updateActive: async (form: IFormState) => {
-    console.log("updateActive 호출", form);
     try {
       const payload = toEstimateRequestPayload(form);
       const token = getAccessTokenFromCookie();
-      console.log("token", token);
-      const res = await fetch(`${API_URL}/estimate-requests/active`, {
+      const res = await fetch(`${API_URL}/estimateRequests/active`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +89,6 @@ const estimateRequestApi = {
         body: JSON.stringify(payload),
         credentials: "include",
       });
-      console.log("fetch 실행됨", res);
       return res.json();
     } catch (e) {
       console.error("updateActive 내부 에러", e, form);
@@ -123,7 +101,7 @@ const estimateRequestApi = {
    */
   cancelActive: async () => {
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimate-requests/active`, {
+    const res = await fetch(`${API_URL}/estimateRequests/active`, {
       method: "DELETE",
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

@@ -2,8 +2,11 @@ import React, { useCallback } from "react";
 import Calendar from "../Calendar";
 import { Button } from "@/components/common/button/Button";
 import { IDateSectionProps } from "@/types/estimateRequest";
+import { useLanguageStore } from "@/stores/languageStore";
 
 const DateSection: React.FC<IDateSectionProps> = ({ value, onChange, onComplete, className }) => {
+  const { t } = useLanguageStore();
+
   const handleDateSelect = useCallback(
     (date: Date) => {
       const formattedDate = date.toISOString().split("T")[0];
@@ -20,7 +23,7 @@ const DateSection: React.FC<IDateSectionProps> = ({ value, onChange, onComplete,
 
       {value && (
         <Button variant="solid" width="w-full" height="h-[54px]" rounded="rounded-[16px]" onClick={onComplete}>
-          선택완료
+          {t("estimateRequest.completeSelection")}
         </Button>
       )}
     </div>
