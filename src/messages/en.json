@@ -160,7 +160,8 @@
     "editSuccess": "Estimate request has been successfully updated!",
     "deleteSuccess": "Estimate request has been successfully deleted!",
     "editConfirmMessage": "Do you want to edit this item?",
-    "editConfirmTitle": "Edit Item"
+    "editConfirmTitle": "Edit Item",
+    "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision."
   },
   "navigation": {
     "home": "Home",

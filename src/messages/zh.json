@@ -161,7 +161,8 @@
     "deleteSuccess": "报价请求已成功删除！",
     "completeSelection": "完成选择",
     "editConfirmMessage": "您要编辑此项目吗？",
-    "editConfirmTitle": "编辑项目"
+    "editConfirmTitle": "编辑项目",
+    "moverEstimateSubmitted": "当司机提交了报价时无法修改。请查看报价并做出决定。"
   },
   "navigation": {
     "home": "首页",
