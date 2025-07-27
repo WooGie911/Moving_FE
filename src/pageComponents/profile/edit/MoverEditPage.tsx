@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
 import { Button } from "@/components/common/button/Button";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Image from "next/image";
-import { PasswordInput } from "@/components/common/input/PasswordInput";
+import { TextInput } from "@/components/common/input/TextInput";
 import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
+import userApi from "@/lib/api/user.api";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { regionLabelMap } from "@/lib/utils/regionMapping";
+import { useModal } from "@/components/common/modal/ModalContext";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
 const REGION_OPTIONS = [
@@ -30,22 +36,103 @@ const REGION_OPTIONS = [
   "제주",
 ];
 
+// 서비스 타입 매핑
+const serviceTypeMapping: { [key: string]: string } = {
+  "소형이사": "SMALL",
+  "가정이사": "HOME",
+  "사무실이사": "OFFICE",
+};
+
+// 지역 매핑
+const regionTypeMapping: { [key: string]: string } = {
+  "서울": "SEOUL",
+  "경기": "GYEONGGI",
+  "인천": "INCHEON",
+  "강원": "GANGWON",
+  "충북": "CHUNGBUK",
+  "충남": "CHUNGNAM",
+  "세종": "SEJONG",
+  "대전": "DAEJEON",
+  "전북": "JEONBUK",
+  "전남": "JEONNAM",
+  "광주": "GWANGJU",
+  "경북": "GYEONGBUK",
+  "경남": "GYEONGNAM",
+  "대구": "DAEGU",
+  "울산": "ULSAN",
+  "부산": "BUSAN",
+  "제주": "JEJU",
+};
+
 const defaultValues = {
-  nickname: "김코드",
-  career: "8년",
-  intro: "꼼꼼한 이사를 도와드립니다.",
-  desc: "안녕하세요. 이사업계 경력 7년으로 안전한 이사를 도와드리는 김코드입니다. 고객님의 물품을 소중하고 안전하게 운송하여 드립니다. 소형이사 및 가정이사 서비스를 제공하며 서비스 가능 지역은 서울과 경기권입니다. 그 외 기타 지역",
+  nickname: "",
+  career: "",
+  intro: "",
+  desc: "",
 };
 
 export default function MoverEditPage() {
+  const router = useRouter();
+  const { getUser } = useAuth();
+  const locale = useLocale();
+  const { open, close } = useModal();
+  const [services, setServices] = useState<string[]>([]);
+  const [regions, setRegions] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<{ file: File | null; dataUrl: string }>({
+    file: null,
+    dataUrl: "",
+  });
+
   const methods = useForm({ defaultValues });
-  const { watch, handleSubmit } = methods;
+  const { watch, handleSubmit, setValue, reset } = methods;
   const nickname = watch("nickname");
   const career = watch("career");
   const intro = watch("intro");
   const desc = watch("desc");
-  const [services, setServices] = useState<string[]>(["소형이사"]);
-  const [regions, setRegions] = useState<string[]>(["서울", "경기", "인천"]);
+
+  // 프로필 정보 불러와서 폼 초기값 세팅
+  useEffect(() => {
+    async function fetchProfile() {
+      const res = await userApi.getProfile();
+      if (res.success && res.data) {
+        reset({
+          nickname: res.data.nickname || "",
+          career: res.data.career?.toString() || "",
+          intro: res.data.shortIntro || "",
+          desc: res.data.detailIntro || "",
+        });
+        
+        // 서비스 타입 설정
+        if (res.data.serviceTypes) {
+          const serviceNames = res.data.serviceTypes.map((type: string) => {
+            // MoveType enum을 한글 이름으로 변환
+            const serviceNameMap: { [key: string]: string } = {
+              "SMALL": "소형이사",
+              "HOME": "가정이사", 
+              "OFFICE": "사무실이사"
+            };
+            return serviceNameMap[type] || "";
+          }).filter(Boolean);
+          setServices(serviceNames);
+        }
+
+        // 지역 설정
+        if (res.data.currentAreas) {
+          const regionNames = res.data.currentAreas.map((area: string) => {
+            return regionLabelMap[area] || "";
+          }).filter(Boolean);
+          setRegions(regionNames);
+        }
+
+        // 이미지 설정
+        if (res.data.moverImage) {
+          setSelectedImage({ file: null, dataUrl: res.data.moverImage });
+        }
+      }
+    }
+    fetchProfile();
+  }, [reset]);
+
   const allFilled =
     nickname?.trim() &&
     career?.trim() &&
@@ -54,10 +141,77 @@ export default function MoverEditPage() {
     desc.trim().length >= 10 &&
     services.length > 0 &&
     regions.length > 0;
-  const onSubmit = (data: any) => {
-    // TODO: 실제 저장 API 연동
-    console.log({ ...data, services, regions });
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        setSelectedImage({ file, dataUrl });
+      };
+      reader.readAsDataURL(file);
+    }
   };
+
+  const onSubmit = async (data: any) => {
+    try {
+      
+      // 이미지 업로드 처리
+      let imageUrl = selectedImage.dataUrl;
+      if (selectedImage.file) {
+        imageUrl = await userApi.uploadFilesToS3(selectedImage.file);
+      }
+
+      // 서비스 타입을 API 형식으로 변환
+      const serviceTypes = services.map(service => serviceTypeMapping[service]).filter(Boolean);
+      
+      // 지역을 API 형식으로 변환 (여러 지역 지원)
+      const currentAreas = regions.map(region => regionTypeMapping[region]).filter(Boolean);
+
+      const req = {
+        nickname: data.nickname,
+        moverImage: imageUrl,
+        currentAreas: currentAreas,
+        serviceTypes: serviceTypes,
+        shortIntro: data.intro,
+        detailIntro: data.desc,
+        career: parseInt(data.career),
+        isVeteran: false, // 기본값
+      };
+
+      const result = await userApi.updateMoverProfile(req);
+      if (result.success) {
+        await getUser();
+        open({
+          title: "프로필 수정 완료",
+          children: <div>프로필 수정이 완료되었습니다.</div>,
+          buttons: [
+            {
+              text: "확인",
+              onClick: () => {
+                close();
+                router.push(`/${locale}/moverMyPage`);
+              },
+            },
+          ],
+        });
+      } else {
+        open({
+          title: "프로필 수정 실패",
+          children: <div>{result.message || "수정에 실패했습니다."}</div>,
+          buttons: [{ text: "확인", onClick: () => close() }],
+        });
+      }
+    } catch (e) {
+      open({
+        title: "프로필 수정 실패",
+        children: <div>오류가 발생했습니다.</div>,
+        buttons: [{ text: "확인", onClick: () => close() }],
+      });
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="flex min-h-screen w-full items-center justify-center bg-white">
@@ -77,8 +231,24 @@ export default function MoverEditPage() {
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
                   프로필 이미지
                 </div>
-                <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-40 lg:w-40">
-                  <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+                <div className="flex items-center gap-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                    id="profile-image-input"
+                  />
+                  <label 
+                    htmlFor="profile-image-input"
+                    className="flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 transition-all hover:bg-neutral-200 lg:h-40 lg:w-40"
+                  >
+                    {selectedImage.dataUrl ? (
+                      <img src={selectedImage.dataUrl} alt="프로필 이미지" className="h-full w-full object-cover" />
+                    ) : (
+                      <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+                    )}
+                  </label>
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
@@ -92,7 +262,7 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
-                  <PasswordInput
+                  <TextInput
                     name="nickname"
                     placeholder="별명을 입력하세요"
                     rules={{ required: "필수 입력" }}
@@ -112,10 +282,10 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
-                  <PasswordInput
+                  <TextInput
                     name="career"
-                    placeholder="ex) 8년"
-                    rules={{ required: "필수 입력" }}
+                    placeholder="ex) 8"
+                    rules={{ required: "필수 입력", min: { value: 0, message: "경력은 0년 이상이어야 합니다" } }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -132,10 +302,10 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
-                  <PasswordInput
+                  <TextInput
                     name="intro"
-                    placeholder="한 줄 소개를 입력하세요"
-                    rules={{ required: "필수 입력" }}
+                    placeholder="한 줄 소개를 입력하세요 (최소 8자)"
+                    rules={{ required: "필수 입력", minLength: { value: 8, message: "8자 이상 입력해주세요" } }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -155,7 +325,7 @@ export default function MoverEditPage() {
                 <div className="w-[327px] lg:w-full">
                   <TextAreaInput
                     name="desc"
-                    placeholder="상세 설명을 입력하세요"
+                    placeholder="상세 설명을 입력하세요 (최소 10자)"
                     rules={{ required: "필수 입력", minLength: { value: 10, message: "10자 이상 입력해주세요" } }}
                     textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
@@ -178,6 +348,7 @@ export default function MoverEditPage() {
                       key={service}
                       text={service}
                       clickAble={true}
+                      isSelected={services.includes(service)}
                       onClick={() =>
                         setServices((prev) =>
                           prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
@@ -204,6 +375,7 @@ export default function MoverEditPage() {
                         key={region}
                         text={region}
                         clickAble={true}
+                        isSelected={regions.includes(region)}
                         onClick={() =>
                           setRegions((prev) =>
                             prev.includes(region) ? prev.filter((r) => r !== region) : [...prev, region],
@@ -214,6 +386,7 @@ export default function MoverEditPage() {
                   </div>
                 </div>
               </div>
+
               <div className="flex w-full flex-col gap-2 lg:flex-row lg:gap-5">
                 <Button
                   variant="solid"

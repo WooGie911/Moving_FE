@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { IUseLikeToggleProps } from "@/types/button";
 import findMoverApi from "@/lib/api/findMover.api";
 import { useAuth } from "@/providers/AuthProvider";
@@ -13,6 +14,7 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
   const { isLoggedIn } = useAuth();
   const { open, close } = useModal();
   const router = useRouter();
+  const t = useTranslations("mover");
 
   useEffect(() => {
     setIsLiked(initialIsLiked);
@@ -21,11 +23,11 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
   const toggleLike = async () => {
     if (!isLoggedIn) {
       open({
-        title: "로그인 필요",
-        children: "로그인 후 찜하기 기능을 이용할 수 있습니다.",
+        title: t("loginRequired"),
+        children: t("likeLoginRequiredMessage"),
         buttons: [
           {
-            text: "로그인 하기",
+            text: t("loginButton"),
             onClick: () => {
               close();
               router.push("/userSignin");
@@ -58,9 +60,9 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
     } catch (error: any) {
       console.error("찜하기 토글 실패:", error);
       open({
-        title: "오류",
-        children: error.message || "찜하기 처리에 실패했습니다.",
-        buttons: [{ text: "확인", onClick: close }],
+        title: t("likeErrorTitle"),
+        children: error.message || t("likeFailedMessage"),
+        buttons: [{ text: t("confirmButton"), onClick: close }],
       });
     } finally {
       setIsLoading(false);

@@ -9,6 +9,7 @@ import { SelectMovingType } from "./SelectMovingType";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { Dropdown } from "./Dropdown";
 import { IFilterState } from "@/types/moverEstimate";
+import { useTranslations } from "next-intl";
 
 interface SmallFilterSectionProps {
   filters: IFilterState;
@@ -22,13 +23,14 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   const deviceType = useWindowWidth();
   const isModalOpening = useRef(false);
   const currentModalFilters = useRef<IFilterState>(filters);
+  const t = useTranslations("estimate");
 
   // 모달 내부 상태 관리 (실시간 반영을 위해)
   const [modalFilters, setModalFilters] = useState<IFilterState>(filters);
 
   // 화면이 desktop(lg)이상이면 모달 자동 close (필터 모달인 경우에만)
   React.useEffect(() => {
-    if (modal && deviceType === "desktop" && modal.title === "필터") {
+    if (modal && deviceType === "desktop" && modal.title === t("filter")) {
       close();
     }
   }, [deviceType, modal, close]);
@@ -95,7 +97,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
 
   return (
     <div className="flex w-full flex-row justify-between">
-      <p>{`전체 ${totalCount}건`}</p>
+      <p>{`${t("totalCount")} ${totalCount}${t("countUnit")}`}</p>
       <div className="flex flex-row items-center justify-center gap-1">
         {/* 정렬 버튼 */}
         <Dropdown value={filters.sortBy} onChange={(sortBy) => onFiltersChange({ sortBy })} />
@@ -105,16 +107,16 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
           onClick={() => {
             isModalOpening.current = true;
             open({
-              title: "필터",
+              title: t("filter"),
               children: (
                 <div className="flex flex-col items-start justify-center gap-4">
                   {/* 이사유형 라벨 선택 영역 */}
                   <div className="flex flex-col items-start justify-center gap-2 pb-7">
-                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">이사 유형</p>
+                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">{t("movingType")}</p>
                     <SelectMovingType selectedTypes={modalFilters.movingTypes} onTypeChange={handleModalTypeChange} />
                   </div>
                   <div className="flex flex-col items-start justify-center gap-2">
-                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">지역 및 견적 </p>
+                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">{t("regionAndEstimate")}</p>
                     <SelectCheckBox
                       isDesignatedOnly={modalFilters.isDesignatedOnly}
                       isServiceAreaOnly={modalFilters.isServiceAreaOnly}
@@ -127,7 +129,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
               type: "bottomSheet", // "center" | "bottomSheet" (생략 시 기본값: "center")
               buttons: [
                 {
-                  text: "조회하기",
+                  text: t("search"),
                   onClick: () => {
                     handleApplyFilters();
                   },

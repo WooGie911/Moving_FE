@@ -54,6 +54,7 @@ const authApi = {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       method: "POST",
+      credentials: "include",
     });
 
     const responseData = await response.json();
@@ -61,6 +62,44 @@ const authApi = {
     await clearServerSideTokens();
 
     return responseData;
+  },
+
+  // 리프레쉬 토큰을 사용한 토큰 갱신
+  refreshToken: async () => {
+    const response = await fetch(`${API_URL}/auth/refresh-token`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      credentials: "include",
+    });
+
+    const responseData = await response.json();
+
+    // 토큰 갱신 성공 시 쿠키에 저장
+    if (responseData.success) {
+      setTokensToCookie(responseData.accessToken);
+    }
+
+    return responseData;
+  },
+
+  // 구글 로그인 (페이지 리디렉션 방식)
+  googleLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 구글 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/google?userType=${userType}`;
+  },
+
+  // 카카오 로그인 (페이지 리디렉션 방식)
+  kakaoLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 카카오 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/kakao?userType=${userType}`;
+  },
+
+  // 네이버 로그인 (페이지 리디렉션 방식)
+  naverLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
+    // 전체 페이지를 네이버 OAuth로 리디렉션
+    window.location.href = `${API_URL}/auth/naver?userType=${userType}`;
   },
 };
 

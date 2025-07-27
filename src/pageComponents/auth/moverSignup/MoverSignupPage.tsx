@@ -13,14 +13,16 @@ import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
 import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignUpFormValues } from "@/types/auth";
-import authApi from "@/lib/api/auth.api";
 import { useAuth } from "@/providers/AuthProvider";
-import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { useValidationRules } from "@/hooks/useValidationRules";
+import { useTranslations } from "next-intl";
 
 const MoverSignupPage = () => {
   const deviceType = useWindowWidth();
-  const { isLoading, signUp } = useAuth();
+  const { isLoading, signUp, googleLogin, kakaoLogin, naverLogin } = useAuth();
+  const validationRules = useValidationRules();
+  const t = useTranslations("auth");
   const { open, close } = useModal();
 
   const form = useForm<ISignUpFormValues>({
@@ -57,7 +59,7 @@ const MoverSignupPage = () => {
       if (isLoading) return;
       const response = await signUp(signUpData);
 
-      if (!response.success) {
+      if (response.status !== 200) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,
@@ -78,8 +80,8 @@ const MoverSignupPage = () => {
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
           <Link href="/userSignup">
-            <span className="text-black-200 text-lg">고객님이신가요?</span>
-            <span className="text-primary-400 ml-2 text-lg font-semibold underline">고객님 전용 페이지</span>
+            <span className="text-black-200 text-lg">{t("areYouCustomer")}</span>
+            <span className="text-primary-400 ml-2 text-lg font-semibold underline">{t("customerPage")}</span>
           </Link>
         </div>
 
@@ -88,11 +90,11 @@ const MoverSignupPage = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
             {/* 이름 */}
             <div className="mb-6 flex flex-col gap-2 font-normal">
-              <span className="text-black-400 text-md">이름</span>
+              <span className="text-black-400 text-md">{t("name")}</span>
               <BaseInput
                 {...register("name", validationRules.name)}
                 error={errors.name?.message}
-                placeholder="이름을 입력해주세요."
+                placeholder={t("namePlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -100,11 +102,11 @@ const MoverSignupPage = () => {
 
             {/* 이메일 */}
             <div className="mb-6 flex flex-col gap-2 font-normal">
-              <span className="text-black-400 text-md">이메일</span>
+              <span className="text-black-400 text-md">{t("email")}</span>
               <BaseInput
                 {...register("email", validationRules.email)}
                 error={errors.email?.message}
-                placeholder="이메일을 입력해주세요."
+                placeholder={t("emailPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -112,11 +114,11 @@ const MoverSignupPage = () => {
 
             {/* 전화번호 */}
             <div className="mb-6 flex flex-col gap-2 font-normal">
-              <span className="text-black-400 text-md">전화번호</span>
+              <span className="text-black-400 text-md">{t("phoneNumber")}</span>
               <BaseInput
                 {...register("phoneNumber", validationRules.phoneNumber)}
                 error={errors.phoneNumber?.message}
-                placeholder="전화번호를 입력해주세요."
+                placeholder={t("phoneNumberPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -124,10 +126,10 @@ const MoverSignupPage = () => {
 
             {/* 비밀번호*/}
             <div className="mb-6 flex flex-col gap-2">
-              <span className="text-black-400 text-md font-normal">비밀번호</span>
+              <span className="text-black-400 text-md font-normal">{t("password")}</span>
               <PasswordInput
                 {...register("password", validationRules.password)}
-                placeholder="비밀번호를 입력해주세요."
+                placeholder={t("passwordPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -135,16 +137,16 @@ const MoverSignupPage = () => {
 
             {/* 비밀번호 확인*/}
             <div className="mb-6 flex flex-col gap-2">
-              <span className="text-black-400 text-md font-normal">비밀번호 확인</span>
+              <span className="text-black-400 text-md font-normal">{t("passwordCheck")}</span>
               <PasswordInput
                 {...register("passwordCheck", {
-                  required: "비밀번호 확인은 필수 입력입니다.",
+                  required: t("passwordCheckRequired"),
                   validate: (value) => {
                     const passwordValue = watch("password");
-                    return value === passwordValue || "비밀번호가 일치하지 않습니다.";
+                    return value === passwordValue || t("passwordMismatch");
                   },
                 })}
-                placeholder="비밀번호를 다시 입력해주세요."
+                placeholder={t("passwordCheckPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -164,17 +166,17 @@ const MoverSignupPage = () => {
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span className="ml-2">회원가입 중...</span>
+                    <span className="ml-2">{t("signupInProgress")}</span>
                   </div>
                 ) : (
-                  "회원가입"
+                  t("signup")
                 )}
               </button>
               {/* 로그인 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
-                <span className="text-black-200 text-lg">이미 무빙 회원이신가요?</span>
+                <span className="text-black-200 text-lg">{t("alreadyMember")}</span>
                 <Link href="/moverSignin">
-                  <span className="text-primary-400 text-lg font-semibold underline">로그인</span>
+                  <span className="text-primary-400 text-lg font-semibold underline">{t("login")}</span>
                 </Link>
               </div>
             </div>
@@ -183,11 +185,32 @@ const MoverSignupPage = () => {
 
         {/* 소셜 로그인 및 마스코트 캐릭터 배치*/}
         <div className="flex w-full flex-col items-center justify-center gap-8">
-          <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
+          <span className="text-black-200 text-lg">{t("snsLogin")}</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
-            <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("MOVER")}
+            />
+            <Image
+              src={kakao}
+              alt="kakao"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => kakaoLogin("MOVER")}
+            />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("MOVER")}
+            />
           </div>
 
           {deviceType === "tablet" && (

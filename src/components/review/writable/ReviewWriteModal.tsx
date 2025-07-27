@@ -70,7 +70,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
 
                 <div className="border-gray-100">
                   <div className="text-gray-500">이사일</div>
-                  <div className="text-black-500">{card.moveDate.toLocaleDateString("ko-KR")}</div>
+                  <div className="text-black-500">{new Date(card.moveDate).toLocaleDateString("ko-KR")}</div>
                 </div>
               </div>
             </div>

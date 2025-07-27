@@ -15,7 +15,7 @@ type TUser = {
   customerImage?: string;
 };
 
-type TSignInResponse = {
+export type TSignInResponse = {
   user: {
     id: string;
     name: string;
@@ -23,6 +23,7 @@ type TSignInResponse = {
     userType: "CUSTOMER" | "MOVER";
   };
   success: boolean;
+  status?: number;
   message: string;
   accessToken: string;
 };
@@ -33,6 +34,9 @@ interface IAuthContextType {
   isLoggedIn: boolean;
   login: (email: string, password: string, userType: "CUSTOMER" | "MOVER") => Promise<TSignInResponse>;
   signUp: (signUpData: ISignUpFormValues) => Promise<TSignInResponse>;
+  googleLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
+  kakaoLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
+  naverLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
 }
@@ -47,7 +51,15 @@ const AuthContext = createContext<IAuthContextType>({
     message: "AuthProvider not found",
     accessToken: "",
   }),
-  signUp: async () => {},
+  signUp: async () => ({
+    user: { id: "", name: "", nickname: null, userType: "CUSTOMER" },
+    success: false,
+    message: "AuthProvider not found",
+    accessToken: "",
+  }),
+  googleLogin: async () => {},
+  kakaoLogin: async () => {},
+  naverLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
 });
@@ -153,6 +165,8 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       // 현재 경로를 고려한 리다이렉트
       handleRedirectAfterAuth(response.user);
+
+      return response;
     } catch (error) {
       console.error("회원가입 실패:", error);
       setUser(null);
@@ -175,6 +189,52 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       console.error("로그아웃 실패:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  /**
+   * 구글 로그인 함수
+   */
+  const googleLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
+      await authApi.googleLogin(userType);
+      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
+    } catch (error: unknown) {
+      console.error("구글 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  /**
+   * 카카오 로그인 함수
+   */
+  const kakaoLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
+      await authApi.kakaoLogin(userType);
+      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
+    } catch (error: unknown) {
+      console.error("카카오 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  /**
+   * 네이버 로그인 함수
+   */
+  const naverLogin = async (userType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      await authApi.naverLogin(userType);
+    } catch (error: unknown) {
+      console.error("네이버 로그인 실패:", error);
+      setIsLoading(false);
+      throw error;
     }
   };
 
@@ -204,6 +264,9 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     isLoggedIn: !!user,
     login,
     signUp,
+    googleLogin,
+    kakaoLogin,
+    naverLogin,
     logout,
     getUser,
   };

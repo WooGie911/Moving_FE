@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
@@ -9,12 +10,15 @@ import { IEditBasicForm } from "@/types/user";
 import { useRouter } from "next/navigation";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
-import { validationRules } from "@/utils/validators";
+import { useValidationRules } from "@/hooks/useValidationRules";
 
 const EditPage = () => {
   const router = useRouter();
   const { getUser } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
+  const t = useTranslations("edit");
+  const locale = useLocale();
+  const validationRules = useValidationRules();
   const form = useForm<IEditBasicForm>({
     mode: "onChange",
     defaultValues: {
@@ -74,24 +78,24 @@ const EditPage = () => {
       const result = await userApi.updateMoverBasicInfo(req);
       if (result.success) {
         await getUser();
-        alert("기본정보가 성공적으로 수정되었습니다.");
-        router.push("/moverMyPage");
+        alert(t("successMessage"));
+        router.push(`/${locale}/moverMyPage`);
       } else {
         if (result.message?.includes("비밀번호")) {
           form.setError("currentPassword", { message: result.message });
         } else {
-          setFormError(result.message || "수정에 실패했습니다.");
+          setFormError(result.message || t("errorMessage"));
         }
       }
     } catch (e) {
-      setFormError("오류가 발생했습니다.");
+      setFormError(t("generalError"));
     }
   };
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-white">
       <div className="mx-auto flex w-full max-w-[560px] flex-col gap-12 rounded-3xl bg-white px-4 py-10 lg:max-w-[1200px]">
-        <div className="mb-4 text-2xl font-bold !text-black text-black">기본정보 수정</div>
+        <div className="mb-4 text-2xl font-bold !text-black text-black">{t("title")}</div>
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-x-40 gap-y-8 lg:grid-cols-2">
             <div className="flex flex-col gap-8">

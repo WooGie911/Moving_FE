@@ -1,6 +1,5 @@
 "use client";
 
-import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
 import React, { useState } from "react";
 import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
@@ -10,6 +9,10 @@ import Link from "next/link";
 import { ICardListProps } from "@/types/customerEstimateRequest";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
+import { useModal } from "@/components/common/modal/ModalContext";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
+import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 // 숫자를 천 단위로 쉼표를 추가하는 함수
 const formatNumber = (num: number): string => {
@@ -25,9 +28,56 @@ export const CardList = ({
   mover,
   type,
 }: ICardListProps) => {
+  const { open, close } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("estimateRequest");
+  const tCommon = useTranslations("common");
+  const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
+    mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
+    onSuccess: () => {
+      open({
+        title: t("confirmSuccess"),
+        children: <div className="py-4 text-center">{t("estimateConfirmed")}</div>,
+        type: "bottomSheet",
+        buttons: [{ text: t("close"), onClick: () => close() }],
+      });
+    },
+    onError: () => {
+      open({
+        title: t("confirmFailed"),
+        children: <div className="py-4 text-center">{t("confirmationFailed")}</div>,
+        type: "bottomSheet",
+        buttons: [{ text: t("close"), onClick: () => close() }],
+      });
+    },
+  });
+
+  const handleConfirmEstimate = () => {
+    confirmEstimate(estimateId);
+  };
+
+  const openConfirmModal = () => {
+    open({
+      title: t("confirmEstimate"),
+      children: <div className="py-4 text-center">{t("confirmEstimateQuestion")}</div>,
+      type: "bottomSheet",
+      buttons: [
+        {
+          text: isConfirming ? tCommon("loading") : tCommon("confirm"),
+          onClick: handleConfirmEstimate,
+          disabled: isConfirming,
+        },
+        {
+          text: tCommon("cancel"),
+          onClick: () => close(),
+        },
+      ],
+    });
+  };
+
   const cardContent = (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-5 md:max-w-[600px] lg:max-w-[558px]"}`}
+      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1">
         <LabelAndTitleSection
@@ -55,29 +105,29 @@ export const CardList = ({
       {type === "pending" ? (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
           <p className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium">
-            견적 금액
+            {t("estimateAmount")}
           </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}원`}</p>
+          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
         </div>
       ) : (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
           <div className="flex w-full flex-row items-center justify-start gap-1 md:hidden">
             {estimateState === "PROPOSED" ? (
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">견적대기</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
             ) : estimateState === "ACCEPTED" ? (
               <div className="flex flex-row items-center justify-center gap-1">
                 <Image src={confirm} alt="confirm" width={16} height={16} />
-                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">확정견적</p>
+                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             ) : (
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">반려견적</p>
+              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("rejectedEstimate")}</p>
             )}
           </div>
           <div className="flex w-full flex-row items-center justify-end gap-3 md:justify-end">
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium">
-              견적 금액
+              {t("estimateAmount")}
             </p>
-            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}원`}</p>
+            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
           </div>
         </div>
       )}
@@ -86,17 +136,22 @@ export const CardList = ({
           <div className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden">
             <Button
               variant="solid"
-              state="default"
+              state={estimateState === "PROPOSED" ? "default" : "disabled"}
               width="w-[287px]"
               height="h-[54px]"
               rounded="rounded-[12px]"
-              onClick={() => console.log("견적 확정 모달 연결 예정")}
+              onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
+              disabled={estimateState !== "PROPOSED"}
             >
-              견적 확정하기
+              {estimateState === "PROPOSED"
+                ? t("confirmEstimateButton")
+                : estimateState === "ACCEPTED"
+                  ? t("alreadyConfirmed")
+                  : t("otherEstimateConfirmed")}
             </Button>
             <Link href={`/estimateRequest/pending/${estimateId}`}>
               <Button variant="outlined" state="default" width="w-[287px]" height="h-[54px]" rounded="rounded-[12px]">
-                상세보기
+                {t("viewDetails")}
               </Button>
             </Link>
           </div>
@@ -111,18 +166,23 @@ export const CardList = ({
                   height="h-[54px]"
                   rounded="rounded-[12px]"
                 >
-                  상세보기
+                  {t("viewDetails")}
                 </Button>
               </Link>
               <Button
                 variant="solid"
-                state="default"
+                state={estimateState === "PROPOSED" ? "default" : "disabled"}
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={() => console.log("모달연결 예정")}
+                onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
+                disabled={estimateState !== "PROPOSED"}
               >
-                견적 확정하기
+                {estimateState === "PROPOSED"
+                  ? t("confirmEstimateButton")
+                  : estimateState === "ACCEPTED"
+                    ? t("alreadyConfirmed")
+                    : t("otherEstimateConfirmed")}
               </Button>
             </div>
           </div>

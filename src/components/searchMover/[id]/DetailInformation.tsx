@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
 import ReviewAvg from "./ReviewAvg";
@@ -14,6 +15,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
   const [isLoadingQuote, setIsLoadingQuote] = useState(true);
   const deviceType = useWindowWidth();
+  const t = useTranslations("mover");
 
   React.useEffect(() => {
     const fetchActiveQuote = async () => {
@@ -39,7 +41,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   return (
     <div
-      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[20px]`}
+      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[359px]`}
     >
       <div>
         <div>
@@ -55,7 +57,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
         ) : (
           <>
             <div className="flex flex-col gap-3">
-              <p className="text-lg font-semibold">나만 알기엔 아쉬운 기사님 이신가요?</p>
+              <p className="text-lg font-semibold">{t("shareMessage")}</p>
               <ShareButtonGroup />
             </div>
             <div className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10"></div>

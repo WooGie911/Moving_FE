@@ -1,27 +1,45 @@
-// src/middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { decodeAccessToken, DecodedTokenPayload } from "./utils/decodeAccessToken";
+import { decodeAccessToken } from "./utils/decodeAccessToken";
 import { TUserRole } from "./types/user.types";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing"; // ✅ default export 확인
 
-// ✅ 미들웨어 엔트리 함수
+// ✅ 로케일 prefix 붙이기 유틸
+function withLocalePrefix(path: string, locale: string) {
+  return `/${locale}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+function extractLocaleFromPathname(pathname: string): string | null {
+  const segments = pathname.split("/");
+  const candidate = segments[1];
+  if (["ko", "en", "zh"].includes(candidate)) return candidate;
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const rawPathname = request.nextUrl.pathname;
+  const pathname = rawPathname.replace(/^\/(ko|en|zh)/, "") || "/";
 
-  // ✅ 쿠키에서 토큰 가져오기
+  const localeFromPath = extractLocaleFromPathname(rawPathname);
+  const localeFromCookie = request.cookies.get("NEXT_LOCALE")?.value;
+  const acceptLanguage = request.headers.get("accept-language");
+  const preferredLocale = acceptLanguage?.split(",")[0]?.split("-")[0];
+
+  const locale =
+    localeFromPath ||
+    (["ko", "en", "zh"].includes(localeFromCookie ?? "") ? localeFromCookie : undefined) ||
+    (["ko", "en", "zh"].includes(preferredLocale ?? "") ? preferredLocale : undefined) ||
+    "ko";
+
   const accessToken = request.cookies.get("accessToken")?.value;
 
-  /**
-   * ✅ 토큰 기반 유저 역할 추출
-   * - accessToken이 존재하면 decode하여 role 추출
-   * - 없으면 undefined
-   */
   let userType: TUserRole | undefined = undefined;
   let hasProfile: boolean | undefined = undefined;
-  let decodedToken: DecodedTokenPayload | null = null;
 
   if (accessToken) {
     try {
-      decodedToken = await decodeAccessToken(accessToken);
+      const decodedToken = await decodeAccessToken(accessToken);
+      if (!decodedToken) throw new Error("Invalid token");
       userType = decodedToken?.userType as TUserRole;
       hasProfile = decodedToken?.hasProfile as boolean;
     } catch (error) {
@@ -29,17 +47,31 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // ✅ 인증 상태
   const isAuthenticated = !!accessToken;
 
-  // ✅ 경로별 플래그
+  // ✅ 루트 경로 접근 제어 (next-intl보다 먼저 처리)
+  if (rawPathname === "/") {
+    if (isAuthenticated && userType) {
+      const redirectPath =
+        userType === "CUSTOMER"
+          ? withLocalePrefix("/searchMover", locale)
+          : withLocalePrefix("/estimate/received", locale);
+      return NextResponse.redirect(new URL(redirectPath, request.url));
+    }
+
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
+  }
+
+  // ✅ next-intl 미들웨어 (로케일 prefix 붙이기)
+  const handleI18nRouting = createMiddleware(routing);
+  const response = handleI18nRouting(request);
+
   const isAuthRoute =
     pathname.startsWith("/userSignin") ||
     pathname.startsWith("/userSignup") ||
     pathname.startsWith("/moverSignin") ||
     pathname.startsWith("/moverSignup");
 
-  // ✅ 보호 페이지
   const isProtectedRoute =
     pathname.startsWith("/profile") ||
     pathname.startsWith("/estimateRequest") ||
@@ -48,89 +80,61 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/favoriteMover") ||
     pathname.startsWith("/review");
 
-  // 고객 전용 페이지
   const isCustomerOnlyRoute =
     pathname.startsWith("/estimateRequest") || pathname.startsWith("/favoriteMover") || pathname.startsWith("/review");
 
-  // 기사 전용 페이지
   const isMoverOnlyRoute =
     (pathname.startsWith("/estimate") && !pathname.startsWith("/estimateRequest")) ||
     pathname.startsWith("/moverMyPage");
 
-  /**
-   * hasProfile 값에 따라 프로필 미등록시 프로필 등록 페이지로 리디렉션
-   * (단, 이미 프로필 등록 페이지에 있는 경우 제외)
-   */
-
+  // ✅ 일반 로그인 프로필 등록 강제 이동
   if (isProtectedRoute && !hasProfile && pathname !== "/profile/register") {
-    return NextResponse.redirect(new URL("/profile/register", request.url));
-  } else if (isProtectedRoute && hasProfile && pathname === "/profile/register") {
-    if (userType === "CUSTOMER") {
-      return NextResponse.redirect(new URL("/searchMover", request.url));
-    }
-    if (userType === "MOVER") {
-      return NextResponse.redirect(new URL("/estimate/received", request.url));
-    }
+    return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 
-  /**
-   * ✅ 홈 페이지 접근 제어 (GUEST 전용)
-   * 인증된 사용자가 홈에 접근하면 역할에 따라 리디렉션
-   */
-
-  if (pathname === "/" && isAuthenticated && userType) {
-    if (userType === "CUSTOMER") {
-      return NextResponse.redirect(new URL("/searchMover", request.url));
-    }
-    if (userType === "MOVER") {
-      console.log("MOVER 접근");
-      return NextResponse.redirect(new URL("/estimate/received", request.url));
-    }
+  // ✅ 소셜 로그인 프로필 등록 강제 이동
+  if (!hasProfile && (pathname === "/searchMover" || pathname === "/estimate/received")) {
+    return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 
-  /**
-   * ✅ 인증된 사용자가 로그인/회원가입 페이지 접근 시 역할별 페이지로 리디렉션
-   */
+  // ✅ 프로필 등록 페이지 접근 방지 (이미 등록된 경우)
+  if (isProtectedRoute && hasProfile && pathname === "/profile/register") {
+    const redirectPath =
+      userType === "CUSTOMER"
+        ? withLocalePrefix("/searchMover", locale)
+        : withLocalePrefix("/estimate/received", locale);
+    return NextResponse.redirect(new URL(redirectPath, request.url));
+  }
+
+  // ✅ 로그인/회원가입 접근 제한
   if (isAuthRoute && isAuthenticated && userType) {
-    if (userType === "CUSTOMER") {
-      return NextResponse.redirect(new URL("/searchMover", request.url));
-    }
-    if (userType === "MOVER") {
-      return NextResponse.redirect(new URL("/estimate/received", request.url));
-    }
+    const redirectPath =
+      userType === "CUSTOMER"
+        ? withLocalePrefix("/searchMover", locale)
+        : withLocalePrefix("/estimate/received", locale);
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  /**
-   * ✅ 인증되지 않은 사용자가 보호 페이지 접근 시 로그인으로 리디렉션
-   */
+  // ✅ 보호 페이지 인증 안 된 유저 차단
   if (isProtectedRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL("/userSignin", request.url));
+    return NextResponse.redirect(new URL(withLocalePrefix("/userSignin", locale), request.url));
   }
 
-  /**
-   * ✅ 역할 기반 접근 제어
-   */
+  // ✅ 역할 기반 차단
   if (isAuthenticated && userType) {
-    // 기사 전용 페이지에 "고객"이 접근하는 경우
     if (isMoverOnlyRoute && userType === "CUSTOMER") {
-      return NextResponse.redirect(new URL("/searchMover", request.url));
+      return NextResponse.redirect(new URL(withLocalePrefix("/searchMover", locale), request.url));
     }
 
-    // 고객 전용 페이지에 "기사"가 접근하는 경우
     if (isCustomerOnlyRoute && userType === "MOVER") {
-      return NextResponse.redirect(new URL("/estimate/received", request.url));
+      return NextResponse.redirect(new URL(withLocalePrefix("/estimate/received", locale), request.url));
     }
   }
 
-  /**
-   * ✅ 모든 조건을 통과하면 그대로 진행
-   */
-  return NextResponse.next();
+  return response;
 }
 
-// ✅ 미들웨어 적용 경로 설정
+// ✅ 미들웨어가 작동할 경로 정의
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)", // API, static, favicon 제외 전체 경로에 적용
-  ],
+  matcher: ["/((?!_next|favicon.ico|api|static).*)"], // 내부 자산 제외
 };

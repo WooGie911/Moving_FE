@@ -14,13 +14,16 @@ import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ISignInFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
-import { validationRules } from "@/utils/validators";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { useValidationRules } from "@/hooks/useValidationRules";
+import { useTranslations } from "next-intl";
 
 const MoverSigninPage = () => {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, googleLogin, kakaoLogin, naverLogin } = useAuth();
+  const validationRules = useValidationRules();
   const deviceType = useWindowWidth();
   const { open, close } = useModal();
+  const t = useTranslations("auth");
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",
@@ -44,7 +47,7 @@ const MoverSigninPage = () => {
     try {
       if (isLoading) return;
       const response = await login(email, password, "MOVER");
-      if (response.success === false) {
+      if (response.status !== 200) {
         open({
           title: "로그인 실패",
           children: <div>{response.message}</div>,
@@ -65,8 +68,8 @@ const MoverSigninPage = () => {
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
           <Link href="/userSignin">
-            <span className="text-black-200 text-lg">고객님이신가요?</span>
-            <span className="text-primary-400 ml-2 text-lg font-semibold underline">고객님 전용 페이지</span>
+            <span className="text-black-200 text-lg">{t("areYouCustomer")}</span>
+            <span className="text-primary-400 ml-2 text-lg font-semibold underline">{t("customerPage")}</span>
           </Link>
         </div>
 
@@ -74,21 +77,21 @@ const MoverSigninPage = () => {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
             <div className="mb-6 flex flex-col gap-2 font-normal">
-              <span className="text-black-400 text-md">이메일</span>
+              <span className="text-black-400 text-md">{t("email")}</span>
               <BaseInput
                 {...register("email", validationRules.email)}
                 error={errors.email?.message}
-                placeholder="이메일을 입력해주세요."
+                placeholder={t("emailPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
             </div>
 
             <div className="mb-6 flex flex-col gap-2">
-              <span className="text-black-400 text-md font-normal">비밀번호</span>
+              <span className="text-black-400 text-md font-normal">{t("password")}</span>
               <PasswordInput
                 {...register("password", validationRules.password)}
-                placeholder="비밀번호를 입력해주세요."
+                placeholder={t("passwordPlaceholder")}
                 inputClassName="py-3.5 px-3.5"
                 wrapperClassName="w-full sm:w-full"
               />
@@ -108,17 +111,17 @@ const MoverSigninPage = () => {
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    <span className="ml-2">로그인 중...</span>
+                    <span className="ml-2">{t("loginInProgress")}</span>
                   </div>
                 ) : (
-                  "로그인"
+                  t("login")
                 )}
               </button>
               {/* 회원가입 링크 */}
               <div className="flex w-full items-center justify-center gap-2">
-                <span className="text-black-200 text-lg">아직 무빙 회원이 아니신가요?</span>
+                <span className="text-black-200 text-lg">{t("notMemberYet")}</span>
                 <Link href="/moverSignup">
-                  <span className="text-primary-400 text-lg font-semibold underline">회원가입</span>
+                  <span className="text-primary-400 text-lg font-semibold underline">{t("signup")}</span>
                 </Link>
               </div>
             </div>
@@ -127,11 +130,32 @@ const MoverSigninPage = () => {
 
         {/* 소셜 로그인 및 마스코트 캐릭터 배치*/}
         <div className="flex w-full flex-col items-center justify-center gap-8">
-          <span className="text-black-200 text-lg">SNS 계정으로 간편 로그인</span>
+          <span className="text-black-200 text-lg">{t("snsLogin")}</span>
           <div className="flex items-center gap-8">
-            <Image src={google} alt="google" width={62} height={62} className="cursor-pointer" />
-            <Image src={kakao} alt="kakao" width={62} height={62} className="cursor-pointer" />
-            <Image src={naver} alt="naver" width={62} height={62} className="cursor-pointer" />
+            <Image
+              src={google}
+              alt="google"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => googleLogin("MOVER")}
+            />
+            <Image
+              src={kakao}
+              alt="kakao"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => kakaoLogin("MOVER")}
+            />
+            <Image
+              src={naver}
+              alt="naver"
+              width={62}
+              height={62}
+              className="cursor-pointer"
+              onClick={() => naverLogin("MOVER")}
+            />
           </div>
 
           {deviceType === "tablet" && (

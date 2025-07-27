@@ -5,4 +5,15 @@ export interface IEditBasicForm {
   currentPassword: string;
   newPassword: string;
   newPasswordConfirm: string;
+}
+
+export interface IMoverProfileEditForm {
+  nickname: string;
+  moverImage: string;
+  currentArea: string;
+  serviceTypes: string[];
+  shortIntro: string;
+  detailIntro: string;
+  career: number;
+  isVeteran: boolean;
 } 

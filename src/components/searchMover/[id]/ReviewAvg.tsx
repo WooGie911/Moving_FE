@@ -1,14 +1,16 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
 import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import Image from "next/image";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
-  const total = mover.reviewCount; 
+  const total = mover.reviewCount;
   const avg = mover.avgRating;
+  const t = useTranslations("mover");
 
   // 점수별 개수 계산
   const reviewCounts = [5, 4, 3, 2, 1].reduce(
@@ -24,7 +26,7 @@ const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <p className="text-xl font-semibold">리뷰</p>
+        <p className="text-xl font-semibold">{t("reviewsTitle")}</p>
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="flex items-center gap-[18px]">
             <p className="text-[40px] font-medium">{avg.toFixed(1)}</p>
@@ -39,7 +41,10 @@ const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
                   />
                 ))}
               </div>
-              <p className="text-md text-[#808080]">{total}개의 리뷰</p>
+              <p className="text-md text-[#808080]">
+                {total}
+                {t("reviewCount")}
+              </p>
             </div>
           </div>
           <div className="flex w-[284px] flex-col gap-3">
@@ -49,7 +54,10 @@ const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
               const isMax = count === maxCount && count > 0;
               return (
                 <div key={score} className="flex items-center gap-4">
-                  <p className={`text-md ${isMax ? "font-bold" : "font-medium"}`}>{score}점</p>
+                  <p className={`text-md ${isMax ? "font-bold" : "font-medium"}`}>
+                    {score}
+                    {t("point")}
+                  </p>
                   <div className="relative h-3 flex-1 rounded-[15px] bg-[#EFEFEF]">
                     <div
                       className="absolute top-0 left-0 h-3 rounded-[15px] bg-[#FFC149]"

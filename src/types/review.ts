@@ -70,6 +70,7 @@ export interface IReviewListProps {
 // 리뷰 작성 관련 타입
 export interface IWritableCardData {
   id: string;
+  reviewId: string;
   profileImage: string;
   nickname: string;
   moveType: "SMALL" | "HOME" | "OFFICE";
@@ -87,7 +88,7 @@ export interface IWritableCardData {
     detail: string;
     region: string;
   };
-  moveDate: Date;
+  moveDate: string;
   price: number;
 }
 
@@ -123,8 +124,8 @@ export interface IWrittenCardData {
     detail: string;
     region: string;
   };
-  moveDate: Date;
+  moveDate: string;
   rating: number;
   content: string;
-  createdAt: Date;
+  createdAt: string;
 }

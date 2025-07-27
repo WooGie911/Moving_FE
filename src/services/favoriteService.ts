@@ -71,7 +71,7 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
 // 찜하기 서비스 클래스
 export class FavoriteService {
   // 찜하기 추가
-  static async addFavorite(moverId: number): Promise<ApiResponse<IFavoriteStatus>> {
+  static async addFavorite(moverId: string): Promise<ApiResponse<IFavoriteStatus>> {
     return apiCall<IFavoriteStatus>("/favorites", {
       method: "POST",
       body: JSON.stringify({ moverId }),
@@ -79,9 +79,16 @@ export class FavoriteService {
   }
 
   // 찜하기 제거
-  static async removeFavorite(moverId: number): Promise<ApiResponse<IFavoriteStatus>> {
+  static async removeFavorite(moverId: string): Promise<ApiResponse<IFavoriteStatus>> {
     return apiCall<IFavoriteStatus>(`/favorites/${moverId}`, {
       method: "DELETE",
+    });
+  }
+
+  // 찜하기 상태 확인
+  static async getFavoriteStatus(moverId: number): Promise<ApiResponse<IFavoriteStatus>> {
+    return apiCall<IFavoriteStatus>(`/favorites/${moverId}/status`, {
+      method: "GET",
     });
   }
 }

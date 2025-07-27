@@ -3,6 +3,7 @@ import { useLikeToggle } from "@/hooks/useLikeToggle";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { MoverProps } from "@/types/mover.types";
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import findMoverApi from "@/lib/api/findMover.api";
@@ -25,6 +26,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
   const router = useRouter();
   const [isRequesting, setIsRequesting] = useState(false);
   const [alreadyRequested, setAlreadyRequested] = useState(false);
+  const t = useTranslations("mover");
 
   useEffect(() => {
     const checkDesignatedRequest = async () => {
@@ -46,11 +48,11 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
   const handleDesignateRequest = async () => {
     if (!isLoggedIn) {
       open({
-        title: "로그인 필요",
-        children: <>로그인 후 이용 가능합니다.</>,
+        title: t("loginRequired"),
+        children: <>{t("loginRequiredMessage")}</>,
         buttons: [
           {
-            text: "로그인 하기",
+            text: t("loginButton"),
             onClick: () => {
               close();
               router.push("/userSignin");
@@ -62,11 +64,11 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
     }
     if (!quoteId) {
       open({
-        title: "지정 견적 요청하기",
-        children: <>일반 견적 요청을 먼저 진행해 주세요.</>,
+        title: t("requestDesignatedQuoteButton"),
+        children: <>{t("generalQuoteRequired")}</>,
         buttons: [
           {
-            text: "일반 견적 요청 하기",
+            text: t("requestGeneralQuoteButton"),
             onClick: () => {
               close();
               router.push("/quote/create");
@@ -87,24 +89,24 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
         expiresAt: expiresAt.toISOString(),
       });
       open({
-        title: "지정 견적 요청 완료",
-        children: <>지정 견적 요청이 성공적으로 완료되었습니다.</>,
-        buttons: [{ text: "확인", onClick: close }],
+        title: t("requestDesignatedQuoteButton"),
+        children: <>{t("requestSuccessMessage")}</>,
+        buttons: [{ text: t("confirmButton"), onClick: close }],
       });
       setAlreadyRequested(true);
     } catch (err: any) {
       if (err.message && err.message.includes("이미")) {
         setAlreadyRequested(true);
         open({
-          title: "이미 요청됨",
-          children: <>이미 이 기사님에게 지정 견적을 요청하셨습니다.</>,
-          buttons: [{ text: "확인", onClick: close }],
+          title: t("alreadyRequested"),
+          children: <>{t("alreadyRequestedMessage")}</>,
+          buttons: [{ text: t("confirmButton"), onClick: close }],
         });
       } else {
         open({
-          title: "오류",
-          children: <>{err.message || "지정 견적 요청에 실패했습니다."}</>,
-          buttons: [{ text: "확인", onClick: close }],
+          title: t("errorTitle"),
+          children: <>{err.message || t("requestFailedMessage")}</>,
+          buttons: [{ text: t("confirmButton"), onClick: close }],
         });
       }
     } finally {
@@ -117,8 +119,8 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       {deviceType === "desktop" ? (
         <div className="flex flex-col gap-4">
           <p className="text-2lg leading-[26px] font-semibold">
-            {mover.nickname} 기사님에게 <br />
-            지정 견적을 요청해보세요
+            {mover.nickname} {t("driverSuffix")} {t("to")} <br />
+            {t("requestDesignatedQuote")}
           </p>
           <Button
             variant="solid"
@@ -129,7 +131,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             onClick={handleDesignateRequest}
             disabled={isRequesting || alreadyRequested}
           >
-            지정 견적 요청하기
+            {t("requestDesignatedQuoteButton")}
           </Button>
           <Button
             variant="like"
@@ -161,7 +163,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             onClick={handleDesignateRequest}
             disabled={isRequesting || alreadyRequested}
           >
-            {alreadyRequested ? "이미 요청됨" : "지정 견적 요청하기"}
+            {alreadyRequested ? t("alreadyRequested") : t("requestDesignatedQuoteButton")}
           </Button>
         </div>
       )}

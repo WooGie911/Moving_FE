@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { IReview, IApiReview, IReviewListProps } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
 import Image from "next/image";
@@ -13,6 +14,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const t = useTranslations("mover");
 
   useEffect(() => {
     if (!moverId) return;
@@ -81,7 +83,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
       <div className="flex items-center justify-center py-8">
         <div className="flex flex-col items-center gap-3">
           <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">리뷰를 불러오는 중...</div>
+          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
         </div>
       </div>
     );
@@ -90,8 +92,8 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   if (!reviews.length) {
     return (
       <div className="mt-20 mb-[200px] flex w-full flex-col items-center">
-        <p className="text-lg font-semibold">아직 등록된 리뷰가 없어요!</p>
-        <p className="text-md text-[#999999]">가장 먼저 리뷰를 등록해보세요</p>
+        <p className="text-lg font-semibold">{t("noReviewsYet")}</p>
+        <p className="text-md text-[#999999]">{t("registerReviewFirst")}</p>
       </div>
     );
   }

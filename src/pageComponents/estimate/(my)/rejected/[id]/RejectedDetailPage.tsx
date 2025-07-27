@@ -1,45 +1,43 @@
+"use client";
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { RejectDetailMain } from "@/components/estimate/(my)/rejected/[id]/RejectDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import React from "react";
+import { useTranslations } from "next-intl";
+
 export const RejectedDetailPage = () => {
-  const data = mockMyRejectedEstimateData[0];
+  const t = useTranslations("estimate");
+  const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["MyRejectedEstimate"],
+    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
+  });
+
+  if (isPending) {
+    return <div>{t("loading")}</div>;
+  }
+  if (isError) {
+    console.error(`${t("apiError")}`, error);
+    return <div>{t("error")}</div>;
+  }
+
+  // data에서 estimateRequestId와 일치하는 항목 찾기
+  const mydata = Array.isArray(data) ? data.find((item: any) => item.id === id) : null;
+
+  if (!mydata) {
+    return <div>{t("estimateNotFound")}</div>;
+  }
+
   return (
     <div>
       <EstimateRequestAndEstimateTab userType="Detail" />
       <div className="flex flex-col gap-[46px] md:gap-[82px]">
         <DetailPageImgSection />
-        {/* 견적 상세 정보 - 유저가 보낸 견적 중 내가 반려한 견적 */}
-
-        <RejectDetailMain
-          data={{
-            id: data.estimateRequest.id,
-            userId: data.estimateRequest.customerId,
-            movingType: data.estimateRequest.moveType,
-            movingDate: data.estimateRequest.moveDate,
-            departureAddr: data.estimateRequest.fromAddress.city + " " + data.estimateRequest.fromAddress.district,
-            arrivalAddr: data.estimateRequest.toAddress.city + " " + data.estimateRequest.toAddress.district,
-            departureDetail: data.estimateRequest.fromAddress.detail || "",
-            arrivalDetail: data.estimateRequest.toAddress.detail || "",
-            description: data.estimateRequest.description || "",
-            status: data.estimateRequest.status,
-            createdAt: data.estimateRequest.createdAt,
-            updatedAt: data.estimateRequest.updatedAt,
-            user: {
-              id: data.estimateRequest.customer.id,
-              name: data.estimateRequest.customer.name,
-              currentRole: "CUSTOMER",
-              currentRegion: data.estimateRequest.customer.currentArea,
-              profile: {
-                nickname: data.estimateRequest.customer.nickname || "",
-                profileImage: data.estimateRequest.customer.customerImage,
-                introduction: "",
-                description: "",
-              },
-            },
-          }}
-        />
+        <RejectDetailMain data={mydata.estimateRequest} />
       </div>
     </div>
   );

@@ -7,23 +7,24 @@ import EstimateRequestCreatePage from "@/pageComponents/estimateRequest/create/E
 import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/EstimateRequestEditPage";
 
 export default function EstimateRequestPageWrapper() {
-  const [hasActiveQuote, setHasActiveQuote] = useState<boolean | null>(null);
+  const [hasActiveEstimateRequest, setHasActiveEstimateRequest] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkActiveQuote();
+    checkActiveEstimateRequest();
   }, []);
 
-  const checkActiveQuote = async () => {
+  const checkActiveEstimateRequest = async () => {
     try {
       const response = await estimateRequestApi.getActive();
       if (!response.success) {
         throw new Error(response.message || "활성 견적 확인 실패");
       }
-      setHasActiveQuote(!!response.hasActive);
+      // data가 있으면 활성 견적이 있는 것
+      setHasActiveEstimateRequest(!!response.data);
     } catch (error) {
       console.error("활성 견적 확인 실패:", error);
-      setHasActiveQuote(false);
+      setHasActiveEstimateRequest(false);
     } finally {
       setLoading(false);
     }
@@ -37,8 +38,8 @@ export default function EstimateRequestPageWrapper() {
     );
   }
 
-  // hasActiveQuote가 true면 Edit, false면 Create
-  if (hasActiveQuote) {
+  // hasActiveEstimateRequest가 true면 Edit, false면 Create
+  if (hasActiveEstimateRequest) {
     return <EstimateRequestEditPage />;
   } else {
     return <EstimateRequestCreatePage />;

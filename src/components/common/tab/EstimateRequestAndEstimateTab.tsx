@@ -1,37 +1,37 @@
 import { Tab } from "@/components/common/tab/Tab";
 import React from "react";
+import { useTranslations } from "next-intl";
 
-const UserTab = [
-  { name: "대기 중인 견적", href: "/quote/pending" },
-  { name: "받았던 견적", href: "/quote/received" },
-];
-
-const MoverTab = [
-  { name: "보낸 견적 조회", href: "/estimate/request" },
-  { name: "반려 요청", href: "/estimate/rejected" },
-];
-
-const DetailTab = [{ name: "견적 상세", href: "" }];
-
-const MoverReceivedTab = [{ name: "받은 요청", href: "/estimate/received" }];
+// 하드코딩된 탭들을 제거하고 컴포넌트 내부에서 다국어 처리
 
 interface IUserType {
   userType: "User" | "Mover" | "Detail" | "MoverReceived";
 }
 
 export const EstimateRequestAndEstimateTab = ({ userType }: IUserType) => {
+  const t = useTranslations("tabs");
+
   const getTabList = () => {
     switch (userType) {
       case "User":
-        return UserTab;
+        return [
+          { name: t("pendingQuote"), href: "/estimateRequest/pending" },
+          { name: t("receivedQuote"), href: "/estimateRequest/received" },
+        ];
       case "Mover":
-        return MoverTab;
+        return [
+          { name: t("sentQuote"), href: "/estimate/request" },
+          { name: t("rejectedRequest"), href: "/estimate/rejected" },
+        ];
       case "Detail":
-        return DetailTab;
+        return [{ name: t("quoteDetail"), href: "" }];
       case "MoverReceived":
-        return MoverReceivedTab;
+        return [{ name: t("receivedRequest"), href: "/estimate/received" }];
       default:
-        return UserTab;
+        return [
+          { name: t("pendingQuote"), href: "/estimateRequest/pending" },
+          { name: t("receivedQuote"), href: "/estimateRequest/received" },
+        ];
     }
   };
 

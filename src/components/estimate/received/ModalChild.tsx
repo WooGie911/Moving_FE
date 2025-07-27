@@ -7,18 +7,21 @@ import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import { TextInput } from "@/components/common/input/TextInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslations, useLocale } from "next-intl";
 
 interface IModalProps {
   data: TEstimateRequestResponse;
   isDesignated: boolean;
   estimatePrice?: number;
   type: "received" | "sent" | "rejected";
-  onFormChange?: (isValid: boolean) => void;
+  onFormChange?: (isValid: boolean, formData?: { price?: number; comment?: string }) => void;
 }
 
 export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalProps) => {
   const methods = useForm();
   const { watch, setValue } = methods;
+  const t = useTranslations("estimate");
+  const locale = useLocale();
 
   // 폼 값들을 감시
   const estimatePrice = watch("estimatePrice");
@@ -32,7 +35,10 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
     const isValid = isEstimateValid && isCommentValid;
 
     if (onFormChange) {
-      onFormChange(isValid);
+      onFormChange(isValid, {
+        price: estimatePrice ? parseInt(estimatePrice) : undefined,
+        comment: comment,
+      });
     }
   }, [estimatePrice, comment, type, onFormChange]);
 
@@ -44,19 +50,20 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
           <LabelArea
             movingType={data.moveType.toLowerCase() as "small" | "home" | "office"}
             isDesignated={isDesignated}
+            type={type}
           />
         </div>
         {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
         <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
           <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-            {`${data.customer.name} 고객님`}
+            {`${data.customer.name}${t("customerSuffix")}`}
           </p>
         </div>
         {/* 이사 정보  부분*/}
         <div className="flex w-full flex-col gap-1 md:flex-row md:justify-between md:pt-2">
           <div className="flex flex-row gap-3">
             <div className="flex flex-col justify-between">
-              <p className="text-[14px] leading-6 font-normal text-gray-500">출발지</p>
+              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                 {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
               </p>
@@ -65,16 +72,44 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
               <Image src={arrow} alt="arrow" width={16} height={16} />
             </div>
             <div className="flex flex-col justify-between">
-              <p className="text-[14px] leading-6 font-normal text-gray-500">도착지</p>
+              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
               <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
                 {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
               </p>
             </div>
           </div>
           <div className="flex flex-col justify-between">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">이사일</p>
+            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
             <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-              {`${data.moveDate.getFullYear()}년 ${data.moveDate.getMonth() + 1}월 ${data.moveDate.getDate()}일 (${["일", "월", "화", "수", "목", "금", "토"][data.moveDate.getDay()]})`}
+              {(() => {
+                const moveDate = new Date(data.moveDate);
+                const year = moveDate.getFullYear();
+                const month = moveDate.getMonth() + 1;
+                const day = moveDate.getDate();
+                const weekday = [
+                  t("weekdays.sunday"),
+                  t("weekdays.monday"),
+                  t("weekdays.tuesday"),
+                  t("weekdays.wednesday"),
+                  t("weekdays.thursday"),
+                  t("weekdays.friday"),
+                  t("weekdays.saturday"),
+                ][moveDate.getDay()];
+
+                // 언어별 날짜 형식
+                const yearSuffix = t("dateFormat.year");
+                const monthSuffix = t("dateFormat.month");
+                const daySuffix = t("dateFormat.day");
+
+                // 영어인 경우 MM/DD/YYYY 형식
+                if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
+                  return `${month}/${day}/${year} (${weekday})`;
+                }
+                // 한국어, 중국어인 경우 YYYY년 MM월 DD일 형식
+                else {
+                  return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
+                }
+              })()}
             </p>
           </div>
         </div>
@@ -82,16 +117,20 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
           <FormProvider {...methods}>
             {/* 견적가 입력 부분 */}
             <div className={`flex w-full flex-col justify-between ${type === "rejected" ? "hidden" : ""}`}>
-              <p className="text-[14px] leading-6 font-normal text-gray-500">견적가를 입력해 주세요.</p>
-              <PasswordInput name="estimatePrice" placeholder="견적가를 입력해 주세요." wrapperClassName="w-full" />
+              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("enterEstimatePrice")}</p>
+              <PasswordInput
+                name="estimatePrice"
+                placeholder={t("estimatePricePlaceholder")}
+                wrapperClassName="w-full"
+              />
               {estimatePrice && !/^[0-9]*$/.test(estimatePrice) && (
-                <p className="pb-2 pl-2 text-sm text-red-500">숫자만 입력해 주세요.</p>
+                <p className="pb-2 pl-2 text-sm text-red-500">{t("onlyNumbersMessage")}</p>
               )}
             </div>
             {/* 코멘트 입력 부분 */}
             <div className="flex flex-col justify-between">
-              <p className="text-[14px] leading-6 font-normal text-gray-500">코멘트를 입력해 주세요.</p>
-              <TextInput name="comment" placeholder="최소 10자 이상 입력해 주세요." wrapperClassName="w-full" />
+              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("enterComment")}</p>
+              <TextInput name="comment" placeholder={t("commentPlaceholder")} wrapperClassName="w-full" />
             </div>
           </FormProvider>
         </div>

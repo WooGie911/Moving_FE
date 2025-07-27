@@ -32,7 +32,7 @@ export const ROUTE_GROUPS: IRouteGroup[] = [
     title: "프로필",
     routes: [
       { name: "프로필 등록", path: "/profile/register" },
-      { name: "일반 유저 프로필 수정", path: "/profile/edit" },
+      { name: "프로필 수정", path: "/profile/edit" },
     ],
     allowedRoles: ["CUSTOMER", "MOVER"],
   },
@@ -52,11 +52,11 @@ export const ROUTE_GROUPS: IRouteGroup[] = [
   {
     title: "유저님 내 견적 관리",
     routes: [
-      { name: "유저님 견적 요청 작성", path: "/quote/create" },
-      { name: "유저님 대기 중인 견적 조회", path: "/quote/pending" },
-      { name: "유저님 대기 중인 견적 조회 상세", path: "/quote/pending/1" },
-      { name: "유저님 받았던 견적 조회", path: "/quote/received" },
-      { name: "유저님 받았던 견적 조회 상세", path: "/quote/received/1" },
+      { name: "유저님 견적 요청 작성", path: "/estimateRequest/create" },
+      { name: "유저님 대기 중인 견적 조회", path: "/estimateRequest/pending" },
+      { name: "유저님 대기 중인 견적 조회 상세", path: "/estimateRequest/pending/1" },
+      { name: "유저님 받았던 견적 조회", path: "/estimateRequest/received" },
+      { name: "유저님 받았던 견적 조회 상세", path: "/estimateRequest/received/1" },
     ],
     allowedRoles: ["CUSTOMER"],
   },

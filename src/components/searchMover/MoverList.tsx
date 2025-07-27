@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
@@ -9,6 +10,7 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import { IMoverInfo } from "@/types/mover.types";
 import findMoverApi from "@/lib/api/findMover.api";
+import { getServiceTypeForLabel } from "@/lib/utils/translationUtils";
 import defaultProfileLg from "@/assets/img/mascot/profile-lg.png";
 import defaultProfileSm from "@/assets/img/mascot/profile-sm.png";
 import badge from "@/assets/icon/etc/icon-chat.png";
@@ -23,6 +25,7 @@ const MoverList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const deviceType = useWindowWidth();
+  const t = useTranslations("mover");
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -66,7 +69,7 @@ const MoverList = () => {
         setHasNext(result.hasNext);
       } catch (err) {
         console.error("[MoverList] API 호출 실패:", err);
-        setError("기사님 정보를 불러오는데 실패했습니다. 다시 시도해주세요.");
+        setError(t("errorMessage"));
       } finally {
         setLoading(false);
       }
@@ -85,7 +88,7 @@ const MoverList = () => {
       <div className="flex items-center justify-center py-12 lg:w-205">
         <div className="flex flex-col items-center gap-3">
           <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">기사님 정보를 불러오는 중...</div>
+          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
         </div>
       </div>
     );
@@ -94,7 +97,7 @@ const MoverList = () => {
   if (error && movers.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 lg:w-205">
-        <div className="mb-4 text-lg text-red-500">오류가 발생했습니다</div>
+        <div className="mb-4 text-lg text-red-500">{t("errorTitle")}</div>
         <div className="text-sm text-gray-500">{error}</div>
       </div>
     );
@@ -103,8 +106,8 @@ const MoverList = () => {
   if (!movers.length) {
     return (
       <div className="flex flex-col items-center justify-center py-12 lg:w-205">
-        <div className="mb-2 text-lg text-gray-500">검색 결과가 없습니다</div>
-        <div className="text-sm text-gray-400">다른 검색어나 필터를 시도해보세요</div>
+        <div className="mb-2 text-lg text-gray-500">{t("noSearchResult")}</div>
+        <div className="text-sm text-gray-400">{t("tryOtherSearch")}</div>
       </div>
     );
   }
@@ -117,42 +120,21 @@ const MoverList = () => {
           <Link key={mover.id} href={`/searchMover/${mover.id}`} className="block">
             {deviceType === "mobile" ? (
               <div
-                className="max-h-[226px] w-[327px] rounded-2xl border-[0.5px] border-[#f2f2f2] p-5"
+                className="max-h-[250px] w-[327px] rounded-2xl border-[0.5px] border-[#f2f2f2] p-5"
                 style={{
                   boxShadow: "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
                 }}
               >
-                <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
+                <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
                   {mover.serviceTypes.map((serviceType, index) => {
                     const serviceName =
-                      typeof serviceType === "string"
-                        ? serviceType === "SMALL"
-                          ? "소형이사"
-                          : serviceType === "HOME"
-                            ? "가정이사"
-                            : serviceType === "OFFICE"
-                              ? "사무실이사"
-                              : "기타"
-                        : serviceType.service?.name || "기타";
+                      typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
 
-                    return (
-                      <MoveTypeLabel
-                        key={index}
-                        type={
-                          serviceName === "소형이사"
-                            ? "small"
-                            : serviceName === "가정이사"
-                              ? "home"
-                              : serviceName === "사무실이사"
-                                ? "office"
-                                : "document"
-                        }
-                      />
-                    );
+                    return <MoveTypeLabel key={index} type={getServiceTypeForLabel(serviceName)} />;
                   })}
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   <div>
                     <div className="text-4 line-clamp-1 leading-[26px] font-semibold">{mover.description}</div>
                     <div className="line-clamp-1 text-[13px] leading-[22px] font-medium text-gray-600">
@@ -174,29 +156,42 @@ const MoverList = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                           <Image src={badge} alt="icon-chat" className="h-[23px] w-5" />
-                          <span className="text-[14px] leading-6 font-semibold">{mover.nickname} 기사님</span>
+                          <span className="text-[14px] leading-6 font-semibold">
+                            {mover.nickname} {t("driverSuffix")}
+                          </span>
                         </div>
                         <div className="flex items-center gap-[7px]">
                           <Image src={like} alt="like-img" className="h-3 w-[14px]" />
                           <span className="text-[14px] font-normal text-gray-600">{mover.favoriteCount}</span>
                         </div>
                       </div>
-                      <div className={`flex items-center ${mover.experience >= 10 ? "gap-1.5" : "gap-2"}`}>
+                      <div className="flex flex-wrap items-center gap-1">
                         <div className="flex items-center gap-0.5">
                           <Image src={star} alt="star-img" className="h-5 w-5" />
-                          {/* <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span> */}
-                          <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating}</span>
+                          <span className="text-[13px] leading-[22px] font-medium">
+                            {mover.avgRating ? Number(mover.avgRating).toFixed(1) : "0.0"}
+                          </span>
                           <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                         </div>
                         <span className="text-[#e6e6e6]">|</span>
-                        <div className="flex items-center gap-1">
-                          <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">경력</span>
-                          <span className="text-[13px] leading-[22px] font-medium">{mover.experience}년</span>
+                        <div className="flex min-w-0 items-center gap-1">
+                          <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
+                            {deviceType === "mobile" ? t("experienceMobile") || "经验" : t("experience")}
+                          </span>
+                          <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
+                            {mover.experience}
+                            {deviceType === "mobile" ? t("yearsMobile") || "年" : t("years")}
+                          </span>
                         </div>
                         <span className="text-[#e6e6e6]">|</span>
-                        <div className="flex items-center gap-1">
-                          <span className="text-[13px] leading-[22px] font-medium">{mover.completedCount}건</span>
-                          <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">확정</span>
+                        <div className="flex min-w-0 items-center gap-1">
+                          <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
+                            {mover.completedCount}
+                            {deviceType === "mobile" ? t("casesMobile") || "" : t("cases")}
+                          </span>
+                          <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
+                            {deviceType === "mobile" ? t("confirmedMobile") || "完成" : t("confirmed")}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -215,32 +210,10 @@ const MoverList = () => {
                   <div className="w-full">
                     <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
                       {mover.serviceTypes.map((serviceType, index) => {
-                        // 백엔드에서 문자열 배열로 오는 경우와 객체로 오는 경우 모두 처리
                         const serviceName =
-                          typeof serviceType === "string"
-                            ? serviceType === "SMALL"
-                              ? "소형이사"
-                              : serviceType === "HOME"
-                                ? "가정이사"
-                                : serviceType === "OFFICE"
-                                  ? "사무실이사"
-                                  : "기타"
-                            : serviceType.service?.name || "기타";
+                          typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
 
-                        return (
-                          <MoveTypeLabel
-                            key={index}
-                            type={
-                              serviceName === "소형이사"
-                                ? "small"
-                                : serviceName === "가정이사"
-                                  ? "home"
-                                  : serviceName === "사무실이사"
-                                    ? "office"
-                                    : "document"
-                            }
-                          />
-                        );
+                        return <MoveTypeLabel key={index} type={getServiceTypeForLabel(serviceName)} />;
                       })}
                     </div>
 
@@ -260,10 +233,12 @@ const MoverList = () => {
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1">
                             <Image src={badge} alt="icon-chat" className="h-[23px] w-5" />
-                            <div className="text-4 leading-[26px] font-semibold">{mover.nickname} 기사님</div>
+                            <div className="text-4 leading-[26px] font-semibold">
+                              {mover.nickname} {t("driverSuffix")}
+                            </div>
                           </div>
                           <div className="flex items-center justify-between md:w-[390px] lg:w-[610px]">
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <div className="flex items-center gap-0.5">
                                 <Image src={star} alt="star-img" className="h-5 w-5" />
                                 <span className="text-[13px] leading-[22px] font-medium">
@@ -272,14 +247,24 @@ const MoverList = () => {
                                 <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                               </div>
                               <span className="text-[#e6e6e6]">|</span>
-                              <div className="flex items-center gap-1">
-                                <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">경력</span>
-                                <span className="text-[13px] leading-[22px] font-medium">{mover.experience}년</span>
+                              <div className="flex min-w-0 items-center gap-1">
+                                <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
+                                  {t("experience")}
+                                </span>
+                                <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
+                                  {mover.experience}
+                                  {t("years")}
+                                </span>
                               </div>
                               <span className="text-[#e6e6e6]">|</span>
-                              <div className="flex items-center gap-1">
-                                <span className="text-[13px] leading-[22px] font-medium">{mover.completedCount}건</span>
-                                <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">확정</span>
+                              <div className="flex min-w-0 items-center gap-1">
+                                <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
+                                  {mover.completedCount}
+                                  {t("cases")}
+                                </span>
+                                <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
+                                  {t("confirmed")}
+                                </span>
                               </div>
                             </div>
                             <div className="flex items-center gap-0.5">
@@ -299,7 +284,7 @@ const MoverList = () => {
       })}
       {/* 무한스크롤 감지용 div */}
       <div ref={ref} style={{ height: 1 }} />
-      {loading && <div className="py-4 text-center text-gray-500">로딩중...</div>}
+      {loading && <div className="py-4 text-center text-gray-500">{t("loadingMessage")}</div>}
     </div>
   );
 };
