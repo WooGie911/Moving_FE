@@ -1,25 +1,28 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import small from "../../../assets/icon/box/icon-box.png";
 import home from "../../../assets/icon/home/icon-home.png";
 import office from "../../../assets/icon/etc/icon-office.png";
 import document from "../../../assets/icon/document/icon-document.png";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
-const MOVE_TYPE_LABELS = {
-  small: "소형이사",
-  home: "가정이사",
-  office: "사무실이사",
-  document: "지정 견적 요청",
-} as const;
-
-const MOVE_TYPE_ICONS = {
-  small: small,
-  home: home,
-  office: office,
-  document: document,
-} as const;
-
 export const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
+  const t = useTranslations("moveTypes");
+
+  const MOVE_TYPE_LABELS = {
+    small: t("small"),
+    home: t("home"),
+    office: t("office"),
+    document: t("document"),
+  } as const;
+
+  const MOVE_TYPE_ICONS = {
+    small: small,
+    home: home,
+    office: office,
+    document: document,
+  } as const;
+
   const label = MOVE_TYPE_LABELS[type];
   const iconSrc = MOVE_TYPE_ICONS[type];
 

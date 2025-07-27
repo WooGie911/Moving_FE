@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { IMoverInfo } from "@/types/mover.types";
 import findMoverApi from "@/lib/api/findMover.api";
@@ -12,6 +13,7 @@ const SearchMoverDetailPage = () => {
   const [mover, setMover] = useState<IMoverInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("mover");
 
   const fetchMoverDetail = async () => {
     if (!id) return;
@@ -24,7 +26,7 @@ const SearchMoverDetailPage = () => {
       setMover(moverData);
     } catch (err) {
       console.error("기사님 상세 정보 조회 실패:", err);
-      setError("기사님 정보를 불러오는데 실패했습니다.");
+      setError(t("errorMessage"));
     } finally {
       setLoading(false);
     }
@@ -39,7 +41,7 @@ const SearchMoverDetailPage = () => {
       <div className="flex items-center justify-center py-12">
         <div className="flex flex-col items-center gap-3">
           <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">기사님 정보를 불러오는 중...</div>
+          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
         </div>
       </div>
     );
@@ -48,8 +50,8 @@ const SearchMoverDetailPage = () => {
   if (error || !mover) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <div className="mb-4 text-lg text-red-500">오류가 발생했습니다</div>
-        <div className="text-sm text-gray-500">{error || "기사님 정보를 찾을 수 없습니다."}</div>
+        <div className="mb-4 text-lg text-red-500">{t("errorTitle")}</div>
+        <div className="text-sm text-gray-500">{error || t("notFoundMessage")}</div>
       </div>
     );
   }

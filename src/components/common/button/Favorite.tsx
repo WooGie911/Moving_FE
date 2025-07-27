@@ -5,7 +5,7 @@ import FavoriteService, { IFavoriteStatus } from "../../../services/favoriteServ
 interface IFavoriteProps {
   isFavorited: boolean;
   favoriteCount: number;
-  moverId: number;
+  moverId: string;
   favoritedColor?: string;
   unfavoritedColor?: string;
   textColor?: string;
@@ -29,7 +29,10 @@ const Favorite = ({
   const [favoriteCount, setFavoriteCount] = useState(initialFavoriteCount);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFavoriteClick = async () => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파 방지
+    e.preventDefault(); // 기본 동작 방지
+
     if (isLoading) return; // 중복 클릭 방지
 
     setIsLoading(true);
