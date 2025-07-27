@@ -1,33 +1,33 @@
-export const getServiceTypeTranslation = (serviceName: string, t: any) => {
-  switch (serviceName) {
-    case "소형이사":
-      return t("serviceTypes.small");
-    case "가정이사":
-      return t("serviceTypes.home");
-    case "사무실이사":
-      return t("serviceTypes.office");
-    default:
-      return serviceName;
+// 서비스 타입 번역 함수
+export const getServiceTypeTranslation = (serviceName: string, t: any): string => {
+  if (serviceName === "소형이사" || serviceName === "SMALL") {
+    return t("serviceTypes.small");
+  } else if (serviceName === "가정이사" || serviceName === "HOME") {
+    return t("serviceTypes.home");
+  } else if (serviceName === "사무실이사" || serviceName === "OFFICE") {
+    return t("serviceTypes.office");
   }
+  return serviceName;
 };
 
-export const getRegionTranslation = (region: string, t: any) => {
-  return t(`regions.${region}`);
+// 지역명 번역 함수
+export const getRegionTranslation = (regionCode: string, t: any): string => {
+  return t(`regions.${regionCode}`) || regionCode;
 };
 
-export const getServiceTypeForLabel = (serviceName: string) => {
-  switch (serviceName) {
-    case "소형이사":
-      return "small";
-    case "가정이사":
-      return "home";
-    case "사무실이사":
-      return "office";
-    default:
-      return "document";
+// 모바일용 지역명 번역 함수
+export const getRegionTranslationMobile = (regionCode: string, t: any): string => {
+  return t(`regionsMobile.${regionCode}`) || regionCode;
+};
+
+// 서비스 타입을 MoveTypeLabel의 type으로 변환하는 함수
+export const getServiceTypeForLabel = (serviceName: string): "small" | "home" | "office" | "document" => {
+  if (serviceName === "소형이사" || serviceName === "SMALL") {
+    return "small";
+  } else if (serviceName === "가정이사" || serviceName === "HOME") {
+    return "home";
+  } else if (serviceName === "사무실이사" || serviceName === "OFFICE") {
+    return "office";
   }
-};
-
-export const getRegionTranslationMobile = (region: string, t: any) => {
-  return t(`regionsMobile.${region}`) || t(`regions.${region}`);
+  return "document";
 };
