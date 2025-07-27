@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
@@ -9,15 +9,51 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
 import type { DetailInformationProps } from "@/types/mover.types";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import findMoverApi from "@/lib/api/findMover.api";
+import type { IReview, IApiReview } from "@/types/review";
 
 const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<IReview[]>([]);
+  const [allReviews, setAllReviews] = useState<IReview[]>([]);
   const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
   const [isLoadingQuote, setIsLoadingQuote] = useState(true);
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
 
-  React.useEffect(() => {
+  // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
+  useEffect(() => {
+    const fetchAllReviews = async () => {
+      try {
+        const response = await findMoverApi.getMoverReviews(mover.id, 1, 1000);
+
+        const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
+          id: apiReview.id,
+          rating: apiReview.rating,
+          content: apiReview.content,
+          createdAt: apiReview.createdAt,
+          userId: apiReview.customerId,
+          moverId: apiReview.moverId,
+          quoteId: apiReview.estimateRequestId,
+          estimateId: apiReview.estimate?.id || "",
+          status: "COMPLETED" as const,
+          isPublic: true,
+          user: {
+            id: apiReview.customerId,
+            name: apiReview.nickname,
+          },
+        }));
+
+        setAllReviews(convertedReviews);
+      } catch (error) {
+        console.error("전체 리뷰 조회 실패:", error);
+        setAllReviews([]);
+      }
+    };
+
+    fetchAllReviews();
+  }, [mover.id]);
+
+  useEffect(() => {
     const fetchActiveQuote = async () => {
       try {
         setIsLoadingQuote(true);
@@ -41,11 +77,11 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   return (
     <div
-      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[359px]`}
+      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[100px]`}
     >
       <div>
         <div>
-          <MoverIntro mover={mover} reviews={reviews} />
+          <MoverIntro mover={mover} reviews={allReviews} />
         </div>
         <div className="mt-8 lg:mt-10">
           <Chip mover={mover} />
@@ -64,7 +100,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
           </>
         )}
 
-        <ReviewAvg mover={mover} reviews={reviews} />
+        <ReviewAvg mover={mover} reviews={allReviews} />
 
         <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
       </div>
