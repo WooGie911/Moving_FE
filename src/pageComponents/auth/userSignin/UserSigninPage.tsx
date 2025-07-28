@@ -50,7 +50,7 @@ const UserSigninPage = () => {
       if (isLoading) return;
       const response = await login(email, password, "CUSTOMER");
 
-      if (response.status !== 200) {
+      if (!response.success) {
         open({
           title: t("loginFailed"),
           children: <div>{response.message}</div>,

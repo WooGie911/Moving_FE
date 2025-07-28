@@ -37,7 +37,7 @@ const MoverRegisterPage = () => {
   const career = watch("career");
   const shortIntro = watch("shortIntro");
   const detailIntro = watch("detailIntro");
-  const [services, setServices] = useState<string[]>(["SMALL"]);
+  const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>(["SEOUL"]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState({
@@ -90,6 +90,10 @@ const MoverRegisterPage = () => {
       currentAreas: regions,
       serviceTypes: services,
     };
+
+    console.log("profileData", profileData);
+
+    return;
 
     const response = await userApi.postProfile(profileData);
 
@@ -349,7 +353,7 @@ const MoverRegisterPage = () => {
                 variant="solid"
                 width="w-full"
                 height="h-[54px] lg:h-[60px]"
-                className="order-1 items-center justify-center rounded-2xl bg-[#F9502E] p-4 text-base leading-relaxed font-semibold text-white lg:order-2"
+                className={`order-1 items-center justify-center rounded-2xl bg-[#F9502E] p-4 text-base leading-relaxed font-semibold text-white lg:order-2`}
                 onClick={methods.handleSubmit(onSubmit)}
                 disabled={!allFilled}
                 state={allFilled ? "default" : "disabled"}

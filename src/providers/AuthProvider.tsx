@@ -128,6 +128,8 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       setIsLoading(true);
       const response = await authApi.signIn({ email, password, userType });
 
+      console.log("response", response);
+
       if (response?.error) {
         throw new Error(response.message || "로그인에 실패했습니다.");
       }

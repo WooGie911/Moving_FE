@@ -47,7 +47,7 @@ const MoverSigninPage = () => {
     try {
       if (isLoading) return;
       const response = await login(email, password, "MOVER");
-      if (response.status !== 200) {
+      if (!response.success) {
         open({
           title: "로그인 실패",
           children: <div>{response.message}</div>,
