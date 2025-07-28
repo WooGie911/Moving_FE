@@ -91,10 +91,6 @@ const MoverRegisterPage = () => {
       serviceTypes: services,
     };
 
-    console.log("profileData", profileData);
-
-    return;
-
     const response = await userApi.postProfile(profileData);
 
     if (response.success) {
