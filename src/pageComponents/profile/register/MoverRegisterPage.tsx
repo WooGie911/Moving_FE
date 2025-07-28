@@ -349,7 +349,7 @@ const MoverRegisterPage = () => {
                 variant="solid"
                 width="w-full"
                 height="h-[54px] lg:h-[60px]"
-                className={`order-1 items-center justify-center rounded-2xl bg-[#F9502E] p-4 text-base leading-relaxed font-semibold text-white lg:order-2`}
+                className="order-1 items-center justify-center rounded-2xl bg-[#F9502E] p-4 text-base leading-relaxed font-semibold text-white lg:order-2"
                 onClick={methods.handleSubmit(onSubmit)}
                 disabled={!allFilled}
                 state={allFilled ? "default" : "disabled"}
