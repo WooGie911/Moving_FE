@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import Image from "next/image";
 import searchIcon from "@/assets/icon/etc/icon-search-lg.png";
@@ -8,6 +9,7 @@ import searchIcon from "@/assets/icon/etc/icon-search-lg.png";
 const SearchBar = () => {
   const { search, setSearch } = useSearchMoverStore();
   const [input, setInput] = useState(search || "");
+  const t = useTranslations("mover");
 
   useEffect(() => {
     setInput(search || "");
@@ -30,7 +32,7 @@ const SearchBar = () => {
       </div>
       <input
         type="text"
-        placeholder="기사님 별명을 입력해 주세요."
+        placeholder={t("searchPlaceholder")}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={handleKeyPress}

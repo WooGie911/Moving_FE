@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import findMoverApi from "@/lib/api/findMover.api";
-import { IMoverInfo } from "@/types/findMover";
+import { IMoverInfo } from "@/types/mover.types";
 
 const SearchMoverDetailPage = () => {
   const { id } = useParams() as { id: string };
@@ -15,7 +15,7 @@ const SearchMoverDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      findMoverApi.fetchMoverDetail(Number(id)).then(setMover);
+      findMoverApi.fetchMoverDetail(id).then(setMover);
     }
   }, [id]);
 

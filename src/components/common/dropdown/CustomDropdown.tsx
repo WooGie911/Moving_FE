@@ -72,7 +72,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       >
         <div className="flex items-center justify-between">
           <span
-            className={
+            className={`truncate ${
               selectedOption
                 ? isOpen
                   ? "text-primary-400"
@@ -80,14 +80,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                 : isOpen
                   ? "text-primary-400"
                   : "text-gray-250"
-            }
+            }`}
           >
             {selectedOption ? selectedOption.label.replace(/이사$/, "") : placeholder}
           </span>
           <Image
             src={isOpen ? iconUp : iconDown}
             alt={isOpen ? "위쪽 화살표" : "아래쪽 화살표"}
-            className="h-5 w-5 transition-transform duration-200 lg:h-9 lg:w-9"
+            className="h-5 w-5 flex-shrink-0 transition-transform duration-200 lg:h-9 lg:w-9"
           />
         </div>
       </button>
@@ -112,7 +112,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                 onClick={() => handleSelect(option)}
                 className={`w-full text-left leading-[24px] font-medium transition-colors duration-150 hover:bg-gray-50 lg:leading-[26px] ${optionClassName} ${option.value === value ? "bg-primary-50 text-primary-600 font-medium" : "text-gray-700"} ${option.value === "" ? "text-gray-500" : ""} ${twoColumns && idx % 2 === 0 ? "border-r-1 border-gray-200" : ""} `}
               >
-                {option.label}
+                <span className="block truncate">{option.label}</span>
               </button>
             ))}
           </div>
