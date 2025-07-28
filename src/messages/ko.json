@@ -242,7 +242,34 @@
 
     "currentArea": "내가 사는 지역",
     "currentAreaInfo": "내가 사는 지역은 언제든 수정 가능해요!",
-    "currentAreas": "서비스 가능 지역"
+    "currentAreas": "서비스 가능 지역",
+    "edit": {
+      "title": "프로필 수정",
+      "profileImage": "프로필 이미지",
+      "nickname": "별명",
+      "nicknamePlaceholder": "별명을 입력하세요",
+      "career": "경력",
+      "careerPlaceholder": "ex) 8",
+      "shortIntro": "한 줄 소개",
+      "shortIntroPlaceholder": "한 줄 소개를 입력하세요 (최소 8자)",
+      "detailIntro": "상세 설명",
+      "detailIntroPlaceholder": "상세 설명을 입력하세요 (최소 10자)",
+      "providedServices": "제공 서비스",
+      "serviceAreas": "서비스 가능 지역",
+      "required": "*",
+      "requiredField": "필수 입력",
+      "minLength8": "8자 이상 입력해주세요",
+      "minLength10": "10자 이상 입력해주세요",
+      "minCareer": "경력은 0년 이상이어야 합니다",
+      "save": "수정하기",
+      "cancel": "취소",
+      "successTitle": "프로필 수정 완료",
+      "successMessage": "프로필 수정이 완료되었습니다.",
+      "errorTitle": "프로필 수정 실패",
+      "errorMessage": "수정에 실패했습니다.",
+      "generalError": "오류가 발생했습니다.",
+      "confirm": "확인"
+    }
   },
   "search": {
     "title": "이사업체 검색",
@@ -324,6 +351,19 @@
     "yearsMobile": "년",
     "casesMobile": "건",
     "confirmedMobile": "확정",
+    "myPage": {
+      "loading": "로딩 중...",
+      "retry": "다시 시도",
+      "profileNotFound": "프로필 정보를 찾을 수 없습니다.",
+      "editProfile": "내 프로필 수정",
+      "editBasicInfo": "기본 정보 수정",
+      "activityStatus": "활동 현황",
+      "inProgress": "진행",
+      "reviews": "리뷰",
+      "totalExperience": "총 경력",
+      "providedServices": "제공 서비스",
+      "serviceAreas": "서비스 가능 지역"
+    },
     "serviceTypes": {
       "small": "소형이사",
       "home": "가정이사",
