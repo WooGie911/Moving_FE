@@ -22,7 +22,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
       <h2 className="text-2lg mt-2 mb-4 font-semibold md:mt-3 md:mb-5 md:text-2xl">{mover.description}</h2>
       <div className="mb-4 flex justify-between">
         <div className="flex items-center gap-1">
-          <Image src={badge} alt="badge-image" className="h-[23px] w-[20px]" />
+          {mover.completedCount > 30 && <Image src={badge} alt="badge-image" className="h-[23px] w-[20px]" />}
           <p className="md:text-2lg text-lg font-semibold">
             {mover.nickname} {t("driverSuffix")}
           </p>
@@ -35,15 +35,15 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
       <p className="text-md mb-8 leading-6 font-normal text-[#808080] md:text-lg md:leading-[26px]">
         {mover.introduction}
       </p>
-      <div className="flex items-center justify-center gap-9 rounded-xl border border-gray-200 py-[24.5px] md:gap-[97px] md:rounded-2xl md:py-8 lg:gap-42">
-        <div className="flex flex-col items-center">
+      <div className="flex items-center justify-center gap-9 rounded-xl border border-gray-200 px-[70px] py-[24.5px] md:gap-[97px] md:rounded-2xl md:py-8 lg:gap-42">
+        <div className="flex w-full flex-col items-center">
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("inProgress")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
             {mover.completedCount}
             {t("cases")}
           </p>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex w-full flex-col items-center">
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("reviews")}</p>
           <div className="flex items-center gap-[6px]">
             <Image src={star} alt="star-image" className="h-5 w-5 md:h-6 md:w-6" />
@@ -51,7 +51,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
             <p className="text-md font-medium text-[#ABABAB] md:text-lg">({total})</p>
           </div>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex w-full flex-col items-center">
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("totalExperience")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
             {mover.experience}
