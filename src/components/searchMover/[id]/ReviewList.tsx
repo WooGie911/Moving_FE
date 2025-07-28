@@ -7,6 +7,12 @@ import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
 import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
 import Pagination from "@/components/common/pagination/Pagination";
 
+// 사용자 이름 마스킹 함수
+const maskUserName = (name: string): string => {
+  if (!name || name.length <= 1) return name;
+  return name.charAt(0) + '*'.repeat(name.length - 1);
+};
+
 const PAGE_SIZE = 5;
 
 const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
@@ -106,7 +112,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
             <li className="py-5 md:py-6">
               <div className="mb-4 flex flex-col gap-2 md:mb-6">
                 <div className="flex items-center gap-3 md:gap-[14px]">
-                  <span className="text-md md:text-2lg font-normal">{review.user.name}</span>
+                  <span className="text-md md:text-2lg font-normal">{maskUserName(review.user.name)}</span>
                   <div className="text-[#E6E6E6]">|</div>
                   <span className="text-md md:text-2lg text-[#ABABAB]">{formatDate(review.createdAt)}</span>
                 </div>
