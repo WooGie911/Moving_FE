@@ -71,7 +71,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             text: t("requestGeneralQuoteButton"),
             onClick: () => {
               close();
-              router.push("/quote/create");
+              router.push("/estimateRequest/create");
             },
           },
         ],
