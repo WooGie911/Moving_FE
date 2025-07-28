@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import CustomDropdown from "@/components/common/dropdown/CustomDropdown";
-import findMoverApi from "@/lib/api/findMover.api";
-import { getRegionLabel, getRegionOptions } from "@/lib/utils/regionMapping";
 import { getRegionTranslation, getServiceTypeTranslation } from "@/lib/utils/translationUtils";
+import { useRegions, useServiceTypes } from "@/hooks/useMoverData";
 import SortBar from "@/components/searchMover/SortBar";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { Option } from "@/types/dropdown";
@@ -15,60 +14,42 @@ const FilterBar = () => {
   const { region, setRegion, serviceTypeId, setServiceTypeId, reset } = useSearchMoverStore();
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
-  const [regionOptions, setRegionOptions] = useState<Option[]>([{ value: "", label: t("all") }]);
-  const [serviceOptions, setServiceOptions] = useState<Option[]>([{ value: "", label: t("all") }]);
-  const [loading, setLoading] = useState(true);
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isServiceOpen, setIsServiceOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchFilterOptions = async () => {
-      try {
-        setLoading(true);
-        const [regions, serviceTypes] = await Promise.all([
-          findMoverApi.fetchRegions(),
-          findMoverApi.fetchServiceTypes(),
-        ]);
-        const regionOpts = [
-          { value: "", label: t("all") },
-          ...regions.map((region) => ({ value: region, label: getRegionTranslation(region, t) })),
-        ];
-        setRegionOptions(regionOpts);
-        const serviceOpts = [
-          { value: "", label: t("all") },
-          ...serviceTypes.map((service) => ({ value: service.id, label: getServiceTypeTranslation(service.name, t) })),
-        ];
-        setServiceOptions(serviceOpts);
-      } catch (error) {
-        const defaultRegionOptions = getRegionOptions();
-        setRegionOptions([
-          { value: "", label: t("all") },
-          ...defaultRegionOptions.map((option) => ({
-            value: option.value,
-            label: getRegionTranslation(option.value, t),
-          })),
-        ]);
-        setServiceOptions([
-          { value: "", label: t("all") },
-          { value: 1, label: t("serviceTypes.home") },
-          { value: 2, label: t("serviceTypes.office") },
-          { value: 3, label: t("serviceTypes.small") },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFilterOptions();
-  }, []);
+  // React Query로 데이터 가져오기
+  const { data: regions = [], isLoading: regionsLoading } = useRegions();
+  const { data: serviceTypes = [], isLoading: serviceTypesLoading } = useServiceTypes();
 
-  // TODO: 스켈레톤 우선 적용해봄. 추후에 스켈레톤 파일로 뺄 예정
-  if (loading) {
+  // 옵션 생성 (메모이제이션)
+  const regionOptions: Option[] = React.useMemo(
+    () => [
+      { value: "", label: t("all") },
+      ...regions.map((region) => ({ value: region, label: getRegionTranslation(region, t) })),
+    ],
+    [regions, t],
+  );
+
+  const serviceOptions: Option[] = React.useMemo(
+    () => [
+      { value: "", label: t("all") },
+      ...serviceTypes.map((service) => ({ value: service.id, label: getServiceTypeTranslation(service.name, t) })),
+    ],
+    [serviceTypes, t],
+  );
+
+  const isLoading = regionsLoading || serviceTypesLoading;
+
+  // 스켈레톤 로딩
+  if (isLoading) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-full">
+        <div className="flex w-full items-center">
+          <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
+          <div className="ml-3 h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
+          <div className="ml-[25px] h-[32px] w-[48px] animate-pulse rounded bg-gray-200" />
+        </div>
         <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
-        <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
-        <div className="ml-2 h-[32px] w-[48px] animate-pulse rounded bg-gray-200" />
-        <div className="ml-2 h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
       </div>
     );
   }

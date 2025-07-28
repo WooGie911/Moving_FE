@@ -58,7 +58,7 @@ const SearchMoverPage = () => {
         <MoverList />
       </div>
       {/* PC 화면에서만 찜한 기사님 표시 */}
-      {shouldShowBookmarked && <FavoriteMoverList movers={favoriteMovers} />}
+      {shouldShowBookmarked && <FavoriteMoverList />}
     </div>
   );
 };
