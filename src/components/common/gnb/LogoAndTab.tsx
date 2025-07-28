@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 import { getPathWithoutLocale } from "@/utils/locale";
+import { useTranslations } from "next-intl";
 
 interface ILogoAndTabProps {
   deviceType: TDeviceType;
@@ -19,6 +20,7 @@ type TNavigationItem = {
 
 export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const pathname = usePathname();
+  const t = useTranslations();
 
   const cleanPath = getPathWithoutLocale(pathname);
 
@@ -48,12 +50,18 @@ export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
                 key={item.name}
                 href={item.href}
                 className={`text-2lg font-bold transition-colors ${
-                  cleanPath === "/ko" || cleanPath === "/en" || cleanPath === "/zh" || cleanPath === item.href
+                  cleanPath === "/ko" ||
+                  cleanPath === "/en" ||
+                  cleanPath === "/zh" ||
+                  cleanPath === item.href ||
+                  cleanPath.startsWith(item.href + "/") ||
+                  (item.href === "/review/writable" && (cleanPath === "/review/writable" || cleanPath === "/review/written")) ||
+                  (item.href === "/estimateRequest/pending" && (cleanPath === "/estimateRequest/pending" || cleanPath === "/estimateRequest/received"))
                     ? "text-black"
                     : "text-gray-400"
                 } transition-colors hover:text-black`}
               >
-                {item.name}
+                {t(item.name)}
               </Link>
             ))}
           </div>
