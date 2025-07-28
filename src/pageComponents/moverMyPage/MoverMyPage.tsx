@@ -290,7 +290,7 @@ const MoverMyPage = () => {
                   <div className="self-stretch h-28 px-40 bg-bg-secondary rounded-24 border border-gray-200 inline-flex justify-between items-center">
                     <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
                       <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.inProgress")}</div>
-                      <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.completedCount}건</div>
+                      <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.completedCount} {t("cases")}</div>
                     </div>
                     <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
                       <div className="text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.reviews")}</div>
@@ -302,7 +302,7 @@ const MoverMyPage = () => {
                     </div>
                     <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
                       <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.totalExperience")}</div>
-                      <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.experience}년</div>
+                      <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.experience} {t("years")}</div>
                     </div>
                   </div>
                 </div>
