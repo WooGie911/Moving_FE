@@ -11,6 +11,7 @@ import estimateIcon from "@/assets/icon/etc/icon-estimate.png";
 import arrowIcon from "@/assets/icon/arrow/icon-arrow.png";
 import { Button } from "@/components/common/button/Button";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.png";
+import { useTranslations } from "next-intl";
 
 interface ReviewWriteModalProps {
   card: IWritableCardData;
@@ -21,6 +22,7 @@ interface ReviewWriteModalProps {
 const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProps) => {
   const formMethods = useForm<IReviewForm>({ mode: "onChange" });
   const { control, handleSubmit, formState } = formMethods;
+  const t = useTranslations("review");
 
   return (
     <FormProvider {...formMethods}>
@@ -36,8 +38,8 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
               {/* 텍스트 영역 */}
               <div>
                 <div className="flex flex-col">
-                  <Image src={estimateIcon} alt="인증된 기사님" className="h-6 w-5" />
-                  <div className="text-xl text-[16px] font-semibold lg:text-[18px]">{card.nickname}</div>
+                  <Image src={estimateIcon} alt={t("verifiedDriver")} className="h-6 w-5" />
+                  <div className="text-xl text-[16px] font-semibold lg:text-[18px]">{card.nickname} {t("driverSuffix")}</div>
                 </div>
               </div>
 
@@ -55,7 +57,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
               <div className="mb-2 flex w-full gap-10">
                 <div className="flex gap-4">
                   <div>
-                    <div className="text-gray-500">출발지</div>
+                    <div className="text-gray-500">{t("departure")}</div>
                     <div className="text-black-500">{card.fromAddress.city}</div>
                   </div>
                   <div>
@@ -63,13 +65,13 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
                   </div>
 
                   <div>
-                    <div className="text-gray-500">도착지</div>
+                    <div className="text-gray-500">{t("arrival")}</div>
                     <div className="text-black-500">{card.toAddress.city}</div>
                   </div>
                 </div>
 
                 <div className="border-gray-100">
-                  <div className="text-gray-500">이사일</div>
+                  <div className="text-gray-500">{t("moveDate")}</div>
                   <div className="text-black-500">{new Date(card.moveDate).toLocaleDateString("ko-KR")}</div>
                 </div>
               </div>
@@ -81,27 +83,27 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
               name="rating"
               control={control}
               defaultValue={0}
-              rules={{ validate: (value) => value > 0 || "평점을 선택해주세요." }}
+              rules={{ validate: (value) => value > 0 || t("selectRatingError") }}
               render={({ field }) => <StarRating rating={field.value} setRating={field.onChange} />}
             />
           </div>
 
           <div>
             <div className="flex flex-col items-start justify-center gap-3">
-              <p className="text-black-300 text-[16px] font-semibold lg:text-[18px]">상세 후기를 작성해 주세요</p>
+              <p className="text-black-300 text-[16px] font-semibold lg:text-[18px]">{t("writeDetailReview")}</p>
               <div className="w-full">
                 <Controller
                   name="content"
                   control={control}
                   defaultValue=""
                   rules={{
-                    required: "상세 후기를 입력해주세요.",
-                    minLength: { value: 10, message: "최소 10자 이상 입력해주세요" },
+                    required: t("reviewRequired"),
+                    minLength: { value: 10, message: t("reviewMinLength") },
                   }}
                   render={({ field }) => (
                     <TextAreaInput
                       {...field}
-                      placeholder="최소 10자 이상 입력해주세요"
+                      placeholder={t("reviewPlaceholder")}
                       textareaClassName="w-full border-gray-200"
                     />
                   )}
@@ -118,7 +120,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
               className="w-full p-4"
               rounded="rounded-xl"
             >
-              {isSubmitting ? "요청 중..." : "리뷰 등록"}
+              {isSubmitting ? t("submitting") : t("registerReview")}
             </Button>
           </div>
         </div>

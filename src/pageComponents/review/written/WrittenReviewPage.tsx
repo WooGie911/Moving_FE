@@ -10,6 +10,7 @@ import WrittenMoverCard from "@/components/review/written/WrittenMoverCard";
 import reviewApi from "@/lib/api/review.api";
 import { useAuth } from "@/providers/AuthProvider";
 import Pagination from "@/components/common/pagination/Pagination";
+import { useTranslations } from "next-intl";
 
 const PAGE_SIZE = 4;
 
@@ -18,6 +19,7 @@ const WrittenReviewPage = () => {
   const router = useRouter();
   const { user } = useAuth();
   const customerId = user?.id ? String(user.id) : null;
+  const t = useTranslations("review");
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -43,13 +45,13 @@ const WrittenReviewPage = () => {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">로딩 중...</div>
+        <div className="py-10 text-center">{t("loading")}</div>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">에러가 발생했습니다.</div>
+        <div className="py-10 text-center text-red-500">{t("error")}</div>
       ) : reviews.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <Image src={noReview} alt="작성한 리뷰 없음" className="mb-6 h-50 w-60" />
-          <div className="text-lg font-semibold text-gray-400">아직 등록된 리뷰가 없어요!</div>
+          <Image src={noReview} alt={t("noWrittenReviewsAlt")} className="mb-6 h-50 w-60" />
+          <div className="text-lg font-semibold text-gray-400">{t("noWrittenReviews")}</div>
         </div>
       ) : (
         <div className="flex w-full flex-col items-center gap-6">

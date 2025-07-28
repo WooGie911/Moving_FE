@@ -12,12 +12,14 @@ import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import Pagination from "@/components/common/pagination/Pagination";
+import { useTranslations } from "next-intl";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
   const { open, close } = useModal();
   const queryClient = useQueryClient();
   const deviceType = useWindowWidth();
+  const t = useTranslations("review");
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -36,9 +38,8 @@ const WritableReviewPage = () => {
       queryClient.invalidateQueries({ queryKey: ["writableReviews", page] });
       close();
     },
-    onError: (error) => {
-      console.error("리뷰 작성 실패:", error);
-      alert("리뷰 작성에 실패했습니다. 다시 시도해주세요.");
+    onError: () => {
+      alert(t("reviewWriteFailed"));
     },
   });
 
@@ -49,7 +50,7 @@ const WritableReviewPage = () => {
   const handleWriteModalOpen = (card: IWritableCardData) => {
     const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
     open({
-      title: "리뷰 쓰기",
+      title: t("writeReview"),
       type: modalType,
       children: card ? (
         <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
@@ -63,13 +64,13 @@ const WritableReviewPage = () => {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">로딩 중...</div>
+        <div className="py-10 text-center">{t("loading")}</div>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">에러가 발생했습니다.</div>
+        <div className="py-10 text-center text-red-500">{t("error")}</div>
       ) : cards.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <Image src={noReview} alt="작성 가능한 리뷰 없음" className="mb-6 h-50 w-60" />
-          <div className="text-lg font-semibold text-gray-400">작성 가능한 리뷰가 없어요!</div>
+          <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
+          <div className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</div>
         </div>
       ) : (
         <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
