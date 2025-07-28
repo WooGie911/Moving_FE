@@ -58,7 +58,7 @@ const UserSignupPage = () => {
     try {
       if (isLoading) return;
       const response = await signUp(signUpData);
-      if (response.status !== 200) {
+      if (!response.success) {
         open({
           title: "회원가입 실패",
           children: <div>{response.message}</div>,
