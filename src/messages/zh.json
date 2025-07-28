@@ -247,7 +247,34 @@
 
     "currentArea": "所在地区",
     "currentAreaInfo": "可以随时修改所在地区！",
-    "currentAreas": "服务范围"
+    "currentAreas": "服务范围",
+    "edit": {
+      "title": "编辑个人资料",
+      "profileImage": "个人资料图片",
+      "nickname": "昵称",
+      "nicknamePlaceholder": "请输入昵称",
+      "career": "工作经验",
+      "careerPlaceholder": "例如：8",
+      "shortIntro": "一句话介绍",
+      "shortIntroPlaceholder": "请输入一句话介绍（最少8个字符）",
+      "detailIntro": "详细介绍",
+      "detailIntroPlaceholder": "请输入详细介绍（最少10个字符）",
+      "providedServices": "提供的服务",
+      "serviceAreas": "服务区域",
+      "required": "*",
+      "requiredField": "必填",
+      "minLength8": "请至少输入8个字符",
+      "minLength10": "请至少输入10个字符",
+      "minCareer": "工作经验必须至少0年",
+      "save": "保存更改",
+      "cancel": "取消",
+      "successTitle": "个人资料更新完成",
+      "successMessage": "个人资料已成功更新。",
+      "errorTitle": "个人资料更新失败",
+      "errorMessage": "更新失败。",
+      "generalError": "发生错误。",
+      "confirm": "确认"
+    }
   },
   "search": {
     "title": "搜索搬家公司",
@@ -329,6 +356,19 @@
     "yearsMobile": "年",
     "casesMobile": "",
     "confirmedMobile": "完成",
+    "myPage": {
+      "loading": "加载中...",
+      "retry": "重试",
+      "profileNotFound": "找不到个人资料信息。",
+      "editProfile": "编辑我的个人资料",
+      "editBasicInfo": "编辑基本信息",
+      "activityStatus": "活动状态",
+      "inProgress": "进行中",
+      "reviews": "评论",
+      "totalExperience": "总经验",
+      "providedServices": "提供的服务",
+      "serviceAreas": "服务区域"
+    },
     "serviceTypes": {
       "small": "小型搬家",
       "home": "家庭搬家",

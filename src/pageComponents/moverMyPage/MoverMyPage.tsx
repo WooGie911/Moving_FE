@@ -8,7 +8,7 @@ import editIcon from "@/assets/icon/edit/icon-edit.png";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Favorite from "@/components/common/button/Favorite";
-import { getRegionTranslation } from "@/lib/utils/translationUtils";
+import { getRegionTranslation, getServiceTypeTranslation } from "@/lib/utils/translationUtils";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import ReviewAvg from "@/components/searchMover/[id]/ReviewAvg";
@@ -153,7 +153,7 @@ const MoverMyPage = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-bg-primary">
-        <div className="text-lg">로딩 중...</div>
+        <div className="text-lg">{t("myPage.loading")}</div>
       </div>
     );
   }
@@ -167,7 +167,7 @@ const MoverMyPage = () => {
             onClick={() => window.location.reload()} 
             className="px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-primary-500"
           >
-            다시 시도
+            {t("myPage.retry")}
           </button>
         </div>
       </div>
@@ -177,7 +177,7 @@ const MoverMyPage = () => {
   if (!profile) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-bg-primary">
-        <div className="text-lg">프로필 정보를 찾을 수 없습니다.</div>
+        <div className="text-lg">{t("myPage.profileNotFound")}</div>
       </div>
     );
   }
@@ -248,7 +248,7 @@ const MoverMyPage = () => {
                   onClick={() => router.push(`/${locale}/profile/edit`)}
                   className="flex items-center justify-center gap-2 px-6 py-3 w-full h-16 bg-primary-400 text-white font-semibold rounded-24 hover:bg-primary-500 transition-colors shadow-md cursor-pointer"
                 >
-                  내 프로필 수정
+                  {t("myPage.editProfile")}
                   <Image src={editIcon} alt="edit-icon" className="w-6 h-6" />
                 </button>
                 <button 
@@ -256,7 +256,7 @@ const MoverMyPage = () => {
                   className="self-stretch h-16 p-4 w-full rounded-24 outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center hover:bg-bg-secondary transition-colors cursor-pointer"
                 >
                   <div className="flex justify-start items-center gap-1.5">
-                    <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">기본 정보 수정</div>
+                    <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">{t("myPage.editBasicInfo")}</div>
                     <div className="w-6 h-6 relative overflow-hidden">
                       <Image src={editGrayIcon} alt="edit-icon" className="w-6 h-6" />
                     </div>
@@ -270,7 +270,7 @@ const MoverMyPage = () => {
                   className="flex-1 h-16 p-4 rounded-24 outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center hover:bg-bg-secondary transition-colors cursor-pointer"
                 >
                   <div className="flex justify-start items-center gap-1.5">
-                    <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">기본 정보 수정</div>
+                    <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">{t("myPage.editBasicInfo")}</div>
                     <div className="w-6 h-6 relative overflow-hidden">
                       <Image src={editGrayIcon} alt="edit-icon" className="w-6 h-6" />
                     </div>
@@ -280,40 +280,40 @@ const MoverMyPage = () => {
                   onClick={() => router.push(`/${locale}/profile/edit`)}
                   className="flex items-center justify-center gap-2 px-6 py-3 flex-1 h-16 bg-primary-400 text-white font-semibold rounded-24 hover:bg-primary-500 transition-colors shadow-md cursor-pointer"
                 >
-                  내 프로필 수정
+                  {t("myPage.editProfile")}
                   <Image src={editIcon} alt="edit-icon" className="w-6 h-6" />
                 </button>
               </div>
               
               <div className="self-stretch flex flex-col justify-start items-start gap-4">
-                  <div className="self-stretch justify-start text-neutral-800 text-xl font-semibold leading-loose">활동 현황</div>
+                  <div className="self-stretch justify-start text-neutral-800 text-xl font-semibold leading-loose">{t("myPage.activityStatus")}</div>
                   <div className="self-stretch h-28 px-40 bg-bg-secondary rounded-24 border border-gray-200 inline-flex justify-between items-center">
-                    <div className="w-14 inline-flex flex-col justify-start items-center gap-1">
-                      <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed">진행</div>
+                    <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
+                      <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.inProgress")}</div>
                       <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.completedCount}건</div>
                     </div>
-                    <div className="w-24 inline-flex flex-col justify-start items-center gap-1">
-                      <div className="text-center justify-start text-gray-800 text-base font-normal leading-relaxed">리뷰</div>
+                    <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
+                      <div className="text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.reviews")}</div>
                       <div className="inline-flex justify-start items-center gap-1.5">
                         <div className="justify-center text-primary-400 text-xl font-bold leading-loose">
                           {profile.avgRating.toFixed(1)}
                         </div>
                       </div>
                     </div>
-                    <div className="w-16 inline-flex flex-col justify-start items-center gap-1">
-                      <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">총 경력</div>
+                    <div className="flex-1 inline-flex flex-col justify-start items-center gap-1">
+                      <div className="self-stretch text-center justify-start text-gray-800 text-base font-normal leading-relaxed whitespace-nowrap">{t("myPage.totalExperience")}</div>
                       <div className="self-stretch text-center justify-center text-primary-400 text-xl font-bold leading-loose">{profile.experience}년</div>
                     </div>
                   </div>
                 </div>
             </div>
             <div className="flex flex-col justify-start items-start gap-4">
-              <div className="justify-start text-neutral-800 text-xl font-semibold leading-loose">제공 서비스</div>
+              <div className="justify-start text-neutral-800 text-xl font-semibold leading-loose">{t("myPage.providedServices")}</div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
                 {profile.serviceTypes.map((serviceType: any, idx: number) => (
                   <CircleTextLabel
                     key={idx}
-                    text={serviceType.service?.name || serviceType}
+                    text={getServiceTypeTranslation(serviceType.service?.name || serviceType, t)}
                     clickAble={false}
                     hasBorder1={true}
                     hasBorder2={true}
@@ -322,7 +322,7 @@ const MoverMyPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-start items-start gap-4">
-              <div className="justify-start text-neutral-800 text-xl font-semibold leading-loose">서비스 가능 지역</div>
+              <div className="justify-start text-neutral-800 text-xl font-semibold leading-loose">{t("myPage.serviceAreas")}</div>
               <div className="flex flex-wrap items-start gap-1.5 lg:gap-3 max-w-full">
                 {(profileDetail.currentAreas.length > 0 ? profileDetail.currentAreas : profile.serviceRegions).map((region: any, idx: number) => (
                   <CircleTextLabel
@@ -354,7 +354,7 @@ const MoverMyPage = () => {
               onClick={() => router.push(`/${locale}/profile/edit`)}
               className="flex items-center justify-center gap-2 px-6 py-3 lg:w-[283px] lg:h-16 bg-primary-400 text-white font-semibold rounded-24 hover:bg-primary-500 transition-colors shadow-md cursor-pointer"
             >
-              내 프로필 수정
+              {t("myPage.editProfile")}
               <Image src={editIcon} alt="edit-icon" className="w-6 h-6" />
             </button>
             <button 
@@ -362,7 +362,7 @@ const MoverMyPage = () => {
               className="self-stretch h-16 p-4 lg:w-[283px] rounded-24 outline outline-1 outline-offset-[-1px] outline-gray-200 inline-flex justify-center items-center hover:bg-bg-secondary transition-colors cursor-pointer"
             >
               <div className="flex justify-start items-center gap-1.5">
-                <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">기본 정보 수정</div>
+                <div className="text-center justify-center text-neutral-400 text-lg font-semibold leading-relaxed">{t("myPage.editBasicInfo")}</div>
                 <div className="w-6 h-6 relative overflow-hidden">
                   <Image src={editGrayIcon} alt="edit-icon" className="w-6 h-6" />
                 </div>

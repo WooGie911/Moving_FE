@@ -246,7 +246,34 @@
 
     "currentArea": "My Area",
     "currentAreaInfo": "You can edit your area anytime!",
-    "currentAreas": "Service Areas"
+    "currentAreas": "Service Areas",
+    "edit": {
+      "title": "Edit Profile",
+      "profileImage": "Profile Image",
+      "nickname": "Nickname",
+      "nicknamePlaceholder": "Enter your nickname",
+      "career": "Career",
+      "careerPlaceholder": "ex) 8",
+      "shortIntro": "Introduction",
+      "shortIntroPlaceholder": "Enter a brief introduction (minimum 8 characters)",
+      "detailIntro": "Description",
+      "detailIntroPlaceholder": "Enter a detailed description (minimum 10 characters)",
+      "providedServices": "Provided Services",
+      "serviceAreas": "Service Areas",
+      "required": "*",
+      "requiredField": "Required",
+      "minLength8": "Please enter at least 8 characters",
+      "minLength10": "Please enter at least 10 characters",
+      "minCareer": "Career must be at least 0 years",
+      "save": "Save Changes",
+      "cancel": "Cancel",
+      "successTitle": "Profile Update Complete",
+      "successMessage": "Profile has been updated successfully.",
+      "errorTitle": "Profile Update Failed",
+      "errorMessage": "Update failed.",
+      "generalError": "An error occurred.",
+      "confirm": "Confirm"
+    }
   },
   "search": {
     "title": "Search Moving Companies",
@@ -328,6 +355,19 @@
     "yearsMobile": "y",
     "casesMobile": "",
     "confirmedMobile": "Done",
+    "myPage": {
+      "loading": "Loading...",
+      "retry": "Retry",
+      "profileNotFound": "Profile information not found.",
+      "editProfile": "Edit My Profile",
+      "editBasicInfo": "Edit Basic Info",
+      "activityStatus": "Activity Status",
+      "inProgress": "In Progress",
+      "reviews": "Reviews",
+      "totalExperience": "Career",
+      "providedServices": "Provided Services",
+      "serviceAreas": "Service Areas"
+    },
     "serviceTypes": {
       "small": "Small Move",
       "home": "Home Move",
