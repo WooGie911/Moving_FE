@@ -100,30 +100,30 @@ const EditPage = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-x-40 gap-y-8 lg:grid-cols-2">
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">이름</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("name")}</div>
                 <TextInput
                   name="name"
                   rules={validationRules.name}
-                  placeholder="이름을 입력해주세요"
+                  placeholder={t("namePlaceholder")}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">이메일</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("email")}</div>
                 <TextInput
                   name="email"
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-neutral-200 text-base text-[#999999] pointer-events-none bg-gray-100"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
-                  placeholder="이메일을 입력해주세요"
+                  placeholder={t("emailPlaceholder")}
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">전화번호</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("phone")}</div>
                 <TextInput
                   name="phone"
                   rules={validationRules.phoneNumber}
-                  placeholder="전화번호를 입력해주세요"
+                  placeholder={t("phonePlaceholder")}
                   inputClassName="w-full lg:w-[500px] p-3.5 bg-white rounded-2xl outline outline-[0.5px] outline-offset-[-0.5px] outline-neutral-200 text-base !text-black"
                   wrapperClassName="w-full max-w-[560px] sm:!w-full lg:max-w-none lg:w-[500px]"
                 />
@@ -131,14 +131,14 @@ const EditPage = () => {
             </div>
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">현재 비밀번호</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("currentPassword")}</div>
                 <PasswordInput
                   name="currentPassword"
-                  placeholder="현재 비밀번호를 입력해주세요"
+                  placeholder={t("currentPasswordPlaceholder")}
                   rules={{
                     validate: (value) => {
                       if (watch("newPassword") || watch("newPasswordConfirm")) {
-                        return value ? true : "현재 비밀번호를 입력해주세요";
+                        return value ? true : t("currentPasswordRequired");
                       }
                       return true;
                     },
@@ -148,14 +148,14 @@ const EditPage = () => {
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">새 비밀번호</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("newPassword")}</div>
                 <PasswordInput
                   name="newPassword"
-                  placeholder="새 비밀번호를 입력해주세요"
+                  placeholder={t("newPasswordPlaceholder")}
                   rules={{
                     validate: (value) => {
                       if (watch("currentPassword") || watch("newPasswordConfirm")) {
-                        if (!value) return "새 비밀번호를 입력해주세요";
+                        if (!value) return t("newPasswordRequired");
                         return validationRules.password.validate(value);
                       }
                       return true;
@@ -166,15 +166,15 @@ const EditPage = () => {
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">새 비밀번호 확인</div>
+                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("confirmNewPassword")}</div>
                 <PasswordInput
                   name="newPasswordConfirm"
-                  placeholder="새 비밀번호를 다시 한번 입력해주세요"
+                  placeholder={t("confirmNewPasswordPlaceholder")}
                   rules={{
                     validate: (value) => {
                       if (watch("currentPassword") || watch("newPassword")) {
-                        if (!value) return "새 비밀번호 확인을 입력해주세요";
-                        if (value !== getValues("newPassword")) return "새 비밀번호가 일치하지 않습니다.";
+                        if (!value) return t("confirmNewPasswordRequired");
+                        if (value !== getValues("newPassword")) return t("passwordMismatch");
                       }
                       return true;
                     },
@@ -190,7 +190,7 @@ const EditPage = () => {
                 className="h-[54px] w-full rounded-xl px-6 py-4 text-base font-semibold text-neutral-400 shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 lg:h-[60px] lg:w-[240px]"
                 onClick={() => router.back()}
               >
-                취소
+                {t("cancel")}
               </button>
               <Button
                 variant="solid"
@@ -199,7 +199,7 @@ const EditPage = () => {
                 disabled={!requiredFilled}
                 onClick={handleSubmit(onSubmit)}
               >
-                수정하기
+                {t("save")}
               </Button>
             </div>
             {formError && <div className="col-span-1 mt-2 text-sm text-red-500 lg:col-span-2">{formError}</div>}
