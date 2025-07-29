@@ -37,8 +37,8 @@ const CustomerRegisterPage = () => {
   const { handleSubmit, watch } = methods;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [services, setServices] = useState<string[]>([]);
-  const [regions, setRegions] = useState<string>("");
+  const [services, setServices] = useState<string[]>(["SMALL"]);
+  const [regions, setRegions] = useState<string>("SEOUL");
   const [selectedImage, setSelectedImage] = useState({
     name: "",
     type: "",
