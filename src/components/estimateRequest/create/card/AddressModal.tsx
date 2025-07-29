@@ -13,10 +13,12 @@ const AddressModal: React.FC<IAddressModalProps> = ({ onComplete }) => {
 
   const handleComplete = () => {
     if (baseAddress && detailAddress) {
-      onComplete({
+      const finalAddress = {
         ...baseAddress,
         detailAddress,
-      });
+      };
+
+      onComplete(finalAddress);
     }
   };
 
@@ -44,7 +46,7 @@ const AddressModal: React.FC<IAddressModalProps> = ({ onComplete }) => {
       {baseAddress && (
         <div className="my-2">
           <AddressCard
-            postalCode={baseAddress.zonecode}
+            postalCode={baseAddress.zoneCode}
             roadAddress={baseAddress.roadAddress + (detailAddress ? ` ${detailAddress}` : "")}
             jibunAddress={baseAddress.jibunAddress}
             selected

@@ -56,17 +56,23 @@ const EstimateRequestCreatePage = () => {
   // 견적 존재 여부 확인 및 edit 페이지로 리다이렉트
   const checkAndRedirectToEdit = async () => {
     try {
+      console.log("🔍 활성 견적 요청 확인 중...");
       const response = await activeQuery.refetch();
+      console.log("📡 API 응답:", response);
 
       if (response.data?.success && response.data?.hasActive) {
+        console.log("✅ 활성 견적 발견 - 수정 페이지로 이동");
         // 활성 견적이 있으면 edit 페이지로 리다이렉트
         router.push("/estimateRequest/edit");
         return;
+      } else {
+        console.log("❌ 활성 견적 없음 - 생성 페이지 유지");
+        console.log("응답 데이터:", response.data);
       }
 
       // 활성 견적이 없으면 create 페이지에서 계속 진행
     } catch (error) {
-      console.error("견적 존재 여부 확인 실패:", error);
+      console.error("❌ 견적 존재 여부 확인 실패:", error);
       // 에러 발생 시 create 페이지에서 계속 진행
     }
   };
