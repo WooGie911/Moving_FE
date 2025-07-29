@@ -25,7 +25,7 @@ const USER_ACTION_LIST = [
   },
 ];
 
-// TODO :  이부분은 기사님쪽에 맞춰서 수정 필요
+// TODO :  기사님 일정 관리 캘린더 추가 예정.
 const MOVER_USER_ACTION_LIST = [
   {
     label: "gnb.userActions.editProfile",
@@ -34,14 +34,6 @@ const MOVER_USER_ACTION_LIST = [
   {
     label: "gnb.userActions.myPage",
     href: "/moverMyPage",
-  },
-  {
-    label: "여기는 추가해 주세용",
-    href: "/user/favorite",
-  },
-  {
-    label: "여기는 추가해 주세용",
-    href: "/user/order",
   },
 ];
 
