@@ -8,14 +8,14 @@ export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayl
       departure: {
         roadAddress: form.departure.roadAddress || "",
         detailAddress: form.departure.detailAddress || "",
-        zonecode: form.departure.zonecode || "",
+        zoneCode: form.departure.zoneCode || "",
         jibunAddress: form.departure.jibunAddress || "",
         extraAddress: form.departure.extraAddress || "",
       },
       arrival: {
         roadAddress: form.arrival.roadAddress || "",
         detailAddress: form.arrival.detailAddress || "",
-        zonecode: form.arrival.zonecode || "",
+        zoneCode: form.arrival.zoneCode || "",
         jibunAddress: form.arrival.jibunAddress || "",
         extraAddress: form.arrival.extraAddress || "",
       },
@@ -108,6 +108,13 @@ const estimateRequestApi = {
       },
       credentials: "include",
     });
+
+    // 204 상태 코드는 성공이지만 응답 본문이 없음
+    if (res.status === 204) {
+      return { success: true, message: "견적 요청이 성공적으로 취소되었습니다." };
+    }
+
+    // 다른 상태 코드는 JSON 응답을 파싱
     return res.json();
   },
 };

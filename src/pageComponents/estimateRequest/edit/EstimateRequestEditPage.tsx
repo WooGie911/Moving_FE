@@ -79,6 +79,25 @@ const EstimateRequestEditPage = () => {
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
+        setForm({
+          movingType: response.data.movingType.toLowerCase() as "small" | "home" | "office",
+          movingDate: response.data.movingDate,
+          isDateConfirmed: true,
+          departure: {
+            roadAddress: response.data.departureAddress,
+            detailAddress: response.data.departureDetailAddress || "",
+            zoneCode: "",
+            jibunAddress: "",
+            extraAddress: "",
+          },
+          arrival: {
+            roadAddress: response.data.arrivalAddress,
+            detailAddress: response.data.arrivalDetailAddress || "",
+            zoneCode: "",
+            jibunAddress: "",
+            extraAddress: "",
+          },
+        });
       } else if (response.success && !response.hasActive) {
         showErrorModal(t("estimateRequest.noActiveEstimateRequest"));
       } else {
@@ -135,14 +154,14 @@ const EstimateRequestEditPage = () => {
       departure: {
         roadAddress: estimateRequestData.departureAddress,
         detailAddress: estimateRequestData.departureDetailAddress || "",
-        zonecode: "",
+        zoneCode: "",
         jibunAddress: "",
         extraAddress: "",
       },
       arrival: {
         roadAddress: estimateRequestData.arrivalAddress,
         detailAddress: estimateRequestData.arrivalDetailAddress || "",
-        zonecode: "",
+        zoneCode: "",
         jibunAddress: "",
         extraAddress: "",
       },
