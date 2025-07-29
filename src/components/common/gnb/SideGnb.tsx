@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TUserRole } from "@/types/user.types";
 import { GEUST_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
+import { useTranslations } from "next-intl";
 
 interface ISideGnbProps {
   isOpen: boolean;
@@ -15,11 +16,12 @@ interface ISideGnbProps {
 
 export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) => {
   const pathname = usePathname();
+  const t = useTranslations();
 
   // 로그인 상태에 따른 메뉴 결정
   const getMenuItems = () => {
     if (userRole === "GUEST") {
-      return [...GEUST_NAVIGATION_ITEMS, { name: "로그인", href: "/userSignin" }];
+      return [...GEUST_NAVIGATION_ITEMS, { name: "auth.signin", href: "/userSignin" }];
     } else {
       return userRole === "CUSTOMER" ? CUSTOMER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
     }
@@ -79,7 +81,7 @@ export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) 
                   pathname === item.href || pathname === "/" ? "text-black" : "text-gray-400"
                 }`}
               >
-                {item.name}
+                {t(item.name)}
               </Link>
             ))}
           </nav>

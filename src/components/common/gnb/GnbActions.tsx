@@ -22,10 +22,6 @@ const USER_ACTION_LIST = [
     label: "찜한 기사님",
     href: "/user/favorite",
   },
-  {
-    label: "이사 리뷰",
-    href: "/review/written",
-  },
 ];
 
 // TODO :  이부분은 기사님쪽에 맞춰서 수정 필요

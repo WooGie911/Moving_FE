@@ -1,17 +1,19 @@
 export const GEUST_NAVIGATION_ITEMS = [
   // 일반 유저
-  { name: "기사님 찾기", href: "/searchMover" },
+  { name: "navigation.findDriver", href: "/searchMover" },
 ];
 
 export const CUSTOMER_NAVIGATION_ITEMS = [
   // 일반 유저
-  { name: "견적 요청", href: "/estimateRequest/create" },
-  { name: "기사님 찾기", href: "/searchMover" },
-  { name: "내 견적 관리", href: "/estimateRequest/pending" },
+  { name: "navigation.estimateRequest", href: "/estimateRequest/create" },
+  { name: "navigation.findDriver", href: "/searchMover" },
+  { name: "navigation.myEstimateManagement", href: "/estimateRequest/pending" },
+  { name: "navigation.myReviewManagement", href: "/review/writable" },
 ];
 
 export const MOVER_NAVIGATION_ITEMS = [
   // 기사님
-  { name: "받은 요청", href: "/estimate/received" },
-  { name: "내 견적 관리", href: "/estimate/request" },
+  { name: "navigation.receivedRequests", href: "/estimate/received" },
+  { name: "navigation.myEstimateManagementDriver", href: "/estimate/request" },
+  { name: "navigation.myReviewManagement", href: "/moverMyPage" },
 ];
