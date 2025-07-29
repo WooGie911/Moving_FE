@@ -4,7 +4,7 @@
 export interface IAddress {
   roadAddress: string;
   detailAddress: string;
-  zonecode?: string;
+  zoneCode?: string;
   jibunAddress?: string;
   extraAddress?: string;
 }
@@ -25,14 +25,14 @@ export interface IEstimateRequestPayload {
   departure: {
     roadAddress: string;
     detailAddress?: string;
-    zonecode?: string;
+    zoneCode?: string;
     jibunAddress?: string;
     extraAddress?: string;
   };
   arrival: {
     roadAddress: string;
     detailAddress?: string;
-    zonecode?: string;
+    zoneCode?: string;
     jibunAddress?: string;
     extraAddress?: string;
   };
@@ -133,7 +133,7 @@ export interface ICalendarProps {
 
 // Daum 주소 검색 관련 타입
 export interface IDaumAddress {
-  zonecode: string;
+  zoneCode: string;
   roadAddress: string;
   jibunAddress: string;
   extraAddress: string;
@@ -141,7 +141,7 @@ export interface IDaumAddress {
 }
 
 export interface IDaumAddressData {
-  zonecode: string;
+  zoneCode: string;
   roadAddress: string;
   jibunAddress: string;
   bname?: string;

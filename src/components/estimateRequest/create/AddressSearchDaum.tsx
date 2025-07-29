@@ -45,12 +45,18 @@ const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) =>
     }
 
     new window.daum.Postcode({
-      oncomplete: function (data: IDaumAddressData) {
+      oncomplete: function (data: any) {
+        // 올바른 주소 정보 추출
+        const zoneCode = data.zonecode || "";
+        const roadAddress = data.roadAddress || "";
+        const jibunAddress = data.jibunAddress || "";
+        const bname = data.bname || ""; // 동/읍/면
+
         onComplete?.({
-          zonecode: data.zonecode,
-          roadAddress: data.roadAddress,
-          jibunAddress: data.jibunAddress,
-          extraAddress: data.bname || "",
+          zoneCode: zoneCode,
+          roadAddress: roadAddress,
+          jibunAddress: jibunAddress,
+          extraAddress: bname,
         });
       },
     }).open();
