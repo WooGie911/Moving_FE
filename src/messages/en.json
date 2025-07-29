@@ -644,6 +644,25 @@
     "부산": "Busan",
     "제주": "Jeju"
   },
+  "gnb": {
+    "notification": "Notification",
+    "profile": "Profile",
+    "menu": "Menu",
+    "login": "Login",
+    "logout": "Logout",
+    "close": "Close",
+    "defaultUser": "User",
+    "userActions": {
+      "editProfile": "Edit Profile",
+      "favoriteDrivers": "Favorite Drivers",
+      "myReviews": "My Reviews",
+      "myPage": "My Page"
+    },
+    "userSuffix": {
+      "customer": "Customer",
+      "driver": "Driver"
+    }
+  },
   "review": {
     "title": "Review",
     "writableTab": "Writable Reviews",
@@ -671,5 +690,10 @@
     "reviewMinLength": "Please enter at least 10 characters",
     "submitting": "Submitting...",
     "registerReview": "Register Review"
+  },
+  "notification": {
+    "title": "Notifications",
+    "noNotifications": "No notifications yet!",
+    "allNotificationsLoaded": "All notifications loaded."
   }
 }

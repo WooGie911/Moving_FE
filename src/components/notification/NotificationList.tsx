@@ -8,11 +8,14 @@ import parse from "html-react-parser";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
+import "dayjs/locale/en";
+import "dayjs/locale/zh";
 import { useRouter } from "next/navigation";
 import { INotification } from "@/types/notification.types";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 dayjs.extend(relativeTime);
-dayjs.locale("ko");
 
 export default function NotificationList({ onClose }: { onClose?: () => void }) {
   const notifications = useNotificationStore((state) => state.notifications);
@@ -22,6 +25,11 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const limit = 4;
   const loadingRef = useRef(false);
   const router = useRouter();
+  const t = useTranslations("notification");
+  const locale = useLocale();
+
+  // dayjs 로케일 설정
+  dayjs.locale(locale);
 
   const { ref, inView } = useInView({ threshold: 0.2 });
 
@@ -52,7 +60,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   if (notifications.length === 0) {
     return (
       <div className="flex w-full items-center justify-center">
-        <div className="p-2 text-center text-gray-400">아직 알림이 없어요!</div>
+        <div className="p-2 text-center text-gray-400">{t("noNotifications")}</div>
       </div>
     );
   }
@@ -84,7 +92,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
         ),
       )}
       {hasMore && <div ref={ref} style={{ height: 40 }} />}
-      {!hasMore && <div className="py-2 text-center text-xs text-gray-400">모든 알림을 불러왔습니다.</div>}
+      {!hasMore && <div className="py-2 text-center text-xs text-gray-400">{t("allNotificationsLoaded")}</div>}
     </div>
   );
 }
