@@ -169,7 +169,13 @@
     "quote": "报价",
     "services": "服务",
     "about": "关于我们",
-    "contact": "联系我们"
+    "contact": "联系我们",
+    "findDriver": "寻找司机",
+    "estimateRequest": "请求报价",
+    "myEstimateManagement": "我的报价管理",
+    "myReviewManagement": "我的评价管理",
+    "receivedRequests": "收到的请求",
+    "myEstimateManagementDriver": "我的报价管理"
   },
   "serviceAvailableCountry": "*目前仅在大韩民国提供服务。",
   "addressSearchScriptNotLoaded": "地址搜索脚本尚未加载，请稍后再试。",
@@ -638,5 +644,33 @@
     "울산": "蔚山",
     "부산": "釜山",
     "제주": "济州"
+  },
+  "review": {
+    "title": "评价",
+    "writableTab": "可写评价",
+    "writtenTab": "我写的评价",
+    "writeReview": "写评价",
+    "noWritableReviews": "没有可写的评价！",
+    "loading": "加载中...",
+    "error": "发生错误。",
+    "reviewWriteFailed": "写评价失败。请重试。",
+    "noWrittenReviews": "没有写的评价！",
+    "noWrittenReviewsAlt": "没有写的评价",
+    "driverSuffix": "司机",
+    "verifiedDriver": "认证司机",
+    "departure": "出发地",
+    "arrival": "目的地",
+    "moveDate": "搬家日期",
+    "writeDate": "撰写日期",
+    "estimateAmount": "估价金额",
+    "writeReviewButton": "写评价",
+    "selectRating": "请选择评分",
+    "selectRatingError": "请选择评分。",
+    "writeDetailReview": "请写详细评价",
+    "reviewPlaceholder": "请输入至少10个字符",
+    "reviewRequired": "请输入详细评价。",
+    "reviewMinLength": "请输入至少10个字符",
+    "submitting": "提交中...",
+    "registerReview": "注册评价"
   }
 }

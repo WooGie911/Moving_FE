@@ -164,7 +164,13 @@
     "quote": "견적",
     "services": "서비스",
     "about": "회사소개",
-    "contact": "문의"
+    "contact": "문의",
+    "findDriver": "기사님 찾기",
+    "estimateRequest": "견적 요청",
+    "myEstimateManagement": "내 견적 관리",
+    "myReviewManagement": "내 리뷰 관리",
+    "receivedRequests": "받은 요청",
+    "myEstimateManagementDriver": "내 견적 관리"
   },
   "serviceAvailableCountry": "*현재 서비스 가능 국가는 대한민국입니다.",
   "addressSearchScriptNotLoaded": "주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.",
@@ -634,5 +640,33 @@
     "울산": "울산",
     "부산": "부산",
     "제주": "제주"
+  },
+  "review": {
+    "title": "리뷰",
+    "writableTab": "작성 가능한 리뷰",
+    "writtenTab": "내가 작성한 리뷰",
+    "writeReview": "리뷰 쓰기",
+    "noWritableReviews": "작성 가능한 리뷰가 없어요!",
+    "loading": "로딩 중...",
+    "error": "에러가 발생했습니다.",
+    "reviewWriteFailed": "리뷰 작성에 실패했습니다. 다시 시도해주세요.",
+    "noWrittenReviews": "작성한 리뷰가 없어요!",
+    "noWrittenReviewsAlt": "작성한 리뷰 없음",
+    "driverSuffix": "기사님",
+    "verifiedDriver": "인증된 기사님",
+    "departure": "출발지",
+    "arrival": "도착지",
+    "moveDate": "이사일",
+    "writeDate": "작성일",
+    "estimateAmount": "견적 금액",
+    "writeReviewButton": "리뷰 작성하기",
+    "selectRating": "평점을 선택해 주세요",
+    "selectRatingError": "평점을 선택해주세요.",
+    "writeDetailReview": "상세 후기를 작성해 주세요",
+    "reviewPlaceholder": "최소 10자 이상 입력해주세요",
+    "reviewRequired": "상세 후기를 입력해주세요.",
+    "reviewMinLength": "최소 10자 이상 입력해주세요",
+    "submitting": "요청 중...",
+    "registerReview": "리뷰 등록"
   }
 }

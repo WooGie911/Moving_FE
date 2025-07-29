@@ -3,6 +3,7 @@
 import star_active from "@/assets/icon/star/icon-star-active-sm.png";
 import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.png";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type StarRatingProps = {
   rating: number;
@@ -10,6 +11,8 @@ type StarRatingProps = {
 };
 
 const StarRating = ({ rating, setRating }: StarRatingProps) => {
+  const t = useTranslations("review");
+
   const handleStarClick = (starIndex: number) => {
     const newRating = starIndex + 1;
     setRating(newRating);
@@ -18,7 +21,7 @@ const StarRating = ({ rating, setRating }: StarRatingProps) => {
   return (
     <>
       <div className="flex flex-col items-start justify-center gap-3">
-        <p className="text-black-300 text-[16px] font-semibold lg:text-[18px]">평점을 선택해 주세요</p>
+        <p className="text-black-300 text-[16px] font-semibold lg:text-[18px]">{t("selectRating")}</p>
         <div>
           {[0, 1, 2, 3, 4].map((index) => (
             <button
