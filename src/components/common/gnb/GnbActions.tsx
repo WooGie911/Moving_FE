@@ -127,11 +127,13 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     };
   }, [isProfileOpen]);
 
+  // 로그인한 사용자만 알림 데이터 패칭
   useEffect(() => {
-    // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
-    fetchNotifications(1, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (userRole !== "GUEST") {
+      // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
+      fetchNotifications(1, 0);
+    }
+  }, [userRole, fetchNotifications]);
 
   return (
     <div className="flex items-center gap-4">
