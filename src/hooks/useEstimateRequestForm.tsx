@@ -12,20 +12,8 @@ const initialForm: IFormState = {
   movingType: "small",
   movingDate: "",
   isDateConfirmed: false,
-  departure: {
-    roadAddress: "",
-    detailAddress: "",
-    zonecode: "",
-    jibunAddress: "",
-    extraAddress: "",
-  },
-  arrival: {
-    roadAddress: "",
-    detailAddress: "",
-    zonecode: "",
-    jibunAddress: "",
-    extraAddress: "",
-  },
+  departure: { roadAddress: "", detailAddress: "", zoneCode: "", jibunAddress: "", extraAddress: "" },
+  arrival: { roadAddress: "", detailAddress: "", zoneCode: "", jibunAddress: "", extraAddress: "" },
 };
 
 // 세션에서 데이터 로드
@@ -117,18 +105,21 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   }, []);
 
   // 주소 업데이트 핸들러
-  const handleAddressUpdate = useCallback((type: TAddressType, address: any) => {
-    setForm((prev) => ({
-      ...prev,
-      [type]: {
-        roadAddress: address.roadAddress,
-        detailAddress: address.detailAddress || "",
-        zonecode: address.zonecode,
-        jibunAddress: address.jibunAddress,
-        extraAddress: address.extraAddress,
-      },
-    }));
-  }, []);
+  const handleAddressUpdate = useCallback(
+    (type: TAddressType, address: any) => {
+      setForm((prev) => ({
+        ...prev,
+        [type]: {
+          roadAddress: address.roadAddress,
+          detailAddress: address.detailAddress || "",
+          zoneCode: address.zoneCode,
+          jibunAddress: address.jibunAddress,
+          extraAddress: address.extraAddress,
+        },
+      }));
+    },
+    [setForm],
+  );
 
   // 세션 데이터 초기화
   const clearSessionData = useCallback(() => {
