@@ -47,7 +47,7 @@ interface IGnbActionsProps {
 
 export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
   const { logout } = useAuth();
-  const t = useTranslations("gnb");
+  const t = useTranslations();
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -137,7 +137,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           href="/userSignin"
           className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
         >
-          {t("login")}
+          {t("auth.signin")}
         </Link>
       )}
 
@@ -146,16 +146,16 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           {/* 알림 버튼 */}
           <div
             className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-            aria-label={t("notification")}
+            aria-label={t("gnb.notification")}
           >
             <div className="relative h-6 w-6">
               <button
                 ref={notificationButtonRef}
                 onClick={handleNotificationClick}
                 className="cursor-pointer"
-                aria-label={t("notification")}
+                aria-label={t("gnb.notification")}
               >
-                <Image src={notification} alt={t("notification")} width={24} height={24} />
+                <Image src={notification} alt={t("gnb.notification")} width={24} height={24} />
                 {hasUnread && <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></div>}
               </button>
               <UserActionDropdown
@@ -164,7 +164,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                 isOpen={isNotificationOpen}
                 triggerRef={notificationButtonRef}
               >
-                <NotificationList onClose={() => setIsNotificationOpen(false)} />
+                <NotificationList />
               </UserActionDropdown>
             </div>
           </div>
@@ -175,9 +175,9 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
               ref={profileButtonRef}
               onClick={handleProfileClick}
               className="flex cursor-pointer gap-3 p-2 text-black"
-              aria-label={t("profile")}
+              aria-label={t("gnb.profile")}
             >
-              <Image src={profile} alt={t("profile")} width={24} height={24} />
+              <Image src={profile} alt={t("gnb.profile")} width={24} height={24} />
               <div className="hidden lg:block">{userName}</div>
             </button>
 
@@ -189,7 +189,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
               >
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
                   <span className="w-full px-2 py-2 text-left text-lg">
-                    {userName} {userRole === "CUSTOMER" ? t("userSuffix.customer") : t("userSuffix.driver")}
+                    {userName} {userRole === "CUSTOMER" ? t("gnb.userSuffix.customer") : t("gnb.userSuffix.driver")}
                   </span>
                   <ul className="flex w-full flex-col">
                     {userRole === "CUSTOMER"
@@ -209,7 +209,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                   className="w-full cursor-pointer px-3 py-3 text-xs text-gray-500 transition-colors hover:text-gray-700 lg:text-lg"
                   onClick={() => logout()}
                 >
-                  {t("logout")}
+                  {t("gnb.logout")}
                 </button>
               </div>
             )}
@@ -223,7 +223,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           <button
             onClick={toggleSideMenu}
             className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-            aria-label={t("menu")}
+            aria-label={t("gnb.menu")}
           >
             <div className="flex h-6 w-6 flex-col justify-center space-y-1">
               <div
