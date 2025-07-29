@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { IButtonProps } from "@/types/button";
 import iconEdit from "@/assets/icon/edit/icon-edit.png";
 import iconLikeBlack from "@/assets/icon/like/icon-like-black.png";
@@ -39,6 +40,7 @@ export const Button = ({
   style,
   fontSize = "",
 }: IButtonProps) => {
+  const t = useTranslations("mover");
   /* Solid */
   const solidBase =
     "flex items-center justify-center text-gray-50 font-semibold transition-colors duration-200 focus:outline-none cursor-pointer";
@@ -64,7 +66,7 @@ export const Button = ({
         style={style}
       >
         <Image src={likeIcon} alt="찜" width={likeIconSize} height={likeIconSize} />
-        <span className="ml-[10px] hidden font-semibold text-black lg:inline">기사님 찜하기</span>
+        <span className="ml-[10px] hidden font-semibold text-black lg:inline">{t("favoriteDriver")}</span>
       </button>
     );
   }

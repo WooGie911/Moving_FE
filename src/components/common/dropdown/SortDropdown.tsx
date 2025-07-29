@@ -36,7 +36,7 @@ const SortDropdown: React.FC<BaseDropdownProps> = ({
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`flex h-10 w-[100px] items-center justify-between gap-0.5 pr-[6px] pl-2 text-left text-[12px] font-medium text-[#999999] ${buttonClassName}`}
+        className={`flex h-10 w-[120px] items-center justify-between gap-0.5 pr-[6px] pl-2 text-left text-[12px] font-medium text-[#999999] ${buttonClassName}`}
       >
         <span className={selectedOption ? "text-gray-900" : "text-gray-250"}>
           {selectedOption ? selectedOption.label : placeholder}
@@ -50,12 +50,9 @@ const SortDropdown: React.FC<BaseDropdownProps> = ({
       {isOpen && (
         <div
           className="rounded-2 absolute z-50 bg-white"
-          style={{ width: 91, maxHeight: 128, boxShadow: "4px 4px 10px 0px #E0E0E040" }}
+          style={{ width: 120, boxShadow: "4px 4px 10px 0px #E0E0E040" }}
         >
-          <div
-            className="dropdown-scrollbar overflow-auto rounded-[8px] border-1 border-gray-200 bg-white"
-            style={{ height: 128, width: 91 }}
-          >
+          <div className="rounded-[8px] border-1 border-gray-200 bg-white" style={{ width: 120 }}>
             {options.map((option) => (
               <button
                 key={option.value}

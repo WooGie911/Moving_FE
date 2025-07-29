@@ -37,7 +37,7 @@ const MoverRegisterPage = () => {
   const career = watch("career");
   const shortIntro = watch("shortIntro");
   const detailIntro = watch("detailIntro");
-  const [services, setServices] = useState<string[]>(["SMALL"]);
+  const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>(["SEOUL"]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState({

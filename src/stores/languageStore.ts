@@ -12,10 +12,16 @@ export const useLanguageStore = create<ILanguageState>()(
   persist(
     (set, get) => ({
       language: "ko",
-      setLanguage: (lang: Language) => set({ language: lang }),
+      setLanguage: (lang: Language) => {
+        set({ language: lang });
+      },
       t: (key: string, params?: Record<string, string | number>) => {
         const { language } = get();
-        return getTranslation(language, key, params);
+        const result = getTranslation(language, key, params);
+        if (result === key) {
+          console.warn(`Missing translation for key: ${key} in language: ${language}`);
+        }
+        return result;
       },
     }),
     {

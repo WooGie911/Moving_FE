@@ -39,14 +39,14 @@ const DropdownHeader = ({
   onClose?: () => void;
   showCloseButton?: boolean;
 }) => (
-  <div className="inline-flex w-full items-center justify-between bg-white py-3.5 pr-3 pl-4">
+  <div className="inline-flex w-full items-center justify-between bg-white py-3.5 pr-3 pl-4 cursor-default">
     <div className="flex items-center justify-start">
       <div className="leading-2lg text-black-400 lg:text-2lg text-left text-base font-bold">{title}</div>
     </div>
     {showCloseButton && onClose && (
       <button
         onClick={onClose}
-        className="flex h-6 w-6 items-center justify-center text-gray-400 transition-colors hover:text-gray-600"
+        className="flex h-6 w-6 items-center justify-center text-gray-400 transition-colors hover:text-gray-600 cursor-pointer"
         aria-label="닫기"
       >
         <IoClose size={20} />

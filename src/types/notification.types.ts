@@ -1,7 +1,12 @@
 export interface INotification {
   id: string;
+  actionId: string;
+  userId: string;
+  type: string;
   title: string;
-  actionUrl: string;
+  content: string;
+  path: string;
+  isRead: boolean;
   createdAt: string;
-  unread: boolean;
+  updatedAt: string;
 }

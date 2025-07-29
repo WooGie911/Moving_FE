@@ -7,9 +7,7 @@ import landingBgLg from "@/assets/img/landing/bg-lg.png";
 import landingBgMd from "@/assets/img/landing/bg-md.png";
 import landingBgSm from "@/assets/img/landing/bg-sm.png";
 import truck from "@/assets/img/landing/truck.png";
-import typeLg from "@/assets/img/landing/type-lg.png";
-import typeMd from "@/assets/img/landing/type-md.svg";
-import typeSm from "@/assets/img/landing/type-sm.png";
+import moveType from "@/assets/img/landing/move-type.png";
 import explainLg from "@/assets/img/landing/explain-img-lg.png";
 import explainMd from "@/assets/img/landing/explain-img-md.svg";
 import explainSm from "@/assets/img/landing/explain-img-sm.svg";
@@ -25,10 +23,6 @@ export const LandingPage = () => {
   let bgImg = landingBgSm;
   if (deviceType === "tablet") bgImg = landingBgMd;
   else if (deviceType === "desktop") bgImg = landingBgLg;
-
-  let moveTypeImg = typeSm;
-  if (deviceType === "tablet") moveTypeImg = typeMd;
-  else if (deviceType === "desktop") moveTypeImg = typeLg;
 
   let bottomImg = bottomSm;
   if (deviceType === "tablet") bottomImg = bottomMd;
@@ -50,24 +44,24 @@ export const LandingPage = () => {
       </div>
 
       <div className="mb-[61px] flex flex-col md:mb-[108.5px] lg:mt-[115px] lg:mb-[124.5px] lg:flex-row lg:items-center lg:justify-center">
-        <p className="mt-[53px] mb-[34px] ml-8 text-xl font-bold md:mt-[69px] md:mb-10 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
-          <span className="block lg:mb-2">{t("selectionProcess")}</span>
+        <p className="mt-[53px] mb-[34px] ml-8 text-xl font-bold whitespace-pre-line md:mt-[69px] md:mb-10 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
+          {t("selectionProcess")}
         </p>
         <div className="overflow-hidden">
-          <Image src={moveTypeImg} alt="move type" className="slow-pulse object-cover" />
+          <Image src={moveType} alt="move type" className="w-[400px] lg:w-[693px] md:w-[677px] slow-pulse object-cover" />
         </div>
       </div>
 
       <div className="relative flex">
         <Image src={bannerImg} alt="explain-banner" className="lg:mb-[61px] lg:max-w-[1200px]" />
-        <p className="absolute top-[5%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[18.3%] lg:left-[53.0%] lg:text-start">
+        <p className="absolute top-[5%]  whitespace-pre-line right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[16%] lg:left-[53.0%] lg:text-start">
           {t("getQuote")}
         </p>
       </div>
 
       <div className="relative flex">
         <Image src={bottomImg} alt="bottom-banner" />
-        <p className="absolute top-[10%] left-[5%] flex max-w-[calc(100%-32px)] flex-col items-start text-xl font-bold md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[20%]">
+        <p className="absolute  whitespace-pre-line top-[10%] left-[5%] flex w-full flex-col items-start text-xl font-bold md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[8%]">
           {t("learnMore")}
         </p>
       </div>

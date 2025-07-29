@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import SearchBar from "@/components/searchMover/SearchBar";
-import FilterBar from "@/components/searchMover/FilterBar";
-import MoverList from "@/components/searchMover/MoverList";
-import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
+import { IMoverInfo } from "@/types/mover.types";
 import findMoverApi from "@/lib/api/findMover.api";
-import { useEffect, useState } from "react";
-import { IMoverInfo } from "@/types/findMover";
+import MoverList from "@/components/searchMover/MoverList";
+import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
+import SearchBar from "@/components/searchMover/SearchBar";
+import FilterBar from "@/components/searchMover/FilterBar";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
@@ -59,7 +58,7 @@ const SearchMoverPage = () => {
         <MoverList />
       </div>
       {/* PC 화면에서만 찜한 기사님 표시 */}
-      {shouldShowBookmarked && <FavoriteMoverList movers={favoriteMovers} />}
+      {shouldShowBookmarked && <FavoriteMoverList />}
     </div>
   );
 };

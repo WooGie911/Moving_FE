@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
 import ReviewAvg from "./ReviewAvg";
@@ -6,19 +7,81 @@ import ReviewList from "./ReviewList";
 import RequestButton from "./RequestButton";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
-import { MoverProps } from "@/types/moverDetail";
+import type { DetailInformationProps } from "@/types/mover.types";
+import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import findMoverApi from "@/lib/api/findMover.api";
+import type { IReview, IApiReview } from "@/types/review";
 
-const DetailInformation = ({ mover }: MoverProps) => {
-  const [reviews, setReviews] = useState<any[]>([]);
+const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
+  const [reviews, setReviews] = useState<IReview[]>([]);
+  const [allReviews, setAllReviews] = useState<IReview[]>([]);
+  const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(true);
   const deviceType = useWindowWidth();
+  const t = useTranslations("mover");
+
+  // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
+  useEffect(() => {
+    const fetchAllReviews = async () => {
+      try {
+        const response = await findMoverApi.getMoverReviews(mover.id, 1, 1000);
+
+        const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
+          id: apiReview.id,
+          rating: apiReview.rating,
+          content: apiReview.content,
+          createdAt: apiReview.createdAt,
+          userId: apiReview.customerId,
+          moverId: apiReview.moverId,
+          quoteId: apiReview.estimateRequestId,
+          estimateId: apiReview.estimate?.id || "",
+          status: "COMPLETED" as const,
+          isPublic: true,
+          user: {
+            id: apiReview.customerId,
+            name: apiReview.nickname,
+          },
+        }));
+
+        setAllReviews(convertedReviews);
+      } catch (error) {
+        console.error("전체 리뷰 조회 실패:", error);
+        setAllReviews([]);
+      }
+    };
+
+    fetchAllReviews();
+  }, [mover.id]);
+
+  useEffect(() => {
+    const fetchActiveQuote = async () => {
+      try {
+        setIsLoadingQuote(true);
+        const response = await estimateRequestApi.getActive();
+
+        if (response.success && response.data && response.data.id) {
+          setQuoteId(String(response.data.id));
+        } else {
+          setQuoteId(undefined);
+        }
+      } catch (error) {
+        console.error("[DetailInformation] 활성 견적 조회 실패:", error);
+        setQuoteId(undefined);
+      } finally {
+        setIsLoadingQuote(false);
+      }
+    };
+
+    fetchActiveQuote();
+  }, []);
 
   return (
     <div
-      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[20px]`}
+      className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[100px]`}
     >
       <div>
         <div>
-          <MoverIntro mover={mover} reviews={reviews} />
+          <MoverIntro mover={mover} reviews={allReviews} />
         </div>
         <div className="mt-8 lg:mt-10">
           <Chip mover={mover} />
@@ -30,19 +93,25 @@ const DetailInformation = ({ mover }: MoverProps) => {
         ) : (
           <>
             <div className="flex flex-col gap-3">
-              <p className="text-lg font-semibold">나만 알기엔 아쉬운 기사님 이신가요?</p>
+              <p className="text-lg font-semibold">{t("shareMessage")}</p>
               <ShareButtonGroup />
             </div>
             <div className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10"></div>
           </>
         )}
 
-        <ReviewAvg mover={mover} reviews={reviews} />
+        <ReviewAvg mover={mover} reviews={allReviews} />
 
         <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
       </div>
       <div className="flex w-full flex-col lg:w-80 lg:gap-[22px]">
-        <RequestButton mover={mover} />
+        {isLoadingQuote ? (
+          <div className="flex items-center justify-center py-4">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+          </div>
+        ) : (
+          <RequestButton mover={mover} quoteId={quoteId} onMoverUpdate={onMoverUpdate} />
+        )}
         {deviceType === "desktop" ? <ShareButtonGroup /> : ""}
       </div>
     </div>

@@ -18,9 +18,7 @@ import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
 import { ICalendarProps, IDateObj } from "@/types/estimateRequest";
-
-// 요일 배열
-const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"] as const;
+import { useLanguageStore } from "@/stores/languageStore";
 
 // 공통 스타일 변수
 const CALENDAR_STYLES: Record<string, string> = {
@@ -97,6 +95,21 @@ const getCalendarMatrix = (date: Date): IDateObj[][] => {
 const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const today = startOfDay(new Date());
+  const { t } = useLanguageStore();
+
+  // 요일 배열을 번역 함수로 생성
+  const daysOfWeek = useMemo(
+    () => [
+      t("estimateRequest.weekdays.sunday"),
+      t("estimateRequest.weekdays.monday"),
+      t("estimateRequest.weekdays.tuesday"),
+      t("estimateRequest.weekdays.wednesday"),
+      t("estimateRequest.weekdays.thursday"),
+      t("estimateRequest.weekdays.friday"),
+      t("estimateRequest.weekdays.saturday"),
+    ],
+    [t],
+  );
 
   // 캘린더 매트릭스를 useMemo로 메모이제이션
   const calendarMatrix = useMemo(() => getCalendarMatrix(currentDate), [currentDate]);
@@ -190,7 +203,7 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
 
       {/* 요일 헤더 */}
       <div className={CALENDAR_STYLES.dayHeader}>
-        {DAYS_OF_WEEK.map((day) => (
+        {daysOfWeek.map((day) => (
           <div key={day} className={CALENDAR_STYLES.dayCell}>
             {day}
           </div>

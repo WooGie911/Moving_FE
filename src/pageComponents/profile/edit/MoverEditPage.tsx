@@ -11,8 +11,9 @@ import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
+import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { useModal } from "@/components/common/modal/ModalContext";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
@@ -75,6 +76,8 @@ export default function MoverEditPage() {
   const router = useRouter();
   const { getUser } = useAuth();
   const locale = useLocale();
+  const t = useTranslations("profile");
+  const moverT = useTranslations("mover");
   const { open, close } = useModal();
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
@@ -184,11 +187,11 @@ export default function MoverEditPage() {
       if (result.success) {
         await getUser();
         open({
-          title: "프로필 수정 완료",
-          children: <div>프로필 수정이 완료되었습니다.</div>,
+          title: t("edit.successTitle"),
+          children: <div>{t("edit.successMessage")}</div>,
           buttons: [
             {
-              text: "확인",
+              text: t("edit.confirm"),
               onClick: () => {
                 close();
                 router.push(`/${locale}/moverMyPage`);
@@ -198,16 +201,16 @@ export default function MoverEditPage() {
         });
       } else {
         open({
-          title: "프로필 수정 실패",
-          children: <div>{result.message || "수정에 실패했습니다."}</div>,
-          buttons: [{ text: "확인", onClick: () => close() }],
+          title: t("edit.errorTitle"),
+          children: <div>{result.message || t("edit.errorMessage")}</div>,
+          buttons: [{ text: t("edit.confirm"), onClick: () => close() }],
         });
       }
     } catch (e) {
       open({
-        title: "프로필 수정 실패",
-        children: <div>오류가 발생했습니다.</div>,
-        buttons: [{ text: "확인", onClick: () => close() }],
+        title: t("edit.errorTitle"),
+        children: <div>{t("edit.generalError")}</div>,
+        buttons: [{ text: t("edit.confirm"), onClick: () => close() }],
       });
     }
   };
@@ -221,7 +224,7 @@ export default function MoverEditPage() {
         >
           <div className="flex flex-col items-start justify-center gap-4 self-stretch lg:gap-8">
             <div className="justify-center text-lg leading-relaxed font-bold text-neutral-800 lg:text-3xl lg:leading-10 lg:font-semibold">
-              프로필 수정
+              {t("edit.title")}
             </div>
           </div>
           <div className="mx-auto h-0 w-[327px] self-stretch outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
@@ -229,7 +232,7 @@ export default function MoverEditPage() {
             <div className="flex w-full flex-col gap-8 lg:w-[500px]">
               <div className="flex flex-col gap-4">
                 <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  프로필 이미지
+                  {t("edit.profileImage")}
                 </div>
                 <div className="flex items-center gap-4">
                   <input
@@ -255,17 +258,17 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    별명
+                    {t("edit.nickname")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
                   <TextInput
                     name="nickname"
-                    placeholder="별명을 입력하세요"
-                    rules={{ required: "필수 입력" }}
+                    placeholder={t("edit.nicknamePlaceholder")}
+                    rules={{ required: t("edit.requiredField") }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -275,17 +278,17 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    경력
+                    {t("edit.career")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
                   <TextInput
                     name="career"
-                    placeholder="ex) 8"
-                    rules={{ required: "필수 입력", min: { value: 0, message: "경력은 0년 이상이어야 합니다" } }}
+                    placeholder={t("edit.careerPlaceholder")}
+                    rules={{ required: t("edit.requiredField"), min: { value: 0, message: t("edit.minCareer") } }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -295,17 +298,17 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    한 줄 소개
+                    {t("edit.shortIntro")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
                   <TextInput
                     name="intro"
-                    placeholder="한 줄 소개를 입력하세요 (최소 8자)"
-                    rules={{ required: "필수 입력", minLength: { value: 8, message: "8자 이상 입력해주세요" } }}
+                    placeholder={t("edit.shortIntroPlaceholder")}
+                    rules={{ required: t("edit.requiredField"), minLength: { value: 8, message: t("edit.minLength8") } }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -316,17 +319,17 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    상세 설명
+                    {t("edit.detailIntro")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
                 <div className="w-[327px] lg:w-full">
                   <TextAreaInput
                     name="desc"
-                    placeholder="상세 설명을 입력하세요 (최소 10자)"
-                    rules={{ required: "필수 입력", minLength: { value: 10, message: "10자 이상 입력해주세요" } }}
+                    placeholder={t("edit.detailIntroPlaceholder")}
+                    rules={{ required: t("edit.requiredField"), minLength: { value: 10, message: t("edit.minLength10") } }}
                     textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -336,17 +339,17 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    제공 서비스
+                    {t("edit.providedServices")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
-                <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
+                <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
                   {SERVICE_OPTIONS.map((service) => (
                     <CircleTextLabel
                       key={service}
-                      text={service}
+                      text={getServiceTypeTranslation(service, moverT)}
                       clickAble={true}
                       isSelected={services.includes(service)}
                       onClick={() =>
@@ -362,18 +365,18 @@ export default function MoverEditPage() {
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    서비스 가능 지역
+                    {t("edit.serviceAreas")}
                   </div>
                   <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
+                    {t("edit.required")}
                   </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                  <div className="grid w-full grid-cols-5 gap-2 lg:gap-3.5">
+                  <div className="flex flex-wrap items-start gap-2 lg:gap-3.5">
                     {REGION_OPTIONS.map((region) => (
                       <CircleTextLabel
                         key={region}
-                        text={region}
+                        text={getRegionTranslation(regionTypeMapping[region], moverT)}
                         clickAble={true}
                         isSelected={regions.includes(region)}
                         onClick={() =>
@@ -397,7 +400,7 @@ export default function MoverEditPage() {
                   disabled={!allFilled}
                   state={allFilled ? "default" : "disabled"}
                 >
-                  <div className="justify-center text-center">수정하기</div>
+                  <div className="justify-center text-center">{t("edit.save")}</div>
                 </Button>
                 <Button
                   variant="outlined"
@@ -407,7 +410,7 @@ export default function MoverEditPage() {
                   className="!hover:bg-white !focus:bg-white !active:bg-white order-2 items-center justify-center rounded-2xl border border-[1px] !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline outline-1 outline-offset-[-1px] lg:order-1"
                   onClick={() => window.history.back()}
                 >
-                  <div className="justify-center text-center">취소</div>
+                  <div className="justify-center text-center">{t("edit.cancel")}</div>
                 </Button>
               </div>
             </div>

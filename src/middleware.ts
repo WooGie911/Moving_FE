@@ -92,8 +92,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 
-  // ✅ 소셜 로그인 프로필 등록 강제 이동
-  if (!hasProfile && (pathname === "/searchMover" || pathname === "/estimate/received")) {
+  // ✅ 소셜 로그인 프로필 등록 강제 이동 (로그인된 사용자만)
+  if (isAuthenticated && !hasProfile && (pathname === "/searchMover" || pathname === "/estimate/received")) {
     return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 

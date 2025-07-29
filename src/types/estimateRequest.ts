@@ -11,7 +11,7 @@ export interface IAddress {
 
 // 폼 상태 타입
 export interface IFormState {
-  movingType: string;
+  movingType: "small" | "home" | "office";
   movingDate: string;
   isDateConfirmed: boolean;
   departure: IAddress;
@@ -36,6 +36,7 @@ export interface IEstimateRequestPayload {
     jibunAddress?: string;
     extraAddress?: string;
   };
+  description?: string;
 }
 
 export interface IEstimateRequestResponse {
@@ -156,4 +157,43 @@ export interface IDaumPostcodeInstance {
 
 export interface IDaumPostcodeConstructor {
   new (options: IDaumPostcodeOptions): IDaumPostcodeInstance;
+}
+
+// 공통 컴포넌트 Props 타입들
+export interface IEstimateRequestLayoutProps {
+  title: string;
+  progress: number;
+  children: React.ReactNode;
+}
+
+export interface IEstimateRequestStepRendererProps {
+  step: number;
+  showNextQuestion: boolean;
+  form: IFormState;
+  t: (key: string) => string;
+  locale: "ko" | "en" | "zh";
+  isFormValid: () => boolean;
+  onSelectMovingType: (type: "small" | "home" | "office") => void;
+  onDateChange: (date: string) => void;
+  onDateComplete: () => void;
+  onDepartureModal: () => void;
+  onArrivalModal: () => void;
+  onConfirmEstimateRequest: (form: IFormState) => void;
+  customButtonText?: string;
+  showConfirmModal?: (onConfirm: () => void) => void;
+}
+
+// 기타 컴포넌트 Props 타입들
+export interface IMoverInfoProps {
+  mover: import("@/types/customerEstimateRequest").TMoverInfo;
+  usedAtDetail: boolean;
+}
+
+export interface ILabelAndTitleSectionProps {
+  mover: import("@/types/customerEstimateRequest").TMoverInfo;
+  isDesignated: boolean;
+  estimateState: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
+  estimateTitle: string;
+  type: "pending" | "received";
+  usedAtDetail: boolean;
 }

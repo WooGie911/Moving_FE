@@ -30,8 +30,8 @@ export interface IButtonProps {
 export interface IShareButtonProps {
   type: TShareType;
   url?: string; // 현재 페이지 URL 자동 사용
-  title?: string; 
-  description?: string; 
+  title?: string;
+  description?: string;
   className?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
@@ -51,6 +51,7 @@ export interface IShareButtonGroupProps {
 export interface IUseLikeToggleProps {
   moverId: string;
   initialIsLiked?: boolean;
+  onToggle?: () => void;
 }
 
 // 체크필터 Props 인터페이스

@@ -1,19 +1,18 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import iconDown from "@/assets/icon/arrow/icon-down.png";
 import iconUp from "@/assets/icon/arrow/icon-up.png";
+import { useLanguageStore } from "@/stores/languageStore";
+import { usePathname, useRouter } from "next/navigation";
 
 export function LanguageSwitcher() {
-  const locale = useLocale();
-  const pathname = usePathname();
-  const t = useTranslations("common");
+  const { language, setLanguage, t } = useLanguageStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // 외부 클릭으로 드롭다운 닫기
   useEffect(() => {
@@ -50,7 +49,18 @@ export function LanguageSwitcher() {
   }, [isOpen]);
 
   const getCurrentLanguageText = () => {
-    return locale === "ko" ? t("korean") : locale === "en" ? t("english") : t("chinese");
+    return language === "ko" ? t("common.korean") : language === "en" ? t("common.english") : t("common.chinese");
+  };
+
+  const handleLanguageChange = (newLanguage: "ko" | "en" | "zh") => {
+    setLanguage(newLanguage);
+
+    // URL의 locale 부분 업데이트
+    const segments = pathname.split("/");
+    segments[1] = newLanguage; // 첫 번째 세그먼트는 locale
+    const newPathname = segments.join("/");
+
+    router.push(newPathname);
   };
 
   return (
@@ -75,18 +85,16 @@ export function LanguageSwitcher() {
 
       {isOpen && (
         <div className="absolute top-full right-0 z-50 mt-1 min-w-[120px] rounded-md border border-gray-200 bg-white py-1 shadow-lg">
-          {routing.locales.map((loc) => (
-            <Link
+          {(["ko", "en", "zh"] as const).map((loc) => (
+            <button
               key={loc}
-              href={pathname}
-              locale={loc}
-              onClick={() => setIsOpen(false)}
-              className={`block px-3 py-2 text-sm transition-colors ${
-                locale === loc ? "bg-primary-100 text-primary-400 font-medium" : "text-gray-700 hover:bg-gray-50"
+              onClick={() => handleLanguageChange(loc)}
+              className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                language === loc ? "bg-primary-100 text-primary-400 font-medium" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
-              {loc === "ko" ? t("korean") : loc === "en" ? t("english") : t("chinese")}
-            </Link>
+              {loc === "ko" ? t("common.korean") : loc === "en" ? t("common.english") : t("common.chinese")}
+            </button>
           ))}
         </div>
       )}

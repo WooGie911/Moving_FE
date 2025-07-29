@@ -7,7 +7,7 @@ const maskName = (fullName: string): string => {
   return firstName + maskedPart;
 };
 
-export const generateMockReviews = (moverId: number, count: number = 100): any[] => {
+export const generateMockReviews = (moverId: number, count: number = 50): any[] => {
   const customerNames = [
     "김철수",
     "이영희",
@@ -82,5 +82,5 @@ export const generateMockReviews = (moverId: number, count: number = 100): any[]
 };
 
 export const getMockReviewsForMover = (moverId: number): any[] => {
-  return generateMockReviews(moverId, 100);
+  return generateMockReviews(moverId, 50);
 };

@@ -24,7 +24,7 @@ const USER_ACTION_LIST = [
   },
   {
     label: "이사 리뷰",
-    href: "/user/order",
+    href: "/review/written",
   },
 ];
 
@@ -70,7 +70,13 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
 
   const handleNotificationClick = () => {
-    setIsNotificationOpen((prev) => !prev);
+    setIsNotificationOpen((prev) => {
+      const willOpen = !prev;
+      if (willOpen) {
+        fetchNotifications(4, 0); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
+      }
+      return willOpen;
+    });
   };
 
   // 프로필 버튼 클릭 시 프로필 모달창 열기
@@ -123,10 +129,11 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     };
   }, [isProfileOpen]);
 
-  // useEffect(() => {
-  //   // 최초 1회만 전체 알림의 hasUnread, total 등 받아오기
-  //   fetchNotifications(1, 0);
-  // }, [fetchNotifications]);
+  useEffect(() => {
+    // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
+    fetchNotifications(1, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex items-center gap-4">
@@ -162,7 +169,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                 isOpen={isNotificationOpen}
                 triggerRef={notificationButtonRef}
               >
-                {/* <NotificationList /> */}
+                <NotificationList onClose={() => setIsNotificationOpen(false)} />
               </UserActionDropdown>
             </div>
           </div>
@@ -183,7 +190,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
             {isProfileOpen && (
               <div
                 ref={profileModalRef}
-                className="absolute top-full right-0 z-50 mt-2 w-[248px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
+                className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
               >
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
                   <span className="w-full px-2 py-2 text-left text-lg">

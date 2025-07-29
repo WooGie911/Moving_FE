@@ -1,12 +1,21 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import SortDropdown from "@/components/common/dropdown/SortDropdown";
-import { SORT_OPTIONS } from "@/lib/utils/regionMapping";
+import { Option } from "@/types/dropdown";
 
 const SortBar = () => {
   const { sort, setSort } = useSearchMoverStore();
+  const t = useTranslations("mover");
+
+  const sortOptions: Option[] = [
+    { value: "review", label: t("sortByReview") },
+    { value: "rating", label: t("sortByRating") },
+    { value: "career", label: t("sortByCareer") },
+    { value: "confirmed", label: t("sortByConfirmed") },
+  ];
 
   const handleSortChange = (value: string | number) => {
     const stringValue = String(value);
@@ -23,7 +32,12 @@ const SortBar = () => {
   };
 
   return (
-    <SortDropdown options={SORT_OPTIONS} value={sort || ""} onChange={handleSortChange} placeholder="리뷰 많은 순" />
+    <SortDropdown
+      options={sortOptions}
+      value={sort || ""}
+      onChange={handleSortChange}
+      placeholder={t("sortByReview")}
+    />
   );
 };
 
