@@ -645,6 +645,25 @@
     "부산": "釜山",
     "제주": "济州"
   },
+  "gnb": {
+    "notification": "通知",
+    "profile": "个人资料",
+    "menu": "菜单",
+    "login": "登录",
+    "logout": "登出",
+    "close": "关闭",
+    "defaultUser": "用户",
+    "userActions": {
+      "editProfile": "编辑个人资料",
+      "favoriteDrivers": "收藏的司机",
+      "myReviews": "我的评价",
+      "myPage": "我的页面"
+    },
+    "userSuffix": {
+      "customer": "客户",
+      "driver": "司机"
+    }
+  },
   "review": {
     "title": "评价",
     "writableTab": "可写评价",
@@ -672,5 +691,10 @@
     "reviewMinLength": "请输入至少10个字符",
     "submitting": "提交中...",
     "registerReview": "注册评价"
+  },
+  "notification": {
+    "title": "通知",
+    "noNotifications": "还没有通知！",
+    "allNotificationsLoaded": "已加载所有通知。"
   }
 }

@@ -641,6 +641,25 @@
     "부산": "부산",
     "제주": "제주"
   },
+  "gnb": {
+    "notification": "알림",
+    "profile": "프로필",
+    "menu": "메뉴",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "close": "닫기",
+    "defaultUser": "사용자",
+    "userActions": {
+      "editProfile": "프로필 수정",
+      "favoriteDrivers": "찜한 기사님",
+      "myReviews": "이사 리뷰",
+      "myPage": "마이페이지"
+    },
+    "userSuffix": {
+      "customer": "고객님",
+      "driver": "기사님"
+    }
+  },
   "review": {
     "title": "리뷰",
     "writableTab": "작성 가능한 리뷰",
@@ -668,5 +687,10 @@
     "reviewMinLength": "최소 10자 이상 입력해주세요",
     "submitting": "요청 중...",
     "registerReview": "리뷰 등록"
+  },
+  "notification": {
+    "title": "알림",
+    "noNotifications": "아직 알림이 없어요!",
+    "allNotificationsLoaded": "모든 알림을 불러왔습니다."
   }
 }

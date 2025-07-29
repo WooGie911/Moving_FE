@@ -12,35 +12,28 @@ import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
 import { useAuth } from "@/providers/AuthProvider";
+import { useTranslations } from "next-intl";
 
 const USER_ACTION_LIST = [
   {
-    label: "프로필 수정",
+    label: "gnb.userActions.editProfile",
     href: "/profile/edit",
   },
   {
-    label: "찜한 기사님",
+    label: "gnb.userActions.favoriteDrivers",
     href: "/user/favorite",
   },
 ];
 
-// TODO :  이부분은 기사님쪽에 맞춰서 수정 필요
+// TODO :  기사님 일정 관리 캘린더 추가 예정.
 const MOVER_USER_ACTION_LIST = [
   {
-    label: "프로필 수정",
+    label: "gnb.userActions.editProfile",
     href: "/profile/edit",
   },
   {
-    label: "마이페이지",
+    label: "gnb.userActions.myPage",
     href: "/moverMyPage",
-  },
-  {
-    label: "여기는 추가해 주세용",
-    href: "/user/favorite",
-  },
-  {
-    label: "여기는 추가해 주세용",
-    href: "/user/order",
   },
 ];
 
@@ -54,6 +47,7 @@ interface IGnbActionsProps {
 
 export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
   const { logout } = useAuth();
+  const t = useTranslations("gnb");
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -125,11 +119,13 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     };
   }, [isProfileOpen]);
 
+  // 로그인한 사용자만 알림 데이터 패칭
   useEffect(() => {
-    // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
-    fetchNotifications(1, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (userRole !== "GUEST") {
+      // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
+      fetchNotifications(1, 0);
+    }
+  }, [userRole, fetchNotifications]);
 
   return (
     <div className="flex items-center gap-4">
@@ -141,22 +137,25 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           href="/userSignin"
           className="bg-primary-400 hover:bg-primary-500 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
         >
-          로그인
+          {t("login")}
         </Link>
       )}
 
       {userRole !== "GUEST" && (
         <>
           {/* 알림 버튼 */}
-          <div className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors" aria-label="알림">
+          <div
+            className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
+            aria-label={t("notification")}
+          >
             <div className="relative h-6 w-6">
               <button
                 ref={notificationButtonRef}
                 onClick={handleNotificationClick}
                 className="cursor-pointer"
-                aria-label="알림"
+                aria-label={t("notification")}
               >
-                <Image src={notification} alt="알림" width={24} height={24} />
+                <Image src={notification} alt={t("notification")} width={24} height={24} />
                 {hasUnread && <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></div>}
               </button>
               <UserActionDropdown
@@ -176,9 +175,9 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
               ref={profileButtonRef}
               onClick={handleProfileClick}
               className="flex cursor-pointer gap-3 p-2 text-black"
-              aria-label="프로필"
+              aria-label={t("profile")}
             >
-              <Image src={profile} alt="프로필" width={24} height={24} />
+              <Image src={profile} alt={t("profile")} width={24} height={24} />
               <div className="hidden lg:block">{userName}</div>
             </button>
 
@@ -190,18 +189,18 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
               >
                 <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
                   <span className="w-full px-2 py-2 text-left text-lg">
-                    {userName} {userRole === "CUSTOMER" ? "고객님" : "기사님"}
+                    {userName} {userRole === "CUSTOMER" ? t("userSuffix.customer") : t("userSuffix.driver")}
                   </span>
                   <ul className="flex w-full flex-col">
                     {userRole === "CUSTOMER"
                       ? USER_ACTION_LIST.map((item, index) => (
                           <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
+                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
                           </Link>
                         ))
                       : MOVER_USER_ACTION_LIST.map((item, index) => (
                           <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{item.label}</li>
+                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
                           </Link>
                         ))}
                   </ul>
@@ -210,7 +209,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
                   className="w-full cursor-pointer px-3 py-3 text-xs text-gray-500 transition-colors hover:text-gray-700 lg:text-lg"
                   onClick={() => logout()}
                 >
-                  로그아웃
+                  {t("logout")}
                 </button>
               </div>
             )}
@@ -224,7 +223,7 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
           <button
             onClick={toggleSideMenu}
             className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-            aria-label="메뉴"
+            aria-label={t("menu")}
           >
             <div className="flex h-6 w-6 flex-col justify-center space-y-1">
               <div
