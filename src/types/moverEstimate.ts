@@ -48,7 +48,7 @@ export interface IUpdateEstimateRequest {
 // 주소 타입 정의 (백엔드와 일치)
 export type TAddress = {
   id: string;
-  postalCode: string;
+  zoneCode: string;
   city: string;
   district: string;
   detail: string | null;

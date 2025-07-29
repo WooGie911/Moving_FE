@@ -55,6 +55,10 @@ export const UserPendingEstimateRequestPage = () => {
 
   const estimateRequest = data.estimateRequest;
   const estimates = data.estimates ?? [];
+
+  // estimates 배열에서 ACCEPTED 상태인 견적이 있는지 확인
+  const hasConfirmedEstimate = estimates.some((estimate) => estimate.status === "ACCEPTED");
+
   // estimateRequest가 null이 아님을 타입가드로 보장
   return (
     <>
@@ -91,6 +95,7 @@ export const UserPendingEstimateRequestPage = () => {
                 " " +
                 estimateRequest.toAddress.detail,
             )}
+            hasConfirmedEstimate={hasConfirmedEstimate}
           />
         )}
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">

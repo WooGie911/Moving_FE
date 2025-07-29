@@ -5,11 +5,12 @@ export interface IEstimateRequestProps {
   movingDate: string;
   startPoint: string;
   endPoint: string;
+  hasConfirmedEstimate: boolean;
 }
 
 // 주소 타입 (백엔드와 일치)
 export type TAddress = {
-  postalCode: string;
+  zoneCode: string;
   city: string;
   district: string;
   detail: string | null;
@@ -194,14 +195,14 @@ export const mockPendingEstimateRequestResponses: TPendingEstimateRequestRespons
     description: "1인가구 이사로 가벼운 짐만 있습니다.",
     status: "PENDING",
     fromAddress: {
-      postalCode: "06123",
+      zoneCode: "06123",
       city: "서울특별시",
       district: "강남구",
       detail: "테헤란로 123",
       region: "강남구",
     },
     toAddress: {
-      postalCode: "06621",
+      zoneCode: "06621",
       city: "서울특별시",
       district: "서초구",
       detail: "서초대로 456",
@@ -279,14 +280,14 @@ export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestL
       description: "1인가구 이사로 가벼운 짐만 있습니다.",
       status: "COMPLETED",
       fromAddress: {
-        postalCode: "06123",
+        zoneCode: "06123",
         city: "서울특별시",
         district: "강남구",
         detail: "테헤란로 123",
         region: "강남구",
       },
       toAddress: {
-        postalCode: "06621",
+        zoneCode: "06621",
         city: "서울특별시",
         district: "서초구",
         detail: "서초대로 456",
@@ -388,14 +389,14 @@ export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestL
       description: "사무실 이사, 책상 10개, 의자 10개, 복사기 2대.",
       status: "COMPLETED",
       fromAddress: {
-        postalCode: "04040",
+        zoneCode: "04040",
         city: "서울특별시",
         district: "마포구",
         detail: "와우산로 789",
         region: "마포구",
       },
       toAddress: {
-        postalCode: "04763",
+        zoneCode: "04763",
         city: "서울특별시",
         district: "성동구",
         detail: "왕십리로 321",
@@ -551,14 +552,14 @@ export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestL
       description: "소형 이사, 박스 5개, 의자 1개.",
       status: "COMPLETED",
       fromAddress: {
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 456",
         region: "강남구",
       },
       toAddress: {
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 789",
@@ -633,14 +634,14 @@ export const mockReceivedEstimateRequestListResponses: TReceivedEstimateRequestL
       description: "가정 이사, 가구 5개, 박스 10개.",
       status: "COMPLETED",
       fromAddress: {
-        postalCode: "06123",
+        zoneCode: "06123",
         city: "서울특별시",
         district: "강남구",
         detail: "테헤란로 123",
         region: "강남구",
       },
       toAddress: {
-        postalCode: "06621",
+        zoneCode: "06621",
         city: "서울특별시",
         district: "서초구",
         detail: "서초대로 456",

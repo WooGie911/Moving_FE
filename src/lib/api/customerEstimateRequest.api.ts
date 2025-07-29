@@ -6,8 +6,8 @@ import {
 } from "@/types/customerEstimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-// const API_URL = "http://localhost:5050";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -86,10 +86,6 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("완료된 견적 조회 실패:", error);
-      console.error("에러 상세 정보:", {
-        message: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-      });
       throw error;
     }
   },
