@@ -49,7 +49,7 @@ const SignupForm = ({ userType, signinLink }: SignupFormProps) => {
       password: data.password,
       name: data.name,
       phoneNumber: data.phoneNumber,
-      userType: userType as const,
+      userType: userType,
     };
 
     try {

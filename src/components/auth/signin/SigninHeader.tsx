@@ -32,7 +32,7 @@ const SigninHeader = ({ userType }: SigninHeaderProps) => {
   const alternateInfo = getAlternateUserTypeInfo();
 
   return (
-    <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
+    <div className="flex h-[100px] w-[250px] flex-col items-center justify-between gap-[11px] md:gap-[18px]">
       <Link href="/">
         <Image src={logo} alt="logo" width={100} height={100} />
       </Link>
