@@ -25,7 +25,6 @@ const USER_ACTION_LIST = [
   },
 ];
 
-// TODO :  기사님 일정 관리 캘린더 추가 예정.
 const MOVER_USER_ACTION_LIST = [
   {
     label: "gnb.userActions.editProfile",
@@ -34,6 +33,10 @@ const MOVER_USER_ACTION_LIST = [
   {
     label: "gnb.userActions.myPage",
     href: "/moverMyPage",
+  },
+  {
+    label: "일정관리", //임시 한국어 처리
+    href: "/moverMyPage/schedule",
   },
 ];
 

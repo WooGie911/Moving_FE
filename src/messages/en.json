@@ -695,5 +695,25 @@
     "title": "Notifications",
     "noNotifications": "No notifications yet!",
     "allNotificationsLoaded": "All notifications loaded."
+  },
+  "schedule": {
+    "title": "Schedule Management",
+    "description": "Check and manage your moving schedules",
+    "selectDate": "Please select a date",
+    "scheduleFor": "Schedule",
+    "noSchedules": "No schedules for this date.",
+    "selectDateToView": "Select a date on the calendar to view detailed schedules.",
+    "customerSuffix": "",
+    "time": "Time:",
+    "type": "Type:",
+    "departure": "From:",
+    "arrival": "To:",
+    "viewDetails": "View Details",
+    "approve": "Approve",
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "completed": "Completed"
+    }
   }
 }

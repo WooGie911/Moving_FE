@@ -692,5 +692,25 @@
     "title": "알림",
     "noNotifications": "아직 알림이 없어요!",
     "allNotificationsLoaded": "모든 알림을 불러왔습니다."
+  },
+  "schedule": {
+    "title": "일정 관리",
+    "description": "이사 일정을 확인하고 관리하세요",
+    "selectDate": "날짜를 선택해주세요",
+    "scheduleFor": "일정",
+    "noSchedules": "해당 날짜에 예정된 일정이 없습니다.",
+    "selectDateToView": "캘린더에서 날짜를 선택하면 상세 일정을 확인할 수 있습니다.",
+    "customerSuffix": "님",
+    "time": "시간:",
+    "type": "유형:",
+    "departure": "출발:",
+    "arrival": "도착:",
+    "viewDetails": "상세보기",
+    "approve": "승인하기",
+    "status": {
+      "confirmed": "확정",
+      "pending": "대기",
+      "completed": "완료"
+    }
   }
 }
