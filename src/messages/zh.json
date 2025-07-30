@@ -485,7 +485,10 @@
 
     "forgotPassword": "忘记密码？",
     "snsLogin": "使用SNS账户轻松登录",
-    "confirm": "确认"
+    "confirm": "确认",
+    "successTitle": "个人资料更新完成",
+    "errorTitle": "更新失败",
+    "generalErrorTitle": "发生错误"
   },
   "landing": {
     "title": "如何选择搬家公司？",
@@ -696,5 +699,25 @@
     "title": "通知",
     "noNotifications": "还没有通知！",
     "allNotificationsLoaded": "已加载所有通知。"
+  },
+  "schedule": {
+    "title": "日程管理",
+    "description": "查看和管理您的搬家日程",
+    "selectDate": "请选择日期",
+    "scheduleFor": "日程",
+    "noSchedules": "该日期没有预定的日程。",
+    "selectDateToView": "在日历上选择日期以查看详细日程。",
+    "customerSuffix": "",
+    "time": "时间：",
+    "type": "类型：",
+    "departure": "出发地：",
+    "arrival": "目的地：",
+    "viewDetails": "查看详情",
+    "approve": "批准",
+    "status": {
+      "confirmed": "已确认",
+      "pending": "待处理",
+      "completed": "已完成"
+    }
   }
 }
