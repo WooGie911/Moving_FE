@@ -79,15 +79,6 @@
       "month": "/",
       "day": ""
     },
-    "weekdays": {
-      "sunday": "Sun",
-      "monday": "Mon",
-      "tuesday": "Tue",
-      "wednesday": "Wed",
-      "thursday": "Thu",
-      "friday": "Fri",
-      "saturday": "Sat"
-    },
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
     "estimateAmount": "Estimate Amount",
@@ -659,7 +650,8 @@
       "editProfile": "Edit Profile",
       "favoriteDrivers": "Favorite Drivers",
       "myReviews": "My Reviews",
-      "myPage": "My Page"
+      "myPage": "My Page",
+      "scheduleManagement": "Schedule"
     },
     "userSuffix": {
       "customer": "Customer",
