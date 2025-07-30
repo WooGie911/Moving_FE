@@ -35,7 +35,7 @@ const MOVER_USER_ACTION_LIST = [
     href: "/moverMyPage",
   },
   {
-    label: "일정관리", //임시 한국어 처리
+    label: "gnb.userActions.scheduleManagement",
     href: "/moverMyPage/schedule",
   },
 ];
