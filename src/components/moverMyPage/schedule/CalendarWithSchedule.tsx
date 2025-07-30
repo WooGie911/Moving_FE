@@ -25,7 +25,7 @@ interface IDateObj {
   isOtherMonth: boolean;
 }
 
-interface Schedule {
+interface ISchedule {
   id: string;
   customerName: string;
   movingType: "소형이사" | "가정이사" | "원룸이사" | "사무실이사";
@@ -38,7 +38,7 @@ interface Schedule {
 interface ICalendarWithScheduleProps {
   value: Date | undefined;
   onChange: (date: Date) => void;
-  getSchedulesForDate: (date: Date) => Schedule[];
+  getSchedulesForDate: (date: Date) => ISchedule[];
   className?: string;
 }
 
