@@ -480,7 +480,10 @@
 
     "forgotPassword": "비밀번호를 잊으셨나요?",
     "snsLogin": "SNS 계정으로 간편 로그인",
-    "confirm": "확인"
+    "confirm": "확인",
+    "successTitle": "기본정보 수정 완료",
+    "errorTitle": "수정 실패",
+    "generalErrorTitle": "오류 발생"
   },
   "landing": {
     "title": "이사업체, 어떻게 고르세요?",

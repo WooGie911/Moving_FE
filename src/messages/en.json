@@ -484,7 +484,10 @@
 
     "forgotPassword": "Forgot your password?",
     "snsLogin": "Login easily with your SNS account",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "successTitle": "Profile Update Complete",
+    "errorTitle": "Update Failed",
+    "generalErrorTitle": "Error Occurred"
   },
   "landing": {
     "title": "How do you choose a moving company?",

@@ -485,7 +485,10 @@
 
     "forgotPassword": "忘记密码？",
     "snsLogin": "使用SNS账户轻松登录",
-    "confirm": "确认"
+    "confirm": "确认",
+    "successTitle": "个人资料更新完成",
+    "errorTitle": "更新失败",
+    "generalErrorTitle": "发生错误"
   },
   "landing": {
     "title": "如何选择搬家公司？",
