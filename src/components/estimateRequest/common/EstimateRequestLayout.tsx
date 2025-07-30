@@ -23,21 +23,25 @@ export const ESTIMATE_REQUEST_STYLES = {
 
 export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ title, progress, children }) => {
   return (
-    <div className={ESTIMATE_REQUEST_STYLES.container}>
+    <main className={ESTIMATE_REQUEST_STYLES.container} role="main" aria-label="견적 요청 페이지">
       <style jsx>{fadeInUpAnimation}</style>
 
-      {/* 상태바 영역 */}
-      <div className={ESTIMATE_REQUEST_STYLES.header}>
+      {/* 헤더 영역 */}
+      <header className={ESTIMATE_REQUEST_STYLES.header} role="banner">
         <div className={ESTIMATE_REQUEST_STYLES.headerContent}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h2 className={ESTIMATE_REQUEST_STYLES.title}>{title}</h2>
+            <h1 className={ESTIMATE_REQUEST_STYLES.title} id="estimate-request-title">
+              {title}
+            </h1>
           </div>
-          <ProgressBar value={progress} />
+          <ProgressBar value={progress} aria-labelledby="estimate-request-title" />
         </div>
-      </div>
+      </header>
 
-      {/* 말풍선 영역 */}
-      <div className={ESTIMATE_REQUEST_STYLES.content}>{children}</div>
-    </div>
+      {/* 메인 콘텐츠 영역 */}
+      <section className={ESTIMATE_REQUEST_STYLES.content} role="region" aria-labelledby="estimate-request-title">
+        {children}
+      </section>
+    </main>
   );
 };
