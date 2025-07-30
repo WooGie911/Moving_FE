@@ -16,7 +16,7 @@ import { ISignUpFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const UserSignupPage = () => {
   const deviceType = useWindowWidth();
@@ -24,6 +24,7 @@ const UserSignupPage = () => {
   const { open, close } = useModal();
   const validationRules = useValidationRules();
   const t = useTranslations("auth");
+  const currentLocale = useLocale();
 
   const form = useForm<ISignUpFormValues>({
     mode: "onChange",
@@ -124,7 +125,7 @@ const UserSignupPage = () => {
             </div>
 
             {/* 비밀번호*/}
-            <div className="mb-6 flex flex-col gap-2">
+            <div className={`flex flex-col gap-2 ${currentLocale === "en" ? "mb-12" : "mb-6"}`}>
               <span className="text-black-400 text-md font-normal">{t("password")}</span>
               <PasswordInput
                 {...register("password", validationRules.password)}
