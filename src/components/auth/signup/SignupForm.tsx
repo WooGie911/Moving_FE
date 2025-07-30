@@ -9,9 +9,10 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
+import { UserType } from "@/types/user";
 
 interface SignupFormProps {
-  userType: "CUSTOMER" | "MOVER";
+  userType: UserType;
   signinLink: string;
 }
 

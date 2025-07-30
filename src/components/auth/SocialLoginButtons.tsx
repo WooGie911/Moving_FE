@@ -7,12 +7,9 @@ import { useTranslations } from "next-intl";
 import google from "@/assets/icon/auth/icon-login-google-lg.png";
 import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
 import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
+import { UserType } from "@/types/user";
 
-interface SocialLoginButtonsProps {
-  userType: "CUSTOMER" | "MOVER";
-}
-
-const SocialLoginButtons = ({ userType }: SocialLoginButtonsProps) => {
+const SocialLoginButtons = ({ userType }: { userType: UserType }) => {
   const { googleLogin, kakaoLogin, naverLogin } = useAuth();
   const t = useTranslations("auth");
 

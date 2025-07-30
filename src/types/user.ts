@@ -1,3 +1,5 @@
+export type UserType = "CUSTOMER" | "MOVER";
+
 export interface IEditBasicForm {
   name: string;
   email: string;
@@ -16,4 +18,4 @@ export interface IMoverProfileEditForm {
   detailIntro: string;
   career: number;
   isVeteran: boolean;
-} 
+}

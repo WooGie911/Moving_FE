@@ -5,12 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import logo from "@/assets/img/logo/textlogo-lg.png";
+import { UserType } from "@/types/user";
 
-interface SigninHeaderProps {
-  userType: "CUSTOMER" | "MOVER";
-}
-
-const SigninHeader = ({ userType }: SigninHeaderProps) => {
+const SigninHeader = ({ userType }: { userType: UserType }) => {
   const t = useTranslations("auth");
 
   const getAlternateUserTypeInfo = () => {

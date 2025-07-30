@@ -6,7 +6,7 @@ import { SocialLoginButtons, MascotCharacter } from "@/components/auth";
 
 const MoverSigninPage = () => {
   return (
-    <div className="md:bg-primary-400 flex min-h-[840px] w-full items-center justify-center overflow-x-hidden bg-white">
+    <div className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[839px]">
       <div className="relative w-full bg-white px-6 py-12 md:max-w-[560px] md:rounded-[40px] md:px-10 lg:max-w-[740px]">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-center justify-between gap-[11px] md:gap-[18px]">
