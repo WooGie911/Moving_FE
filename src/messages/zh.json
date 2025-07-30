@@ -79,15 +79,6 @@
       "month": "月",
       "day": "日"
     },
-    "weekdays": {
-      "sunday": "日",
-      "monday": "一",
-      "tuesday": "二",
-      "wednesday": "三",
-      "thursday": "四",
-      "friday": "五",
-      "saturday": "六"
-    },
     "profileImage": "个人资料图片",
     "estimatePrice": "报价",
     "estimateAmount": "报价金额",
@@ -660,7 +651,8 @@
       "editProfile": "编辑个人资料",
       "favoriteDrivers": "收藏的司机",
       "myReviews": "我的评价",
-      "myPage": "我的页面"
+      "myPage": "我的页面",
+      "scheduleManagement": "日程管理"
     },
     "userSuffix": {
       "customer": "客户",
@@ -699,5 +691,25 @@
     "title": "通知",
     "noNotifications": "还没有通知！",
     "allNotificationsLoaded": "已加载所有通知。"
+  },
+  "schedule": {
+    "title": "日程管理",
+    "description": "查看和管理您的搬家日程",
+    "selectDate": "请选择日期",
+    "scheduleFor": "日程",
+    "noSchedules": "该日期没有预定的日程。",
+    "selectDateToView": "在日历上选择日期以查看详细日程。",
+    "customerSuffix": "",
+    "time": "时间：",
+    "type": "类型：",
+    "departure": "出发地：",
+    "arrival": "目的地：",
+    "viewDetails": "查看详情",
+    "approve": "批准",
+    "status": {
+      "confirmed": "已确认",
+      "pending": "待处理",
+      "completed": "已完成"
+    }
   }
 }

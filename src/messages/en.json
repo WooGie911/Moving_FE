@@ -79,15 +79,6 @@
       "month": "/",
       "day": ""
     },
-    "weekdays": {
-      "sunday": "Sun",
-      "monday": "Mon",
-      "tuesday": "Tue",
-      "wednesday": "Wed",
-      "thursday": "Thu",
-      "friday": "Fri",
-      "saturday": "Sat"
-    },
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
     "estimateAmount": "Estimate Amount",
@@ -659,7 +650,8 @@
       "editProfile": "Edit Profile",
       "favoriteDrivers": "Favorite Drivers",
       "myReviews": "My Reviews",
-      "myPage": "My Page"
+      "myPage": "My Page",
+      "scheduleManagement": "Schedule"
     },
     "userSuffix": {
       "customer": "Customer",
@@ -698,5 +690,25 @@
     "title": "Notifications",
     "noNotifications": "No notifications yet!",
     "allNotificationsLoaded": "All notifications loaded."
+  },
+  "schedule": {
+    "title": "Schedule Management",
+    "description": "Check and manage your moving schedules",
+    "selectDate": "Please select a date",
+    "scheduleFor": "Schedule",
+    "noSchedules": "No schedules for this date.",
+    "selectDateToView": "Select a date on the calendar to view detailed schedules.",
+    "customerSuffix": "",
+    "time": "Time:",
+    "type": "Type:",
+    "departure": "From:",
+    "arrival": "To:",
+    "viewDetails": "View Details",
+    "approve": "Approve",
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "completed": "Completed"
+    }
   }
 }
