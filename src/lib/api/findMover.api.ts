@@ -107,7 +107,6 @@ const findMoverApi = {
   fetchMoverDetail: async (moverId: string, language?: string): Promise<IMoverInfo | null> => {
     try {
       const accessToken = await getTokenFromCookie();
-      const queryParams = language ? `?lang=${language}` : '';
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
