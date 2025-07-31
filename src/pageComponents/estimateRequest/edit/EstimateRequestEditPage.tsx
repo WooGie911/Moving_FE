@@ -11,9 +11,10 @@ import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
 import { useEstimateRequestAddressModal } from "@/hooks/useEstimateRequestAddressModal";
 import { useLanguageStore } from "@/stores/languageStore";
 import { formatDateByLanguage } from "@/utils/dateUtils";
-import { shortenRegionInAddress } from "@/utils/regionMapping";
+import { createAddressDisplay, getMoveTypeLabel } from "@/utils/estimateRequestUtils";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
 
@@ -47,15 +48,18 @@ const EstimateRequestEditPage = () => {
     getAnswerText,
   } = formLogic;
 
-  const { updateMutation, deleteMutation, showErrorModal } = apiLogic;
+  const { updateMutation, deleteMutation, showErrorModal, activeQuery } = apiLogic;
 
   // 주소 모달 훅 사용
   const { handleDepartureModal, handleArrivalModal } = useEstimateRequestAddressModal(handleAddressUpdate);
 
+  // API 로딩 상태 확인 (React Query + 로컬 로딩)
+  const isApiLoading = activeQuery.isLoading || activeQuery.isFetching || loading;
+
   // 기사님이 보낸 견적이 있는지 확인하는 공통 함수
   const checkEstimatesAndRedirect = useCallback(async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestApi.getActive(language);
       if (response.success && response.data && response.data.hasEstimates) {
         // 기사님이 보낸 견적이 있으면 pending 페이지로 리다이렉트
         router.push("/estimateRequest/pending");
@@ -65,7 +69,7 @@ const EstimateRequestEditPage = () => {
       console.error("견적 상태 확인 실패:", error);
     }
     return false;
-  }, [router]);
+  }, [router, language]);
 
   // 견적 데이터로 폼을 초기화하는 공통 함수
   const initializeFormFromData = useCallback(
@@ -101,7 +105,7 @@ const EstimateRequestEditPage = () => {
   // 견적 존재 여부 확인 및 create 페이지로 리다이렉트
   const checkAndRedirectToCreate = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestApi.getActive(language);
 
       if (!response.success || !response.hasActive) {
         // 활성 견적이 없으면 create 페이지로 리다이렉트
@@ -118,7 +122,7 @@ const EstimateRequestEditPage = () => {
 
   const fetchEstimateRequestData = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestApi.getActive(language);
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
@@ -261,9 +265,13 @@ const EstimateRequestEditPage = () => {
     return answers;
   }, [step, form, t, language, handleEditMovingType, handleEditMovingDate]);
 
-  // 로딩 상태 - 전역 로딩이 표시되므로 별도 UI 불필요
-  if (loading) {
-    return null;
+  // 로딩 상태 - 로딩 시스템 표시
+  if (isApiLoading) {
+    return (
+      <div className="min-h-screen bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText="견적 요청을 불러오고 있습니다..." />
+      </div>
+    );
   }
 
   // 데이터 없음 상태
@@ -280,25 +288,20 @@ const EstimateRequestEditPage = () => {
   }
 
   // 이사 종류 라벨 변환
-  const getMoveTypeLabel = (moveType: string): string => {
-    switch (moveType) {
-      case "HOME":
-        return t("estimateRequest.movingTypes.home");
-      case "OFFICE":
-        return t("estimateRequest.movingTypes.office");
-      case "SMALL":
-        return t("estimateRequest.movingTypes.small");
-      default:
-        return moveType;
-    }
-  };
+  const moveTypeLabel = getMoveTypeLabel(estimateRequestData.movingType, t);
 
   // 날짜 변환
   const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, language);
 
   // 주소 표시 (null 체크 포함)
-  const departureDisplay = `${shortenRegionInAddress(estimateRequestData.departureAddress)}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;
-  const arrivalDisplay = `${shortenRegionInAddress(estimateRequestData.arrivalAddress)}${estimateRequestData.arrivalDetailAddress ? ` ${estimateRequestData.arrivalDetailAddress}` : ""}`;
+  const departureDisplay = createAddressDisplay(
+    estimateRequestData.departureAddress,
+    estimateRequestData.departureDetailAddress,
+  );
+  const arrivalDisplay = createAddressDisplay(
+    estimateRequestData.arrivalAddress,
+    estimateRequestData.arrivalDetailAddress,
+  );
 
   // edit 모드일 때 공통 컴포넌트 사용
   if (isEditMode) {
@@ -318,7 +321,7 @@ const EstimateRequestEditPage = () => {
       {/* 기존 견적 정보 말풍선들 */}
       <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
-          {t("estimateRequest.result.movingType")}: {getMoveTypeLabel(estimateRequestData.movingType)}
+          {t("estimateRequest.result.movingType")}: {moveTypeLabel}
         </SpeechBubble>
       </section>
       <section className="fade-in-up" role="region" aria-label="견적 요청 정보">

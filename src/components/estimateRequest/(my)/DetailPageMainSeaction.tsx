@@ -1,18 +1,17 @@
-import Image from "next/image";
 import React from "react";
-import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
-import info from "@/assets/icon/info/icon-info.png";
-import { IDetailPageMainSeactionProps, TMoverInfo } from "@/types/customerEstimateRequest";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
-
-import { MoverInfo } from "./MoverInfo";
+import { Button } from "@/components/common/button/Button";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
+import { MoverInfo } from "./MoverInfo";
 import { DetailMoveInfo } from "./DetailMoveInfo";
 import { ShareSection } from "./ShareSection";
-import { LastButtonSection } from "./received/LastButtonSection";
 import { LgButtonSection } from "./LgButtonSection";
-import { Button } from "@/components/common/button/Button";
-import { shortenRegionInAddress } from "@/utils/regionMapping";
+import { LastButtonSection } from "./LastButtonSection";
+import { createComplexAddressDisplay } from "@/utils/estimateRequestUtils";
+import type { IDetailPageMainSeactionProps, TMoverInfo } from "@/types/estimateRequest";
+import defaultProfileImg_sm from "@/assets/img/etc/default-profile-sm.png";
+import info from "@/assets/icon/info/info.png";
 
 export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDetailPageMainSeactionProps) => {
   const t = useTranslations("estimateRequest");
@@ -21,10 +20,23 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
     return num.toLocaleString();
   };
 
-  const allowedTypes = ["small", "home", "office"] as const;
-  const safeMovingType = allowedTypes.includes(estimateRequest.moveType as any)
-    ? (estimateRequest.moveType as "small" | "home" | "office")
-    : "small"; // 기본값
+  // 이사 종류에 따른 타입 설정
+  const moveType = estimateRequest.moveType ? estimateRequest.moveType.toLowerCase() : "small"; // 기본값
+
+  // 주소 생성
+  const departureAddr = createComplexAddressDisplay(
+    estimateRequest.fromAddress.region,
+    estimateRequest.fromAddress.city,
+    estimateRequest.fromAddress.district,
+    estimateRequest.fromAddress.detail,
+  );
+
+  const arrivalAddr = createComplexAddressDisplay(
+    estimateRequest.toAddress.region,
+    estimateRequest.toAddress.city,
+    estimateRequest.toAddress.district,
+    estimateRequest.toAddress.detail,
+  );
 
   return (
     <div
@@ -64,20 +76,8 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
           movingType={estimateRequest.moveType as "SMALL" | "HOME" | "OFFICE"}
           movingDate={estimateRequest.moveDate}
           createdAt={estimateRequest.createdAt}
-          departureAddr={
-            shortenRegionInAddress(estimateRequest.fromAddress.region) +
-            " " +
-            estimateRequest.fromAddress.city +
-            " " +
-            estimateRequest.fromAddress.district
-          }
-          arrivalAddr={
-            shortenRegionInAddress(estimateRequest.toAddress.region) +
-            " " +
-            estimateRequest.toAddress.city +
-            " " +
-            estimateRequest.toAddress.district
-          }
+          departureAddr={departureAddr}
+          arrivalAddr={arrivalAddr}
           departureDetail={estimateRequest.fromAddress.detail}
           arrivalDetail={estimateRequest.toAddress.detail}
           status={estimateRequest.status}

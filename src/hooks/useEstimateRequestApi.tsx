@@ -16,7 +16,7 @@ interface ApiResponse<T = any> {
 
 export const useEstimateRequestApi = () => {
   const { open, close } = useModal();
-  const { t } = useLanguageStore();
+  const { t, language } = useLanguageStore();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -107,8 +107,31 @@ export const useEstimateRequestApi = () => {
 
   // 기사님 견적 확인 및 pending 리다이렉트 함수
   const checkEstimatesAndRedirect = useCallback(
-    (result: ApiResponse | Error) => {
-      const message = result instanceof Error ? result.message : result.message;
+    (result: ApiResponse | Error | unknown) => {
+      // ApiResponse 타입인지 확인하고 hasEstimates 필드가 있는지 체크
+      if (
+        typeof result === "object" &&
+        result &&
+        result !== null &&
+        "data" in result &&
+        result.data &&
+        typeof result.data === "object" &&
+        result.data !== null &&
+        "hasEstimates" in result.data
+      ) {
+        if ((result.data as any).hasEstimates) {
+          router.push("/estimateRequest/pending");
+          return true;
+        }
+      }
+
+      // 기존 메시지 기반 체크 (fallback)
+      const message =
+        result instanceof Error
+          ? result.message
+          : typeof result === "object" && result && "message" in result
+            ? (result as any).message
+            : "";
       if (message && message.includes("견적이")) {
         router.push("/estimateRequest/pending");
         return true;
@@ -204,8 +227,8 @@ export const useEstimateRequestApi = () => {
 
   // 활성 견적 요청 조회
   const activeQuery = useQuery<ApiResponse>({
-    queryKey: ["estimateRequest", "active"],
-    queryFn: () => estimateRequestApi.getActive(),
+    queryKey: ["estimateRequest", "active", language],
+    queryFn: () => estimateRequestApi.getActive(language),
     staleTime: 60 * 1000,
     retry: false,
   });

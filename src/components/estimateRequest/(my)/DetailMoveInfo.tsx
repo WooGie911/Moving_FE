@@ -2,6 +2,7 @@ import { IEstimateRequest } from "@/types/customerEstimateRequest";
 import React from "react";
 import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
 import { useTranslations } from "next-intl";
+import { getMovingTypeText, createAddressDisplay } from "@/utils/estimateRequestUtils";
 
 export const DetailMoveInfo = ({
   movingType,
@@ -30,19 +31,9 @@ export const DetailMoveInfo = ({
     pm: t("timeFormat.pm"),
   };
 
-  // movingType을 다국어로 변환하는 함수
-  const getMovingTypeText = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "small":
-        return tMoveTypes("small");
-      case "home":
-        return tMoveTypes("home");
-      case "office":
-        return tMoveTypes("office");
-      default:
-        return type;
-    }
-  };
+  // 주소 표시 생성
+  const departureDisplay = createAddressDisplay(departureAddr, departureDetail);
+  const arrivalDisplay = createAddressDisplay(arrivalAddr, arrivalDetail);
 
   return (
     <div className="my-2 flex w-full flex-col items-start justify-center gap-7">
@@ -63,7 +54,7 @@ export const DetailMoveInfo = ({
             {t("service")}
           </p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {getMovingTypeText(movingType)}
+            {getMovingTypeText(movingType, tMoveTypes)}
           </p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
@@ -78,17 +69,13 @@ export const DetailMoveInfo = ({
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
             {t("departure")}
           </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {departureAddr + " " + departureDetail}
-          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">{departureDisplay}</p>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
             {t("arrival")}
           </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {arrivalAddr + " " + arrivalDetail}
-          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">{arrivalDisplay}</p>
         </div>
       </div>
     </div>

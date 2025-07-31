@@ -8,6 +8,7 @@ import { ESTIMATE_REQUEST_STYLES } from "./EstimateRequestLayout";
 import { IFormState, IEstimateRequestStepRendererProps } from "@/types/estimateRequest";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
+import { createAddressDisplay } from "@/utils/estimateRequestUtils";
 
 export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererProps> = ({
   step,
@@ -107,12 +108,12 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
                   {t("estimateRequest.result.movingDate")}: {formatDateByLanguage(form.movingDate, locale)}
                 </div>
                 <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
-                  {t("estimateRequest.result.departure")}: {shortenRegionInAddress(form.departure.roadAddress)}{" "}
-                  {form.departure.detailAddress}
+                  {t("estimateRequest.result.departure")}:{" "}
+                  {createAddressDisplay(form.departure.roadAddress, form.departure.detailAddress)}
                 </div>
                 <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
-                  {t("estimateRequest.result.arrival")}: {shortenRegionInAddress(form.arrival.roadAddress)}{" "}
-                  {form.arrival.detailAddress}
+                  {t("estimateRequest.result.arrival")}:{" "}
+                  {createAddressDisplay(form.arrival.roadAddress, form.arrival.detailAddress)}
                 </div>
               </div>
             </SpeechBubble>

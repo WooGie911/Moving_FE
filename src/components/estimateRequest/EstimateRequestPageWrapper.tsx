@@ -6,18 +6,20 @@ import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import EstimateRequestCreatePage from "@/pageComponents/estimateRequest/create/EstimateRequestCreatePage";
 import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/EstimateRequestEditPage";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { useLanguageStore } from "@/stores/languageStore";
 
 export default function EstimateRequestPageWrapper() {
   const [hasActiveEstimateRequest, setHasActiveEstimateRequest] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguageStore();
 
   useEffect(() => {
     checkActiveEstimateRequest();
-  }, []);
+  }, [language]);
 
   const checkActiveEstimateRequest = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestApi.getActive(language);
       if (!response.success) {
         throw new Error(response.message || "활성 견적 확인 실패");
       }

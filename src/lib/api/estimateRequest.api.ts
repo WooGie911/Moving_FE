@@ -62,9 +62,10 @@ const estimateRequestApi = {
   /**
    * 활성 견적 요청 조회
    */
-  getActive: async () => {
+  getActive: async (language?: string) => {
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/active`, {
+    const queryParams = language ? `?lang=${language}` : "";
+    const res = await fetch(`${API_URL}/estimateRequests/active${queryParams}`, {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },

@@ -11,6 +11,7 @@ import type { DetailInformationProps } from "@/types/mover.types";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import findMoverApi from "@/lib/api/findMover.api";
 import type { IReview, IApiReview } from "@/types/review";
+import { useLanguageStore } from "@/stores/languageStore";
 
 const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
   const [reviews, setReviews] = useState<IReview[]>([]);
@@ -19,6 +20,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const [isLoadingQuote, setIsLoadingQuote] = useState(true);
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
+  const { language } = useLanguageStore();
 
   // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
   useEffect(() => {
@@ -57,7 +59,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     const fetchActiveQuote = async () => {
       try {
         setIsLoadingQuote(true);
-        const response = await estimateRequestApi.getActive();
+        const response = await estimateRequestApi.getActive(language);
 
         if (response.success && response.data && response.data.id) {
           setQuoteId(String(response.data.id));
@@ -73,7 +75,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     };
 
     fetchActiveQuote();
-  }, []);
+  }, [language]);
 
   return (
     <div

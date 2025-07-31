@@ -92,15 +92,11 @@ export const shortenRegionInAddress = (fullAddress: string): string => {
     }
   }
 
-  const parts = convertedAddress.split(" ");
-
-  if (parts.length >= 2) {
-    const region = parts[0]; // 첫 번째 부분이 시/도
-    const district = parts[1]; // 두 번째 부분이 구/군
-
-    const shortenedRegion = regionMapping[region] || region;
-
-    return `${shortenedRegion} ${district}`;
+  // 시/도 부분만 줄이고 나머지는 그대로 유지
+  for (const [fullName, shortName] of Object.entries(regionMapping)) {
+    if (convertedAddress.startsWith(fullName)) {
+      return convertedAddress.replace(fullName, shortName);
+    }
   }
 
   return convertedAddress;
