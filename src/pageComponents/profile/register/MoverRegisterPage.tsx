@@ -17,6 +17,7 @@ import {
   RegionSelection,
   ProfileFormButton,
 } from "@/components/profile/register";
+import { isValidName } from "@/utils/validators";
 
 const MoverRegisterPage = () => {
   const router = useRouter();
@@ -41,8 +42,9 @@ const MoverRegisterPage = () => {
     dataUrl: uploadSkeleton.src,
   });
 
+  const isNicknameValid = nickname?.trim().length >= 2 && isValidName(nickname);
   const allFilled =
-    nickname?.trim() &&
+    isNicknameValid &&
     career?.trim() &&
     shortIntro?.trim()?.length >= 8 &&
     detailIntro?.trim()?.length >= 10 &&
@@ -102,7 +104,11 @@ const MoverRegisterPage = () => {
         >
           {/* 왼쪽 컬럼 */}
           <div className="flex w-full flex-col gap-5 lg:w-[500px]" aria-label={t("aria.formLeftColumn")}>
-            <ProfileImageUpload selectedImage={selectedImage} onImageChange={setSelectedImage} />
+            <ProfileImageUpload
+              uploadSkeleton={uploadSkeleton.src}
+              selectedImage={selectedImage}
+              onImageChange={setSelectedImage}
+            />
             <FormField
               name="nickname"
               label={t("nickname")}

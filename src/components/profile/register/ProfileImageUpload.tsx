@@ -2,17 +2,22 @@
 
 import Image from "next/image";
 import React, { useRef } from "react";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import userApi from "@/lib/api/user.api";
 import { useTranslations } from "next-intl";
 
 interface IProfileImageUploadProps {
+  uploadSkeleton: string;
   onImageChange: (imageData: { name: string; type: string; dataUrl: string }) => void;
   selectedImage: { name: string; type: string; dataUrl: string };
   className?: string;
 }
 
-export const ProfileImageUpload = ({ onImageChange, selectedImage, className = "" }: IProfileImageUploadProps) => {
+export const ProfileImageUpload = ({
+  uploadSkeleton,
+  onImageChange,
+  selectedImage,
+  className = "",
+}: IProfileImageUploadProps) => {
   const t = useTranslations("profile");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,6 +43,10 @@ export const ProfileImageUpload = ({ onImageChange, selectedImage, className = "
     reader.readAsDataURL(file);
   };
 
+  const isUploaded = Boolean(selectedImage.name);
+  const imageSrc = isUploaded ? selectedImage.dataUrl : uploadSkeleton;
+  const imageAlt = isUploaded ? t("aria.selectedProfileImgAlt") : t("aria.defaultProfileImgAlt");
+
   return (
     <section
       className={`border-border-light flex flex-col gap-4 border-b-1 pb-4 ${className}`}
@@ -47,27 +56,19 @@ export const ProfileImageUpload = ({ onImageChange, selectedImage, className = "
 
       <button
         type="button"
-        className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
+        className="flex h-[160px] w-[160px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100"
         onClick={handleImageClick}
         aria-label={t("profileImg")}
       >
-        {selectedImage.name ? (
-          <Image
-            src={selectedImage.dataUrl}
-            alt={t("aria.selectedProfileImgAlt")}
-            width={160}
-            height={160}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <Image
-            src={uploadSkeleton}
-            alt={t("aria.defaultProfileImgAlt")}
-            width={160}
-            height={160}
-            className="h-full w-full object-cover"
-          />
-        )}
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          width={160}
+          height={160}
+          sizes="160px"
+          priority={!isUploaded} // 초기 스켈레톤만 LCP 후보로
+          className="h-full w-full object-cover"
+        />
       </button>
 
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />

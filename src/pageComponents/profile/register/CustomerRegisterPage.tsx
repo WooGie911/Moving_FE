@@ -98,7 +98,11 @@ const CustomerRegisterPage = () => {
 
           <div className="flex w-full flex-col gap-5 lg:w-[640px]" aria-label={t("aria.formContainerLabel")}>
             {/* 프로필 이미지 */}
-            <ProfileImageUpload selectedImage={selectedImage} onImageChange={setSelectedImage} />
+            <ProfileImageUpload
+              uploadSkeleton={uploadSkeleton.src}
+              selectedImage={selectedImage}
+              onImageChange={setSelectedImage}
+            />
 
             {/* 별명 */}
             <FormField
