@@ -104,8 +104,9 @@ export class MoverScheduleService {
   /**
    * 월별 스케줄 조회 (캘린더용)
    */
-  static async getMonthlySchedules(year: number, month: number): Promise<ScheduleApiResponse> {
-    return apiCall<Schedule[]>(`/mover-schedules/monthly/${year}/${month}`, {
+  static async getMonthlySchedules(year: number, month: number, lang?: string): Promise<ScheduleApiResponse> {
+    const queryParams = lang ? `?lang=${lang}` : "";
+    return apiCall<Schedule[]>(`/mover-schedules/monthly/${year}/${month}${queryParams}`, {
       method: "GET",
     });
   }

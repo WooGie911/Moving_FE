@@ -8,13 +8,14 @@ import { GnbActions } from "./GnbActions";
 import { useAuth } from "@/providers/AuthProvider";
 
 export const Gnb = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const deviceType = useWindowWidth();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const userRole = user?.userType || "GUEST";
   const userName = user?.nickname || user?.name || "";
+  const userProfileImage = userRole === "CUSTOMER" ? user?.customerImage : user?.moverImage;
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -34,10 +35,12 @@ export const Gnb = () => {
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
               <GnbActions
                 userRole={userRole}
+                logout={logout}
                 userName={userName}
                 deviceType={deviceType}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}
+                profileImage={userProfileImage}
               />
             </div>
           ) : (
@@ -46,10 +49,12 @@ export const Gnb = () => {
               <LogoAndTab deviceType={deviceType} userRole={userRole} />
               <GnbActions
                 userRole={userRole}
+                logout={logout}
                 userName={userName}
                 deviceType={deviceType}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}
+                profileImage={userProfileImage}
               />
             </div>
           )}
