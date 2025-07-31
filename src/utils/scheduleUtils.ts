@@ -76,12 +76,12 @@ export const getStatusStyleClass = (status: Schedule["status"]) => {
 export const getStatusText = (status: Schedule["status"], t: (key: string) => string) => {
   switch (status) {
     case "confirmed":
-      return t("confirmed");
+      return t("status.confirmed");
     case "pending":
-      return t("pending");
+      return t("status.pending");
     case "completed":
-      return t("completed");
+      return t("status.completed");
     default:
-      return t("pending");
+      return t("status.pending");
   }
 };

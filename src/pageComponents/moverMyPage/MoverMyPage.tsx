@@ -16,6 +16,7 @@ import ReviewList from "@/components/searchMover/[id]/ReviewList";
 import { IMoverInfo } from "@/types/mover.types";
 import { IReview, IApiReview } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
+import { useLanguageStore } from "@/stores/languageStore";
 
 // 프로필 상세 정보 타입 정의
 type TMoverProfileDetail = {
@@ -57,6 +58,7 @@ const MoverMyPage = () => {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("mover");
+  const { language } = useLanguageStore();
   const [profile, setProfile] = useState<IMoverInfo | null>(null);
   const [profileDetail, setProfileDetail] = useState<TMoverProfileDetail>(DEFAULT_PROFILE_DETAIL);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
@@ -80,7 +82,7 @@ const MoverMyPage = () => {
         const userId = userRes.data.id;
         
         // 상세페이지와 동일한 방식으로 기사님 정보 가져오기
-        const moverData = await findMoverApi.fetchMoverDetail(userId);
+        const moverData = await findMoverApi.fetchMoverDetail(userId, language);
         
         if (moverData) {
           setProfile(moverData);
@@ -89,7 +91,7 @@ const MoverMyPage = () => {
         }
         
         // 프로필 상세 정보 가져오기 (currentAreas 포함)
-        const profileRes = await userApi.getProfile();
+        const profileRes = await userApi.getProfile(language);
         if (profileRes.success && profileRes.data) {
           const profileData = profileRes.data as any;
           setProfileDetail({
@@ -115,7 +117,7 @@ const MoverMyPage = () => {
       }
     }
     fetchProfile();
-  }, []);
+  }, [language]);
 
   // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
   useEffect(() => {
