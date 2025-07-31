@@ -194,6 +194,80 @@ Typography Scale
   animation: slow-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* 트럭 움직임 애니메이션 */
+@keyframes truck-move {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+@keyframes dust-1 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0);
+  }
+}
+
+@keyframes dust-2 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  25% {
+    opacity: 0.6;
+    transform: translateY(-8px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0);
+  }
+}
+
+@keyframes dust-3 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  75% {
+    opacity: 0.6;
+    transform: translateY(-12px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0);
+  }
+}
+
+/* Tailwind 클래스로 애니메이션 적용 */
+.animate-truck-move {
+  animation: truck-move 4s linear infinite;
+}
+
+.animate-dust-1 {
+  animation: dust-1 1.5s ease-out infinite;
+}
+
+.animate-dust-2 {
+  animation: dust-2 1.5s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-dust-3 {
+  animation: dust-3 1.5s ease-out infinite;
+  animation-delay: 1s;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

@@ -20,40 +20,28 @@ export const useEstimateRequestApi = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // 에러 모달 표시
-  const showErrorModal = useCallback(
-    (message: string) => {
+  // 공통 모달 생성 함수
+  const createModal = useCallback(
+    (title: string, message: string, onConfirm?: () => void, confirmText?: string) => {
       open({
-        title: t("common.error"),
+        title,
         children: (
           <div className="p-6">
             <p className="mb-4 text-gray-700">{message}</p>
           </div>
         ),
         buttons: [
+          ...(onConfirm
+            ? [
+                {
+                  variant: "outlined" as const,
+                  text: t("common.cancel"),
+                  onClick: close,
+                },
+              ]
+            : []),
           {
-            text: t("common.confirm"),
-            onClick: close,
-          },
-        ],
-      });
-    },
-    [open, close, t],
-  );
-
-  // 성공 모달 표시
-  const showSuccessModal = useCallback(
-    (message: string, onConfirm?: () => void) => {
-      open({
-        title: t("common.success"),
-        children: (
-          <div className="p-6">
-            <p className="mb-4 text-gray-700">{message}</p>
-          </div>
-        ),
-        buttons: [
-          {
-            text: t("common.confirm"),
+            text: confirmText || t("common.confirm"),
             onClick: () => {
               close();
               onConfirm?.();
@@ -65,120 +53,69 @@ export const useEstimateRequestApi = () => {
     [open, close, t],
   );
 
+  // 에러 모달 표시
+  const showErrorModal = useCallback(
+    (message: string) => {
+      createModal(t("common.error"), message);
+    },
+    [createModal],
+  );
+
+  // 성공 모달 표시
+  const showSuccessModal = useCallback(
+    (message: string, onConfirm?: () => void) => {
+      createModal(t("common.success"), message, onConfirm);
+    },
+    [createModal],
+  );
+
   // 삭제 확인 모달 표시
   const showDeleteConfirmModal = useCallback(
     (onConfirm: () => void) => {
-      open({
-        title: t("estimateRequest.deleteConfirmTitle"),
-        children: (
-          <div className="p-6">
-            <p className="mb-4 text-gray-700">{t("estimateRequest.deleteConfirmMessage")}</p>
-          </div>
-        ),
-        buttons: [
-          {
-            variant: "outlined",
-            text: t("common.cancel"),
-            onClick: close,
-          },
-          {
-            text: t("common.confirm"),
-            onClick: () => {
-              close();
-              onConfirm();
-            },
-          },
-        ],
-      });
+      createModal(t("estimateRequest.deleteConfirmTitle"), t("estimateRequest.deleteConfirmMessage"), onConfirm);
     },
-    [open, close, t],
+    [createModal],
   );
 
   // 수정 확인 모달 표시
   const showUpdateConfirmModal = useCallback(
     (onConfirm: () => void) => {
-      open({
-        title: t("estimateRequest.updateConfirmTitle"),
-        children: (
-          <div className="p-6">
-            <p className="mb-4 text-gray-700">{t("estimateRequest.updateConfirmMessage")}</p>
-          </div>
-        ),
-        buttons: [
-          {
-            variant: "outlined",
-            text: t("common.cancel"),
-            onClick: close,
-          },
-          {
-            text: t("common.confirm"),
-            onClick: () => {
-              close();
-              onConfirm();
-            },
-          },
-        ],
-      });
+      createModal(t("estimateRequest.updateConfirmTitle"), t("estimateRequest.updateConfirmMessage"), onConfirm);
     },
-    [open, close, t],
+    [createModal],
   );
 
   // 개별 항목 수정 확인 모달 표시
   const showEditItemConfirmModal = useCallback(
     (onConfirm: () => void) => {
-      open({
-        title: t("estimateRequest.editConfirmTitle"),
-        children: (
-          <div className="p-6">
-            <p className="mb-4 text-gray-700">{t("estimateRequest.editConfirmMessage")}</p>
-          </div>
-        ),
-        buttons: [
-          {
-            variant: "outlined",
-            text: t("common.cancel"),
-            onClick: close,
-          },
-          {
-            text: t("common.confirm"),
-            onClick: () => {
-              close();
-              onConfirm();
-            },
-          },
-        ],
-      });
+      createModal(t("estimateRequest.editConfirmTitle"), t("estimateRequest.editConfirmMessage"), onConfirm);
     },
-    [open, close, t],
+    [createModal],
   );
 
   // 견적 확정 확인 모달 표시
   const showConfirmEstimateRequestModal = useCallback(
     (onConfirm: () => void) => {
-      open({
-        title: t("estimateRequest.confirmEstimateRequestTitle"),
-        children: (
-          <div className="p-6">
-            <p className="mb-4 text-gray-700">{t("estimateRequest.confirmEstimateRequestMessage")}</p>
-          </div>
-        ),
-        buttons: [
-          {
-            variant: "outlined",
-            text: t("common.cancel"),
-            onClick: close,
-          },
-          {
-            text: t("common.confirm"),
-            onClick: () => {
-              close();
-              onConfirm();
-            },
-          },
-        ],
-      });
+      createModal(
+        t("estimateRequest.confirmEstimateRequestTitle"),
+        t("estimateRequest.confirmEstimateRequestMessage"),
+        onConfirm,
+      );
     },
-    [open, close, t],
+    [createModal],
+  );
+
+  // 기사님 견적 확인 및 pending 리다이렉트 함수
+  const checkEstimatesAndRedirect = useCallback(
+    (result: ApiResponse | Error) => {
+      const message = result instanceof Error ? result.message : result.message;
+      if (message && message.includes("견적이")) {
+        router.push("/estimateRequest/pending");
+        return true;
+      }
+      return false;
+    },
+    [router],
   );
 
   // 공통 에러 처리 함수
@@ -205,9 +142,8 @@ export const useEstimateRequestApi = () => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        showSuccessModal(t("estimateRequest.createSuccess"), () => {
-          window.location.reload();
-        });
+        // 견적 생성 완료 후 바로 페이지 새로고침 (모달 없이)
+        window.location.reload();
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
@@ -223,15 +159,22 @@ export const useEstimateRequestApi = () => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        showSuccessModal(t("estimateRequest.editSuccess"), () => {
-          window.location.reload();
-        });
+        // 견적 수정 완료 후 바로 페이지 새로고침 (모달 없이)
+        window.location.reload();
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
-        showErrorModal(result.message || "견적 수정에 실패했습니다.");
+        // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
+        if (!checkEstimatesAndRedirect(result)) {
+          showErrorModal(result.message || "견적 수정에 실패했습니다.");
+        }
       }
     },
-    onError: (error) => handleApiError(error, "견적 수정에 실패했습니다."),
+    onError: (error) => {
+      // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
+      if (!checkEstimatesAndRedirect(error)) {
+        handleApiError(error, "견적 수정에 실패했습니다.");
+      }
+    },
   });
 
   // 견적 삭제
@@ -241,15 +184,22 @@ export const useEstimateRequestApi = () => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        showSuccessModal(t("estimateRequest.deleteSuccess"), () => {
-          window.location.reload();
-        });
+        // 삭제 완료 후 바로 페이지 새로고침 (모달 없이)
+        window.location.reload();
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
-        showErrorModal(result.message || "견적 삭제에 실패했습니다.");
+        // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
+        if (!checkEstimatesAndRedirect(result)) {
+          showErrorModal(result.message || "견적 삭제에 실패했습니다.");
+        }
       }
     },
-    onError: (error) => handleApiError(error, "견적 삭제에 실패했습니다."),
+    onError: (error) => {
+      // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
+      if (!checkEstimatesAndRedirect(error)) {
+        handleApiError(error, "견적 삭제에 실패했습니다.");
+      }
+    },
   });
 
   // 활성 견적 요청 조회
