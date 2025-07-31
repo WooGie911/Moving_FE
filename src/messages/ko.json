@@ -188,7 +188,7 @@
     "start": "시작하기",
     "optional": "(선택사항)",
     "cancel": "취소",
-    "edit": "수정",
+    "editButton": "수정",
 
     "customerRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
     "moverRegisterInfo": "추가 정보를 입력하여 회원가입을 완료해주세요.",
@@ -227,6 +227,7 @@
     "currentAreas": "서비스 가능 지역",
     "edit": {
       "title": "프로필 수정",
+      "customerTitle": "일반유저 프로필 수정",
       "profileImage": "프로필 이미지",
       "nickname": "별명",
       "nicknamePlaceholder": "별명을 입력하세요",
@@ -250,7 +251,22 @@
       "errorTitle": "프로필 수정 실패",
       "errorMessage": "수정에 실패했습니다.",
       "generalError": "오류가 발생했습니다.",
-      "confirm": "확인"
+      "confirm": "확인",
+      "name": "이름",
+      "namePlaceholder": "이름을 입력해 주세요",
+      "email": "이메일",
+      "emailPlaceholder": "이메일을 입력해 주세요",
+      "phone": "전화번호",
+      "phonePlaceholder": "전화번호를 입력해 주세요",
+      "currentPassword": "현재 비밀번호",
+      "currentPasswordPlaceholder": "현재 비밀번호를 입력해 주세요",
+      "newPassword": "새 비밀번호",
+      "newPasswordPlaceholder": "새 비밀번호를 입력해 주세요",
+      "confirmNewPassword": "새 비밀번호 확인",
+      "confirmNewPasswordPlaceholder": "새 비밀번호 확인을 입력해 주세요",
+      "confirmNewPasswordRequired": "새 비밀번호 확인을 입력해주세요",
+      "passwordMismatch": "새 비밀번호와 일치하지 않습니다",
+      "optional": "(선택사항)"
     },
     "aria": {
       "pageLabel": "일반 유저 프로필 등록 페이지",

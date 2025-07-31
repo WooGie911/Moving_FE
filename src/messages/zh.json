@@ -193,7 +193,7 @@
     "start": "开始",
     "optional": "（可选）",
     "cancel": "取消",
-    "edit": "编辑",
+    "editButton": "编辑",
 
     "customerRegisterInfo": "请输入额外信息以完成注册。",
     "moverRegisterInfo": "请输入额外信息以完成注册。",
@@ -232,30 +232,62 @@
     "currentAreas": "服务范围",
     "edit": {
       "title": "编辑个人资料",
+      "customerTitle": "编辑普通用户资料",
       "profileImage": "个人资料图片",
+
+      "name": "姓名",
+      "namePlaceholder": "请输入您的姓名",
+
       "nickname": "昵称",
       "nicknamePlaceholder": "请输入昵称",
+
+      "email": "电子邮箱",
+      "emailPlaceholder": "请输入您的电子邮箱",
+
+      "phone": "电话号码",
+      "phonePlaceholder": "请输入您的电话号码",
+
       "career": "工作经验",
       "careerPlaceholder": "例如：8",
+
+      "currentPassword": "当前密码",
+      "currentPasswordPlaceholder": "请输入当前密码",
+
+      "newPassword": "新密码",
+      "newPasswordPlaceholder": "请输入新密码",
+
+      "confirmNewPassword": "确认新密码",
+      "confirmNewPasswordPlaceholder": "请再次输入新密码",
+      "confirmNewPasswordRequired": "请确认新密码",
+      "passwordMismatch": "新密码不一致",
+
       "shortIntro": "一句话介绍",
       "shortIntroPlaceholder": "请输入一句话介绍（最少8个字符）",
+
       "detailIntro": "详细介绍",
       "detailIntroPlaceholder": "请输入详细介绍（最少10个字符）",
+
       "providedServices": "提供的服务",
       "serviceAreas": "服务区域",
+
       "required": "*",
       "requiredField": "必填",
       "minLength8": "请至少输入8个字符",
       "minLength10": "请至少输入10个字符",
-      "minCareer": "工作经验必须至少0年",
+      "minCareer": "工作经验必须至少为0年",
+
       "save": "保存更改",
       "cancel": "取消",
-      "successTitle": "个人资料更新完成",
-      "successMessage": "个人资料已成功更新。",
-      "errorTitle": "个人资料更新失败",
+
+      "successTitle": "资料更新完成",
+      "successMessage": "您的资料已成功更新。",
+
+      "errorTitle": "资料更新失败",
       "errorMessage": "更新失败。",
       "generalError": "发生错误。",
-      "confirm": "确认"
+      "confirm": "确认",
+
+      "optional": "（可选）"
     },
     "aria": {
       "pageLabel": "普通用户资料注册页面",

@@ -45,7 +45,7 @@ export const ProfileImageUpload = ({
 
   const isUploaded = Boolean(selectedImage.name);
   const imageSrc = isUploaded ? selectedImage.dataUrl : uploadSkeleton;
-  const imageAlt = isUploaded ? t("aria.selectedProfileImgAlt") : t("aria.defaultProfileImgAlt");
+  const imageAlt = isUploaded ? t("aria.profileImgButtonAlt") : t("aria.defaultProfileImgAlt");
 
   return (
     <section

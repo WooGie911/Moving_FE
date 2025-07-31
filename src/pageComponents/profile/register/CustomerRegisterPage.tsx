@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
