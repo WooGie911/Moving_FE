@@ -130,6 +130,11 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     }
   }, [userRole, fetchNotifications]);
 
+  // userRole이나 userName 변경 시 프로필 모달 상태 초기화
+  useEffect(() => {
+    setIsProfileOpen(false);
+  }, [userRole, userName]);
+
   return (
     <div className="flex items-center gap-4">
       {/* 언어 변경 버튼 */}

@@ -24,9 +24,6 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
     const refreshed = await authApi.refreshToken();
 
     if (refreshed?.accessToken) {
-      // 👉 새 토큰 쿠키에도 저장
-      setTokensToCookie(refreshed.accessToken);
-
       // 👉 Authorization 헤더에 새 토큰 명시 후 재시도
       return fetchWithAuth<T>(
         input,

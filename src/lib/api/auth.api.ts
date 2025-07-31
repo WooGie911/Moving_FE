@@ -22,10 +22,6 @@ const authApi = {
 
     const responseData = await response.json();
 
-    if (responseData.success) {
-      setTokensToCookie(responseData.accessToken);
-    }
-
     return responseData;
   },
 
@@ -40,10 +36,6 @@ const authApi = {
     });
 
     const responseData = await response.json();
-
-    if (responseData.success) {
-      setTokensToCookie(responseData.accessToken);
-    }
 
     return responseData;
   },
