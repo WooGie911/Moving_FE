@@ -83,20 +83,27 @@ const CustomerRegisterPage = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-10 lg:max-w-[640px] lg:px-0">
+      <div
+        className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-10 lg:max-w-[640px] lg:px-0"
+        aria-label={t("aria.pageLabel")}
+      >
         {/* 폼 컨테이너 */}
-        <form className="flex max-w-[327px] flex-col gap-4 lg:max-w-[640px]" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex max-w-[327px] flex-col gap-4 lg:max-w-[640px]"
+          onSubmit={handleSubmit(onSubmit)}
+          aria-label={t("aria.formLabel")}
+        >
           {/* 헤더 */}
           <ProfileFormHeader titleKey="customerTitle" descriptionKey="customerRegisterInfo" />
 
-          <div className="flex w-full flex-col gap-5 lg:w-[640px]">
+          <div className="flex w-full flex-col gap-5 lg:w-[640px]" aria-label={t("aria.formContainerLabel")}>
             {/* 프로필 이미지 */}
             <ProfileImageUpload selectedImage={selectedImage} onImageChange={setSelectedImage} />
 
             {/* 별명 */}
             <FormField
               name="nickname"
-              label="별명"
+              label={t("nickname")}
               placeholder={t("nicknamePlaceholder")}
               rules={validationRules.nickname}
               methods={methods}

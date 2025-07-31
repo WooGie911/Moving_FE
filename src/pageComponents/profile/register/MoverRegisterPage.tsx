@@ -25,7 +25,7 @@ const MoverRegisterPage = () => {
   const t = useTranslations("profile");
 
   const methods = useForm({
-    mode: "onChange", // 실시간 벨리데이션
+    mode: "onChange",
   });
   const { watch, handleSubmit } = methods;
 
@@ -44,20 +44,18 @@ const MoverRegisterPage = () => {
   const allFilled =
     nickname?.trim() &&
     career?.trim() &&
-    shortIntro?.trim() &&
-    shortIntro?.trim().length >= 8 &&
-    detailIntro?.trim() &&
-    detailIntro?.trim().length >= 10 &&
+    shortIntro?.trim()?.length >= 8 &&
+    detailIntro?.trim()?.length >= 10 &&
     services.length > 0 &&
     regions.length > 0;
 
   const onSubmit = async () => {
     const profileData = {
       moverImage: selectedImage.dataUrl,
-      nickname: nickname,
+      nickname,
       career: Number(career),
-      shortIntro: shortIntro,
-      detailIntro: detailIntro,
+      shortIntro,
+      detailIntro,
       currentAreas: regions,
       serviceTypes: services,
     };
@@ -89,7 +87,10 @@ const MoverRegisterPage = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-10 lg:min-h-screen lg:max-w-[1100px] lg:justify-between">
+      <div
+        className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-10 lg:min-h-screen lg:max-w-[1100px] lg:justify-between"
+        aria-label={t("aria.pageLabelMover")}
+      >
         {/* 헤더 */}
         <ProfileFormHeader titleKey="moverTitle" descriptionKey="moverRegisterInfo" />
 
@@ -97,13 +98,11 @@ const MoverRegisterPage = () => {
         <form
           className="flex w-full max-w-[327px] flex-col gap-5 lg:max-w-full lg:flex-row lg:justify-between"
           onSubmit={handleSubmit(onSubmit)}
+          aria-label={t("aria.formLabelMover")}
         >
           {/* 왼쪽 컬럼 */}
-          <div className="flex w-full flex-col gap-5 lg:w-[500px]">
-            {/* 프로필 이미지 */}
+          <div className="flex w-full flex-col gap-5 lg:w-[500px]" aria-label={t("aria.formLeftColumn")}>
             <ProfileImageUpload selectedImage={selectedImage} onImageChange={setSelectedImage} />
-
-            {/* 별명 */}
             <FormField
               name="nickname"
               label={t("nickname")}
@@ -111,8 +110,6 @@ const MoverRegisterPage = () => {
               rules={validationRules.nickname}
               methods={methods}
             />
-
-            {/* 경력 */}
             <FormField
               name="career"
               label={t("career")}
@@ -120,8 +117,6 @@ const MoverRegisterPage = () => {
               rules={validationRules.career}
               methods={methods}
             />
-
-            {/* 한 줄 소개 */}
             <FormField
               name="shortIntro"
               label={t("shortIntro")}
@@ -132,8 +127,7 @@ const MoverRegisterPage = () => {
           </div>
 
           {/* 오른쪽 컬럼 */}
-          <div className="flex w-full flex-col gap-5 lg:w-[500px]">
-            {/* 상세 설명 */}
+          <div className="flex w-full flex-col gap-5 lg:w-[500px]" aria-label={t("aria.formRightColumn")}>
             <FormField
               name="detailIntro"
               label={t("detailIntro")}
@@ -142,21 +136,15 @@ const MoverRegisterPage = () => {
               type="textarea"
               methods={methods}
             />
-
-            {/* 제공 서비스 */}
             <ServiceSelection selectedServices={services} onServicesChange={setServices} titleKey="serviceTypes" />
-
-            {/* 서비스 가능 지역 */}
             <RegionSelection
               selectedRegions={regions}
               onRegionsChange={(value) => setRegions(value as string[])}
               titleKey="currentAreas"
-              multiple={true}
+              multiple
             />
-
-            {/* 버튼 */}
-            <div className="mt-6 w-full lg:mt-12 lg:self-end">
-              <ProfileFormButton onClick={methods.handleSubmit(onSubmit)} disabled={!allFilled} />
+            <div className="mt-6 w-full lg:mt-12 lg:self-end" aria-label={t("aria.submitButtonSection")}>
+              <ProfileFormButton onClick={handleSubmit(onSubmit)} disabled={!allFilled} />
             </div>
           </div>
         </form>

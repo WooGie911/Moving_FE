@@ -251,6 +251,27 @@
       "errorMessage": "수정에 실패했습니다.",
       "generalError": "오류가 발생했습니다.",
       "confirm": "확인"
+    },
+    "aria": {
+      "pageLabel": "일반 유저 프로필 등록 페이지",
+      "formLabel": "일반 유저 프로필 등록 폼",
+      "formContainerLabel": "일반 유저 프로필 등록 폼 컨테이너",
+      "headerLabel": "프로필 등록 헤더",
+      "profileImgLabel": "프로필 이미지 업로드 섹션",
+      "profileImgButtonAlt": "선택된 프로필 이미지",
+      "defaultProfileImgAlt": "기본 프로필 이미지",
+      "formFieldLabel": "{field} 폼 필드",
+      "regionSelectionLabel": "내가 사는 지역 선택",
+      "profileSubmitButton": "프로필 등록 버튼",
+      "pageLabelMover": "이사 기사 프로필 등록 페이지",
+      "formLabelMover": "이사 기사 프로필 등록 폼",
+      "formLeftColumn": "왼쪽 입력 영역",
+      "formRightColumn": "오른쪽 입력 영역",
+      "submitButtonSection": "프로필 제출 버튼 영역",
+      "serviceSelectionLabelCustomer": "이용 서비스 선택",
+      "serviceSelectionLabelMover": "제공 서비스 선택",
+      "regionSelectionLabelCustomer": "내가 사는 지역 선택",
+      "regionSelectionLabelMover": "서비스 가능 지역 선택"
     }
   },
   "search": {

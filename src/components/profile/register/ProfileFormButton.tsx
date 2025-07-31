@@ -15,7 +15,10 @@ export const ProfileFormButton = ({ onClick, disabled, className = "", buttonTex
   const t = useTranslations("profile");
 
   return (
-    <div className={`flex w-[327px] flex-col gap-2 lg:w-full lg:flex-row lg:gap-5 ${className}`}>
+    <section
+      className={`flex w-[327px] flex-col gap-2 lg:w-full lg:flex-row lg:gap-5 ${className}`}
+      aria-label={t("aria.profileSubmitButton")}
+    >
       <Button
         variant="solid"
         width="w-full"
@@ -27,6 +30,6 @@ export const ProfileFormButton = ({ onClick, disabled, className = "", buttonTex
       >
         <div className="justify-center text-center">{buttonText || t("start")}</div>
       </Button>
-    </div>
+    </section>
   );
 };

@@ -3,8 +3,7 @@
 import React from "react";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { REGION_OPTIONS, REGION_MAPPING } from "@/constant/profile";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface IRegionSelectionProps {
   selectedRegions: string | string[];
@@ -48,20 +47,24 @@ export const RegionSelection = ({
     return (selectedRegions as string) === regionValue;
   };
 
+  // ✅ titleKey 기반으로 customer vs mover ARIA 분기 처리
+  const ariaLabelKey =
+    titleKey === "currentAreas" ? "aria.regionSelectionLabelMover" : "aria.regionSelectionLabelCustomer";
+
   return (
-    <div className={`flex flex-col gap-6 ${className}`}>
+    <div className={`flex flex-col gap-6 ${className}`} aria-label={t(ariaLabelKey)}>
       <div className="flex flex-col gap-2">
         <div className="inline-flex items-center gap-1">
-          <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
+          <span className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
             {t(titleKey)}
-          </div>
-          <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
+          </span>
+          <span className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</span>
         </div>
         {descriptionKey && <span className="text-xs text-gray-400 lg:text-lg">* {t(descriptionKey)}</span>}
       </div>
 
-      <div className="flex w-[327px] flex-col gap-4 lg:w-[450px]">
-        <div className={`grid w-full gap-2 lg:gap-4 ${locale === "en" ? "grid-cols-3 gap-x-6" : "grid-cols-5"}`}>
+      <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
+        <div className={`grid w-full gap-2 lg:gap-3.5 ${locale === "en" ? "grid-cols-3" : "grid-cols-5"}`}>
           {REGION_OPTIONS.map((region) => {
             const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
             return (

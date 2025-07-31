@@ -3,8 +3,8 @@
 import React from "react";
 import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
-import { useLocale, useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface IFormFieldProps {
   name: string;
@@ -31,15 +31,17 @@ export const FormField = ({
   methods,
   className = "",
 }: IFormFieldProps) => {
+  const t = useTranslations("profile");
+
   return (
-    <div className={`flex flex-col gap-4 ${className}`}>
-      <div className="inline-flex items-center gap-1">
-        <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">{label}</div>
+    <fieldset className={`flex flex-col gap-4 ${className}`} aria-label={t("aria.formFieldLabel", { field: label })}>
+      <legend className="inline-flex items-center gap-1">
+        <span className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">{label}</span>
         {required && (
-          <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
+          <span className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</span>
         )}
-      </div>
-      <div className="border-border-light w-[327px] border-b-1 pb-8 lg:w-full">
+      </legend>
+      <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
         {type === "textarea" ? (
           <TextAreaInput
             name={name}
@@ -52,6 +54,6 @@ export const FormField = ({
           <TextInput name={name} placeholder={placeholder} rules={rules} wrapperClassName={wrapperClassName} />
         )}
       </div>
-    </div>
+    </fieldset>
   );
 };

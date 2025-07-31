@@ -31,8 +31,15 @@ export const ServiceSelection = ({
     );
   };
 
+  // ✅ titleKey 기반으로 역할 분기하여 aria-label 키 선택
+  const ariaLabelKey =
+    titleKey === "serviceTypes" ? "aria.serviceSelectionLabelMover" : "aria.serviceSelectionLabelCustomer";
+
   return (
-    <div className={`border-border-light flex flex-col gap-6 border-b-1 pb-4 ${className}`}>
+    <div
+      className={`border-border-light flex flex-col gap-6 border-b-1 pb-4 ${className}`}
+      aria-label={t(ariaLabelKey)}
+    >
       <div className="flex flex-col gap-2">
         <div className="inline-flex items-center gap-1">
           <span className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
