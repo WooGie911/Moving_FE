@@ -29,23 +29,25 @@ const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest =
   ].join(" ");
 
   return (
-    <div className="flex flex-col items-end">
+    <article className="flex flex-col items-end" role="article" aria-label={isQuestion ? "질문" : "답변"}>
       <div
         className={bubbleClass}
         style={{
           alignSelf: isQuestion ? "flex-start" : "flex-end",
         }}
+        role={isQuestion ? "region" : "region"}
+        aria-label={isQuestion ? "질문 내용" : "답변 내용"}
       >
         {children}
       </div>
 
       {/* 수정하기 버튼 - 답변이고 최신이 아니고 수정 함수가 있을 때만 표시 */}
       {isAnswer && !isLatest && onEdit && (
-        <button className={SPEECH_BUBBLE_STYLES.editButton} onClick={onEdit}>
+        <button className={SPEECH_BUBBLE_STYLES.editButton} onClick={onEdit} aria-label={`답변 수정하기`}>
           {t("estimateRequest.editAnswer")}
         </button>
       )}
-    </div>
+    </article>
   );
 };
 
