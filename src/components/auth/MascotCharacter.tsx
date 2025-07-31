@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import userAvatarLg from "@/assets/img/mascot/user-avatartion-lg.png";
 import moverAvatarLg from "@/assets/img/mascot/mover-avatartion-lg.png";
-import { UserType } from "@/types/user";
+import { TUserType } from "@/types/user";
 
-const MascotCharacter = ({ userType }: { userType: UserType }) => {
+const MascotCharacter = ({ userType }: { userType: TUserType }) => {
   const avatarSrc = userType === "CUSTOMER" ? userAvatarLg : moverAvatarLg;
   const altText = userType === "CUSTOMER" ? "userAvatar" : "moverAvatar";
 

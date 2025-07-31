@@ -9,14 +9,15 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useTranslations } from "next-intl";
-import { UserType } from "@/types/user";
+import { TUserType } from "@/types/user";
+import Link from "next/link";
 
-interface SigninFormProps {
-  userType: UserType;
+interface ISigninFormProps {
+  userType: TUserType;
   signupLink: string;
 }
 
-const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
+const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
   const { login, isLoading } = useAuth();
   const validationRules = useValidationRules();
   const { open, close } = useModal();
@@ -33,11 +34,9 @@ const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
     formState: { errors, isValid },
   } = form;
 
-  // 입력 값 감시
   const email = watch("email");
   const password = watch("password");
 
-  // 로그인 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
   const onSubmit = async () => {
@@ -60,7 +59,9 @@ const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
         <div className="mb-6 flex flex-col gap-2 font-normal">
-          <span className="text-black-400 text-md">{t("email")}</span>
+          <label htmlFor="email" className="text-black-400 text-md">
+            {t("email")}
+          </label>
           <BaseInput
             {...register("email", validationRules.email)}
             error={errors.email?.message}
@@ -71,7 +72,9 @@ const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
         </div>
 
         <div className="mb-6 flex flex-col gap-2">
-          <span className="text-black-400 text-md font-normal">{t("password")}</span>
+          <label htmlFor="password" className="text-black-400 text-md font-normal">
+            {t("password")}
+          </label>
           <PasswordInput
             {...register("password", validationRules.password)}
             placeholder={t("passwordPlaceholder")}
@@ -81,10 +84,11 @@ const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          {/* 로그인 버튼 */}
           <button
             type="submit"
             disabled={!isFormValid || isLoading}
+            aria-disabled={!isFormValid || isLoading}
+            aria-busy={isLoading}
             className={`mt-4 rounded-xl px-4 py-4 text-lg font-semibold text-white transition ${
               isFormValid && !isLoading
                 ? "bg-primary-400 hover:bg-primary-500 cursor-pointer"
@@ -100,12 +104,12 @@ const SigninForm = ({ userType, signupLink }: SigninFormProps) => {
               t("login")
             )}
           </button>
-          {/* 회원가입 링크 */}
+
           <div className="flex w-full items-center justify-center gap-2">
             <span className="text-black-200 text-lg">{t("notMemberYet")}</span>
-            <a href={signupLink}>
-              <span className="text-primary-400 text-lg font-semibold underline">{t("signup")}</span>
-            </a>
+            <Link href={signupLink} className="text-primary-400 text-lg font-semibold underline">
+              {t("signup")}
+            </Link>
           </div>
         </div>
       </form>

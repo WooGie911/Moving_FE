@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import logo from "@/assets/img/logo/textlogo-lg.png";
-import { UserType } from "@/types/user";
+import { TUserType } from "@/types/user";
 
-const SigninHeader = ({ userType }: { userType: UserType }) => {
+const SigninHeader = ({ userType }: { userType: TUserType }) => {
   const t = useTranslations("auth");
 
   const getAlternateUserTypeInfo = () => {
@@ -29,15 +29,21 @@ const SigninHeader = ({ userType }: { userType: UserType }) => {
   const alternateInfo = getAlternateUserTypeInfo();
 
   return (
-    <div className="flex h-[100px] w-[250px] flex-col items-center justify-between gap-[11px] md:gap-[18px]">
-      <Link href="/">
-        <Image src={logo} alt="logo" width={100} height={100} />
+    <header
+      className="flex h-[100px] w-[300px] flex-col items-center justify-between gap-[11px] md:gap-[18px]"
+      aria-label={t("signinPageHeader")}
+    >
+      <Link href="/" aria-label={t("goToHome")}>
+        <Image src={logo} alt="떠나요 로고" width={100} height={100} priority />
       </Link>
-      <Link href={alternateInfo.href}>
+
+      <div aria-label={t("signinHeaderSwitchRoleLabel")}>
         <span className="text-black-200 text-lg">{alternateInfo.message}</span>
-        <span className="text-primary-400 ml-2 text-lg font-semibold underline">{alternateInfo.link}</span>
-      </Link>
-    </div>
+        <Link href={alternateInfo.href} className="text-primary-400 ml-2 text-lg font-semibold underline">
+          {alternateInfo.link}
+        </Link>
+      </div>
+    </header>
   );
 };
 

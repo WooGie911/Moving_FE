@@ -1,4 +1,4 @@
-export type UserType = "CUSTOMER" | "MOVER";
+export type TUserType = "CUSTOMER" | "MOVER";
 
 export interface IEditBasicForm {
   name: string;
