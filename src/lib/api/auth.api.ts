@@ -68,11 +68,6 @@ const authApi = {
 
     const responseData = await response.json();
 
-    // 토큰 갱신 성공 시 쿠키에 저장
-    if (responseData.success) {
-      setTokensToCookie(responseData.accessToken);
-    }
-
     return responseData;
   },
 
