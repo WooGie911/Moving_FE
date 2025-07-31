@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/providers/AuthProvider";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
 import ReviewAvg from "./ReviewAvg";
@@ -16,8 +17,9 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
   const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
-  const [isLoadingQuote, setIsLoadingQuote] = useState(true);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(false);
   const deviceType = useWindowWidth();
+  const { isLoggedIn, user } = useAuth();
   const t = useTranslations("mover");
 
   // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
@@ -55,6 +57,13 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   useEffect(() => {
     const fetchActiveQuote = async () => {
+      // 로그인한 고객 사용자만 활성 견적 조회
+      if (!isLoggedIn || user?.userType !== "CUSTOMER") {
+        setQuoteId(undefined);
+        setIsLoadingQuote(false);
+        return;
+      }
+
       try {
         setIsLoadingQuote(true);
         const response = await estimateRequestApi.getActive();
@@ -73,7 +82,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     };
 
     fetchActiveQuote();
-  }, []);
+  }, [isLoggedIn, user?.userType]);
 
   return (
     <div
