@@ -715,9 +715,9 @@
     "selectDate": "Please select a date",
     "scheduleFor": "Schedule",
     "noSchedules": "No schedules for this date.",
+    "noSchedule": "No schedules for this date.",
     "selectDateToView": "Select a date on the calendar to view detailed schedules.",
     "customerSuffix": "",
-    "time": "Time:",
     "type": "Type:",
     "departure": "From:",
     "arrival": "To:",
@@ -727,6 +727,12 @@
       "confirmed": "Confirmed",
       "pending": "Pending",
       "completed": "Completed"
-    }
+    },
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "completed": "Completed",
+    "movingType": "Moving Type",
+    "from": "From",
+    "to": "To"
   }
 }
