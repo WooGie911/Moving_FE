@@ -17,6 +17,7 @@ import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
 import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useLanguageStore } from "@/stores/languageStore";
 
 interface IDateObj {
@@ -125,20 +126,23 @@ const CalendarWithSchedule: React.FC<ICalendarWithScheduleProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const today = startOfDay(new Date());
-  const { t } = useLanguageStore();
+  const t = useTranslations("estimateRequest");
 
-  // 요일 배열을 번역 함수로 생성
+  // 언어 변경 시 강제 리렌더링을 위한 언어 상태 사용
+  const { language } = useLanguageStore();
+
+  // 요일 배열을 번역 함수로 생성 (언어 변경 시 자동 업데이트)
   const daysOfWeek = useMemo(
     () => [
-      t("estimateRequest.weekdays.sunday"),
-      t("estimateRequest.weekdays.monday"),
-      t("estimateRequest.weekdays.tuesday"),
-      t("estimateRequest.weekdays.wednesday"),
-      t("estimateRequest.weekdays.thursday"),
-      t("estimateRequest.weekdays.friday"),
-      t("estimateRequest.weekdays.saturday"),
+      t("weekdays.sunday"),
+      t("weekdays.monday"),
+      t("weekdays.tuesday"),
+      t("weekdays.wednesday"),
+      t("weekdays.thursday"),
+      t("weekdays.friday"),
+      t("weekdays.saturday"),
     ],
-    [t],
+    [t, language], // language를 의존성에 추가하여 언어 변경 시 업데이트
   );
 
   // 캘린더 매트릭스를 useMemo로 메모이제이션

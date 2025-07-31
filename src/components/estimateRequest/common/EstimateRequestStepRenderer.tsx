@@ -32,14 +32,14 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
       // case 1: 이사 종류(소형/가정/사무실) 선택 화면
       case 1:
         return (
-          <div className="fade-in-up">
+          <section className="fade-in-up" role="region" aria-label="이사 종류 선택">
             <MovingTypeSection value={form.movingType} onSelect={onSelectMovingType} />
-          </div>
+          </section>
         );
       // case 2: 이사 날짜 선택 화면
       case 2:
         return (
-          <div className="fade-in-up">
+          <section className="fade-in-up" role="region" aria-label="이사 날짜 선택">
             <SpeechBubble type="question">{t("estimateRequest.dateQuestion")}</SpeechBubble>
             <SpeechBubble type="question">
               <DateSection
@@ -49,12 +49,12 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
                 className="mx-auto min-w-[327px] lg:max-w-160"
               />
             </SpeechBubble>
-          </div>
+          </section>
         );
       // case 3: 출발지/도착지 주소 입력 화면
       case 3:
         return (
-          <div className="fade-in-up">
+          <section className="fade-in-up" role="region" aria-label="주소 입력">
             <SpeechBubble type="question">{t("estimateRequest.addressQuestion")}</SpeechBubble>
             <SpeechBubble type="question">
               <div className={ESTIMATE_REQUEST_STYLES.addressContainer}>
@@ -83,33 +83,34 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
                     }
                   }}
                   className="mt-6"
+                  aria-label="견적 요청 확정"
                 >
                   {customButtonText || t("estimateRequest.confirmEstimateRequest")}
                 </Button>
               </div>
             </SpeechBubble>
-          </div>
+          </section>
         );
       // case 4: 입력한 모든 정보를 요약해서 보여주고, 최종 확인(요청) 버튼을 제공하는 화면
       case 4:
         return (
-          <div className="fade-in-up">
+          <section className="fade-in-up" role="region" aria-label="견적 요청 정보 확인">
             <SpeechBubble type="answer" isLatest={true}>
-              <div className={ESTIMATE_REQUEST_STYLES.resultContainer}>
-                <div className={ESTIMATE_REQUEST_STYLES.resultItem}>
+              <div className={ESTIMATE_REQUEST_STYLES.resultContainer} role="list" aria-label="견적 요청 정보 목록">
+                <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.movingType")}:{" "}
                   {form.movingType
                     ? `${t(`estimateRequest.movingTypes.${form.movingType}`)} (${t(`estimateRequest.movingTypes.${form.movingType}Desc`)})`
                     : ""}
                 </div>
-                <div className={ESTIMATE_REQUEST_STYLES.resultItem}>
+                <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.movingDate")}: {formatDateByLanguage(form.movingDate, locale)}
                 </div>
-                <div className={ESTIMATE_REQUEST_STYLES.resultItem}>
+                <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.departure")}: {shortenRegionInAddress(form.departure.roadAddress)}{" "}
                   {form.departure.detailAddress}
                 </div>
-                <div className={ESTIMATE_REQUEST_STYLES.resultItem}>
+                <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.arrival")}: {shortenRegionInAddress(form.arrival.roadAddress)}{" "}
                   {form.arrival.detailAddress}
                 </div>
@@ -125,13 +126,14 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
                     height={ESTIMATE_REQUEST_STYLES.button}
                     rounded="rounded-[16px]"
                     onClick={() => onConfirmEstimateRequest(form)}
+                    aria-label="견적 요청 최종 확정"
                   >
                     {t("estimateRequest.confirmEstimateRequest")}
                   </Button>
                 </div>
               </SpeechBubble>
             )}
-          </div>
+          </section>
         );
       default:
         return undefined;

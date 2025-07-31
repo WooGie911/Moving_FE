@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import EstimateRequestCreatePage from "@/pageComponents/estimateRequest/create/EstimateRequestCreatePage";
 import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/EstimateRequestEditPage";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export default function EstimateRequestPageWrapper() {
   const [hasActiveEstimateRequest, setHasActiveEstimateRequest] = useState<boolean | undefined>(undefined);
@@ -30,10 +31,11 @@ export default function EstimateRequestPageWrapper() {
     }
   };
 
+  // 로딩 중일 때
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-200">
-        <div className="text-lg">로딩 중...</div>
+      <div className="min-h-screen bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText="견적 요청 페이지를 준비하고 있습니다..." />
       </div>
     );
   }

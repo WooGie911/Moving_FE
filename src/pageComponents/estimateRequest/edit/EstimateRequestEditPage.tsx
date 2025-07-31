@@ -15,6 +15,8 @@ import { shortenRegionInAddress } from "@/utils/regionMapping";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
 
+import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
+
 const EstimateRequestEditPage = () => {
   const [estimateRequestData, setEstimateRequestData] = useState<IEstimateRequestResponse | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -50,6 +52,47 @@ const EstimateRequestEditPage = () => {
   // 주소 모달 훅 사용
   const { handleDepartureModal, handleArrivalModal } = useEstimateRequestAddressModal(handleAddressUpdate);
 
+  // 기사님이 보낸 견적이 있는지 확인하는 공통 함수
+  const checkEstimatesAndRedirect = useCallback(async () => {
+    try {
+      const response = await estimateRequestApi.getActive();
+      if (response.success && response.data && response.data.hasEstimates) {
+        // 기사님이 보낸 견적이 있으면 pending 페이지로 리다이렉트
+        router.push("/estimateRequest/pending");
+        return true;
+      }
+    } catch (error) {
+      console.error("견적 상태 확인 실패:", error);
+    }
+    return false;
+  }, [router]);
+
+  // 견적 데이터로 폼을 초기화하는 공통 함수
+  const initializeFormFromData = useCallback(
+    (data: IEstimateRequestResponse) => {
+      setForm({
+        movingType: data.movingType.toLowerCase() as "small" | "home" | "office",
+        movingDate: data.movingDate,
+        isDateConfirmed: true,
+        departure: {
+          roadAddress: data.departureAddress,
+          detailAddress: data.departureDetailAddress || "",
+          zoneCode: "",
+          jibunAddress: "",
+          extraAddress: "",
+        },
+        arrival: {
+          roadAddress: data.arrivalAddress,
+          detailAddress: data.arrivalDetailAddress || "",
+          zoneCode: "",
+          jibunAddress: "",
+          extraAddress: "",
+        },
+      });
+    },
+    [setForm],
+  );
+
   // 활성 견적 데이터 로드 및 존재 여부 확인
   useEffect(() => {
     fetchEstimateRequestData();
@@ -79,25 +122,7 @@ const EstimateRequestEditPage = () => {
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
-        setForm({
-          movingType: response.data.movingType.toLowerCase() as "small" | "home" | "office",
-          movingDate: response.data.movingDate,
-          isDateConfirmed: true,
-          departure: {
-            roadAddress: response.data.departureAddress,
-            detailAddress: response.data.departureDetailAddress || "",
-            zoneCode: "",
-            jibunAddress: "",
-            extraAddress: "",
-          },
-          arrival: {
-            roadAddress: response.data.arrivalAddress,
-            detailAddress: response.data.arrivalDetailAddress || "",
-            zoneCode: "",
-            jibunAddress: "",
-            extraAddress: "",
-          },
-        });
+        initializeFormFromData(response.data);
       } else if (response.success && !response.hasActive) {
         showErrorModal(t("estimateRequest.noActiveEstimateRequest"));
       } else {
@@ -140,32 +165,19 @@ const EstimateRequestEditPage = () => {
   }, [pendingAnswer, step, setShowNextQuestion, setPendingAnswer, setStep]);
 
   // 수정하기 핸들러 - edit 모드로 전환하여 질문 플로우 시작
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!estimateRequestData) {
       showErrorModal(t("estimateRequest.noDataAvailable"));
       return;
     }
 
+    // 기사님이 보낸 견적이 있는지 확인
+    if (await checkEstimatesAndRedirect()) {
+      return;
+    }
+
     // 기존 데이터로 폼 초기화
-    setForm({
-      movingType: estimateRequestData.movingType.toLowerCase() as "small" | "home" | "office",
-      movingDate: estimateRequestData.movingDate,
-      isDateConfirmed: true,
-      departure: {
-        roadAddress: estimateRequestData.departureAddress,
-        detailAddress: estimateRequestData.departureDetailAddress || "",
-        zoneCode: "",
-        jibunAddress: "",
-        extraAddress: "",
-      },
-      arrival: {
-        roadAddress: estimateRequestData.arrivalAddress,
-        detailAddress: estimateRequestData.arrivalDetailAddress || "",
-        zoneCode: "",
-        jibunAddress: "",
-        extraAddress: "",
-      },
-    });
+    initializeFormFromData(estimateRequestData);
 
     // edit 모드로 전환하고 첫 번째 질문부터 시작
     setIsEditMode(true);
@@ -181,7 +193,12 @@ const EstimateRequestEditPage = () => {
   };
 
   // 삭제 핸들러
-  const handleDeleteClick = () => {
+  const handleDeleteClick = async () => {
+    // 기사님이 보낸 견적이 있는지 확인
+    if (await checkEstimatesAndRedirect()) {
+      return;
+    }
+
     apiLogic.showDeleteConfirmModal(() => {
       deleteMutation.mutate();
     });
@@ -244,25 +261,21 @@ const EstimateRequestEditPage = () => {
     return answers;
   }, [step, form, t, language, handleEditMovingType, handleEditMovingDate]);
 
-  // 로딩 상태
+  // 로딩 상태 - 전역 로딩이 표시되므로 별도 UI 불필요
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-200">
-        <div className="flex min-h-screen items-center justify-center">
-          <div className="text-lg">{t("common.loading")}</div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   // 데이터 없음 상태
   if (!estimateRequestData) {
     return (
-      <div className="min-h-screen bg-gray-200">
+      <main className="min-h-screen bg-gray-200" role="main" aria-label="견적 요청 편집 페이지">
         <div className="flex min-h-screen items-center justify-center">
-          <div className="text-lg">{t("estimateRequest.noDataAvailable")}</div>
+          <div className="text-lg" role="status" aria-live="polite">
+            {t("estimateRequest.noDataAvailable")}
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -287,41 +300,15 @@ const EstimateRequestEditPage = () => {
   const departureDisplay = `${shortenRegionInAddress(estimateRequestData.departureAddress)}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;
   const arrivalDisplay = `${shortenRegionInAddress(estimateRequestData.arrivalAddress)}${estimateRequestData.arrivalDetailAddress ? ` ${estimateRequestData.arrivalDetailAddress}` : ""}`;
 
-  // edit 모드일 때 create와 동일한 질문 플로우 렌더링
+  // edit 모드일 때 공통 컴포넌트 사용
   if (isEditMode) {
     return (
-      <EstimateRequestLayout title={t("estimateRequest.editTitle")} progress={progress}>
-        <div className="fade-in-up">
-          <SpeechBubble type="question">{t("estimateRequest.intro")}</SpeechBubble>
-        </div>
-        <div className="fade-in-up">
-          <SpeechBubble type="question">{t("estimateRequest.movingTypeQuestion")}</SpeechBubble>
-        </div>
-
-        {/* 이전 답변들 */}
-        {renderPreviousAnswers()}
-
-        {/* 현재 답변 말풍선 */}
-        {renderAnswerBubble()}
-
-        {/* 현재 단계 */}
-        <EstimateRequestStepRenderer
-          step={step}
-          showNextQuestion={showNextQuestion}
-          form={form}
-          t={t}
-          locale={language}
-          isFormValid={isFormValid}
-          onSelectMovingType={handleSelectMovingType}
-          onDateChange={handleDateChange}
-          onDateComplete={handleDateComplete}
-          onDepartureModal={handleDepartureModal}
-          onArrivalModal={handleArrivalModal}
-          onConfirmEstimateRequest={handleConfirmEdit}
-          customButtonText={t("estimateRequest.editButton")}
-          showConfirmModal={apiLogic.showUpdateConfirmModal}
-        />
-      </EstimateRequestLayout>
+      <EstimateRequestFlow
+        title={t("estimateRequest.editTitle")}
+        onConfirm={(form: any) => updateMutation.mutate(form)}
+        customButtonText={t("estimateRequest.editButton")}
+        showConfirmModal={apiLogic.showUpdateConfirmModal}
+      />
     );
   }
 
@@ -329,34 +316,41 @@ const EstimateRequestEditPage = () => {
   return (
     <EstimateRequestLayout title={t("estimateRequest.editTitle")} progress={100}>
       {/* 기존 견적 정보 말풍선들 */}
-      <div className="fade-in-up">
+      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
           {t("estimateRequest.result.movingType")}: {getMoveTypeLabel(estimateRequestData.movingType)}
         </SpeechBubble>
-      </div>
-      <div className="fade-in-up">
+      </section>
+      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
           {t("estimateRequest.result.movingDate")}: {moveDateLabel}
         </SpeechBubble>
-      </div>
-      <div className="fade-in-up">
+      </section>
+      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
           {t("estimateRequest.result.departure")}: {departureDisplay}
         </SpeechBubble>
-      </div>
-      <div className="fade-in-up">
+      </section>
+      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
           {t("estimateRequest.result.arrival")}: {arrivalDisplay}
         </SpeechBubble>
-      </div>
+      </section>
 
       {/* 수정/삭제 질문 말풍선 */}
-      <div className="fade-in-up">
+      <section className="fade-in-up" role="region" aria-label="견적 요청 수정 또는 삭제">
         <SpeechBubble type="question">
           <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
             <p className="text-black-400">{t("estimateRequest.editQuestion")}</p>
             <div className="flex gap-3">
-              <Button variant="outlined" width="flex-1" height="h-[54px]" rounded="rounded-[16px]" onClick={handleEdit}>
+              <Button
+                variant="outlined"
+                width="flex-1"
+                height="h-[54px]"
+                rounded="rounded-[16px]"
+                onClick={handleEdit}
+                aria-label="견적 요청 수정하기"
+              >
                 {t("estimateRequest.editButton")}
               </Button>
               <Button
@@ -365,13 +359,14 @@ const EstimateRequestEditPage = () => {
                 height="h-[54px]"
                 rounded="rounded-[16px]"
                 onClick={handleDeleteClick}
+                aria-label="견적 요청 삭제하기"
               >
                 {t("estimateRequest.deleteButton")}
               </Button>
             </div>
           </div>
         </SpeechBubble>
-      </div>
+      </section>
     </EstimateRequestLayout>
   );
 };
