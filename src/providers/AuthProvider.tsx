@@ -13,6 +13,7 @@ type TUser = {
   nickname: string | null;
   userType: "CUSTOMER" | "MOVER";
   customerImage?: string;
+  moverImage?: string;
 };
 
 export type TSignInResponse = {

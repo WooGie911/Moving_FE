@@ -192,7 +192,7 @@
     "start": "Start",
     "optional": "(Optional)",
     "cancel": "Cancel",
-    "edit": "Edit",
+    "editButton": "Edit",
 
     "customerRegisterInfo": "Please provide additional information to complete your registration.",
     "moverRegisterInfo": "Please provide additional information to complete your registration.",
@@ -231,30 +231,84 @@
     "currentAreas": "Service Areas",
     "edit": {
       "title": "Edit Profile",
+      "customerTitle": "Edit Customer Profile",
       "profileImage": "Profile Image",
+
+      "name": "Name",
+      "namePlaceholder": "Enter your name",
+
       "nickname": "Nickname",
       "nicknamePlaceholder": "Enter your nickname",
+
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+
       "career": "Career",
       "careerPlaceholder": "ex) 8",
+
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter your current password",
+
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter a new password",
+
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Re-enter your new password",
+      "confirmNewPasswordRequired": "Please confirm your new password",
+      "passwordMismatch": "Passwords do not match",
+
       "shortIntro": "Introduction",
       "shortIntroPlaceholder": "Enter a brief introduction (minimum 8 characters)",
+
       "detailIntro": "Description",
       "detailIntroPlaceholder": "Enter a detailed description (minimum 10 characters)",
+
       "providedServices": "Provided Services",
       "serviceAreas": "Service Areas",
+
       "required": "*",
       "requiredField": "Required",
       "minLength8": "Please enter at least 8 characters",
       "minLength10": "Please enter at least 10 characters",
       "minCareer": "Career must be at least 0 years",
+
       "save": "Save Changes",
       "cancel": "Cancel",
+
       "successTitle": "Profile Update Complete",
-      "successMessage": "Profile has been updated successfully.",
+      "successMessage": "Your profile has been updated successfully.",
+
       "errorTitle": "Profile Update Failed",
-      "errorMessage": "Update failed.",
+      "errorMessage": "Failed to update profile.",
       "generalError": "An error occurred.",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+
+      "optional": "(Optional)"
+    },
+    "aria": {
+      "pageLabel": "Customer profile registration page",
+      "formLabel": "Customer profile registration form",
+      "formContainerLabel": "Customer profile registration form container",
+      "headerLabel": "Profile registration header",
+      "profileImgLabel": "Profile image upload section",
+      "profileImgButtonAlt": "Selected profile image",
+      "defaultProfileImgAlt": "Default profile image",
+      "formFieldLabel": "{field} form field",
+      "serviceSelectionLabel": "Select services to use",
+      "regionSelectionLabel": "Select your current region",
+      "profileSubmitButton": "Profile submit button",
+      "pageLabelMover": "Mover profile registration page",
+      "formLabelMover": "Mover profile registration form",
+      "formLeftColumn": "Left input column",
+      "formRightColumn": "Right input column",
+      "submitButtonSection": "Profile submit button section",
+      "serviceSelectionLabelCustomer": "Select services to use",
+      "serviceSelectionLabelMover": "Select services you offer",
+      "regionSelectionLabelCustomer": "Select your current region",
+      "regionSelectionLabelMover": "Select serviceable regions"
     }
   },
   "search": {
@@ -715,9 +769,9 @@
     "selectDate": "Please select a date",
     "scheduleFor": "Schedule",
     "noSchedules": "No schedules for this date.",
+    "noSchedule": "No schedules for this date.",
     "selectDateToView": "Select a date on the calendar to view detailed schedules.",
     "customerSuffix": "",
-    "time": "Time:",
     "type": "Type:",
     "departure": "From:",
     "arrival": "To:",
@@ -727,6 +781,12 @@
       "confirmed": "Confirmed",
       "pending": "Pending",
       "completed": "Completed"
-    }
+    },
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "completed": "Completed",
+    "movingType": "Moving Type",
+    "from": "From",
+    "to": "To"
   }
 }

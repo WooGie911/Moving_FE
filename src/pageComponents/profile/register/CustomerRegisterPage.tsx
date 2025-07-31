@@ -1,31 +1,28 @@
 "use client";
 
-import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
-import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
-import { REGION_OPTIONS, SERVICE_MAPPING, SERVICE_OPTIONS, REGION_MAPPING } from "@/constant/profile";
-import { Button } from "@/components/common/button/Button";
 import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { TextInput } from "@/components/common/input/TextInput";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
+import {
+  ProfileFormHeader,
+  ProfileImageUpload,
+  FormField,
+  ServiceSelection,
+  RegionSelection,
+  ProfileFormButton,
+} from "@/components/profile/register";
+import { isValidName } from "@/utils/validators";
 
 const CustomerRegisterPage = () => {
   const router = useRouter();
   const validationRules = useValidationRules();
-
-  const locale = useLocale();
-
   const t = useTranslations("profile");
-  const regionT = useTranslations("region");
-  const serviceT = useTranslations("service");
-
   const { open, close } = useModal();
 
   const methods = useForm({
@@ -35,7 +32,6 @@ const CustomerRegisterPage = () => {
     },
   });
   const { handleSubmit, watch } = methods;
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [services, setServices] = useState<string[]>(["SMALL"]);
   const [regions, setRegions] = useState<string>("SEOUL");
@@ -46,32 +42,9 @@ const CustomerRegisterPage = () => {
   });
 
   const nickname = watch("nickname");
-  const allFilled = selectedImage && services.length > 0 && regions && nickname?.trim().length >= 2;
 
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    // 1. presigned URL 요청 및 s3 업로드
-    const fileUrl = await userApi.uploadFilesToS3(file);
-
-    // 2. 미리보기 이미지와 메타데이터 저장
-    const reader = new FileReader();
-    reader.onload = () => {
-      setSelectedImage({
-        name: file.name,
-        type: file.type,
-        dataUrl: fileUrl,
-      });
-    };
-
-    reader.readAsDataURL(file);
-  };
+  const isNicknameValid = nickname?.trim().length >= 2 && isValidName(nickname);
+  const allFilled = selectedImage && services.length > 0 && regions && isNicknameValid;
 
   const onSubmit = async (data: { nickname: string }) => {
     const response = await userApi.postProfile({
@@ -106,143 +79,57 @@ const CustomerRegisterPage = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-4 lg:mt-12 lg:max-w-[640px] lg:px-0 lg:pb-4">
+      <div
+        className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-10 lg:max-w-[640px] lg:px-0"
+        aria-label={t("aria.pageLabel")}
+      >
         {/* 폼 컨테이너 */}
-        <form className="flex max-w-[327px] flex-col gap-4 lg:max-w-[640px]" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex max-w-[327px] flex-col gap-4 lg:max-w-[640px]"
+          onSubmit={handleSubmit(onSubmit)}
+          aria-label={t("aria.formLabel")}
+        >
           {/* 헤더 */}
-          <div className="border-border-light flex flex-col items-start justify-center self-stretch border-b-1 pb-4">
-            <span className="text-2lg justify-center leading-relaxed font-bold text-neutral-800 lg:text-3xl">
-              {t("customerTitle")}
-            </span>
-            <span className="text-black-200 py-2 text-xs lg:text-xl">{t("customerRegisterInfo")}</span>
-          </div>
+          <ProfileFormHeader titleKey="customerTitle" descriptionKey="customerRegisterInfo" />
 
-          <div className="flex w-full flex-col gap-5 lg:w-[640px]">
+          <div className="flex w-full flex-col gap-5 lg:w-[640px]" aria-label={t("aria.formContainerLabel")}>
             {/* 프로필 이미지 */}
-            <div className="border-border-light flex flex-col gap-4 border-b-1 pb-4">
-              <div className="text-base leading-relaxed font-semibold text-zinc-800">{t("profileImg")}</div>
-              <div
-                className="flex h-[100px] w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 lg:h-[160px] lg:w-[160px]"
-                onClick={handleImageClick}
-              >
-                {selectedImage ? (
-                  <Image
-                    src={selectedImage.dataUrl}
-                    alt="선택된 프로필 이미지"
-                    width={160}
-                    height={160}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <Image
-                    src={uploadSkeleton}
-                    alt="기본 프로필 이미지"
-                    width={160}
-                    height={160}
-                    className="h-full w-full object-cover"
-                  />
-                )}
-              </div>
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-            </div>
+            <ProfileImageUpload
+              uploadSkeleton={uploadSkeleton.src}
+              selectedImage={selectedImage}
+              onImageChange={setSelectedImage}
+            />
 
             {/* 별명 */}
-            <div className="flex flex-col gap-4">
-              <div className="inline-flex items-center gap-1">
-                <div className="text-lg leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                  별명
-                </div>
-                <div className="text-lg leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">*</div>
-              </div>
-              <div className="border-border-light w-[327px] border-b-1 pb-4 lg:w-full">
-                <TextInput
-                  name="nickname"
-                  placeholder={t("nicknamePlaceholder")}
-                  rules={validationRules.nickname}
-                  wrapperClassName="w-[327px] lg:w-[500px] h-[54px]"
-                />
-              </div>
-            </div>
+            <FormField
+              name="nickname"
+              label={t("nickname")}
+              placeholder={t("nicknamePlaceholder")}
+              rules={validationRules.nickname}
+              methods={methods}
+            />
 
             {/* 이용 서비스 */}
-            <div className="border-border-light flex flex-col gap-6 border-b-1 pb-4">
-              <div className="flex flex-col gap-2">
-                <div className="inline-flex items-center gap-1">
-                  <span className="text-base leading-relaxed font-semibold text-zinc-800">
-                    {t("customerServiceTypes")}
-                  </span>
-                  <span className="text-base leading-relaxed font-semibold text-red-500">*</span>
-                </div>
-                <span className="text-xs text-gray-400 lg:text-lg">* {t("customerServiceTypesInfo")}</span>
-              </div>
-              <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {SERVICE_OPTIONS.map((service) => {
-                  const serviceCode = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
-                  return (
-                    <CircleTextLabel
-                      key={service}
-                      text={serviceT(service)}
-                      clickAble={true}
-                      isSelected={services.includes(serviceCode)}
-                      onClick={() => {
-                        setServices((prev) =>
-                          prev.includes(serviceCode) ? prev.filter((s) => s !== serviceCode) : [...prev, serviceCode],
-                        );
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+            <ServiceSelection
+              selectedServices={services}
+              onServicesChange={setServices}
+              titleKey="customerServiceTypes"
+              descriptionKey="customerServiceTypesInfo"
+            />
 
             {/* 내가 사는 지역 */}
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <div className="inline-flex items-center gap-1">
-                  <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
-                    {t("currentArea")}
-                  </div>
-                  <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-xl lg:leading-loose">
-                    *
-                  </div>
-                </div>
-                <span className="text-xs text-gray-400 lg:text-lg">* {t("currentAreaInfo")}</span>
-              </div>
-
-              <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
-                <div className={`grid w-full gap-2 lg:gap-3.5 ${locale === "en" ? "grid-cols-3" : "grid-cols-5"}`}>
-                  {REGION_OPTIONS.map((region) => {
-                    const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
-                    return (
-                      <CircleTextLabel
-                        key={region}
-                        text={regionT(region)}
-                        clickAble={true}
-                        isSelected={regions === regionValue}
-                        onClick={() => {
-                          setRegions(regions === regionValue ? "" : regionValue);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+            <RegionSelection
+              selectedRegions={regions}
+              onRegionsChange={(value) => setRegions(value as string)}
+              titleKey="currentArea"
+              descriptionKey="currentAreaInfo"
+              multiple={false}
+            />
           </div>
         </form>
-        <div className="flex w-[327px] flex-col gap-2 lg:w-full lg:flex-row lg:gap-5">
-          <Button
-            variant="solid"
-            width="w-full"
-            height="h-[54px] lg:h-[60px]"
-            className="order-1 items-center justify-center rounded-2xl bg-[#F9502E] p-4 text-base leading-relaxed font-semibold text-white lg:order-2"
-            onClick={methods.handleSubmit(onSubmit)}
-            disabled={!allFilled}
-            state={allFilled ? "default" : "disabled"}
-          >
-            <div className="justify-center text-center">{t("start")}</div>
-          </Button>
-        </div>
+
+        {/* 제출 버튼 */}
+        <ProfileFormButton onClick={methods.handleSubmit(onSubmit)} disabled={!allFilled} />
       </div>
     </FormProvider>
   );

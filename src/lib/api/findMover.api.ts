@@ -17,6 +17,7 @@ const findMoverApi = {
    */
   fetchMovers: async (
     params: IMoverListParams = {},
+    language?: string,
   ): Promise<{
     items: IMoverInfo[];
     nextCursor: string | null;
@@ -30,6 +31,7 @@ const findMoverApi = {
       if (params.sort) query.append("sort", params.sort);
       if (params.cursor) query.append("cursor", params.cursor);
       if (params.take) query.append("take", params.take.toString());
+      if (language) query.append("lang", language);
 
       const res = await fetch(`${API_URL}/movers?${query.toString()}`);
 
@@ -67,14 +69,15 @@ const findMoverApi = {
   /**
    * 찜한 기사님 조회 API
    */
-  fetchFavoriteMovers: async (): Promise<IMoverInfo[]> => {
+  fetchFavoriteMovers: async (language?: string): Promise<IMoverInfo[]> => {
     try {
       const accessToken = await getTokenFromCookie();
       if (!accessToken) {
         throw new Error("로그인이 필요합니다.");
       }
 
-      const res = await fetch(`${API_URL}/movers/favorite`, {
+      const queryParams = language ? `?lang=${language}` : "";
+      const res = await fetch(`${API_URL}/movers/favorite${queryParams}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -114,6 +117,7 @@ const findMoverApi = {
         headers.Authorization = `Bearer ${accessToken}`;
       }
 
+      const queryParams = language ? `?lang=${language}` : "";
       const res = await fetch(`${API_URL}/movers/${moverId}${queryParams}`, {
         headers,
       });

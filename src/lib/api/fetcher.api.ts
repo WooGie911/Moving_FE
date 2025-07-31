@@ -1,4 +1,4 @@
-import { getTokenFromCookie, setTokensToCookie } from "@/utils/auth";
+import { getTokenFromCookie } from "@/utils/auth";
 import authApi from "./auth.api";
 
 // TODO? : 제네릭 any 타입을 각 api 호출의 반환 타입으로 변경? (이게 구조적으로 맞는 방식)
@@ -21,12 +21,11 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
 
   // 401 Unauthorized → accessToken 만료 가능성
   if (res.status === 401 && retry) {
-    const refreshed = await authApi.refreshToken();
+    await authApi.refreshToken();
 
-    if (refreshed?.accessToken) {
-      // 👉 새 토큰 쿠키에도 저장
-      setTokensToCookie(refreshed.accessToken);
+    const accessToken = await getTokenFromCookie();
 
+    if (accessToken) {
       // 👉 Authorization 헤더에 새 토큰 명시 후 재시도
       return fetchWithAuth<T>(
         input,
@@ -34,7 +33,7 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
           ...init,
           headers: {
             ...(init.headers || {}),
-            Authorization: `Bearer ${refreshed.accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
         false, // 재귀 방지
