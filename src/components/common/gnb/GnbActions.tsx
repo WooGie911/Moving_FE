@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import profile from "@/assets/icon/auth/icon-profile-lg.png";
+import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
@@ -11,7 +11,6 @@ import { TUserRole } from "@/types/user.types";
 import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
-import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations } from "next-intl";
 
 const USER_ACTION_LIST = [
@@ -44,12 +43,21 @@ interface IGnbActionsProps {
   userRole: TUserRole;
   userName: string;
   deviceType: TDeviceType;
-  toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
+  profileImage?: string;
+  logout: () => void;
+  toggleSideMenu: () => void;
 }
 
-export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
-  const { logout } = useAuth();
+export const GnbActions = ({
+  userRole,
+  logout,
+  userName,
+  deviceType,
+  toggleSideMenu,
+  isSideMenuOpen,
+  profileImage,
+}: IGnbActionsProps) => {
   const t = useTranslations();
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -81,6 +89,8 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
   const closeProfileModal = () => {
     setIsProfileOpen(false);
   };
+
+  //
 
   // 프로필 모달창 외부 클릭 감지
   useEffect(() => {
@@ -182,10 +192,18 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
             <button
               ref={profileButtonRef}
               onClick={handleProfileClick}
-              className="flex cursor-pointer gap-3 p-2 text-black"
+              className="flex w-auto cursor-pointer items-center gap-3 p-2 text-black"
               aria-label={t("gnb.profile")}
             >
-              <Image src={profile} alt={t("gnb.profile")} width={24} height={24} />
+              <div className="h-10 w-10 overflow-hidden rounded-full">
+                <Image
+                  src={profileImage || baseProfileImage.src}
+                  alt={t("gnb.profile")}
+                  width={40}
+                  height={40}
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <div className="hidden lg:block">{userName}</div>
             </button>
 

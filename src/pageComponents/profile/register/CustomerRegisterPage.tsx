@@ -77,10 +77,6 @@ const CustomerRegisterPage = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(allFilled);
-  }, [allFilled]);
-
   return (
     <FormProvider {...methods}>
       <div
