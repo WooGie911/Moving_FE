@@ -17,7 +17,6 @@ export interface Schedule {
   id: string;
   customerName: string;
   movingType: MovingType;
-  time: string;
   status: ScheduleStatus;
   fromAddress: string;
   toAddress: string;
