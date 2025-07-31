@@ -101,9 +101,10 @@ const findMoverApi = {
   /**
    * 기사님 상세 조회 API
    */
-  fetchMoverDetail: async (moverId: string): Promise<IMoverInfo | null> => {
+  fetchMoverDetail: async (moverId: string, language?: string): Promise<IMoverInfo | null> => {
     try {
       const accessToken = await getTokenFromCookie();
+      const queryParams = language ? `?lang=${language}` : '';
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
@@ -113,7 +114,7 @@ const findMoverApi = {
         headers.Authorization = `Bearer ${accessToken}`;
       }
 
-      const res = await fetch(`${API_URL}/movers/${moverId}`, {
+      const res = await fetch(`${API_URL}/movers/${moverId}${queryParams}`, {
         headers,
       });
 
