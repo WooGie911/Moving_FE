@@ -244,9 +244,30 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   useEffect(() => {
     const initializeAuth = async () => {
       // 인증이 필요하지 않은 페이지들
-      const publicRoutes = ["/", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
+      const publicRoutes = [
+        "/",
+        "/ko",
+        "/en",
+        "/zh",
+        "/userSignin",
+        "/userSignup",
+        "/moverSignin",
+        "/moverSignup",
+        "/ko/searchMover",
+        "/en/searchMover",
+        "/zh/searchMover",
+      ];
 
-      if (!pathname || publicRoutes.includes(pathname)) {
+      // 기사님 상세 페이지도 비회원 접근 가능하도록 체크
+      const isSearchMoverDetailPage =
+        pathname?.startsWith("/ko/searchMover/") ||
+        pathname?.startsWith("/en/searchMover/") ||
+        pathname?.startsWith("/zh/searchMover/");
+
+      // locale이 포함된 랜딩페이지 체크
+      const isLandingPage = pathname === "/" || pathname === "/ko" || pathname === "/en" || pathname === "/zh";
+
+      if (!pathname || publicRoutes.includes(pathname) || isLandingPage || isSearchMoverDetailPage) {
         setIsLoading(false);
         return;
       }
