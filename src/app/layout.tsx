@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "../globals.css";
-import Providers from "./providers";
+import "./globals.css";
+import Providers from "./[locale]/providers";
 import { DevNavitgation } from "@/components/common/DevNavitgation";
 import { Gnb } from "@/components/common/gnb/Gnb";
 import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
-import LanguageSync from "./LanguageSync";
+import LanguageSync from "./[locale]/LanguageSync";
 
 const pretendard = localFont({
-  src: "../../assets/font/PretendardVariable.woff2",
+  src: "../assets/font/PretendardVariable.woff2",
   display: "swap",
   variable: "--font-pretendard",
 });
@@ -48,12 +47,12 @@ export default async function LocaleLayout({
 }) {
   // 들어오는 `locale`이 유효한지 확인
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+
+  // 유효하지 않은 locale인 경우 기본 locale 사용
+  const validLocale = hasLocale(routing.locales, locale) ? locale : routing.locales[0];
 
   return (
-    <html lang={locale}>
+    <html lang={validLocale}>
       <head>
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="무빙" />
@@ -69,7 +68,7 @@ export default async function LocaleLayout({
       <body className={`${pretendard.variable} antialiased`}>
         <NextIntlClientProvider>
           {/* 언어 동기화 */}
-          <LanguageSync locale={locale} />
+          <LanguageSync locale={validLocale} />
           <Providers>
             <Gnb />
             {children}

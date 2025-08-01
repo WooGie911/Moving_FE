@@ -20,7 +20,7 @@ const NotFound = () => {
           <p className="text-lg">Sorry, the page you are looking for does not exist.</p>
           <button
             onClick={handleGoBack}
-            className="w-fit rounded-lg bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700"
+            className="bg-primary-400 hover:bg-primary-500 w-fit rounded-lg px-6 py-2 text-white transition-colors"
           >
             GO BACK
           </button>
