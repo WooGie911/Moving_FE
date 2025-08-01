@@ -4,7 +4,7 @@ import { useLanguageStore } from "@/stores/languageStore";
 
 // 공통 스타일 변수
 const SPEECH_BUBBLE_STYLES = {
-  base: "lg:text-2lg inline-block max-w-full gap-2 rounded-3xl px-5 py-3 text-md leading-6 font-medium md:gap-4 mb-2 shadow-sm",
+  base: "lg:text-2lg inline-block max-w-full gap-2 rounded-3xl px-4 py-3 text-md leading-6 font-medium md:gap-4 md:px-5 mb-2 shadow-sm",
   question: "text-black-400 self-start rounded-tl-none bg-gray-50",
   answerLatest: "self-end rounded-tr-none bg-primary-400 text-gray-50",
   answerPrevious: "self-end rounded-tr-none bg-primary-100 text-primary-400",

@@ -7,7 +7,7 @@ import {
   subMonths,
   startOfMonth,
   getDay,
-  isToday,
+  isToday as dateFnsIsToday,
   format,
   isBefore,
   startOfDay,
@@ -19,32 +19,10 @@ import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useLanguageStore } from "@/stores/languageStore";
+import { CalendarDateObj, ScheduleDisplay, CalendarWithScheduleProps } from "@/types/schedule";
+import { createSafeDate, getCalendarMatrix, isToday, isPastDate } from "@/utils/scheduleUtils";
 
-interface IDateObj {
-  day: number;
-  date: Date;
-  isOtherMonth: boolean;
-}
-
-interface ISchedule {
-  id: string;
-  customerName: string;
-  movingType: "소형이사" | "가정이사" | "원룸이사" | "사무실이사";
-  time: string;
-  status: "confirmed" | "pending" | "completed";
-  fromAddress: string;
-  toAddress: string;
-}
-
-interface ICalendarWithScheduleProps {
-  value: Date | undefined;
-  onChange: (date: Date) => void;
-  getSchedulesForDate: (date: Date) => ISchedule[];
-  onMonthChange?: (date: Date) => void;
-  className?: string;
-}
-
-// 공통 스타일 변수 (기존 Calendar 스타일 유지)
+// 캘린더 스타일 상수
 const CALENDAR_STYLES: Record<string, string> = {
   container: "w-full pb-[2px]",
   header: "mt-[14px] flex w-full items-center justify-between px-[14px] py-[11px]",
@@ -64,62 +42,7 @@ const CALENDAR_STYLES: Record<string, string> = {
   scheduleCount: "text-xs text-gray-500 font-medium mt-1",
 };
 
-// 안전한 날짜 생성 함수
-const createSafeDate = (year: number, month: number, day: number): Date => {
-  return new Date(Date.UTC(year, month, day));
-};
-
-// 캘린더 매트릭스 생성 함수
-const getCalendarMatrix = (date: Date): IDateObj[][] => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const startDay = getDay(startOfMonth(date));
-  const daysInMonth = getDaysInMonth(date);
-  const prevMonth = subMonths(date, 1);
-  const daysInPrevMonth = getDaysInMonth(prevMonth);
-  const days: IDateObj[] = [];
-
-  // 이전 달의 날짜들 추가
-  for (let i = startDay - 1; i >= 0; i--) {
-    const prevMonthDate = createSafeDate(year, month - 1, daysInPrevMonth - i);
-    days.push({
-      day: daysInPrevMonth - i,
-      date: prevMonthDate,
-      isOtherMonth: true,
-    });
-  }
-
-  // 현재 달의 날짜들 추가
-  for (let i = 1; i <= daysInMonth; i++) {
-    const currentMonthDate = createSafeDate(year, month, i);
-    days.push({
-      day: i,
-      date: currentMonthDate,
-      isOtherMonth: false,
-    });
-  }
-
-  // 다음 달의 날짜들 추가 (7의 배수가 될 때까지)
-  while (days.length % 7 !== 0) {
-    const nextDay: number = days.length - (startDay + daysInMonth) + 1;
-    const nextMonthDate = createSafeDate(year, month + 1, nextDay);
-    days.push({
-      day: nextDay,
-      date: nextMonthDate,
-      isOtherMonth: true,
-    });
-  }
-
-  // 7일씩 나누어 매트릭스 생성
-  const matrix: IDateObj[][] = [];
-  for (let i = 0; i < days.length; i += 7) {
-    matrix.push(days.slice(i, i + 7));
-  }
-
-  return matrix;
-};
-
-const CalendarWithSchedule: React.FC<ICalendarWithScheduleProps> = ({
+const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
   value,
   onChange,
   getSchedulesForDate,
@@ -170,35 +93,30 @@ const CalendarWithSchedule: React.FC<ICalendarWithScheduleProps> = ({
     [onChange],
   );
 
-  const getDateCellClass = useCallback(
-    (dateObj: IDateObj, isSelected: boolean): string => {
-      const isPastDate = isBefore(startOfDay(dateObj.date), today);
-      const isCurrentDay = isToday(dateObj.date);
+  const getDateCellClass = useCallback((dateObj: CalendarDateObj, isSelected: boolean): string => {
+    const isPast = isPastDate(startOfDay(dateObj.date));
+    const isCurrentDay = isToday(dateObj.date);
 
-      const classes = [CALENDAR_STYLES.dateCell];
+    const classes = [CALENDAR_STYLES.dateCell];
 
-      if (dateObj.isOtherMonth) {
-        classes.push(CALENDAR_STYLES.otherMonth);
-      } else if (isPastDate) {
-        classes.push(CALENDAR_STYLES.pastDate);
-      } else {
-        classes.push(CALENDAR_STYLES.currentDate);
-      }
+    if (dateObj.isOtherMonth) {
+      classes.push(CALENDAR_STYLES.otherMonth);
+    } else if (isPast) {
+      classes.push(CALENDAR_STYLES.pastDate);
+    } else {
+      classes.push(CALENDAR_STYLES.currentDate);
+    }
 
-      if (isCurrentDay) {
-        classes.push(CALENDAR_STYLES.today);
-      }
+    if (isCurrentDay) {
+      classes.push(CALENDAR_STYLES.today);
+    }
 
-      // 선택된 날짜 스타일은 개별적으로 적용되므로 여기서는 제외
-
-      return classes.join(" ");
-    },
-    [today],
-  );
+    return classes.join(" ");
+  }, []);
 
   // 선택된 날짜와 현재 날짜를 비교하는 함수
   const isDateSelected = useCallback(
-    (dateObj: IDateObj): boolean => {
+    (dateObj: CalendarDateObj): boolean => {
       if (!value) return false;
       return (
         dateObj.date.getFullYear() === value.getFullYear() &&
@@ -211,7 +129,7 @@ const CalendarWithSchedule: React.FC<ICalendarWithScheduleProps> = ({
 
   // 일정 표시기 렌더링 (원형으로 표시)
   const renderScheduleIndicator = useCallback(
-    (dateObj: IDateObj) => {
+    (dateObj: CalendarDateObj) => {
       const schedules = getSchedulesForDate(dateObj.date);
 
       if (schedules.length === 0) return null;
