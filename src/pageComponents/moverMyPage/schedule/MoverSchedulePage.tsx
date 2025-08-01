@@ -34,30 +34,47 @@ const PAGE_STYLES = {
 
 // 스케줄 아이템 컴포넌트
 const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, t, tEstimateRequest }) => (
-  <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-    <div className="mb-2 flex items-center justify-between">
-      <span className="text-sm font-medium text-gray-900">{schedule.customerName}</span>
-      <span className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusStyleClass(schedule.status)}`}>
+  <article
+    className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+    aria-labelledby={`schedule-${schedule.id}-title`}
+    role="article"
+  >
+    <header className="mb-2 flex items-center justify-between">
+      <h3 id={`schedule-${schedule.id}-title`} className="text-sm font-medium text-gray-900">
+        {schedule.customerName}
+      </h3>
+      <span
+        className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusStyleClass(schedule.status)}`}
+        aria-label={`상태: ${getStatusText(schedule.status, t)}`}
+        role="status"
+      >
         {getStatusText(schedule.status, t)}
       </span>
-    </div>
-    <div className="mb-2 text-sm text-gray-600">
-      <div className="mb-1">
-        <span className="font-medium">{t("movingType")}:</span> {tEstimateRequest(`movingTypes.${schedule.movingType}`)}
-      </div>
-      <div className="mb-1">
-        <span className="font-medium">{t("from")}:</span> {schedule.fromAddress}
-      </div>
-      <div>
-        <span className="font-medium">{t("to")}:</span> {schedule.toAddress}
-      </div>
-    </div>
-  </div>
+    </header>
+    <section aria-label="스케줄 상세 정보">
+      <dl className="mb-2 text-sm text-gray-600">
+        <div className="mb-1">
+          <dt className="inline font-medium">{t("movingType")}:</dt>
+          <dd className="ml-1 inline">{tEstimateRequest(`movingTypes.${schedule.movingType}`)}</dd>
+        </div>
+        <div className="mb-1">
+          <dt className="inline font-medium">{t("from")}:</dt>
+          <dd className="ml-1 inline">{schedule.fromAddress}</dd>
+        </div>
+        <div>
+          <dt className="inline font-medium">{t("to")}:</dt>
+          <dd className="ml-1 inline">{schedule.toAddress}</dd>
+        </div>
+      </dl>
+    </section>
+  </article>
 );
 
 // 빈 상태 컴포넌트
 const EmptyState: React.FC<EmptyStateProps> = ({ message }) => (
-  <div className="py-8 text-center text-gray-500">{message}</div>
+  <div className="py-8 text-center text-gray-500" role="status" aria-live="polite">
+    {message}
+  </div>
 );
 
 // 스케줄 목록 컴포넌트
@@ -67,20 +84,20 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, t, tEstimateRequ
   }
 
   return (
-    <div className="space-y-4">
+    <section className="space-y-4" aria-label="선택된 날짜의 스케줄 목록" role="region">
       {schedules.map((schedule) => (
         <ScheduleItem key={schedule.id} schedule={schedule} t={t} tEstimateRequest={tEstimateRequest} />
       ))}
-    </div>
+    </section>
   );
 };
 
 // 헤더 컴포넌트
 const PageHeader: React.FC<PageHeaderProps> = ({ t }) => (
-  <div className={PAGE_STYLES.header}>
+  <header className={PAGE_STYLES.header} role="banner">
     <h1 className={PAGE_STYLES.title}>{t("title")}</h1>
     <p className={PAGE_STYLES.description}>{t("description")}</p>
-  </div>
+  </header>
 );
 
 // 캘린더 영역 컴포넌트
@@ -90,7 +107,7 @@ const CalendarSection: React.FC<CalendarSectionProps> = ({
   getSchedulesForSelectedDate,
   setCurrentMonth,
 }) => (
-  <div className={PAGE_STYLES.calendarContainer}>
+  <section className={PAGE_STYLES.calendarContainer} aria-label="월간 스케줄 캘린더" role="region">
     <div className={PAGE_STYLES.calendarCard}>
       <CalendarWithSchedule
         value={selectedDate}
@@ -99,7 +116,7 @@ const CalendarSection: React.FC<CalendarSectionProps> = ({
         onMonthChange={setCurrentMonth}
       />
     </div>
-  </div>
+  </section>
 );
 
 // 상세 정보 영역 컴포넌트
@@ -111,19 +128,21 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   t,
   tEstimateRequest,
 }) => (
-  <div className={PAGE_STYLES.detailContainer}>
+  <aside className={PAGE_STYLES.detailContainer} aria-label="선택된 날짜의 스케줄 상세 정보" role="complementary">
     <div className={PAGE_STYLES.detailCard}>
-      <h3 className={PAGE_STYLES.detailTitle}>{headerText}</h3>
+      <h2 className={PAGE_STYLES.detailTitle}>{headerText}</h2>
 
       {isLoadingMonthly ? (
-        <LoadingSpinner containerClassName="py-8" />
+        <div aria-live="polite" aria-busy="true">
+          <LoadingSpinner containerClassName="py-8" />
+        </div>
       ) : selectedDate ? (
         <ScheduleList schedules={selectedDateSchedules} t={t} tEstimateRequest={tEstimateRequest} />
       ) : (
         <EmptyState message={t("selectDateToView")} />
       )}
     </div>
-  </div>
+  </aside>
 );
 
 // 메인 스케줄 페이지 컴포넌트
@@ -241,10 +260,10 @@ const MoverSchedulePage = () => {
   const headerText = selectedDate ? formatDate(selectedDate) : t("selectDate");
 
   return (
-    <div className={PAGE_STYLES.container}>
+    <main className={PAGE_STYLES.container} role="main" aria-label="기사님 일정 관리 페이지">
       <PageHeader t={t} />
 
-      <div className={PAGE_STYLES.grid}>
+      <div className={PAGE_STYLES.grid} role="application" aria-label="스케줄 관리 인터페이스">
         <CalendarSection
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
@@ -261,7 +280,7 @@ const MoverSchedulePage = () => {
           tEstimateRequest={tEstimateRequest}
         />
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -168,10 +168,10 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
   }
 
   return (
-    <div className={containerClasses.join(" ")}>
+    <div className={containerClasses.join(" ")} role="application" aria-label="월간 스케줄 캘린더">
       {/* 헤더 - 연/월, 이전/다음 버튼 */}
-      <div className={CALENDAR_STYLES.header}>
-        <button onClick={handlePrevMonth} className="focus:outline-none">
+      <header className={CALENDAR_STYLES.header} role="banner">
+        <button onClick={handlePrevMonth} className="focus:outline-none" aria-label="이전 달로 이동">
           <span className="block lg:hidden">
             <Image src={LeftArrowIcon} alt="이전 달" />
           </span>
@@ -180,9 +180,11 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
           </span>
         </button>
 
-        <span className={CALENDAR_STYLES.monthText}>{format(currentDate, "yyyy. MM")}</span>
+        <h2 className={CALENDAR_STYLES.monthText} aria-live="polite">
+          {format(currentDate, "yyyy. MM")}
+        </h2>
 
-        <button onClick={handleNextMonth} className="focus:outline-none">
+        <button onClick={handleNextMonth} className="focus:outline-none" aria-label="다음 달로 이동">
           <span className="block lg:hidden">
             <Image src={RightArrowIcon} alt="다음 달" />
           </span>
@@ -190,37 +192,72 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
             <Image src={RightBigArrowIcon} alt="다음 달" />
           </span>
         </button>
-      </div>
+      </header>
 
       {/* 요일 헤더 */}
-      <div className={CALENDAR_STYLES.dayHeader}>
+      <div className={CALENDAR_STYLES.dayHeader} role="rowgroup" aria-label="요일 헤더">
         {daysOfWeek.map((day) => (
-          <div key={day} className={CALENDAR_STYLES.dayCell}>
+          <div key={day} className={CALENDAR_STYLES.dayCell} role="columnheader" aria-label={day}>
             {day}
           </div>
         ))}
       </div>
 
       {/* 날짜 그리드 */}
-      {calendarMatrix.map((week, weekIndex) => (
-        <div className={CALENDAR_STYLES.weekRow} key={weekIndex}>
-          {week.map((dateObj, dayIndex) => {
-            const isSelected = isDateSelected(dateObj);
-            const cellClass = getDateCellClass(dateObj, isSelected);
+      <div role="grid" aria-label={`${format(currentDate, "yyyy년 MM월")} 스케줄 캘린더`}>
+        {calendarMatrix.map((week, weekIndex) => (
+          <div className={CALENDAR_STYLES.weekRow} key={weekIndex} role="row">
+            {week.map((dateObj, dayIndex) => {
+              const isSelected = isDateSelected(dateObj);
+              const cellClass = getDateCellClass(dateObj, isSelected);
+              const schedules = getSchedulesForDate(dateObj.date);
+              const scheduleCount = schedules.length;
+              const isCurrentDay = isToday(dateObj.date);
+              const isPast = isPastDate(startOfDay(dateObj.date));
 
-            return (
-              <div key={dayIndex} onClick={() => handleDateClick(dateObj.date)} className={cellClass}>
-                <div className="flex h-full flex-col items-center justify-center">
-                  <div className={isSelected ? CALENDAR_STYLES.selected : CALENDAR_STYLES.dateNumber}>
-                    {dateObj.day}
+              // 날짜 셀의 접근성 라벨 생성
+              const getDateAriaLabel = () => {
+                const dateStr = format(dateObj.date, "M월 d일");
+                let label = dateStr;
+
+                if (isCurrentDay) label += " (오늘)";
+                if (isPast) label += " (과거 날짜)";
+                if (isSelected) label += " (선택됨)";
+                if (scheduleCount > 0) label += ` (${scheduleCount}개 일정)`;
+
+                return label;
+              };
+
+              return (
+                <div
+                  key={dayIndex}
+                  onClick={() => handleDateClick(dateObj.date)}
+                  className={cellClass}
+                  role="gridcell"
+                  aria-label={getDateAriaLabel()}
+                  aria-selected={isSelected}
+                  tabIndex={!dateObj.isOtherMonth && !isPast ? 0 : -1}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      if (!dateObj.isOtherMonth && !isPast) {
+                        handleDateClick(dateObj.date);
+                      }
+                    }
+                  }}
+                >
+                  <div className="flex h-full flex-col items-center justify-center">
+                    <div className={isSelected ? CALENDAR_STYLES.selected : CALENDAR_STYLES.dateNumber}>
+                      {dateObj.day}
+                    </div>
+                    {!dateObj.isOtherMonth && renderScheduleIndicator(dateObj)}
                   </div>
-                  {!dateObj.isOtherMonth && renderScheduleIndicator(dateObj)}
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
