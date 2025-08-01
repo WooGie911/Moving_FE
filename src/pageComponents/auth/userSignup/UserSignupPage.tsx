@@ -10,11 +10,11 @@ const UserSignupPage = () => {
 
   return (
     <main
-      className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[1300px]"
+      className="md:bg-primary-400 flex h-screen min-h-[1100px] w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[1300px]"
       aria-label={t("signupPageBg")}
     >
       <section
-        className="relative h-[1150px] w-full bg-white px-6 py-12 md:max-w-[560px] md:rounded-[40px] md:px-10 lg:max-w-[740px]"
+        className="relative h-[1100px] w-full bg-white px-6 py-12 md:max-w-[560px] md:rounded-[40px] md:px-10 lg:max-w-[740px]"
         role="region"
         aria-label={t("signupPageContainer")}
       >
