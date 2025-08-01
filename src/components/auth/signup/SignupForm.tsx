@@ -10,6 +10,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 interface ISignupFormProps {
   userType: TUserType;
@@ -17,6 +18,7 @@ interface ISignupFormProps {
 }
 
 const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
+  const router = useRouter();
   const { signUp, isLoading } = useAuth();
   const validationRules = useValidationRules();
   const { open, close } = useModal();
@@ -62,6 +64,8 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
           children: <div>{response.message}</div>,
           buttons: [{ text: "확인", onClick: () => close() }],
         });
+      } else {
+        router.push("/");
       }
     } catch (error) {
       console.error(error);
