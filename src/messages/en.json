@@ -675,7 +675,7 @@
       "description": "Please enter a detailed description."
     },
     "invalid": {
-      "name": "Name must be 1 to 10 characters long and contain only Korean or English letters.",
+      "name": "Name must be 1 to 15 characters in Korean, English, or Chinese only.",
       "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
       "email": "Invalid email format.",
       "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
