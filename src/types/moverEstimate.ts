@@ -179,8 +179,8 @@ export type TMyRejectedEstimateResponse = {
 // 견적 생성 응답 타입 (백엔드와 일치)
 export interface ICreateEstimateResponse {
   id: string;
-  moverId: string;
   estimateRequestId: string;
+  moverId: string;
   price: number;
   comment: string;
   status: "PROPOSED";
@@ -190,8 +190,8 @@ export interface ICreateEstimateResponse {
 // 견적 반려 응답 타입 (백엔드와 일치)
 export interface IRejectEstimateResponse {
   id: string;
-  moverId: string;
   estimateRequestId: string;
+  moverId: string;
   price: number | null;
   comment: string;
   status: "REJECTED";
@@ -229,6 +229,7 @@ export interface ICardListProps {
   estimatePrice?: number;
   mover?: TMover;
   type: "received" | "sent" | "rejected";
+  index?: number;
 }
 
 // 견적 응답 예시 데이터 (백엔드 구조에 맞게 수정)
@@ -258,7 +259,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr1",
-        postalCode: "06123",
+        zoneCode: "06123",
         city: "서울특별시",
         district: "강남구",
         detail: "테헤란로 123",
@@ -266,7 +267,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr2",
-        postalCode: "06621",
+        zoneCode: "06621",
         city: "서울특별시",
         district: "서초구",
         detail: "서초대로 456",
@@ -295,7 +296,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr5",
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 456",
@@ -303,7 +304,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr6",
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 789",
@@ -331,7 +332,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr9",
-        postalCode: "04040",
+        zoneCode: "04040",
         city: "서울특별시",
         district: "마포구",
         detail: "와우산로 123",
@@ -339,7 +340,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr10",
-        postalCode: "04763",
+        zoneCode: "04763",
         city: "서울특별시",
         district: "성동구",
         detail: "왕십리로 456",
@@ -367,7 +368,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr13",
-        postalCode: "04040",
+        zoneCode: "04040",
         city: "서울특별시",
         district: "마포구",
         detail: "와우산로 456",
@@ -375,7 +376,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr14",
-        postalCode: "04763",
+        zoneCode: "04763",
         city: "서울특별시",
         district: "성동구",
         detail: "왕십리로 789",
@@ -405,7 +406,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr3",
-        postalCode: "04040",
+        zoneCode: "04040",
         city: "서울특별시",
         district: "마포구",
         detail: "와우산로 789",
@@ -413,7 +414,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr4",
-        postalCode: "04763",
+        zoneCode: "04763",
         city: "서울특별시",
         district: "성동구",
         detail: "왕십리로 321",
@@ -441,7 +442,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr7",
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 789",
@@ -449,7 +450,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr8",
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 123",
@@ -477,7 +478,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr11",
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 321",
@@ -485,7 +486,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr12",
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 654",
@@ -513,7 +514,7 @@ export const mockEstimateRequestResponseData: {
       },
       fromAddress: {
         id: "addr15",
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 654",
@@ -521,7 +522,7 @@ export const mockEstimateRequestResponseData: {
       },
       toAddress: {
         id: "addr16",
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 321",
@@ -582,7 +583,7 @@ export const mockMyEstimateData: TMyEstimateResponse[] = [
       },
       fromAddress: {
         id: "addr1",
-        postalCode: "06123",
+        zoneCode: "06123",
         city: "서울특별시",
         district: "강남구",
         detail: "테헤란로 123",
@@ -590,7 +591,7 @@ export const mockMyEstimateData: TMyEstimateResponse[] = [
       },
       toAddress: {
         id: "addr2",
-        postalCode: "06621",
+        zoneCode: "06621",
         city: "서울특별시",
         district: "서초구",
         detail: "서초대로 456",
@@ -647,7 +648,7 @@ export const mockMyEstimateData: TMyEstimateResponse[] = [
       },
       fromAddress: {
         id: "addr3",
-        postalCode: "04040",
+        zoneCode: "04040",
         city: "서울특별시",
         district: "마포구",
         detail: "와우산로 789",
@@ -655,7 +656,7 @@ export const mockMyEstimateData: TMyEstimateResponse[] = [
       },
       toAddress: {
         id: "addr4",
-        postalCode: "04763",
+        zoneCode: "04763",
         city: "서울특별시",
         district: "성동구",
         detail: "왕십리로 321",
@@ -716,7 +717,7 @@ export const mockMyRejectedEstimateData: TMyRejectedEstimateResponse[] = [
       },
       fromAddress: {
         id: "addr5",
-        postalCode: "06234",
+        zoneCode: "06234",
         city: "서울특별시",
         district: "강남구",
         detail: "역삼로 456",
@@ -724,7 +725,7 @@ export const mockMyRejectedEstimateData: TMyRejectedEstimateResponse[] = [
       },
       toAddress: {
         id: "addr6",
-        postalCode: "06772",
+        zoneCode: "06772",
         city: "서울특별시",
         district: "서초구",
         detail: "반포대로 789",
@@ -832,35 +833,4 @@ export interface IMyRejectedEstimateRequestResponse {
   };
 }
 
-export interface ICreateEstimateResponse {
-  id: string;
-  estimateRequestId: string;
-  moverId: string;
-  price: number;
-  description: string;
-  status: "PROPOSED";
-  createdAt: Date;
-}
-
-export interface IRejectEstimateResponse {
-  id: string;
-  estimateRequestId: string;
-  moverId: string;
-  price: number | null;
-  description: string;
-  status: "REJECTED";
-  createdAt: Date;
-}
-
-export interface IUpdateEstimateStatusResponse {
-  id: string;
-  status: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
-  updatedAt: Date;
-}
-
-export interface IUpdateEstimateResponse {
-  id: string;
-  price: number;
-  description: string;
-  updatedAt: Date;
-}
+// 중복된 타입 정의 제거 - 위쪽에 이미 정의되어 있음

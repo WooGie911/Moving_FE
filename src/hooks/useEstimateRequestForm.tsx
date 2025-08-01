@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useLanguageStore } from "@/stores/languageStore";
-import { IFormState, TAddressType } from "@/types/estimateRequest";
+import { IFormState, TAddressType, IDaumAddress } from "@/types/estimateRequest";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 
@@ -106,7 +106,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
   // 주소 업데이트 핸들러
   const handleAddressUpdate = useCallback(
-    (type: TAddressType, address: any) => {
+    (type: TAddressType, address: IDaumAddress) => {
       setForm((prev) => ({
         ...prev,
         [type]: {

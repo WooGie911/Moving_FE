@@ -1,20 +1,22 @@
 "use client";
-import { ICardListProps } from "@/types/moverEstimate";
+
 import React, { useState, useEffect } from "react";
-import { LabelArea } from "./LabelArea";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
-import Image from "next/image";
-import { shortenRegionInAddress } from "@/utils/regionMapping";
-import arrow from "@/assets/icon/arrow/icon-arrow.png";
-import { Button } from "../common/button/Button";
-import edit from "@/assets/icon/edit/icon-edit.png";
-import { useModal } from "../common/modal/ModalContext";
-import { ModalChild } from "./received/ModalChild";
 import Link from "next/link";
-import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations, useLocale } from "next-intl";
+import moverEstimateApi from "@/lib/api/moverEstimate.api";
+
+import Image from "next/image";
+import confirm from "@/assets/icon/etc/icon-confirm.png";
+import edit from "@/assets/icon/edit/icon-edit.png";
+import arrow from "@/assets/icon/arrow/icon-arrow.png";
+import { shortenRegionInAddress } from "@/utils/regionMapping";
+import { ICardListProps } from "@/types/moverEstimate";
+import { LabelArea } from "./LabelArea";
+import { Button } from "../common/button/Button";
+import { useModal } from "../common/modal/ModalContext";
+import { ModalChild } from "./received/ModalChild";
 
 export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();
@@ -55,7 +57,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
     }
   };
-
+  console.log("카드데이터", data);
   // 견적 생성 mutation
   const createEstimateMutation = useMutation({
     mutationFn: (data: { estimateRequestId: string; price: number; comment: string }) =>

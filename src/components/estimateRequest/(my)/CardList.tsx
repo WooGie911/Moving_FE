@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState } from "react";
-import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
@@ -10,6 +8,8 @@ import { ICardListProps } from "@/types/customerEstimateRequest";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
 import { useModal } from "@/components/common/modal/ModalContext";
+import Image from "next/image";
+import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -19,15 +19,7 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString();
 };
 
-export const CardList = ({
-  isDesignated,
-  estimateId,
-  estimateState,
-  estimateTitle,
-  estimatePrice,
-  mover,
-  type,
-}: ICardListProps) => {
+export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) => {
   const { open, close } = useModal();
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations("estimateRequest");
@@ -53,7 +45,7 @@ export const CardList = ({
   });
 
   const handleConfirmEstimate = () => {
-    confirmEstimate(estimateId);
+    confirmEstimate(estimate.id);
   };
 
   const openConfirmModal = () => {
@@ -77,44 +69,29 @@ export const CardList = ({
 
   const cardContent = (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${type === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
+      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1">
-        <LabelAndTitleSection
-          estimateState={estimateState}
-          estimateTitle={estimateTitle}
-          isDesignated={isDesignated}
-          mover={mover}
-          type={type}
-          usedAtDetail={false}
-        />
+        {/* 라벨과 견적상태 영역 */}
+        <LabelAndTitleSection mover={estimate.mover} estimate={estimate} usedAt={usedAt} />
         {/* 기사님 프로필 영역 */}
-        <div className={`flex w-full ${type === "received" ? "border-border-light rounded-lg border-2 p-2" : ""}`}>
-          <div
-            className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${type === "pending" ? "border-border-light border-b-1" : ""} `}
-          >
-            {/* 좌측 프로필 이미지 */}
-            <Image src={mover.moverImage ? mover.moverImage : defaultProfile} alt="profile" width={50} height={50} />
-            {/* 프로필 이미지 외 모든 프로필 정보*/}
-            <MoverInfo mover={mover} usedAtDetail={false} />
-          </div>
-        </div>
+        <MoverInfo mover={estimate.mover} usedAt={usedAt} />
       </div>
-      {/* 견적서 금액 영역 */}
 
-      {type === "pending" ? (
+      {/* 견적서 금액 영역 */}
+      {usedAt === "pending" ? (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
           <p className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium">
             {t("estimateAmount")}
           </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
+          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${t("currency")}`}</p>
         </div>
       ) : (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
           <div className="flex w-full flex-row items-center justify-start gap-1 md:hidden">
-            {estimateState === "PROPOSED" ? (
+            {estimate.status === "PROPOSED" ? (
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
-            ) : estimateState === "ACCEPTED" ? (
+            ) : estimate.status === "ACCEPTED" ? (
               <div className="flex flex-row items-center justify-center gap-1">
                 <Image src={confirm} alt="confirm" width={16} height={16} />
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
@@ -127,29 +104,29 @@ export const CardList = ({
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium">
               {t("estimateAmount")}
             </p>
-            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
+            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${t("currency")}`}</p>
           </div>
         </div>
       )}
-      {type === "pending" ? (
+      {usedAt === "pending" ? (
         <div className="flex w-full flex-col items-center justify-center">
           <div className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden">
             <Button
               variant="solid"
-              state={estimateState === "PROPOSED" ? "default" : "disabled"}
+              state={estimate.status === "PROPOSED" ? "default" : "disabled"}
               width="w-[287px]"
               height="h-[54px]"
               rounded="rounded-[12px]"
-              onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
-              disabled={estimateState !== "PROPOSED"}
+              onClick={estimate.status === "PROPOSED" ? openConfirmModal : undefined}
+              disabled={estimate.status !== "PROPOSED"}
             >
-              {estimateState === "PROPOSED"
+              {estimate.status === "PROPOSED"
                 ? t("confirmEstimateButton")
-                : estimateState === "ACCEPTED"
+                : estimate.status === "ACCEPTED"
                   ? t("alreadyConfirmed")
                   : t("otherEstimateConfirmed")}
             </Button>
-            <Link href={`/estimateRequest/pending/${estimateId}`}>
+            <Link href={`/estimateRequest/pending/${estimate.id}`}>
               <Button variant="outlined" state="default" width="w-[287px]" height="h-[54px]" rounded="rounded-[12px]">
                 {t("viewDetails")}
               </Button>
@@ -158,7 +135,7 @@ export const CardList = ({
 
           <div className="hidden w-full md:block">
             <div className="flex w-full flex-row items-center justify-between gap-[11px]">
-              <Link href={`/estimateRequest/pending/${estimateId}`}>
+              <Link href={`/estimateRequest/pending/${estimate.id}`}>
                 <Button
                   variant="outlined"
                   state="default"
@@ -171,16 +148,16 @@ export const CardList = ({
               </Link>
               <Button
                 variant="solid"
-                state={estimateState === "PROPOSED" ? "default" : "disabled"}
+                state={estimate.status === "PROPOSED" ? "default" : "disabled"}
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={estimateState === "PROPOSED" ? openConfirmModal : undefined}
-                disabled={estimateState !== "PROPOSED"}
+                onClick={estimate.status === "PROPOSED" ? openConfirmModal : undefined}
+                disabled={estimate.status !== "PROPOSED"}
               >
-                {estimateState === "PROPOSED"
+                {estimate.status === "PROPOSED"
                   ? t("confirmEstimateButton")
-                  : estimateState === "ACCEPTED"
+                  : estimate.status === "ACCEPTED"
                     ? t("alreadyConfirmed")
                     : t("otherEstimateConfirmed")}
               </Button>
@@ -191,8 +168,8 @@ export const CardList = ({
     </div>
   );
 
-  return type === "received" ? (
-    <Link href={`/estimateRequest/received/${estimateId}`}>{cardContent}</Link>
+  return usedAt === "received" ? (
+    <Link href={`/estimateRequest/received/${estimate.id}`}>{cardContent}</Link>
   ) : (
     cardContent
   );

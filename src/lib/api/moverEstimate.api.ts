@@ -15,8 +15,7 @@ import {
 } from "@/types/moverEstimate";
 import { getTokenFromCookie } from "@/utils/auth";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = "http://localhost:5050";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {

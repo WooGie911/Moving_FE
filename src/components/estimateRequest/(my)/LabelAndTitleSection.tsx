@@ -2,32 +2,24 @@ import React from "react";
 import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
-import { TMoverInfo } from "@/types/customerEstimateRequest";
-import { ILabelAndTitleSectionProps } from "@/types/estimateRequest";
+import { ILabelAndTitleSectionProps, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";
 
-// 서비스 타입 이름을 MoveTypeLabel 타입으로 매핑하는 함수
-const mapServiceTypeToMoveType = (serviceName: string): "small" | "home" | "office" | "document" => {
-  switch (serviceName) {
-    case "소형이사":
+// 서비스 타입 코드를 MoveTypeLabel 타입으로 매핑하는 함수
+const mapServiceTypeToMoveType = (serviceCode: string): "small" | "home" | "office" | "document" => {
+  switch (serviceCode) {
+    case "SMALL":
       return "small";
-    case "가정이사":
+    case "HOME":
       return "home";
-    case "사무실이사":
+    case "OFFICE":
       return "office";
     default:
       return "home"; // 기본값
   }
 };
 
-export const LabelAndTitleSection = ({
-  mover,
-  isDesignated,
-  estimateState,
-  estimateTitle,
-  type,
-  usedAtDetail = false,
-}: ILabelAndTitleSectionProps) => {
+export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitleSectionProps) => {
   const t = useTranslations("estimateRequest");
   return (
     <div className="border-border-light flex w-full flex-col gap-3">
@@ -38,37 +30,39 @@ export const LabelAndTitleSection = ({
           {mover.serviceTypes?.map((serviceType: string, index: number) => (
             <MoveTypeLabel key={index} type={mapServiceTypeToMoveType(serviceType)} />
           ))}
-          {isDesignated ? <MoveTypeLabel type="document" /> : ""}
+          {estimate.isDesignated ? <MoveTypeLabel type="document" /> : ""}
         </div>
         {/* 확정견적인지 + 견적상태  모바일만 표시 */}
 
-        {estimateState === "PROPOSED" ? (
+        {estimate.status === "PROPOSED" ? (
           <p
-            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
+            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
           >
             {t("estimateWaiting")}
           </p>
-        ) : estimateState === "ACCEPTED" ? (
-          <div className={`flex flex-row items-center justify-end gap-1 ${type === "received" ? "md:hidden" : ""}`}>
+        ) : estimate.status === "ACCEPTED" ? (
+          <div className={`flex flex-row items-center justify-end gap-1 ${usedAt === "received" ? "md:hidden" : ""}`}>
             <Image src={confirm} alt="confirm" width={16} height={16} />
             <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
           </div>
         ) : (
           <p
-            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${type === "received" ? "md:hidden" : ""}`}
+            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
           >
-            {estimateState === "REJECTED" || estimateState === "AUTO_REJECTED" ? t("rejectedEstimate") : estimateState}
+            {estimate.status === "REJECTED" || estimate.status === "AUTO_REJECTED"
+              ? t("rejectedEstimate")
+              : estimate.status}
           </p>
         )}
       </div>
       <div className="flex w-full flex-row items-center justify-center gap-1">
         <h1
-          className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAtDetail ? "text-[18px] md:text-[24px]" : "truncate text-[16px] md:text-[18px]"}`}
-          title={estimateTitle}
+          className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAt === "detail" ? "text-[18px] md:text-[24px]" : "truncate text-[16px] md:text-[18px]"}`}
+          title={estimate.comment || ""}
         >
-          {usedAtDetail
+          {usedAt === "detail"
             ? (() => {
-                const sentences = estimateTitle.split(".");
+                const sentences = estimate.comment?.split(".") || [];
                 if (sentences.length >= 2) {
                   const first = sentences[0].trim();
                   const second = sentences[1].trim();
@@ -80,22 +74,22 @@ export const LabelAndTitleSection = ({
                     </>
                   );
                 } else {
-                  return estimateTitle;
+                  return estimate.comment || "";
                 }
               })()
-            : estimateTitle.length > 30
-              ? `${estimateTitle.substring(0, 30)}...`
-              : estimateTitle}
+            : estimate.comment!.length > 30
+              ? `${estimate.comment?.substring(0, 30)}...`
+              : estimate.comment || ""}
         </h1>
-        {type === "pending" ? (
+        {usedAt === "pending" ? (
           ""
-        ) : estimateState === "PROPOSED" ? (
+        ) : estimate.status === "PROPOSED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
             </div>
           </div>
-        ) : estimateState === "ACCEPTED" ? (
+        ) : estimate.status === "ACCEPTED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
               <Image src={confirm} alt="confirm" width={16} height={16} />

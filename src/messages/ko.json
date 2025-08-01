@@ -584,6 +584,8 @@
     "completedMoveMessage": "이사 완료된 견적 입니다.",
     "viewEstimateDetail": "견적 상세 보기",
     "rejectedRequestMessage": "반려된 요청 입니다.",
+    "estimateWaiting": "견적대기",
+    "rejectedEstimate": "반려견적",
     "confirmedEstimate": "확정견적",
     "customerSuffix": " 고객님",
     "departure": "출발지",

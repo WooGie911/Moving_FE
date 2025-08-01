@@ -570,10 +570,10 @@
     }
   },
   "moveTypes": {
-    "small": "Small Moving",
-    "home": "Home Moving",
-    "office": "Office Moving",
-    "document": "Designated Quote Request"
+    "small": "Small",
+    "home": "Home",
+    "office": "Office",
+    "document": "Designated Request"
   },
 
   "estimate": {
@@ -597,7 +597,9 @@
     "completedMoveMessage": "This is a completed move estimate.",
     "viewEstimateDetail": "View Estimate Details",
     "rejectedRequestMessage": "This is a rejected request.",
-    "confirmedEstimate": "Confirmed Estimate",
+    "estimateWaiting": "Waiting",
+    "rejectedEstimate": "Rejected",
+    "confirmedEstimate": "Confirmed",
     "customerSuffix": " Customer",
     "departure": "Departure",
     "arrival": "Arrival",
