@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import logo from "@/assets/img/logo/textlogo-lg.png";
+import logo from "@/assets/img/logo/textlogo-lg.webp";
 import { TUserType } from "@/types/user";
 
 const SigninHeader = ({ userType }: { userType: TUserType }) => {
@@ -34,7 +34,7 @@ const SigninHeader = ({ userType }: { userType: TUserType }) => {
       aria-label={t("signinPageHeader")}
     >
       <Link href="/" aria-label={t("goToHome")}>
-        <Image src={logo} alt="떠나요 로고" width={100} height={100} priority />
+        <Image src={logo} alt="떠나요 로고" width={100} height={100} priority quality={100} />
       </Link>
 
       <div aria-label={t("signinHeaderSwitchRoleLabel")}>
