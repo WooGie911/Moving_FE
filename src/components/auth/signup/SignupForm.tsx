@@ -131,29 +131,6 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
           )}
         </div>
 
-        {/* 전화번호 */}
-        <div className="mb-6 flex flex-col gap-2 font-normal">
-          <label htmlFor="phoneNumber" className="text-black-400 text-md">
-            {t("phoneNumber")}
-          </label>
-          <BaseInput
-            id="phoneNumber"
-            {...register("phoneNumber", validationRules.phoneNumber)}
-            aria-required="true"
-            aria-invalid={!!errors.phoneNumber}
-            aria-describedby={errors.phoneNumber ? "phoneNumber-error" : undefined}
-            error={errors.phoneNumber?.message}
-            placeholder={t("phoneNumberPlaceholder")}
-            inputClassName="py-3.5 px-3.5"
-            wrapperClassName="w-full sm:w-full"
-          />
-          {errors.phoneNumber && (
-            <span id="phoneNumber-error" className="sr-only">
-              {errors.phoneNumber.message}
-            </span>
-          )}
-        </div>
-
         {/* 비밀번호 */}
         <div className={`flex flex-col gap-2 ${currentLocale === "en" ? "mb-12" : "mb-6"}`}>
           <label htmlFor="password" className="text-black-400 text-md font-normal">
@@ -200,6 +177,29 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
           {errors.passwordCheck && (
             <span id="passwordCheck-error" className="sr-only">
               {errors.passwordCheck.message}
+            </span>
+          )}
+        </div>
+
+        {/* 전화번호 */}
+        <div className="mb-6 flex flex-col gap-2 font-normal">
+          <label htmlFor="phoneNumber" className="text-black-400 text-md">
+            {t("phoneNumber")}
+          </label>
+          <BaseInput
+            id="phoneNumber"
+            {...register("phoneNumber", validationRules.phoneNumber)}
+            aria-required="true"
+            aria-invalid={!!errors.phoneNumber}
+            aria-describedby={errors.phoneNumber ? "phoneNumber-error" : undefined}
+            error={errors.phoneNumber?.message}
+            placeholder={t("phoneNumberPlaceholder")}
+            inputClassName="py-3.5 px-3.5"
+            wrapperClassName="w-full sm:w-full"
+          />
+          {errors.phoneNumber && (
+            <span id="phoneNumber-error" className="sr-only">
+              {errors.phoneNumber.message}
             </span>
           )}
         </div>
