@@ -45,6 +45,7 @@ export const BaseInput = ({
         )}
         <input
           className={`h-full w-full rounded-2xl ${icon && iconPosition === "left" ? "pl-12" : ""} ${inputStyle} ${inputClassName}`}
+          autoComplete="off"
           {...rest}
         />
         {onClear && rest.value && (

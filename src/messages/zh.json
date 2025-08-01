@@ -251,7 +251,7 @@
       "careerPlaceholder": "例如：8",
 
       "currentPassword": "当前密码",
-      "currentPasswordPlaceholder": "请输入当前密码",
+      "currentPasswordPlaceholder": "请输入当前密码以设置新密码",
 
       "newPassword": "新密码",
       "newPasswordPlaceholder": "请输入新密码",
@@ -676,11 +676,11 @@
       "description": "请输入详细说明。"
     },
     "invalid": {
-      "name": "姓名需为1到15个字符，仅可输入韩文、英文或中文。",
-      "nickname": "昵称需为1到10个字符，只能包含中文或英文字符。",
+      "name": "姓名需为1到15个字符，仅可输入韩文、英文或中文",
+      "nickname": "昵称需为1到15个字符，仅可包含韩文、英文、中文或数字",
       "email": "邮箱格式不正确。",
-      "phoneNumber": "电话号码格式不正确。（例如：01012345678）",
-      "password": "密码需至少8位，并包含字母、数字和特殊字符。",
+      "phoneNumber": "电话号码格式不正确。（例如：01012345678",
+      "password": "密码需至少8位，并包含字母、数字和特殊字符",
       "passwordCheck": "两次输入的密码不一致。",
       "career": "工作经验必须是大于等于0的数字。（例如：8）",
       "intro": "简介需至少8个字符。",

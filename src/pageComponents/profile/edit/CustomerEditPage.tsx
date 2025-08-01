@@ -17,8 +17,13 @@ import {
   ProfileEditFormField,
   ProfileEditActionButtons,
 } from "@/components/profile/edit";
+import { useAuth } from "@/providers/AuthProvider";
+import { isValidEmail, isValidName, isValidPhoneNumber } from "@/utils/validators";
 
 export default function CustomerEditPage() {
+  const { user } = useAuth();
+  const provider = user?.provider;
+
   const router = useRouter();
   const { open, close } = useModal();
   const validationRules = useValidationRules();
@@ -39,15 +44,15 @@ export default function CustomerEditPage() {
 
   const { name = "", nickname = "", email = "", phone = "", currentPassword = "", newPassword = "" } = watch();
 
-  const allFilled =
-    name.trim() &&
-    nickname.trim() &&
-    email.trim() &&
-    phone.trim() &&
-    currentPassword.trim() &&
-    customerImage.dataUrl !== uploadSkeleton.src &&
-    services.length > 0 &&
-    regions;
+  const validName = name.trim() && isValidName(name);
+  const validNickname = nickname.trim() && isValidName(nickname);
+  const validEmail = email.trim() && isValidEmail(email);
+  const validPhone = phone.trim() && isValidPhoneNumber(phone);
+  const validServices = services.length > 0;
+  const validRegions = regions.length > 0;
+
+  // 필수값 체크
+  const allFilled = validName && validNickname && validEmail && validPhone && validServices && validRegions;
 
   // 프로필 수정
   const onSubmit = async () => {
@@ -134,6 +139,10 @@ export default function CustomerEditPage() {
     fetchProfile();
   }, [reset]);
 
+  useEffect(() => {
+    console.log(validName, validNickname, validEmail, validPhone, validServices, validRegions);
+  }, [validName, validNickname, validEmail, validPhone, validServices, validRegions]);
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -144,7 +153,7 @@ export default function CustomerEditPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-8 lg:mt-12 lg:min-h-screen lg:max-w-[1100px] lg:justify-between">
+      <div className="mx-auto flex max-w-[327px] flex-col gap-8 bg-white py-8 lg:min-h-screen lg:max-w-[1100px] lg:justify-between">
         {/* 헤더 */}
         <ProfileEditHeader titleKey="edit.customerTitle" />
 
@@ -196,66 +205,81 @@ export default function CustomerEditPage() {
               required
             />
 
-            {/* 현재 비밀번호 */}
-            <ProfileEditFormField
-              type="password"
-              name="currentPassword"
-              labelKey="currentPassword"
-              placeholderKey="edit.currentPasswordPlaceholder"
-              rules={validationRules.password}
-              required
-            />
+            {/* 로그인 provider가 LOCAL일 때만 비밀번호 수정 필드 표시 */}
+            {provider === "LOCAL" && (
+              <>
+                {/* 현재 비밀번호 */}
+                <ProfileEditFormField
+                  type="password"
+                  name="currentPassword"
+                  labelKey="currentPassword"
+                  placeholderKey="edit.currentPasswordPlaceholder"
+                  rules={{
+                    validate: (value: string) => {
+                      if (value && value.trim()) {
+                        return validationRules.password.validate(value);
+                      }
+                      return true;
+                    },
+                    onChange: () => {
+                      const confirmValue = getValues("newPasswordConfirm");
+                      if (confirmValue) {
+                        trigger("newPasswordConfirm");
+                      }
+                    },
+                  }}
+                />
 
-            {/* 새 비밀번호 */}
-            <ProfileEditFormField
-              type="password"
-              name="newPassword"
-              labelKey="newPassword"
-              placeholderKey="newPasswordPlaceholder"
-              rules={{
-                validate: (value: string) => {
-                  if (value && value.trim()) {
-                    return validationRules.password.validate(value);
-                  }
-                  return true;
-                },
-                onChange: () => {
-                  const confirmValue = getValues("newPasswordConfirm");
-                  if (confirmValue) {
-                    trigger("newPasswordConfirm");
-                  }
-                },
-              }}
-              optional
-            />
+                {/* 새 비밀번호 */}
+                <ProfileEditFormField
+                  type="password"
+                  name="newPassword"
+                  labelKey="newPassword"
+                  placeholderKey="newPasswordPlaceholder"
+                  rules={{
+                    validate: (value: string) => {
+                      if (value && value.trim()) {
+                        return validationRules.password.validate(value);
+                      }
+                      return true;
+                    },
+                    onChange: () => {
+                      const confirmValue = getValues("newPasswordConfirm");
+                      if (confirmValue) {
+                        trigger("newPasswordConfirm");
+                      }
+                    },
+                  }}
+                />
 
-            {/* 새 비밀번호 확인 */}
-            <ProfileEditFormField
-              type="password"
-              name="newPasswordConfirm"
-              labelKey="newPasswordConfirm"
-              placeholderKey="newPasswordConfirmPlaceholder"
-              rules={{
-                validate: (value: string) => {
-                  const newPassword = getValues("newPassword");
+                {/* 새 비밀번호 확인 */}
+                <ProfileEditFormField
+                  type="password"
+                  name="newPasswordConfirm"
+                  labelKey="newPasswordConfirm"
+                  placeholderKey="newPasswordConfirmPlaceholder"
+                  rules={{
+                    validate: (value: string) => {
+                      const newPassword = getValues("newPassword");
 
-                  if (!newPassword || !newPassword.trim()) {
-                    return true;
-                  }
+                      if (!newPassword || !newPassword.trim()) {
+                        return true;
+                      }
 
-                  if (!value || !value.trim()) {
-                    return t("newPasswordConfirmPlaceholder");
-                  }
+                      if (!value || !value.trim()) {
+                        return t("newPasswordConfirmPlaceholder");
+                      }
 
-                  if (value !== newPassword) {
-                    return t("newPasswordConfirmError");
-                  }
+                      if (value !== newPassword) {
+                        return t("newPasswordConfirmError");
+                      }
 
-                  return true;
-                },
-              }}
-              optional
-            />
+                      return true;
+                    },
+                  }}
+                />
+              </>
+            )}
           </div>
 
           {/* 오른쪽 컬럼 */}
