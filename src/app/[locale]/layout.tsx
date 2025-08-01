@@ -73,7 +73,7 @@ export default async function LocaleLayout({
           <Providers>
             <Gnb />
             {children}
-            <DevNavitgation />
+            {/* <DevNavitgation /> */}
           </Providers>
         </NextIntlClientProvider>
       </body>

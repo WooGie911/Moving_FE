@@ -11,6 +11,7 @@ import { useValidationRules } from "@/hooks/useValidationRules";
 import { useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ISigninFormProps {
   userType: TUserType;
@@ -18,6 +19,7 @@ interface ISigninFormProps {
 }
 
 const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
+  const router = useRouter();
   const { login, isLoading } = useAuth();
   const validationRules = useValidationRules();
   const { open, close } = useModal();
@@ -49,6 +51,8 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
           children: <div>{response.message}</div>,
           buttons: [{ text: t("confirm"), onClick: () => close() }],
         });
+      } else {
+        router.push("/");
       }
     } catch (error) {
       console.error(error);

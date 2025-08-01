@@ -25,8 +25,7 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
 
     setTokensToCookie(refreshed.accessToken);
 
-    if (accessToken) {
-      // 👉 Authorization 헤더에 새 토큰 명시 후 재시도
+    if (refreshed.accessToken) {
       return fetchWithAuth<T>(
         input,
         {
@@ -36,7 +35,7 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
             Authorization: `Bearer ${refreshed.accessToken}`,
           },
         },
-        false, // 재귀 방지
+        false,
       );
     }
 
