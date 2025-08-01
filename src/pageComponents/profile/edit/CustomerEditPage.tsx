@@ -72,7 +72,7 @@ export default function CustomerEditPage() {
       email,
       phoneNumber: phone,
       password: currentPassword,
-      customerImage: customerImage.dataUrl,
+      customerImage: customerImage.dataUrl === uploadSkeleton.src ? "" : customerImage.dataUrl,
       preferredServices: services,
       currentArea: regions,
     };

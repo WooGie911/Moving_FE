@@ -39,30 +39,30 @@ const REGION_OPTIONS = [
 
 // 서비스 타입 매핑
 const serviceTypeMapping: { [key: string]: string } = {
-  "소형이사": "SMALL",
-  "가정이사": "HOME",
-  "사무실이사": "OFFICE",
+  소형이사: "SMALL",
+  가정이사: "HOME",
+  사무실이사: "OFFICE",
 };
 
 // 지역 매핑
 const regionTypeMapping: { [key: string]: string } = {
-  "서울": "SEOUL",
-  "경기": "GYEONGGI",
-  "인천": "INCHEON",
-  "강원": "GANGWON",
-  "충북": "CHUNGBUK",
-  "충남": "CHUNGNAM",
-  "세종": "SEJONG",
-  "대전": "DAEJEON",
-  "전북": "JEONBUK",
-  "전남": "JEONNAM",
-  "광주": "GWANGJU",
-  "경북": "GYEONGBUK",
-  "경남": "GYEONGNAM",
-  "대구": "DAEGU",
-  "울산": "ULSAN",
-  "부산": "BUSAN",
-  "제주": "JEJU",
+  서울: "SEOUL",
+  경기: "GYEONGGI",
+  인천: "INCHEON",
+  강원: "GANGWON",
+  충북: "CHUNGBUK",
+  충남: "CHUNGNAM",
+  세종: "SEJONG",
+  대전: "DAEJEON",
+  전북: "JEONBUK",
+  전남: "JEONNAM",
+  광주: "GWANGJU",
+  경북: "GYEONGBUK",
+  경남: "GYEONGNAM",
+  대구: "DAEGU",
+  울산: "ULSAN",
+  부산: "BUSAN",
+  제주: "JEJU",
 };
 
 const defaultValues = {
@@ -104,26 +104,30 @@ export default function MoverEditPage() {
           intro: res.data.shortIntro || "",
           desc: res.data.detailIntro || "",
         });
-        
+
         // 서비스 타입 설정
         if (res.data.serviceTypes) {
-          const serviceNames = res.data.serviceTypes.map((type: string) => {
-            // MoveType enum을 한글 이름으로 변환
-            const serviceNameMap: { [key: string]: string } = {
-              "SMALL": "소형이사",
-              "HOME": "가정이사", 
-              "OFFICE": "사무실이사"
-            };
-            return serviceNameMap[type] || "";
-          }).filter(Boolean);
+          const serviceNames = res.data.serviceTypes
+            .map((type: string) => {
+              // MoveType enum을 한글 이름으로 변환
+              const serviceNameMap: { [key: string]: string } = {
+                SMALL: "소형이사",
+                HOME: "가정이사",
+                OFFICE: "사무실이사",
+              };
+              return serviceNameMap[type] || "";
+            })
+            .filter(Boolean);
           setServices(serviceNames);
         }
 
         // 지역 설정
         if (res.data.currentAreas) {
-          const regionNames = res.data.currentAreas.map((area: string) => {
-            return regionLabelMap[area] || "";
-          }).filter(Boolean);
+          const regionNames = res.data.currentAreas
+            .map((area: string) => {
+              return regionLabelMap[area] || "";
+            })
+            .filter(Boolean);
           setRegions(regionNames);
         }
 
@@ -159,7 +163,6 @@ export default function MoverEditPage() {
 
   const onSubmit = async (data: any) => {
     try {
-      
       // 이미지 업로드 처리
       let imageUrl = selectedImage.dataUrl;
       if (selectedImage.file) {
@@ -167,10 +170,10 @@ export default function MoverEditPage() {
       }
 
       // 서비스 타입을 API 형식으로 변환
-      const serviceTypes = services.map(service => serviceTypeMapping[service]).filter(Boolean);
-      
+      const serviceTypes = services.map((service) => serviceTypeMapping[service]).filter(Boolean);
+
       // 지역을 API 형식으로 변환 (여러 지역 지원)
-      const currentAreas = regions.map(region => regionTypeMapping[region]).filter(Boolean);
+      const currentAreas = regions.map((region) => regionTypeMapping[region]).filter(Boolean);
 
       const req = {
         nickname: data.nickname,
@@ -242,14 +245,20 @@ export default function MoverEditPage() {
                     className="hidden"
                     id="profile-image-input"
                   />
-                  <label 
+                  <label
                     htmlFor="profile-image-input"
                     className="flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-md bg-neutral-100 transition-all hover:bg-neutral-200 lg:h-40 lg:w-40"
                   >
                     {selectedImage.dataUrl ? (
                       <img src={selectedImage.dataUrl} alt="프로필 이미지" className="h-full w-full object-cover" />
                     ) : (
-                      <Image src={moverprofileMd} alt="프로필 이미지" width={160} height={160} className="object-cover" />
+                      <Image
+                        src={moverprofileMd}
+                        alt="프로필 이미지"
+                        width={160}
+                        height={160}
+                        className="object-cover"
+                      />
                     )}
                   </label>
                 </div>
@@ -308,7 +317,10 @@ export default function MoverEditPage() {
                   <TextInput
                     name="intro"
                     placeholder={t("edit.shortIntroPlaceholder")}
-                    rules={{ required: t("edit.requiredField"), minLength: { value: 8, message: t("edit.minLength8") } }}
+                    rules={{
+                      required: t("edit.requiredField"),
+                      minLength: { value: 8, message: t("edit.minLength8") },
+                    }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
@@ -329,7 +341,10 @@ export default function MoverEditPage() {
                   <TextAreaInput
                     name="desc"
                     placeholder={t("edit.detailIntroPlaceholder")}
-                    rules={{ required: t("edit.requiredField"), minLength: { value: 10, message: t("edit.minLength10") } }}
+                    rules={{
+                      required: t("edit.requiredField"),
+                      minLength: { value: 10, message: t("edit.minLength10") },
+                    }}
                     textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
                   />
