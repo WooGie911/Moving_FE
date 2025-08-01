@@ -45,14 +45,14 @@ export const isValidEmail = (email: string): boolean => {
 
 /**
  * 이름 유효성 검사
- * - 한글 완성형(가~힣) 또는 영문만 허용
- * - 한글 자모(ㄱㄴㄷ 등) 불허
- * - 최소 1자 이상, 최대 10자 이하
+ * - 한글 완성형, 영어, 중국어만 허용
+ * - 한글 자모(ㄱㄴㄷ 등)는 불허
+ * - 최소 1자 이상, 최대 15자 이하
  */
 export const isValidName = (name: string): boolean => {
-  const nameRegex = /^[a-zA-Z가-힣]{1,10}$/; // 허용 문자
-  const disallowed = /[ㄱ-ㅎㅏ-ㅣ]/; // 자모 차단
-  return nameRegex.test(name) && !disallowed.test(name);
+  const allowedRegex = /^[a-zA-Z가-힣\u4E00-\u9FFF]{1,15}$/;
+  const disallowedRegex = /[ㄱ-ㅎㅏ-ㅣ]/; // 한글 자모 차단
+  return allowedRegex.test(name) && !disallowedRegex.test(name);
 };
 
 /**
