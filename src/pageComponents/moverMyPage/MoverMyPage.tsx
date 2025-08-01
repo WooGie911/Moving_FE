@@ -231,6 +231,7 @@ const MoverMyPage = () => {
                         textColor="text-gray-500"
                         heartPosition="left"
                         onFavoriteChange={() => {}}
+                        disabled={true}
                       />
                     </div>
                   </div>
