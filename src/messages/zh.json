@@ -142,7 +142,7 @@
     "roadNameLabel": "道路名",
     "jibunLabel": "地段",
     "roadAddressPlaceholder": "请输入道路名地址",
-    "jibunAddressPlaceholder": "请输入地段地址",
+    "jibunAddressPlaceholder": "该地址无地段信息",
     "editAnswer": "修改",
     "selectDeparture": "选择出发地",
     "selectArrival": "选择目的地",
@@ -153,7 +153,10 @@
     "completeSelection": "完成选择",
     "editConfirmMessage": "您要编辑此项目吗？",
     "editConfirmTitle": "编辑项目",
-    "moverEstimateSubmitted": "当司机提交了报价时无法修改。请查看报价并做出决定。"
+    "moverEstimateSubmitted": "当司机提交了报价时无法修改。请查看报价并做出决定。",
+    "hasEstimatesMessage": "司机已发送报价。",
+    "viewEstimatesButton": "查看报价",
+    "loadingText": "正在准备报价请求页面..."
   },
   "navigation": {
     "home": "首页",
@@ -166,7 +169,8 @@
     "myEstimateManagement": "我的报价管理",
     "myReviewManagement": "我的评价管理",
     "receivedRequests": "收到的请求",
-    "myEstimateManagementDriver": "我的报价管理"
+    "myEstimateManagementDriver": "我的报价管理",
+    "scheduleManagement": "日程管理"
   },
   "serviceAvailableCountry": "*目前仅在大韩民国提供服务。",
   "addressSearchScriptNotLoaded": "地址搜索脚本尚未加载，请稍后再试。",
@@ -768,16 +772,13 @@
     "title": "日程管理",
     "description": "查看和管理您的搬家日程",
     "selectDate": "请选择日期",
-    "scheduleFor": "日程",
-    "noSchedules": "该日期没有预定的日程。",
+    "schedule": "日程",
+    "scheduleText": "日程",
+    "noSchedule": "该日期没有预定的日程。",
     "selectDateToView": "在日历上选择日期以查看详细日程。",
-    "customerSuffix": "",
-    "time": "时间：",
-    "type": "类型：",
-    "departure": "出发地：",
-    "arrival": "目的地：",
-    "viewDetails": "查看详情",
-    "approve": "批准",
+    "movingType": "搬家类型",
+    "from": "出发地",
+    "to": "目的地",
     "status": {
       "confirmed": "已确认",
       "pending": "待处理",

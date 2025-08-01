@@ -4,8 +4,9 @@ import { useLanguageStore } from "@/stores/languageStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import MoverScheduleService from "@/lib/api/moverScheduleService";
-import { Schedule } from "@/types/schedule";
+import { Schedule, TranslationFunction, ModalOptions } from "@/types/schedule";
 import { getCurrentYearMonth, getAdjacentMonth } from "@/utils/scheduleUtils";
+import { createQueryKey, createModalOptions } from "@/utils/apiUtils";
 
 // 상수 정의
 const QUERY_KEYS = {
@@ -19,11 +20,11 @@ const QUERY_CONFIG = {
 } as const;
 
 const ERROR_MESSAGES = {
-  MONTHLY_SCHEDULES: "월별 스케줄 조회에 실패했습니다.",
+  monthlySchedules: "월별 스케줄 조회에 실패했습니다.",
 } as const;
 
 // 유틸리티 함수들
-const createQueryKey = (year: number, month: number, locale: string) => [
+const createMonthlyQueryKey = (year: number, month: number, locale: string) => [
   QUERY_KEYS.MOVER_SCHEDULES,
   QUERY_KEYS.MONTHLY,
   year,
@@ -31,20 +32,14 @@ const createQueryKey = (year: number, month: number, locale: string) => [
   locale,
 ];
 
-const createErrorModal = (open: any, close: any, t: any, message: string) => ({
-  title: t("common.error"),
-  children: (
-    <div className="p-6">
-      <p className="mb-4 text-gray-700">{message}</p>
-    </div>
-  ),
-  buttons: [
-    {
-      text: t("common.confirm"),
-      onClick: close,
-    },
-  ],
-});
+const createErrorModal = (
+  open: (options: ModalOptions) => void,
+  close: () => void,
+  t: TranslationFunction,
+  message: string,
+): ModalOptions => {
+  return createModalOptions(t("error"), message, close, t);
+};
 
 const fetchMonthlySchedules = async (year: number, month: number, locale: string) => {
   const response = await MoverScheduleService.getMonthlySchedules(year, month, locale);
@@ -71,11 +66,15 @@ export const useMoverScheduleApi = () => {
       const { prevMonth, nextMonth } = getAdjacentMonth(year, month);
 
       // 이전 달 데이터 확인
-      const prevData = queryClient.getQueryData<Schedule[]>(createQueryKey(prevMonth.year, prevMonth.month, locale));
+      const prevData = queryClient.getQueryData<Schedule[]>(
+        createMonthlyQueryKey(prevMonth.year, prevMonth.month, locale),
+      );
       if (prevData) return prevData;
 
       // 다음 달 데이터 확인
-      const nextData = queryClient.getQueryData<Schedule[]>(createQueryKey(nextMonth.year, nextMonth.month, locale));
+      const nextData = queryClient.getQueryData<Schedule[]>(
+        createMonthlyQueryKey(nextMonth.year, nextMonth.month, locale),
+      );
       if (nextData) return nextData;
 
       return undefined;
@@ -86,12 +85,13 @@ export const useMoverScheduleApi = () => {
   // 월별 스케줄 조회 (캘린더용)
   const useGetMonthlySchedules = (year: number, month: number) => {
     return useQuery({
-      queryKey: createQueryKey(year, month, locale),
+      queryKey: createMonthlyQueryKey(year, month, locale),
       queryFn: async () => {
         try {
           return await fetchMonthlySchedules(year, month, locale);
-        } catch (error: any) {
-          showErrorModal(error.message || ERROR_MESSAGES.MONTHLY_SCHEDULES);
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : ERROR_MESSAGES.monthlySchedules;
+          showErrorModal(errorMessage);
           throw error;
         }
       },
@@ -111,7 +111,7 @@ export const useMoverScheduleApi = () => {
     (year?: number, month?: number) => {
       if (year && month) {
         queryClient.invalidateQueries({
-          queryKey: createQueryKey(year, month, locale),
+          queryKey: createMonthlyQueryKey(year, month, locale),
         });
       } else {
         queryClient.invalidateQueries({
@@ -129,14 +129,14 @@ export const useMoverScheduleApi = () => {
 
       // 이전 달 미리 캐싱
       queryClient.prefetchQuery({
-        queryKey: createQueryKey(prevMonth.year, prevMonth.month, locale),
+        queryKey: createMonthlyQueryKey(prevMonth.year, prevMonth.month, locale),
         queryFn: () => fetchMonthlySchedules(prevMonth.year, prevMonth.month, locale),
         ...QUERY_CONFIG,
       });
 
       // 다음 달 미리 캐싱
       queryClient.prefetchQuery({
-        queryKey: createQueryKey(nextMonth.year, nextMonth.month, locale),
+        queryKey: createMonthlyQueryKey(nextMonth.year, nextMonth.month, locale),
         queryFn: () => fetchMonthlySchedules(nextMonth.year, nextMonth.month, locale),
         ...QUERY_CONFIG,
       });

@@ -7,9 +7,9 @@ import { IEstimateRequestLayoutProps } from "@/types/estimateRequest";
 export const ESTIMATE_REQUEST_STYLES = {
   container: "min-h-screen bg-gray-200",
   header: "sticky top-[72px] z-10 bg-white p-6 shadow-sm",
-  headerContent: "mx-auto min-w-[330px] md:min-w-175 lg:max-w-225",
+  headerContent: "mx-auto min-w-[330px] md:min-w-175 md:px-3 lg:max-w-225 lg:px-5",
   title: "text-2lg text-black-400 leading-lg mb-4 font-semibold",
-  content: "mx-auto min-w-[330px] space-y-4 py-6 md:min-w-175 lg:max-w-225",
+  content: "mx-auto min-w-[330px] space-y-4 py-6 px-1 md:min-w-175 md:px-3 lg:max-w-225 lg:px-5",
   button: "h-[54px] rounded-[16px]",
   buttonFull: "w-full",
   buttonFlex: "flex-1",
