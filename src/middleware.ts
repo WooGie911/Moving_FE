@@ -32,6 +32,7 @@ export async function middleware(request: NextRequest) {
     "ko";
 
   const accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
 
   let userType: TUserRole | undefined = undefined;
   let hasProfile: boolean | undefined = undefined;
@@ -47,7 +48,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const isAuthenticated = !!accessToken;
+  const isAuthenticated = !!accessToken || !!refreshToken;
 
   // ✅ 루트 경로 접근 제어 (next-intl보다 먼저 처리)
   if (rawPathname === "/") {
@@ -87,18 +88,23 @@ export async function middleware(request: NextRequest) {
     (pathname.startsWith("/estimate") && !pathname.startsWith("/estimateRequest")) ||
     pathname.startsWith("/moverMyPage");
 
-  // ✅ 일반 로그인 프로필 등록 강제 이동
-  if (isProtectedRoute && !hasProfile && pathname !== "/profile/register") {
+  // ✅ 일반 로그인 프로필 등록 강제 이동 (accessToken 있는 경우)
+  if (isProtectedRoute && accessToken && !hasProfile && pathname !== "/profile/register") {
     return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 
-  // ✅ 소셜 로그인 프로필 등록 강제 이동 (로그인된 사용자만)
-  if (isAuthenticated && !hasProfile && (pathname === "/searchMover" || pathname === "/estimate/received")) {
+  // ✅ 소셜 로그인 프로필 등록 강제 이동 (accessToken 있는 경우)
+  if (
+    isAuthenticated &&
+    accessToken &&
+    !hasProfile &&
+    (pathname === "/searchMover" || pathname === "/estimate/received")
+  ) {
     return NextResponse.redirect(new URL(withLocalePrefix("/profile/register", locale), request.url));
   }
 
   // ✅ 프로필 등록 페이지 접근 방지 (이미 등록된 경우)
-  if (isProtectedRoute && hasProfile && pathname === "/profile/register") {
+  if (isProtectedRoute && accessToken && hasProfile && pathname === "/profile/register") {
     const redirectPath =
       userType === "CUSTOMER"
         ? withLocalePrefix("/searchMover", locale)

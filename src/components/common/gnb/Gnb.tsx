@@ -16,6 +16,7 @@ export const Gnb = () => {
   const userRole = user?.userType || "GUEST";
   const userName = user?.nickname || user?.name || "";
   const userProfileImage = userRole === "CUSTOMER" ? user?.customerImage : user?.moverImage;
+  const hasBothProfiles = user?.hasBothProfiles || false;
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -38,6 +39,7 @@ export const Gnb = () => {
                 logout={logout}
                 userName={userName}
                 deviceType={deviceType}
+                hasBothProfiles={hasBothProfiles}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}
                 profileImage={userProfileImage}
@@ -52,6 +54,7 @@ export const Gnb = () => {
                 logout={logout}
                 userName={userName}
                 deviceType={deviceType}
+                hasBothProfiles={hasBothProfiles}
                 toggleSideMenu={toggleMobileMenu}
                 isSideMenuOpen={isMobileMenuOpen}
                 profileImage={userProfileImage}

@@ -12,34 +12,14 @@ import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
 import { useTranslations } from "next-intl";
-
-const USER_ACTION_LIST = [
-  {
-    label: "gnb.userActions.editProfile",
-    href: "/profile/edit",
-  },
-  {
-    label: "gnb.userActions.favoriteDrivers",
-    href: "/user/favorite",
-  },
-];
-
-const MOVER_USER_ACTION_LIST = [
-  {
-    label: "gnb.userActions.editProfile",
-    href: "/profile/edit",
-  },
-  {
-    label: "gnb.userActions.myPage",
-    href: "/moverMyPage",
-  },
-];
+import ProfileModal from "./ProfileModal";
 
 interface IGnbActionsProps {
   userRole: TUserRole;
   userName: string;
   deviceType: TDeviceType;
   isSideMenuOpen: boolean;
+  hasBothProfiles: boolean;
   profileImage?: string;
   logout: () => void;
   toggleSideMenu: () => void;
@@ -49,6 +29,7 @@ export const GnbActions = ({
   userRole,
   logout,
   userName,
+  hasBothProfiles,
   deviceType,
   toggleSideMenu,
   isSideMenuOpen,
@@ -205,35 +186,14 @@ export const GnbActions = ({
 
             {/* 프로필 모달창 */}
             {isProfileOpen && (
-              <div
-                ref={profileModalRef}
-                className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
-              >
-                <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
-                  <span className="w-full px-2 py-2 text-left text-lg">
-                    {userName} {userRole === "CUSTOMER" ? t("gnb.userSuffix.customer") : t("gnb.userSuffix.driver")}
-                  </span>
-                  <ul className="flex w-full flex-col">
-                    {userRole === "CUSTOMER"
-                      ? USER_ACTION_LIST.map((item, index) => (
-                          <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
-                          </Link>
-                        ))
-                      : MOVER_USER_ACTION_LIST.map((item, index) => (
-                          <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
-                          </Link>
-                        ))}
-                  </ul>
-                </nav>
-                <button
-                  className="w-full cursor-pointer px-3 py-3 text-xs text-gray-500 transition-colors hover:text-gray-700 lg:text-lg"
-                  onClick={() => logout()}
-                >
-                  {t("gnb.logout")}
-                </button>
-              </div>
+              <ProfileModal
+                userName={userName}
+                userRole={userRole}
+                hasBothProfiles={hasBothProfiles}
+                logout={logout}
+                profileModalRef={profileModalRef}
+                closeProfileModal={closeProfileModal}
+              />
             )}
           </div>
         </>
