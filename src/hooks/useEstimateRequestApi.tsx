@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import { IFormState } from "@/types/estimateRequest";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ interface ApiResponse<T = any> {
 
 export const useEstimateRequestApi = () => {
   const { open, close } = useModal();
-  const { t } = useLanguageStore();
+  const t = useTranslations();
   const router = useRouter();
   const queryClient = useQueryClient();
 

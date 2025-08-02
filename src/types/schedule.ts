@@ -117,7 +117,6 @@ export interface CalendarWithScheduleProps {
 export interface ScheduleItemProps {
   schedule: Schedule;
   t: (key: string) => string;
-  tEstimateRequest: (key: string) => string;
 }
 
 /**
@@ -126,7 +125,6 @@ export interface ScheduleItemProps {
 export interface ScheduleListProps {
   schedules: Schedule[];
   t: (key: string) => string;
-  tEstimateRequest: (key: string) => string;
 }
 
 /**
@@ -162,7 +160,6 @@ export interface DetailSectionProps {
   selectedDate: Date | undefined;
   selectedDateSchedules: Schedule[];
   t: (key: string) => string;
-  tEstimateRequest: (key: string) => string;
 }
 
 /**

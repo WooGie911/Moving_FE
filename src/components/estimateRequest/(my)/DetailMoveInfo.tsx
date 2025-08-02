@@ -17,17 +17,17 @@ export const DetailMoveInfo = ({
 
   // 요일과 시간 포맷 가져오기
   const weekdays = [
-    t("weekdays.sunday"),
-    t("weekdays.monday"),
-    t("weekdays.tuesday"),
-    t("weekdays.wednesday"),
-    t("weekdays.thursday"),
-    t("weekdays.friday"),
-    t("weekdays.saturday"),
+    t("shared.time.weekdays.sunday"),
+    t("shared.time.weekdays.monday"),
+    t("shared.time.weekdays.tuesday"),
+    t("shared.time.weekdays.wednesday"),
+    t("shared.time.weekdays.thursday"),
+    t("shared.time.weekdays.friday"),
+    t("shared.time.weekdays.saturday"),
   ];
   const timeFormat = {
-    am: t("timeFormat.am"),
-    pm: t("timeFormat.pm"),
+    am: t("shared.time.timeFormat.am"),
+    pm: t("shared.time.timeFormat.pm"),
   };
 
   // movingType을 다국어로 변환하는 함수

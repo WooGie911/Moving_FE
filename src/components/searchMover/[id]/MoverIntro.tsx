@@ -40,7 +40,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("inProgress")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
             {mover.completedCount}
-            {t("cases")}
+            {t("shared.units.cases")}
           </p>
         </div>
         <div className="flex w-full flex-col items-center">
@@ -55,7 +55,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("totalExperience")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
             {mover.experience}
-            {t("years")}
+            {t("shared.units.years")}
           </p>
         </div>
       </div>

@@ -17,8 +17,7 @@ import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
 import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations, useLocale } from "next-intl";
 import { CalendarDateObj, ScheduleDisplay, CalendarWithScheduleProps } from "@/types/schedule";
 import { createSafeDate, getCalendarMatrix, isToday, isPastDate } from "@/utils/scheduleUtils";
 
@@ -51,23 +50,23 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const today = startOfDay(new Date());
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations();
 
   // 언어 변경 시 강제 리렌더링을 위한 언어 상태 사용
-  const { language } = useLanguageStore();
+  const locale = useLocale();
 
   // 요일 배열을 번역 함수로 생성 (언어 변경 시 자동 업데이트)
   const daysOfWeek = useMemo(
     () => [
-      t("weekdays.sunday"),
-      t("weekdays.monday"),
-      t("weekdays.tuesday"),
-      t("weekdays.wednesday"),
-      t("weekdays.thursday"),
-      t("weekdays.friday"),
-      t("weekdays.saturday"),
+      t("shared.time.weekdays.sunday"),
+      t("shared.time.weekdays.monday"),
+      t("shared.time.weekdays.tuesday"),
+      t("shared.time.weekdays.wednesday"),
+      t("shared.time.weekdays.thursday"),
+      t("shared.time.weekdays.friday"),
+      t("shared.time.weekdays.saturday"),
     ],
-    [t, language], // language를 의존성에 추가하여 언어 변경 시 업데이트
+    [t, locale], // language를 의존성에 추가하여 언어 변경 시 업데이트
   );
 
   // 캘린더 매트릭스를 useMemo로 메모이제이션

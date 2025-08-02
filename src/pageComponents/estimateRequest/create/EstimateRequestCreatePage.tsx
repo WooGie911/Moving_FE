@@ -3,11 +3,11 @@
 import React from "react";
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
 import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 const EstimateRequestCreatePage = () => {
   const apiLogic = useEstimateRequestApi();
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   return (
     <EstimateRequestFlow

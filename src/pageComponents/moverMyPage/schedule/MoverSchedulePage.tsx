@@ -16,7 +16,7 @@ import {
   DetailSectionProps,
 } from "@/types/schedule";
 import { groupSchedulesByDate, getSchedulesForDate, getStatusStyleClass, getStatusText } from "@/utils/scheduleUtils";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useLocale } from "next-intl";
 
 // 페이지 스타일 상수
 const PAGE_STYLES = {
@@ -33,7 +33,7 @@ const PAGE_STYLES = {
 } as const;
 
 // 스케줄 아이템 컴포넌트
-const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, t, tEstimateRequest }) => (
+const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, t }) => (
   <article
     className="rounded-lg border border-gray-200 bg-gray-50 p-4"
     aria-labelledby={`schedule-${schedule.id}-title`}
@@ -54,15 +54,15 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ schedule, t, tEstimateReque
     <section aria-label="스케줄 상세 정보">
       <dl className="mb-2 text-sm text-gray-600">
         <div className="mb-1">
-          <dt className="inline font-medium">{t("movingType")}:</dt>
-          <dd className="ml-1 inline">{tEstimateRequest(`movingTypes.${schedule.movingType}`)}</dd>
+          <dt className="inline font-medium">{t("schedule.movingType")}:</dt>
+          <dd className="ml-1 inline">{t(`shared.movingTypes.${schedule.movingType}`)}</dd>
         </div>
         <div className="mb-1">
-          <dt className="inline font-medium">{t("from")}:</dt>
+          <dt className="inline font-medium">{t("schedule.from")}:</dt>
           <dd className="ml-1 inline">{schedule.fromAddress}</dd>
         </div>
         <div>
-          <dt className="inline font-medium">{t("to")}:</dt>
+          <dt className="inline font-medium">{t("schedule.to")}:</dt>
           <dd className="ml-1 inline">{schedule.toAddress}</dd>
         </div>
       </dl>
@@ -78,15 +78,15 @@ const EmptyState: React.FC<EmptyStateProps> = ({ message }) => (
 );
 
 // 스케줄 목록 컴포넌트
-const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, t, tEstimateRequest }) => {
+const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, t }) => {
   if (schedules.length === 0) {
-    return <EmptyState message={t("noSchedule")} />;
+    return <EmptyState message={t("schedule.noSchedule")} />;
   }
 
   return (
     <section className="space-y-4" aria-label="선택된 날짜의 스케줄 목록" role="region">
       {schedules.map((schedule) => (
-        <ScheduleItem key={schedule.id} schedule={schedule} t={t} tEstimateRequest={tEstimateRequest} />
+        <ScheduleItem key={schedule.id} schedule={schedule} t={t} />
       ))}
     </section>
   );
@@ -95,8 +95,8 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ schedules, t, tEstimateRequ
 // 헤더 컴포넌트
 const PageHeader: React.FC<PageHeaderProps> = ({ t }) => (
   <header className={PAGE_STYLES.header} role="banner">
-    <h1 className={PAGE_STYLES.title}>{t("title")}</h1>
-    <p className={PAGE_STYLES.description}>{t("description")}</p>
+    <h1 className={PAGE_STYLES.title}>{t("schedule.title")}</h1>
+    <p className={PAGE_STYLES.description}>{t("schedule.description")}</p>
   </header>
 );
 
@@ -126,7 +126,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   selectedDate,
   selectedDateSchedules,
   t,
-  tEstimateRequest,
 }) => (
   <aside className={PAGE_STYLES.detailContainer} aria-label="선택된 날짜의 스케줄 상세 정보" role="complementary">
     <div className={PAGE_STYLES.detailCard}>
@@ -137,9 +136,9 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           <LoadingSpinner containerClassName="py-8" />
         </div>
       ) : selectedDate ? (
-        <ScheduleList schedules={selectedDateSchedules} t={t} tEstimateRequest={tEstimateRequest} />
+        <ScheduleList schedules={selectedDateSchedules} t={t} />
       ) : (
-        <EmptyState message={t("selectDateToView")} />
+        <EmptyState message={t("schedule.selectDateToView")} />
       )}
     </div>
   </aside>
@@ -147,9 +146,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
 // 메인 스케줄 페이지 컴포넌트
 const MoverSchedulePage = () => {
-  const t = useTranslations("schedule");
-  const tEstimateRequest = useTranslations("estimateRequest");
-  const { language } = useLanguageStore();
+  const t = useTranslations();
+  const locale = useLocale();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const { useGetMonthlySchedules } = useMoverScheduleApi();
@@ -169,10 +167,10 @@ const MoverSchedulePage = () => {
       const schedules = getSchedulesForDate(date, schedulesByDate);
       return schedules.map((schedule) => ({
         ...schedule,
-        movingType: tEstimateRequest(`movingTypes.${schedule.movingType}`),
+        movingType: t(`shared.movingTypes.${schedule.movingType}`),
       }));
     },
-    [schedulesByDate, tEstimateRequest],
+    [schedulesByDate, t],
   );
 
   // 선택된 날짜의 스케줄
@@ -200,7 +198,7 @@ const MoverSchedulePage = () => {
 
       // 언어별 기본 일정 텍스트
       const getDefaultScheduleText = () => {
-        switch (language) {
+        switch (locale) {
           case "ko":
             return "일정";
           case "zh":
@@ -215,7 +213,7 @@ const MoverSchedulePage = () => {
 
       try {
         // 새로운 키를 사용하여 번역 가져오기
-        const translatedText = t("scheduleText");
+        const translatedText = t("schedule.scheduleText");
         // 번역이 제대로 로드되었는지 확인 (키가 그대로 반환되지 않았는지)
         if (
           translatedText &&
@@ -230,9 +228,9 @@ const MoverSchedulePage = () => {
         scheduleText = getDefaultScheduleText();
       }
 
-      if (language === "ko") {
+      if (locale === "ko") {
         return `${month}월 ${day}일 ${scheduleText}`;
-      } else if (language === "zh") {
+      } else if (locale === "zh") {
         return `${month}月${day}日 ${scheduleText}`;
       } else {
         // 영어
@@ -253,11 +251,11 @@ const MoverSchedulePage = () => {
         return `${monthNames[month - 1]} ${day} ${scheduleText}`;
       }
     },
-    [language, t],
+    [locale, t],
   );
 
   // 헤더 텍스트 - 날짜 번역 추가
-  const headerText = selectedDate ? formatDate(selectedDate) : t("selectDate");
+  const headerText = selectedDate ? formatDate(selectedDate) : t("schedule.selectDate");
 
   return (
     <main className={PAGE_STYLES.container} role="main" aria-label="기사님 일정 관리 페이지">
@@ -277,7 +275,6 @@ const MoverSchedulePage = () => {
           selectedDate={selectedDate}
           selectedDateSchedules={selectedDateSchedules}
           t={t}
-          tEstimateRequest={tEstimateRequest}
         />
       </div>
     </main>

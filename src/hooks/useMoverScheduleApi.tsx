@@ -1,8 +1,7 @@
 import React, { useCallback } from "react";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations, useLocale } from "next-intl";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useLocale } from "next-intl";
 import MoverScheduleService from "@/lib/api/moverScheduleService";
 import { Schedule, TranslationFunction, ModalOptions } from "@/types/schedule";
 import { getCurrentYearMonth, getAdjacentMonth } from "@/utils/scheduleUtils";
@@ -38,7 +37,7 @@ const createErrorModal = (
   t: TranslationFunction,
   message: string,
 ): ModalOptions => {
-  return createModalOptions(t("error"), message, close, t);
+  return createModalOptions(t("common.error"), message, close, t);
 };
 
 const fetchMonthlySchedules = async (year: number, month: number, locale: string) => {
@@ -48,7 +47,7 @@ const fetchMonthlySchedules = async (year: number, month: number, locale: string
 
 export const useMoverScheduleApi = () => {
   const { open, close } = useModal();
-  const { t } = useLanguageStore();
+  const t = useTranslations();
   const locale = useLocale();
   const queryClient = useQueryClient();
 

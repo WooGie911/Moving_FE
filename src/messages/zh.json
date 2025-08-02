@@ -18,14 +18,52 @@
     "previous": "上一步",
     "completeSelection": "完成选择",
     "editAnswer": "修改",
-    "success": "完成"
+    "success": "完成",
+    "retry": "重试"
+  },
+  "shared": {
+    "units": {
+      "years": "年",
+      "cases": "件",
+      "currency": "韩元"
+    },
+    "time": {
+      "weekdays": {
+        "sunday": "日",
+        "monday": "一",
+        "tuesday": "二",
+        "wednesday": "三",
+        "thursday": "四",
+        "friday": "五",
+        "saturday": "六"
+      },
+      "dateFormat": {
+        "year": "年",
+        "month": "月",
+        "day": "日"
+      },
+      "timeFormat": {
+        "am": "上午",
+        "pm": "下午"
+      }
+    },
+    "movingTypes": {
+      "small": "小型搬家",
+      "smallDesc": "单间，双间，20坪以下",
+      "home": "家庭搬家",
+      "homeDesc": "三间，20坪以上",
+      "office": "办公室搬家",
+      "officeDesc": "办公室，商业空间",
+      "store": "商店搬家",
+      "piano": "钢琴搬家",
+      "art": "艺术品搬家",
+      "storage": "存储搬家"
+    }
   },
   "estimateRequest": {
     "title": "报价请求",
     "editTitle": "编辑报价",
     "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
-    "loading": "加载中...",
-    "error": "发生错误。",
     "noEstimateInProgress": "没有进行中的报价。",
     "requestNewEstimate": "请申请新的报价。",
     "goToCreateEstimate": "去创建报价",
@@ -50,8 +88,6 @@
     "movingDateLabel": "搬家日期",
     "driverSuffix": "司机",
     "experience": "经验",
-    "years": "年",
-    "cases": "案例",
     "confirmed": "已确认",
     "estimateWaiting": "等待中",
     "confirmedEstimate": "已确认",
@@ -61,24 +97,7 @@
     "requestDateShort": "申请日期",
     "service": "服务",
     "usageDate": "使用日期",
-    "weekdays": {
-      "sunday": "日",
-      "monday": "一",
-      "tuesday": "二",
-      "wednesday": "三",
-      "thursday": "四",
-      "friday": "五",
-      "saturday": "六"
-    },
-    "timeFormat": {
-      "am": "上午",
-      "pm": "下午"
-    },
-    "dateFormat": {
-      "year": "年",
-      "month": "月",
-      "day": "日"
-    },
+
     "profileImage": "个人资料图片",
     "estimatePrice": "报价",
     "estimateAmount": "报价金额",
@@ -354,9 +373,7 @@
     "tryOtherSearch": "尝试其他搜索词或过滤器",
     "driverSuffix": "司机",
     "experience": "经验",
-    "years": "年",
     "confirmed": "确认",
-    "cases": "件",
     "reviews": "评论",
     "totalExperience": "总经验",
     "inProgress": "进行中",
@@ -397,7 +414,6 @@
     "casesMobile": "",
     "confirmedMobile": "完成",
     "myPage": {
-      "loading": "加载中...",
       "retry": "重试",
       "profileNotFound": "找不到个人资料信息。",
       "editProfile": "编辑我的个人资料",
@@ -582,8 +598,6 @@
   },
 
   "estimate": {
-    "loading": "加载中...",
-    "error": "发生错误。请重试。",
     "apiError": "API错误：",
     "createEstimateSuccessTitle": "报价创建成功",
     "createEstimateSuccessMessage": "报价发送成功",
@@ -607,15 +621,7 @@
     "departure": "出发地",
     "arrival": "目的地",
     "movingDate": "搬家日期",
-    "weekdays": {
-      "sunday": "日",
-      "monday": "一",
-      "tuesday": "二",
-      "wednesday": "三",
-      "thursday": "四",
-      "friday": "五",
-      "saturday": "六"
-    },
+
     "estimateAmount": "报价金额",
     "currency": "韩元",
     "enterEstimatePrice": "请输入报价。",
@@ -653,13 +659,7 @@
     "estimatePrice": "报价",
     "customerSuffix": " 客户",
     "confirmedEstimate": "已确认报价",
-    "profileImage": "个人资料图片",
-    "currency": "韩元",
-    "dateFormat": {
-      "year": "年",
-      "month": "月",
-      "day": "日"
-    }
+    "profileImage": "个人资料图片"
   },
   "relativeTime": {
     "justNow": "刚刚",
@@ -743,8 +743,6 @@
     "writtenTab": "我写的评价",
     "writeReview": "写评价",
     "noWritableReviews": "没有可写的评价！",
-    "loading": "加载中...",
-    "error": "发生错误。",
     "reviewWriteFailed": "写评价失败。请重试。",
     "noWrittenReviews": "没有写的评价！",
     "noWrittenReviewsAlt": "没有写的评价",

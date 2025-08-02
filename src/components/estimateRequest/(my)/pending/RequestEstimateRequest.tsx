@@ -38,9 +38,9 @@ export const RequestEstimateRequest = ({
     const day = date.getDate();
 
     // 다국어 날짜 포맷
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = t("shared.time.dateFormat.year");
+    const monthSuffix = t("shared.time.dateFormat.month");
+    const daySuffix = t("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
@@ -59,20 +59,20 @@ export const RequestEstimateRequest = ({
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const weekdays = [
-      t("weekdays.sunday"),
-      t("weekdays.monday"),
-      t("weekdays.tuesday"),
-      t("weekdays.wednesday"),
-      t("weekdays.thursday"),
-      t("weekdays.friday"),
-      t("weekdays.saturday"),
+      t("shared.time.weekdays.sunday"),
+      t("shared.time.weekdays.monday"),
+      t("shared.time.weekdays.tuesday"),
+      t("shared.time.weekdays.wednesday"),
+      t("shared.time.weekdays.thursday"),
+      t("shared.time.weekdays.friday"),
+      t("shared.time.weekdays.saturday"),
     ];
     const dayOfWeek = weekdays[date.getDay()];
 
     // 다국어 날짜 포맷 - 언어별로 다른 형식 적용
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = t("shared.time.dateFormat.year");
+    const monthSuffix = t("shared.time.dateFormat.month");
+    const daySuffix = t("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {

@@ -99,7 +99,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                     ? t("yearsFavorite")
                     : deviceType === "mobile"
                       ? t("yearsMobile") || "年"
-                      : t("years")}
+                      : t("shared.units.years")}
                 </span>
               </div>
               <span className="text-[#e6e6e6]">|</span>
@@ -110,7 +110,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                     ? t("casesFavorite")
                     : deviceType === "mobile"
                       ? t("casesMobile") || ""
-                      : t("cases")}
+                      : t("shared.units.cases")}
                 </span>
                 <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">
                   {variant === "favorite"
@@ -177,14 +177,14 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                       </span>
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
                         {mover.experience}
-                        {t("years")}
+                        {t("shared.units.years")}
                       </span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>
                     <div className="flex min-w-0 items-center gap-1">
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
                         {mover.completedCount}
-                        {t("cases")}
+                        {t("shared.units.cases")}
                       </span>
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
                         {t("confirmed")}
