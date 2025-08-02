@@ -73,7 +73,7 @@ function ProfileModal({
           <div
             className={`relative flex w-full items-center justify-between ${!hasBothProfiles ? "cursor-not-allowed opacity-50" : ""}`}
           >
-            <span className="text-md font-medium">간편 전환</span>
+            <span className="text-md font-medium">{t("gnb.roleToggleText")}</span>
             <RoleToggle disabled={!hasBothProfiles} />
           </div>
           {!hasBothProfiles && (

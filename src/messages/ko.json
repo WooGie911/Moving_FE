@@ -721,7 +721,8 @@
       "customer": "고객님",
       "driver": "기사님"
     },
-    "roleToggleLockMessage": "두 역할(일반회원, 기사님) 모두 프로필 등록을 완료해야 간편 전환이 가능합니다!"
+    "roleToggleLockMessage": "두 역할(일반회원, 기사님) 모두 프로필 등록을 완료해야 간편 전환이 가능합니다!",
+    "roleToggleText": "간편 전환"
   },
   "review": {
     "title": "리뷰",
