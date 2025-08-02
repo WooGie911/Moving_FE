@@ -48,7 +48,7 @@ const CustomerRegisterPage = () => {
 
   const onSubmit = async (data: { nickname: string }) => {
     const response = await userApi.postProfile({
-      customerImage: selectedImage.dataUrl,
+      customerImage: selectedImage.dataUrl === uploadSkeleton.src ? "" : selectedImage.dataUrl,
       currentArea: regions,
       nickname: data.nickname,
       preferredServices: services,

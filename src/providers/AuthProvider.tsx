@@ -14,6 +14,7 @@ type TUser = {
   userType: "CUSTOMER" | "MOVER";
   customerImage?: string;
   moverImage?: string;
+  provider: "GOOGLE" | "KAKAO" | "NAVER" | "LOCAL";
 };
 
 export type TSignInResponse = {

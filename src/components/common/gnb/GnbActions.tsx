@@ -33,10 +33,6 @@ const MOVER_USER_ACTION_LIST = [
     label: "gnb.userActions.myPage",
     href: "/moverMyPage",
   },
-  {
-    label: "gnb.userActions.scheduleManagement",
-    href: "/moverMyPage/schedule",
-  },
 ];
 
 interface IGnbActionsProps {

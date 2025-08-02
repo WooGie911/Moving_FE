@@ -1,5 +1,5 @@
 import React from "react";
-import CheckIcon from "@/assets/icon/checkbox/icon-checkbox-circle-active.png";
+import CheckIcon from "@/assets/icon/checkbox/roundCheck.svg";
 import Image from "next/image";
 import { IMovingTypeCardProps } from "@/types/estimateRequest";
 

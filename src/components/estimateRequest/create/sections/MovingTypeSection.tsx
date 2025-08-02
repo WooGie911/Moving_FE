@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import MovingTypeCard from "../card/MovingTypeCard";
 import SpeechBubble from "../SpeechBubble";
-import MovingTypeSmall from "@/assets/img/etc/smallmove.png";
-import MovingTypeHome from "@/assets/img/etc/homemove.png";
-import MovingTypeOffice from "@/assets/img/etc/officemove.png";
+import MovingTypeSmall from "@/assets/img/etc/smallMoving.webp";
+import MovingTypeHome from "@/assets/img/etc/homeMoving.webp";
+import MovingTypeOffice from "@/assets/img/etc/officeMoving.webp";
 import { IMovingTypeSectionProps } from "@/types/estimateRequest";
 import { useLanguageStore } from "@/stores/languageStore";
 

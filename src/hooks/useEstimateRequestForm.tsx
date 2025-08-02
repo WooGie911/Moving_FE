@@ -9,7 +9,7 @@ const ESTIMATE_REQUEST_SESSION_KEY = "estimateRequest_draft";
 
 // 초기 폼 상태
 const initialForm: IFormState = {
-  movingType: "small",
+  movingType: "",
   movingDate: "",
   isDateConfirmed: false,
   departure: { roadAddress: "", detailAddress: "", zoneCode: "", jibunAddress: "", extraAddress: "" },
@@ -79,7 +79,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   }, [form]);
 
   // 이사 종류 선택 핸들러
-  const handleSelectMovingType = useCallback((type: "small" | "home" | "office") => {
+  const handleSelectMovingType = useCallback((type: "" | "small" | "home" | "office") => {
     setForm((prev) => ({ ...prev, movingType: type }));
     setPendingAnswer(type);
     setShowNextQuestion(false);
