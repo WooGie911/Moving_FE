@@ -38,38 +38,49 @@ export const DetailMoveInfo = ({
   };
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-[12px] bg-gray-50 p-6 md:gap-6 md:p-8">
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">
-            {getMovingTypeText(movingType)}
-          </h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
+    <div className="my-2 flex w-full flex-col items-start justify-center gap-7">
+      <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
+        {t("estimateInfo")}
+      </p>
+      <div className="flex w-full flex-col items-start justify-center gap-3">
+        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+            {t("requestDateShort")}
+          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
             {formatDateDot(createdAt)}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("movingDate")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
+        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+            {t("service")}
+          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+            {getMovingTypeText(movingType)}
+          </p>
+        </div>
+        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+            {t("usageDate")}
+          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
             {formatDateWithDayAndTime(movingDate, weekdays, timeFormat)}
           </p>
         </div>
-      </div>
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("departure")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
-            {departureAddr}
-            {departureDetail && <br />}
-            {departureDetail}
+        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+            {t("departure")}
+          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+            {departureAddr + " " + departureDetail}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("arrival")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
-            {arrivalAddr}
-            {arrivalDetail && <br />}
-            {arrivalDetail}
+        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+            {t("arrival")}
+          </p>
+          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+            {arrivalAddr + " " + arrivalDetail}
           </p>
         </div>
       </div>

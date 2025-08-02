@@ -120,7 +120,16 @@ export const DetailPageMainSeaction = ({
       </div>
       <div className="hidden lg:block">
         <div className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start">
-          {type === "pending" ? <LgButtonSection estimatePrice={formatNumber(estimate.price)} /> : ""}
+          {type === "pending" ? (
+            <LgButtonSection
+              estimateId={estimate.id}
+              estimateStatus={estimate.status}
+              hasConfirmedEstimate={estimates?.some((e) => e.status === "ACCEPTED") || false}
+              estimatePrice={formatNumber(estimate.price)}
+            />
+          ) : (
+            ""
+          )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
           <ShareSection />
         </div>
