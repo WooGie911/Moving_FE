@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { TUserRole } from "@/types/user.types";
 import { GEUST_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 import { useTranslations } from "next-intl";
+import { getPathWithoutLocale } from "@/utils/locale";
 
 interface ISideGnbProps {
   isOpen: boolean;
@@ -17,8 +18,8 @@ interface ISideGnbProps {
 export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) => {
   const pathname = usePathname();
   const t = useTranslations();
+  const cleanPath = getPathWithoutLocale(pathname); // "/ko/mypage" -> "/mypage"
 
-  // 로그인 상태에 따른 메뉴 결정
   const getMenuItems = () => {
     if (userRole === "GUEST") {
       return [...GEUST_NAVIGATION_ITEMS, { name: "auth.signin", href: "/userSignin" }];
@@ -29,48 +30,48 @@ export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) 
 
   const menuItems = getMenuItems();
 
-  // 오버레이 클릭 시 닫기
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+  const isActive = (href: string) => {
+    return (
+      cleanPath === href ||
+      cleanPath.startsWith(href + "/") ||
+      (href === "/review/writable" && (cleanPath === "/review/writable" || cleanPath === "/review/written")) ||
+      (href === "/estimateRequest/pending" &&
+        (cleanPath === "/estimateRequest/pending" || cleanPath === "/estimateRequest/received")) ||
+      ["/ko", "/en", "/zh"].includes(cleanPath)
+    );
   };
 
   return (
     <>
-      {/* 오버레이 */}
       <div
         className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ease-in-out lg:hidden ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
-        onClick={handleOverlayClick}
+        onClick={(e) => e.target === e.currentTarget && onClose()}
         aria-hidden="true"
       />
 
-      {/* 사이드바 */}
       <div
         className={`fixed top-0 right-0 z-50 h-full w-80 transform bg-white shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* 헤더 */}
+        {/* 닫기 버튼 */}
         <div className="flex justify-end border-b border-gray-200">
           <button
             onClick={onClose}
             className="hover:text-black-400 cursor-pointer p-2 px-6 py-4.5 text-gray-400 transition-colors"
             aria-label="메뉴 닫기"
           >
-            {/* X 아이콘 */}
             <div className="relative h-6 w-6">
-              <div className="absolute top-1/2 left-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current"></div>
-              <div className="absolute top-1/2 left-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-current"></div>
+              <div className="absolute top-1/2 left-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current" />
+              <div className="absolute top-1/2 left-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-current" />
             </div>
           </button>
         </div>
 
-        {/* 메뉴 내용 */}
+        {/* 메뉴 리스트 */}
         <div className="flex h-full flex-col">
-          {/* 네비게이션 메뉴 */}
           <nav>
             {menuItems.map((item) => (
               <Link
@@ -78,7 +79,7 @@ export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) 
                 href={item.href}
                 onClick={onClose}
                 className={`block rounded-lg px-5 py-6 text-lg font-medium transition-colors hover:bg-gray-100 ${
-                  pathname === item.href || pathname === "/" ? "text-black" : "text-gray-400"
+                  isActive(item.href) ? "text-black" : "text-gray-400"
                 }`}
               >
                 {t(item.name)}
