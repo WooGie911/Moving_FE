@@ -57,7 +57,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
     }
   };
-  console.log("카드데이터", data);
+  // console.log("카드데이터", data);
   // 견적 생성 mutation
   const createEstimateMutation = useMutation({
     mutationFn: (data: { estimateRequestId: string; price: number; comment: string }) =>
@@ -168,8 +168,8 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
   const moveDate = new Date(data.moveDate);
   const isPastDate = moveDate < new Date();
 
-  // 견적 개수 확인 (최대 5개)
-  const estimateCount = data.estimates?.length || 0;
+  // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외
+  const estimateCount = data.estimates?.filter((estimate) => estimate.status !== "REJECTED").length || 0;
   const isMaxEstimates = estimateCount >= 5;
 
   const openRejectModal = () => {

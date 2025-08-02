@@ -17,6 +17,7 @@ export const MoverReceivedPage = () => {
         designated: true,
       }),
   });
+
   // 필터 상태 관리
   const [filters, setFilters] = useState<IFilterState>({
     movingTypes: [],
@@ -26,33 +27,44 @@ export const MoverReceivedPage = () => {
     sortBy: "createdAt",
   });
 
+  console.log("data", data);
   // 필터링된 데이터
   const filteredData = useMemo(() => {
     let filtered: any[] = [];
 
     // 지정 견적과 서비스 가능 지역 필터링에 따라 데이터 선택
     if (filters.isDesignatedOnly && filters.isServiceAreaOnly) {
-      // 둘 다 선택된 경우: 두 배열 모두 포함
+      // 둘 다 선택된 경우: 두 배열 모두 포함하되 중복 제거
       const designatedWithFlag = (data?.designatedEstimateRequests || []).map((item) => ({
         ...item,
         isDesignated: true,
       }));
-      const regionWithFlag = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
-      filtered = [...designatedWithFlag, ...regionWithFlag];
+      const regionWithFlag = data?.regionEstimateRequests || [];
+
+      // 중복 제거: designatedEstimateRequests를 우선으로 하고, 중복되지 않은 regionEstimateRequests만 추가
+      const designatedIds = new Set(designatedWithFlag.map((item) => item.id));
+      const uniqueRegionItems = regionWithFlag.filter((item) => !designatedIds.has(item.id));
+
+      filtered = [...designatedWithFlag, ...uniqueRegionItems];
     } else if (filters.isDesignatedOnly) {
       // 지정 견적만 선택된 경우
       filtered = (data?.designatedEstimateRequests || []).map((item) => ({ ...item, isDesignated: true }));
     } else if (filters.isServiceAreaOnly) {
       // 서비스 가능 지역만 선택된 경우
-      filtered = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
+      filtered = data?.regionEstimateRequests || [];
     } else {
-      // 둘 다 선택되지 않은 경우: 기본적으로 모든 데이터 표시
+      // 둘 다 선택되지 않은 경우: 기본적으로 모든 데이터 표시하되 중복 제거
       const designatedWithFlag = (data?.designatedEstimateRequests || []).map((item) => ({
         ...item,
         isDesignated: true,
       }));
-      const regionWithFlag = (data?.regionEstimateRequests || []).map((item) => ({ ...item, isDesignated: false }));
-      filtered = [...designatedWithFlag, ...regionWithFlag];
+      const regionWithFlag = data?.regionEstimateRequests || [];
+
+      // 중복 제거: designatedEstimateRequests를 우선으로 하고, 중복되지 않은 regionEstimateRequests만 추가
+      const designatedIds = new Set(designatedWithFlag.map((item) => item.id));
+      const uniqueRegionItems = regionWithFlag.filter((item) => !designatedIds.has(item.id));
+
+      filtered = [...designatedWithFlag, ...uniqueRegionItems];
     }
 
     // 검색어 필터링
@@ -132,7 +144,7 @@ export const MoverReceivedPage = () => {
     <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
       {/* 최상단 탭 */}
       <div className="flex w-full justify-start">
-        <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
+        <div className="text-black-500 h-[96px] cursor-pointer py-8 text-[24px] font-bold whitespace-nowrap transition-colors">
           {t("receivedRequests")}
         </div>
       </div>

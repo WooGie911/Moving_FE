@@ -40,6 +40,12 @@ export const SearchInput = ({
     clearErrors(name);
   };
 
+  // wrapperClassName에 w-full이 포함되어 있으면 고정 너비를 사용하지 않음
+  const isFullWidth = wrapperClassName?.includes("w-full");
+  const defaultWrapperClass = isFullWidth
+    ? `h-[52px] sm:h-[64px] ${wrapperClassName}`
+    : `w-[260px] h-[52px] sm:w-[560px] sm:h-[64px] ${wrapperClassName}`;
+
   return (
     <BaseInput
       type="search"
@@ -50,7 +56,7 @@ export const SearchInput = ({
       iconPosition={iconPosition}
       inputClassName={inputClassName}
       errorClassName={errorClassName}
-      wrapperClassName={`w-[260px] h-[52px] sm:w-[560px] sm:h-[64px] ${wrapperClassName}`}
+      wrapperClassName={defaultWrapperClass}
       value={value ?? ""}
       {...register(name, rules)}
     />
