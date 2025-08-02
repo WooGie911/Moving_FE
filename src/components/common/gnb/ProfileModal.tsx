@@ -68,12 +68,15 @@ function ProfileModal({
               ))}
         </ul>
       </nav>
-      <div className="flex flex-col items-center justify-between">
-        <div className="group relative flex items-center gap-2 py-3">
-          <div className={`relative ${!hasBothProfiles ? "cursor-not-allowed opacity-50" : ""}`}>
+      <div className="flex flex-col items-center justify-between gap-2">
+        <div className="group relative flex w-full items-center justify-between gap-2 px-2 py-3">
+          <div
+            className={`relative flex w-full items-center justify-between ${!hasBothProfiles ? "cursor-not-allowed opacity-50" : ""}`}
+          >
+            <span className="text-md font-medium">간편 전환</span>
             <RoleToggle disabled={!hasBothProfiles} />
           </div>
-          {!hasBothProfiles && (
+          {/* {!hasBothProfiles && (
             <>
               <FaLock className="ml-1 text-gray-400" size={14} aria-label="Locked" />
               <div className="absolute -top-12 left-1/2 z-10 hidden w-[220px] -translate-x-1/2 rounded bg-gray-800 px-3 py-2 text-xs text-white group-hover:block">
@@ -81,7 +84,7 @@ function ProfileModal({
                 <div className="absolute top-full left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-800" />
               </div>
             </>
-          )}
+          )} */}
         </div>
 
         <button

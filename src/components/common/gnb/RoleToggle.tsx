@@ -1,8 +1,8 @@
 import { useSwitchUserType } from "@/hooks/useSwitchUserType";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 interface IRoleToggleProps {
   disabled?: boolean;
 }
@@ -11,7 +11,6 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
   const { user } = useAuth();
   const { mutate, isPending } = useSwitchUserType();
   const [fakeUserType, setFakeUserType] = useState<"CUSTOMER" | "MOVER" | null>(null);
-  const router = useRouter();
   const handleToggle = () => {
     if (!user || disabled) return;
     const current = user.userType;
@@ -22,26 +21,47 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
 
   const typeToShow = fakeUserType ?? user?.userType;
 
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    console.log(windowWidth);
+  }, [windowWidth]);
+
   return (
     <button
       onClick={handleToggle}
       disabled={isPending || disabled}
-      className={`relative flex h-8 w-20 cursor-pointer items-center rounded-full p-1 transition-colors ${
-        typeToShow === "MOVER" ? "bg-black" : "bg-orange-500"
+      className={`relative flex h-8 w-20 cursor-pointer items-center rounded-full p-1 transition-colors lg:w-30 ${
+        typeToShow === "MOVER" ? "bg-gray-600" : "bg-primary-400"
       }`}
     >
-      <motion.div
-        className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm"
-        animate={{ x: typeToShow === "MOVER" ? 48 : 0 }}
-        initial={false}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 30,
-        }}
-      >
-        {typeToShow === "MOVER" ? "🚚" : "👤"}
-      </motion.div>
+      {windowWidth === "desktop" ? (
+        <motion.div
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm"
+          animate={{ x: typeToShow === "MOVER" ? 88 : 0 }}
+          initial={false}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+          }}
+        >
+          {typeToShow === "MOVER" ? "🚚" : "👤"}
+        </motion.div>
+      ) : (
+        <motion.div
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm"
+          animate={{ x: typeToShow === "MOVER" ? 48 : 0 }}
+          initial={false}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+          }}
+        >
+          {typeToShow === "MOVER" ? "🚚" : "👤"}
+        </motion.div>
+      )}
     </button>
   );
 };
