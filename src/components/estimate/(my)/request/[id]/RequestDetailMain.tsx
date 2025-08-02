@@ -11,6 +11,8 @@ import { useTranslations } from "next-intl";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const t = useTranslations("estimate");
+
+  const estimateT = useTranslations("estimateRequest");
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
@@ -27,7 +29,8 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         <LabelArea
           movingType={data.estimateRequest.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
           isDesignated={data.isDesignated}
-          type="detail"
+          usedAt="detail"
+          estimateStatus={data.status}
         />
 
         {/* 유저 정보 */}
@@ -35,10 +38,23 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           <p className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]">
             {`${data.estimateRequest.customer.name}${t("customerSuffix")}`}
           </p>
-          <div className={`flex flex-row items-center justify-end gap-1 ${data.status == "ACCEPTED" ? "" : "hidden"}`}>
-            {/* 확정견적 라벨 */}
-            <Image src={confirm} alt="confirm" width={16} height={16} />
-            <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
+          <div className="hidden md:block">
+            <div className="flex flex-row items-center justify-end gap-1">
+              {data.status === "PROPOSED" ? (
+                <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateT("estimateWaiting")}</p>
+              ) : data.status === "ACCEPTED" ? (
+                <div className="flex flex-row items-center justify-center gap-1">
+                  <Image src={confirm} alt="confirm" width={16} height={16} />
+                  <p className="text-primary-400 text-[16px] leading-[26px] font-bold">
+                    {estimateT("confirmedEstimate")}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[16px] leading-[26px] font-semibold text-gray-300">
+                  {estimateT("rejectedEstimate")}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 

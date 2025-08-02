@@ -644,6 +644,7 @@
     "onlyNumbersMessage": "请只输入数字。",
     "enterComment": "请输入评论。",
     "commentPlaceholder": "请输入至少10个字符。",
+    "commentMinLengthMessage": "请输入至少10个字符。",
     "totalCount": "全部",
     "countUnit": "件",
     "filter": "筛选",

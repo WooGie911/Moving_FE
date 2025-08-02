@@ -53,10 +53,10 @@ export const RejectedPage = () => {
             {data.map((item: any, index: number) => (
               <CardList
                 key={item.id}
-                data={item.estimate}
+                data={item.estimateRequest}
                 id={item.id}
                 isDesignated={item.isDesignated}
-                type="rejected"
+                usedAt="rejected"
                 index={index}
               />
             ))}

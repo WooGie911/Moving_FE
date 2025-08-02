@@ -75,7 +75,10 @@ const moverEstimateApi = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          estimateRequestId: data.estimateRequestId,
+          comment: data.comment,
+        }),
       });
 
       if (!response.ok) {

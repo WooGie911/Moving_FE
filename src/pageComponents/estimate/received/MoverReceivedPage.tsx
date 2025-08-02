@@ -154,7 +154,7 @@ export const MoverReceivedPage = () => {
       <div className="flex w-full flex-col items-center justify-center">
         <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
           {filteredData.map((item) => (
-            <CardList key={item.id} id={item.id} data={item} isDesignated={item.isDesignated} type="received" />
+            <CardList key={item.id} id={item.id} data={item} isDesignated={item.isDesignated} usedAt="received" />
           ))}
         </div>
       </div>

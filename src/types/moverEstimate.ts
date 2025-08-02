@@ -11,7 +11,6 @@ export interface ICreateEstimateRequest {
 // 견적 반려 요청 타입 (백엔드와 일치)
 export interface IRejectEstimateRequest {
   estimateRequestId: string;
-  moverId: string;
   comment: string;
 }
 
@@ -141,7 +140,7 @@ export type TMyEstimateResponse = {
   estimateRequestId: string;
   price: number | null;
   comment: string | null;
-  status: "PROPOSED" | "ACCEPTED" | "AUTO_REJECTED";
+  status: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
   rejectReason: string | null;
   isDesignated: boolean;
   workingHours: string | null;
@@ -225,10 +224,11 @@ export interface IFilterState {
 export interface ICardListProps {
   id: string;
   data: TEstimateRequestResponse;
+  estimateStatus?: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
   isDesignated: boolean;
   estimatePrice?: number;
   mover?: TMover;
-  type: "received" | "sent" | "rejected";
+  usedAt: "received" | "sent" | "rejected";
   index?: number;
 }
 

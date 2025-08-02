@@ -18,7 +18,7 @@ import { Button } from "../common/button/Button";
 import { useModal } from "../common/modal/ModalContext";
 import { ModalChild } from "./received/ModalChild";
 
-export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardListProps) => {
+export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estimateStatus }: ICardListProps) => {
   const { open, close, updateButtons } = useModal();
   const [isFormValid, setIsFormValid] = useState(false);
   const [currentModalType, setCurrentModalType] = useState<"rejected" | "sent" | null>(null);
@@ -27,6 +27,12 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
   const { user } = useAuth();
   const t = useTranslations("estimate");
   const locale = useLocale();
+
+  // 데이터 검증
+  if (!data) {
+    console.error("CardList: data is undefined");
+    return null;
+  }
 
   // 다국어 날짜 포맷 함수
   const formatDateWithWeekday = (date: Date) => {
@@ -98,7 +104,6 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       moverEstimateApi.rejectEstimate({
         estimateRequestId: data.estimateRequestId,
         comment: data.comment,
-        moverId: user?.id || "",
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequest"] });
@@ -113,6 +118,10 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     },
     onError: (error) => {
       console.error("견적 반려 실패:", error);
+      console.error("에러 상세 정보:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+      });
       setCurrentModalType(null); // useEffect 비활성화
       // 실패 모달 표시 - 구체적인 에러 메시지 포함
       const errorMessage = error instanceof Error ? error.message : t("rejectEstimateFailMessage");
@@ -165,11 +174,11 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     }
   }, [isFormValid, currentModalType, updateButtons, modalData, id, createEstimateMutation, rejectEstimateMutation]);
 
-  const moveDate = new Date(data.moveDate);
+  const moveDate = data?.moveDate ? new Date(data.moveDate) : new Date();
   const isPastDate = moveDate < new Date();
 
   // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외
-  const estimateCount = data.estimates?.filter((estimate) => estimate.status !== "REJECTED").length || 0;
+  const estimateCount = data.estimates?.filter((estimate) => estimate?.status !== "REJECTED").length || 0;
   const isMaxEstimates = estimateCount >= 5;
 
   const openRejectModal = () => {
@@ -213,48 +222,48 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
       ],
     });
   };
-
   return (
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
-      {isPastDate && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-          <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
-          <Link href={`/estimate/request/${id}`} className="cursor-pointer">
-            <Button
-              variant="outlined"
-              state="default"
-              width="w-[254px] lg:w-[233px]"
-              height="h-[54px]"
-              rounded="rounded-[12px]"
-              className="bg-primary-100"
-            >
-              {t("viewEstimateDetail")}
-            </Button>
-          </Link>
-        </div>
-      )}
-      {type === "rejected" && (
+      {isPastDate ||
+        (estimateStatus === "AUTO_REJECTED" && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
+            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
+            <Link href={`/estimate/request/${id}`} className="cursor-pointer">
+              <Button
+                variant="outlined"
+                state="default"
+                width="w-[254px] lg:w-[233px]"
+                height="h-[54px]"
+                rounded="rounded-[12px]"
+                className="bg-primary-100"
+              >
+                {t("viewEstimateDetail")}
+              </Button>
+            </Link>
+          </div>
+        ))}
+      {usedAt === "rejected" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           <p className="text-[18px] leading-[26px] font-semibold text-white">{t("rejectedRequestMessage")}</p>
         </div>
       )}
 
       {/* type이 "sent"이고 과거 날짜가 아닐 때 혹은 반려된 요청일때 전체를 링크로 감쌈 */}
-      {(type === "sent" && !isPastDate) || type === "rejected" ? (
+      {(usedAt === "sent" && !isPastDate) || usedAt === "rejected" ? (
         <Link
-          href={type === "sent" ? `/estimate/request/${id}` : `/estimate/rejected/${id}`}
-          className="cursor-pointer"
+          href={usedAt === "sent" ? `/estimate/request/${id}` : `/estimate/rejected/${id}`}
+          className="w-full cursor-pointer"
         >
           <div className="flex w-full flex-col items-center justify-center gap-6">
             {/* 라벨과 확정견적/견적서시간/부분 */}
             <div className="flex w-full flex-row items-center justify-between">
               <LabelArea
-                movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
+                movingType={(data.moveType || "SMALL").toLowerCase() as "small" | "home" | "office" | "document"}
                 isDesignated={isDesignated}
-                createdAt={new Date(data.createdAt)}
-                type={type}
+                createdAt={new Date(data.createdAt || new Date())}
+                usedAt={usedAt}
               />
-              {data.status === "APPROVED" && (
+              {estimateStatus === "ACCEPTED" && (
                 <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                   <Image src={confirm} alt="confirm" width={16} height={16} />
                   <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
@@ -264,7 +273,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
             <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-                {`${data.customer.name}${t("customerSuffix")}`}
+                {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
               </p>
             </div>
             {/* 이사 정보  부분*/}
@@ -273,7 +282,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.fromAddress.region + " " + data.fromAddress.city)}
+                    {shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))}
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
@@ -282,7 +291,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress(data.toAddress.region + " " + data.toAddress.city)}
+                    {shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))}
                   </p>
                 </div>
               </div>
@@ -294,7 +303,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               </div>
             </div>
             {/* 견적금액 부분 - rejected 타입일 때는 숨김 */}
-            {type !== "rejected" && (
+            {usedAt !== "rejected" && (
               <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
                 <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
                 <p className="text-black-400 text-[24px] leading-[32px] font-bold">
@@ -310,12 +319,12 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
           {/* 라벨과 확정견적/견적서시간/부분 */}
           <div className="flex w-full flex-row items-center justify-between">
             <LabelArea
-              movingType={data.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
+              movingType={(data.moveType || "SMALL").toLowerCase() as "small" | "home" | "office" | "document"}
               isDesignated={isDesignated}
-              createdAt={new Date(data.createdAt)}
-              type={type}
+              createdAt={new Date(data.createdAt || new Date())}
+              usedAt={usedAt}
             />
-            {data.status === "APPROVED" && (
+            {estimateStatus === "ACCEPTED" && (
               <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
                 <Image src={confirm} alt="confirm" width={16} height={16} />
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
@@ -325,7 +334,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
           <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
             <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-              {`${data.customer.name}${t("customerSuffix")}`}
+              {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
             </p>
           </div>
           {/* 이사 정보  부분*/}
@@ -334,7 +343,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress(data.fromAddress.city + " " + data.fromAddress.district)}
+                  {shortenRegionInAddress((data.fromAddress?.city || "") + " " + (data.fromAddress?.district || ""))}
                 </p>
               </div>
               <div className="flex flex-col justify-end pb-1">
@@ -343,7 +352,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress(data.toAddress.city + " " + data.toAddress.district)}
+                  {shortenRegionInAddress((data.toAddress?.city || "") + " " + (data.toAddress?.district || ""))}
                 </p>
               </div>
             </div>
@@ -355,7 +364,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
             </div>
           </div>
           {/* 버튼 혹은 견적금액 부분 */}
-          {type === "received" ? (
+          {usedAt === "received" ? (
             <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:justify-between md:pt-4">
               <Button
                 variant="outlined"
@@ -394,7 +403,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 {t("reject")}
               </Button>
             </div>
-          ) : type === "sent" ? (
+          ) : usedAt === "sent" ? (
             <div className="border-border-light mt-2 flex w-full flex-row items-center justify-between border-t-[0.5px] pt-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
               <p className="text-black-400 text-[24px] leading-[32px] font-bold">

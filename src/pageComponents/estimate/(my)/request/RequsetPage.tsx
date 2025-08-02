@@ -2,7 +2,6 @@
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { CardList } from "@/components/estimate/CardList";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
-import { mockMyEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useTranslations } from "next-intl";
@@ -52,9 +51,10 @@ export const RequsetPage = () => {
                 key={item.id}
                 id={item.id}
                 data={item.estimateRequest!}
+                estimateStatus={item.status}
                 isDesignated={item.isDesignated}
                 estimatePrice={item.price!}
-                type="sent"
+                usedAt="sent"
                 index={index}
               />
             ))}

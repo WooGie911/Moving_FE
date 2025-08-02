@@ -643,6 +643,7 @@
     "onlyNumbersMessage": "Please enter numbers only.",
     "enterComment": "Please enter a comment.",
     "commentPlaceholder": "Please enter at least 10 characters.",
+    "commentMinLengthMessage": "Please enter at least 10 characters.",
     "totalCount": "Total",
     "countUnit": "items",
     "filter": "Filter",

@@ -5,6 +5,7 @@ import { shortenRegionInAddress } from "@/utils/regionMapping";
 import Image from "next/image";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import { TextInput } from "@/components/common/input/TextInput";
+import { TextAreaInput } from "@/components/common/input/TextAreaInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslations, useLocale } from "next-intl";
@@ -117,11 +118,12 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
           <FormProvider {...methods}>
             {/* 견적가 입력 부분 */}
             <div className={`flex w-full flex-col justify-between ${type === "rejected" ? "hidden" : ""}`}>
-              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("enterEstimatePrice")}</p>
+              <p className="text-black-300 pb-4 text-[18px] leading-[26px] font-semibold">{t("enterEstimatePrice")}</p>
               <PasswordInput
                 name="estimatePrice"
                 placeholder={t("estimatePricePlaceholder")}
                 wrapperClassName="w-full"
+                showInit={true}
               />
               {estimatePrice && !/^[0-9]*$/.test(estimatePrice) && (
                 <p className="pb-2 pl-2 text-sm text-red-500">{t("onlyNumbersMessage")}</p>
@@ -129,8 +131,16 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
             </div>
             {/* 코멘트 입력 부분 */}
             <div className="flex flex-col justify-between">
-              <p className="text-[14px] leading-6 font-normal text-gray-500">{t("enterComment")}</p>
-              <TextInput name="comment" placeholder={t("commentPlaceholder")} wrapperClassName="w-full" />
+              <p className="text-black-300 pb-4 text-[18px] leading-[26px] font-semibold">{t("enterComment")}</p>
+              <TextAreaInput
+                textareaClassName="h-40 border w-full border-gray-200 rounded-[16px]"
+                name="comment"
+                placeholder={t("commentPlaceholder")}
+                wrapperClassName="w-full"
+              />
+              {comment && comment.length < 10 && (
+                <p className="pb-2 pl-2 text-sm text-red-500">{t("commentMinLengthMessage")}</p>
+              )}
             </div>
           </FormProvider>
         </div>
