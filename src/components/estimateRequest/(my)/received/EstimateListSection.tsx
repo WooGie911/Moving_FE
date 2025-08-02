@@ -48,6 +48,9 @@ export const EstimateListSection = ({
   // ACCEPTED 상태의 estimateId 찾기
   const acceptedEstimateId = estimateList?.find((estimate) => estimate.estimate.status === "ACCEPTED")?.estimate.id;
 
+  // 확정견적이 있는지 확인
+  const hasConfirmedEstimate = estimateList?.some((estimate) => estimate.estimate.status === "ACCEPTED") ?? false;
+
   // 이사확정 API 호출 함수
   const handleCompleteEstimate = () => {
     if (!acceptedEstimateId) {
@@ -62,19 +65,19 @@ export const EstimateListSection = ({
   const getButtonState = () => {
     if (estimateRequest?.status === "COMPLETED") {
       return {
-        text: "확정완료",
+        text: t("estimateCompleted"),
         disabled: true,
         state: "disabled" as const,
       };
     } else if (estimateRequest?.status === "APPROVED") {
       return {
-        text: completeEstimateMutation.isPending ? "처리중..." : "이사확정",
+        text: completeEstimateMutation.isPending ? t("processingMove") : t("confirmMove"),
         disabled: completeEstimateMutation.isPending,
         state: completeEstimateMutation.isPending ? ("disabled" as const) : ("default" as const),
       };
     } else {
       return {
-        text: "이사확정",
+        text: t("confirmMove"),
         disabled: true,
         state: "disabled" as const,
       };
@@ -134,17 +137,17 @@ export const EstimateListSection = ({
           style={{ cursor: buttonState.disabled ? "not-allowed" : "pointer" }}
           onClick={() =>
             open({
-              title: "이사확정",
+              title: t("confirmMoveTitle"),
               children: (
                 <div className="flex flex-col items-center justify-center">
-                  <p>즐거운 이사가 되셨나요?</p>
-                  <p>이사확정 버튼을 눌러 이사를 완료해주세요.</p>
+                  <p>{t("confirmMoveQuestion")}</p>
+                  <p>{t("confirmMoveInstruction")}</p>
                 </div>
               ),
               type: "bottomSheet",
               buttons: [
                 {
-                  text: completeEstimateMutation.isPending ? "처리중..." : "확정",
+                  text: completeEstimateMutation.isPending ? t("processingMove") : t("confirmButton"),
                   onClick: handleCompleteEstimate,
                   disabled: completeEstimateMutation.isPending,
                 },
@@ -182,7 +185,7 @@ export const EstimateListSection = ({
 
       <div className="flex w-full flex-col items-stretch justify-center">
         {filteredList.map((item) => (
-          <CardList key={item.estimate.id} {...item} />
+          <CardList key={item.estimate.id} {...item} hasConfirmedEstimate={hasConfirmedEstimate} />
         ))}
       </div>
     </div>

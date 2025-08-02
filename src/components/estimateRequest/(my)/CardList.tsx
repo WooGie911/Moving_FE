@@ -14,10 +14,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { formatNumber } from "@/lib/utils/formatNumber";
 
-export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) => {
+export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstimate }: ICardListProps) => {
   const { open, close } = useModal();
   const t = useTranslations("estimateRequest");
   const tCommon = useTranslations("common");
+
+  // 확정견적이 있는 경우의 추가 로직
+  const isConfirmedEstimate = estimate.status === "ACCEPTED";
+  const shouldDisableConfirmButton = hasConfirmedEstimate && !isConfirmedEstimate;
   const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
     mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
     onSuccess: () => {
@@ -69,7 +73,12 @@ export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) 
         {/* 라벨과 견적상태 영역 */}
         <LabelAndTitleSection mover={estimate.mover} estimate={estimate} usedAt={usedAt} />
         {/* 기사님 프로필 영역 */}
-        <MoverInfo mover={estimate.mover} usedAt={usedAt} estimateId={estimate.id} />
+        <MoverInfo
+          mover={estimate.mover}
+          usedAt={usedAt}
+          estimateId={estimate.id}
+          hasConfirmedEstimate={hasConfirmedEstimate}
+        />
       </div>
 
       {/* 견적서 금액 영역 */}
@@ -107,12 +116,12 @@ export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) 
           <div className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden">
             <Button
               variant="solid"
-              state={estimate.status === "PROPOSED" ? "default" : "disabled"}
+              state={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? "default" : "disabled"}
               width="w-[287px]"
               height="h-[54px]"
               rounded="rounded-[12px]"
-              onClick={estimate.status === "PROPOSED" ? openConfirmModal : undefined}
-              disabled={estimate.status !== "PROPOSED"}
+              onClick={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? openConfirmModal : undefined}
+              disabled={estimate.status !== "PROPOSED" || shouldDisableConfirmButton}
             >
               {estimate.status === "PROPOSED"
                 ? t("confirmEstimateButton")
@@ -142,12 +151,12 @@ export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) 
               </Link>
               <Button
                 variant="solid"
-                state={estimate.status === "PROPOSED" ? "default" : "disabled"}
+                state={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? "default" : "disabled"}
                 width="w-[254px] lg:w-[233px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={estimate.status === "PROPOSED" ? openConfirmModal : undefined}
-                disabled={estimate.status !== "PROPOSED"}
+                onClick={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? openConfirmModal : undefined}
+                disabled={estimate.status !== "PROPOSED" || shouldDisableConfirmButton}
               >
                 {estimate.status === "PROPOSED"
                   ? t("confirmEstimateButton")

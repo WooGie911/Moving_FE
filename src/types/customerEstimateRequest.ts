@@ -25,6 +25,7 @@ export interface IMoverInfoProps {
   mover: TMoverInfo;
   usedAt: "pending" | "received" | "detail";
   estimateId?: string;
+  hasConfirmedEstimate?: boolean;
 }
 
 type TMoveType = "HOME" | "OFFICE" | "SMALL";
@@ -192,6 +193,7 @@ export interface ICardListProps {
   estimateRequest: TEstimateRequestResponse | null; // null 가능하도록 수정
   estimate: TEstimateResponse;
   usedAt: "pending" | "received";
+  hasConfirmedEstimate?: boolean;
 }
 
 export interface IDetailPageMainSeactionProps {

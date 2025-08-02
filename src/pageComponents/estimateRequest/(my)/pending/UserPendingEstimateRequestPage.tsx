@@ -59,8 +59,7 @@ export const UserPendingEstimateRequestPage = () => {
 
   // estimates 배열에서 ACCEPTED 상태인 견적이 있는지 확인
   const hasConfirmedEstimate = estimates.some((estimate) => estimate.status === "ACCEPTED");
-  console.log("메인페이지 데이터", data);
-  // estimateRequest가 null이 아님을 타입가드로 보장
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -86,7 +85,13 @@ export const UserPendingEstimateRequestPage = () => {
           ) : (
             <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
               {estimates.map((item) => (
-                <CardList key={item.id} estimateRequest={estimateRequest} estimate={item} usedAt="pending" />
+                <CardList
+                  key={item.id}
+                  estimateRequest={estimateRequest}
+                  estimate={item}
+                  usedAt="pending"
+                  hasConfirmedEstimate={hasConfirmedEstimate}
+                />
               ))}
             </div>
           )}

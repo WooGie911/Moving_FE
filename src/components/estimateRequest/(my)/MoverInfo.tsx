@@ -8,13 +8,12 @@ import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
 import { useTranslations } from "next-intl";
 import deleteIcon from "@/assets/icon/menu/icon-delete.png";
-import router from "next/router";
 import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/common/modal/ModalContext";
 
-export const MoverInfo = ({ mover, usedAt, estimateId }: IMoverInfoProps) => {
+export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const t = useTranslations("estimateRequest");
@@ -131,33 +130,58 @@ export const MoverInfo = ({ mover, usedAt, estimateId }: IMoverInfoProps) => {
                           setIsOpen(false);
                         }}
                       >
-                        {"기사님 보러 가기"}
+                        {t("viewMover")}
                       </div>
                     </Link>
                     <div
                       className="flex h-10 w-35 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
                       onClick={() => {
                         setIsOpen(false);
-                        open({
-                          title: "견적 반려",
-                          children: (
-                            <div className="flex flex-col items-center justify-center">
-                              <p>정말로 이 견적을 반려하시겠습니까?</p>
-                              <p>반려된 견적은 복구할 수 없습니다.</p>
-                            </div>
-                          ),
-                          type: "bottomSheet",
-                          buttons: [
-                            {
-                              text: rejectEstimateMutation.isPending ? "처리중..." : "반려",
-                              onClick: handleRejectEstimate,
-                              disabled: rejectEstimateMutation.isPending,
-                            },
-                          ],
-                        });
+
+                        if (hasConfirmedEstimate) {
+                          // 확정견적이 있는 경우 다른 모달 표시
+                          open({
+                            title: t("rejectEstimateFailed"),
+                            children: (
+                              <div className="flex flex-col items-center justify-center">
+                                <p>{t("rejectEstimateFailedMessage1")}</p>
+                                <p>{t("rejectEstimateFailedMessage2")}</p>
+                              </div>
+                            ),
+                            type: "bottomSheet",
+                            buttons: [
+                              {
+                                text: t("close"),
+                                onClick: () => {
+                                  close();
+                                },
+                                disabled: rejectEstimateMutation.isPending,
+                              },
+                            ],
+                          });
+                        } else {
+                          // 확정견적이 없는 경우 기존 모달 표시
+                          open({
+                            title: t("rejectEstimateTitle"),
+                            children: (
+                              <div className="flex flex-col items-center justify-center">
+                                <p>{t("rejectEstimateConfirm")}</p>
+                                <p>{t("rejectEstimateWarning")}</p>
+                              </div>
+                            ),
+                            type: "bottomSheet",
+                            buttons: [
+                              {
+                                text: rejectEstimateMutation.isPending ? t("processing") : t("rejectEstimate"),
+                                onClick: handleRejectEstimate,
+                                disabled: rejectEstimateMutation.isPending,
+                              },
+                            ],
+                          });
+                        }
                       }}
                     >
-                      {"견적 반려하기"}
+                      {t("rejectEstimate")}
                     </div>
                   </div>
                 )}

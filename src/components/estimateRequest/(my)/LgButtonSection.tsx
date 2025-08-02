@@ -61,7 +61,7 @@ export const LgButtonSection = ({
         disabled: true,
         state: "disabled" as const,
       };
-    } else if (hasConfirmedEstimate) {
+    } else if (estimateStatus === "AUTO_REJECTED") {
       return {
         text: t("otherEstimateConfirmed"),
         disabled: true,
