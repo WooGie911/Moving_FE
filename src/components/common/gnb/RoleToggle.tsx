@@ -2,7 +2,7 @@ import { useSwitchUserType } from "@/hooks/useSwitchUserType";
 import { useAuth } from "@/providers/AuthProvider";
 import { motion } from "framer-motion";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 interface IRoleToggleProps {
   disabled?: boolean;
 }
@@ -11,7 +11,7 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
   const { user } = useAuth();
   const { mutate, isPending } = useSwitchUserType();
   const [fakeUserType, setFakeUserType] = useState<"CUSTOMER" | "MOVER" | null>(null);
-
+  const router = useRouter();
   const handleToggle = () => {
     if (!user || disabled) return;
     const current = user.userType;
