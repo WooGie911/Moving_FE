@@ -1,7 +1,7 @@
 import React from "react";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { IAddressCardProps } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 // 공통 스타일 변수
 const ADDRESS_CARD_STYLES = {
@@ -16,7 +16,7 @@ const ADDRESS_CARD_STYLES = {
 } as const;
 
 const AddressCard: React.FC<IAddressCardProps> = ({ postalCode, roadAddress, jibunAddress, selected = false }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   const containerClass = `${ADDRESS_CARD_STYLES.container} ${
     selected ? ADDRESS_CARD_STYLES.selected : ADDRESS_CARD_STYLES.unselected

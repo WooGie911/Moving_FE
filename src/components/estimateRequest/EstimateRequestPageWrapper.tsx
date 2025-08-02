@@ -6,10 +6,10 @@ import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import EstimateRequestCreatePage from "@/pageComponents/estimateRequest/create/EstimateRequestCreatePage";
 import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/EstimateRequestEditPage";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 export default function EstimateRequestPageWrapper() {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
   const [hasActiveEstimateRequest, setHasActiveEstimateRequest] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 

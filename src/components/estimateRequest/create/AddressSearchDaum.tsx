@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { IAddressSearchDaumProps, IDaumAddressData, IDaumPostcodeConstructor } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 declare global {
   interface Window {
@@ -30,7 +30,7 @@ const loadDaumPostcodeScript = () => {
 };
 
 const AddressSearchDaum: React.FC<IAddressSearchDaumProps> = ({ onComplete }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   useEffect(() => {
     if (!window.daum?.Postcode) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ISpeechBubbleProps } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 // 공통 스타일 변수
 const SPEECH_BUBBLE_STYLES = {
@@ -13,7 +13,7 @@ const SPEECH_BUBBLE_STYLES = {
 } as const;
 
 const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest = false, onEdit }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
   const isQuestion = type === "question";
   const isAnswer = type === "answer";
 

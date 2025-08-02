@@ -17,12 +17,12 @@ export const UserReceivedEstimateRequestDetailPage = () => {
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(),
   });
 
-  if (isPending) return <div>{t("loading")}</div>;
+  if (isPending) return <div>{t("common.loading")}</div>;
   if (isError) {
     console.error("API 에러:", isError);
     return (
       <div>
-        {t("error")} {t("pleaseRetry")}{" "}
+        {t("common.error")} {t("pleaseRetry")}{" "}
       </div>
     );
   }

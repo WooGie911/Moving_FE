@@ -16,14 +16,52 @@
     "back": "뒤로",
     "next": "다음",
     "previous": "이전",
-    "success": "완료"
+    "success": "완료",
+    "retry": "다시 시도"
+  },
+  "shared": {
+    "units": {
+      "years": "년",
+      "cases": "건",
+      "currency": "원"
+    },
+    "time": {
+      "weekdays": {
+        "sunday": "일",
+        "monday": "월",
+        "tuesday": "화",
+        "wednesday": "수",
+        "thursday": "목",
+        "friday": "금",
+        "saturday": "토"
+      },
+      "dateFormat": {
+        "year": "년",
+        "month": "월",
+        "day": "일"
+      },
+      "timeFormat": {
+        "am": "오전",
+        "pm": "오후"
+      }
+    },
+    "movingTypes": {
+      "small": "소형 이사",
+      "smallDesc": "원룸, 투룸, 20평대 미만",
+      "home": "가정 이사",
+      "homeDesc": "쓰리룸, 20평대 이상",
+      "office": "사무실 이사",
+      "officeDesc": "사무실, 상업공간",
+      "store": "상가이사",
+      "piano": "피아노이사",
+      "art": "예술품이사",
+      "storage": "보관이사"
+    }
   },
   "estimateRequest": {
     "title": "견적요청",
     "editTitle": "견적 수정",
     "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
-    "loading": "로딩 중...",
-    "error": "에러가 발생했습니다.",
     "noEstimateInProgress": "진행중인 견적이 없습니다.",
     "requestNewEstimate": "새로운 견적을 요청해보세요.",
     "goToCreateEstimate": "견적 작성하러가기",
@@ -48,8 +86,6 @@
     "movingDateLabel": "이사날짜",
     "driverSuffix": "기사님",
     "experience": "경력",
-    "years": "년",
-    "cases": "건",
     "confirmed": "확정",
     "estimateWaiting": "견적대기",
     "confirmedEstimate": "확정견적",
@@ -59,28 +95,10 @@
     "requestDateShort": "견적 요청일",
     "service": "서비스",
     "usageDate": "이용일",
-    "weekdays": {
-      "sunday": "일",
-      "monday": "월",
-      "tuesday": "화",
-      "wednesday": "수",
-      "thursday": "목",
-      "friday": "금",
-      "saturday": "토"
-    },
-    "timeFormat": {
-      "am": "오전",
-      "pm": "오후"
-    },
-    "dateFormat": {
-      "year": "년",
-      "month": "월",
-      "day": "일"
-    },
+
     "profileImage": "프로필이미지",
     "estimatePrice": "견적가",
     "estimateAmount": "견적 금액",
-    "currency": "원",
     "notConfirmedEstimate": "확정하지 않은 견적이에요!",
     "pleaseRetry": "다시 시도해주세요.",
     "shareEstimate": "견적서 공유하기",
@@ -110,18 +128,7 @@
     "updateConfirmMessage": "정말로 이 견적을 수정하시겠습니까?",
     "confirmEstimateRequestTitle": "견적 확정",
     "confirmEstimateRequestMessage": "견적 요청이 성공적으로 전송되었습니다. 견적을 확정하시겠습니까?",
-    "movingTypes": {
-      "small": "소형 이사",
-      "smallDesc": "원룸, 투룸, 20평대 미만",
-      "home": "가정 이사",
-      "homeDesc": "쓰리룸, 20평대 이상",
-      "office": "사무실 이사",
-      "officeDesc": "사무실, 상업공간",
-      "store": "상가이사",
-      "piano": "피아노이사",
-      "art": "예술품이사",
-      "storage": "보관이사"
-    },
+
     "result": {
       "movingType": "이사 종류",
       "movingDate": "이사 예정일",
@@ -308,7 +315,6 @@
   },
   "mover": {
     "title": "기사님 찾기",
-    "loading": "로딩중...",
     "customer": "고객님",
     "notification": "알림",
     "user": "사용자",
@@ -332,9 +338,7 @@
     "tryOtherSearch": "다른 검색어나 필터를 시도해보세요",
     "driverSuffix": "기사님",
     "experience": "경력",
-    "years": "년",
     "confirmed": "확정",
-    "cases": "건",
     "reviews": "리뷰",
     "totalExperience": "총 경력",
     "inProgress": "진행",
@@ -375,7 +379,6 @@
     "casesMobile": "건",
     "confirmedMobile": "확정",
     "myPage": {
-      "loading": "로딩 중...",
       "retry": "다시 시도",
       "profileNotFound": "프로필 정보를 찾을 수 없습니다.",
       "editProfile": "내 프로필 수정",
@@ -568,8 +571,6 @@
   },
 
   "estimate": {
-    "loading": "로딩 중...",
-    "error": "에러가 발생했습니다. 다시 시도해주세요.",
     "apiError": "API 에러:",
     "createEstimateSuccessTitle": "견적생성성공",
     "createEstimateSuccessMessage": "견적보내기에 성공했습니다",
@@ -593,17 +594,8 @@
     "departure": "출발지",
     "arrival": "도착지",
     "movingDate": "이사일",
-    "weekdays": {
-      "sunday": "일",
-      "monday": "월",
-      "tuesday": "화",
-      "wednesday": "수",
-      "thursday": "목",
-      "friday": "금",
-      "saturday": "토"
-    },
+
     "estimateAmount": "견적금액",
-    "currency": "원",
     "enterEstimatePrice": "견적가를 입력해 주세요.",
     "estimatePricePlaceholder": "견적가를 입력해 주세요.",
     "onlyNumbersMessage": "숫자만 입력해 주세요.",
@@ -639,13 +631,7 @@
     "estimatePrice": "견적가",
     "customerSuffix": " 고객님",
     "confirmedEstimate": "확정견적",
-    "profileImage": "프로필이미지",
-    "currency": "원",
-    "dateFormat": {
-      "year": "년",
-      "month": "월",
-      "day": "일"
-    }
+    "profileImage": "프로필이미지"
   },
   "relativeTime": {
     "justNow": "방금 전",
@@ -730,8 +716,6 @@
     "writtenTab": "내가 작성한 리뷰",
     "writeReview": "리뷰 쓰기",
     "noWritableReviews": "작성 가능한 리뷰가 없어요!",
-    "loading": "로딩 중...",
-    "error": "에러가 발생했습니다.",
     "reviewWriteFailed": "리뷰 작성에 실패했습니다. 다시 시도해주세요.",
     "noWrittenReviews": "작성한 리뷰가 없어요!",
     "noWrittenReviewsAlt": "작성한 리뷰 없음",
