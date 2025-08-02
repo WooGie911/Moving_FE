@@ -27,7 +27,7 @@ export const FormField = ({
   required = true,
   type = "text",
   wrapperClassName = "w-[327px] lg:w-[500px] h-[54px]",
-  textareaClassName = "w-[327px] h-[100px] lg:w-[500px]  border border-[1px] !border-[#E6E6E6]",
+  textareaClassName = "w-[327px] h-[100px] lg:w-[500px] border border-[1px] !border-[#E6E6E6]",
   methods,
   className = "",
 }: IFormFieldProps) => {

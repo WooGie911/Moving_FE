@@ -39,7 +39,7 @@ const SigninHeader = ({ userType }: { userType: TUserType }) => {
 
       <div aria-label={t("signinHeaderSwitchRoleLabel")}>
         <span className="text-black-200 text-lg">{alternateInfo.message}</span>
-        <Link href={alternateInfo.href} className="text-primary-400 ml-2 text-lg font-semibold underline">
+        <Link href={alternateInfo.href} className="text-primary-400 ml-2 text-xl font-semibold underline">
           {alternateInfo.link}
         </Link>
       </div>
