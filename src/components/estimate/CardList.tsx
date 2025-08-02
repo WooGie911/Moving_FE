@@ -32,19 +32,19 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const weekday = [
-      t("weekdays.sunday"),
-      t("weekdays.monday"),
-      t("weekdays.tuesday"),
-      t("weekdays.wednesday"),
-      t("weekdays.thursday"),
-      t("weekdays.friday"),
-      t("weekdays.saturday"),
+      t("shared.time.weekdays.sunday"),
+      t("shared.time.weekdays.monday"),
+      t("shared.time.weekdays.tuesday"),
+      t("shared.time.weekdays.wednesday"),
+      t("shared.time.weekdays.thursday"),
+      t("shared.time.weekdays.friday"),
+      t("shared.time.weekdays.saturday"),
     ][date.getDay()];
 
     // 언어별 날짜 형식
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = t("shared.time.dateFormat.year");
+    const monthSuffix = t("shared.time.dateFormat.month");
+    const daySuffix = t("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
@@ -297,7 +297,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
                 <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
                 <p className="text-black-400 text-[24px] leading-[32px] font-bold">
                   {estimatePrice?.toLocaleString()}
-                  {t("currency")}
+                  {t("shared.units.currency")}
                 </p>
               </div>
             )}
@@ -397,7 +397,7 @@ export const CardList = ({ data, isDesignated, type, id, estimatePrice }: ICardL
               <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
               <p className="text-black-400 text-[24px] leading-[32px] font-bold">
                 {estimatePrice?.toLocaleString()}
-                {t("currency")}
+                {t("shared.units.currency")}
               </p>
             </div>
           ) : (

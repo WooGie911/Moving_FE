@@ -58,12 +58,12 @@ export const MoverInfo = ({ mover, usedAtDetail = false }: IMoverInfoProps) => {
 
         <div className="flex flex-row items-center justify-center gap-1">
           <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("experience")}</p>
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("years")}`}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("shared.units.years")}`}</p>
         </div>
         <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
         <div className="flex flex-row items-center justify-center gap-1">
-          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("cases")}`}</p>
+          <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("shared.units.cases")}`}</p>
           <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("confirmed")}</p>
         </div>
       </div>
