@@ -1,10 +1,10 @@
 // 백엔드 API 응답 구조에 맞는 타입 정의
 export interface IEstimateRequestProps {
-  movingType: "home" | "office" | "small" | "document";
-  requestDate: string;
-  movingDate: string;
-  startPoint: string;
-  endPoint: string;
+  moveType: string;
+  createdAt: Date;
+  moveDate: Date;
+  fromAddress: TAddress;
+  toAddress: TAddress;
   hasConfirmedEstimate: boolean;
 }
 
@@ -195,7 +195,7 @@ export interface ICardListProps {
 }
 
 export interface IDetailPageMainSeactionProps {
-  estimateRequest: TEstimateRequestResponse;
+  estimateRequest: TEstimateRequestResponse | null;
   estimate: TEstimateResponse;
   type: "pending" | "received";
 }

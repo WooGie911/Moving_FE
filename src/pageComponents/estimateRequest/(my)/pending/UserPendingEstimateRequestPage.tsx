@@ -12,6 +12,7 @@ import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";
+import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 
 export const UserPendingEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
@@ -66,35 +67,11 @@ export const UserPendingEstimateRequestPage = () => {
         <EstimateRequestAndEstimateTab userType="User" />
         {estimateRequest && (
           <RequestEstimateRequest
-            movingType={estimateRequest.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
-            requestDate={
-              typeof estimateRequest.createdAt === "string"
-                ? estimateRequest.createdAt
-                : estimateRequest.createdAt.toISOString()
-            }
-            movingDate={
-              typeof estimateRequest.moveDate === "string"
-                ? estimateRequest.moveDate
-                : estimateRequest.moveDate.toISOString()
-            }
-            startPoint={shortenRegionInAddress(
-              shortenRegionInAddress(estimateRequest.fromAddress.region) +
-                " " +
-                estimateRequest.fromAddress.city +
-                " " +
-                estimateRequest.fromAddress.district +
-                " " +
-                estimateRequest.fromAddress.detail,
-            )}
-            endPoint={shortenRegionInAddress(
-              shortenRegionInAddress(estimateRequest.toAddress.region) +
-                " " +
-                estimateRequest.toAddress.city +
-                " " +
-                estimateRequest.toAddress.district +
-                " " +
-                estimateRequest.toAddress.detail,
-            )}
+            moveType={mapServiceTypeToMoveType(estimateRequest.moveType)}
+            createdAt={estimateRequest.createdAt}
+            moveDate={estimateRequest.moveDate}
+            fromAddress={estimateRequest.fromAddress}
+            toAddress={estimateRequest.toAddress}
             hasConfirmedEstimate={hasConfirmedEstimate}
           />
         )}

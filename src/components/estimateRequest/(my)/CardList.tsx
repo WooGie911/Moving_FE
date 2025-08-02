@@ -9,15 +9,10 @@ import { LabelAndTitleSection } from "./LabelAndTitleSection";
 import { MoverInfo } from "./MoverInfo";
 import { useModal } from "@/components/common/modal/ModalContext";
 import Image from "next/image";
-import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-
-// 숫자를 천 단위로 쉼표를 추가하는 함수
-const formatNumber = (num: number): string => {
-  return num.toLocaleString();
-};
+import { formatNumber } from "@/lib/utils/formatNumber";
 
 export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) => {
   const { open, close } = useModal();

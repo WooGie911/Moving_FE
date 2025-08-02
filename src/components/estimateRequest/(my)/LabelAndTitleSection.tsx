@@ -4,20 +4,7 @@ import confirm from "@/assets/icon/etc/icon-confirm.png";
 import Image from "next/image";
 import { ILabelAndTitleSectionProps, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";
-
-// 서비스 타입 코드를 MoveTypeLabel 타입으로 매핑하는 함수
-const mapServiceTypeToMoveType = (serviceCode: string): "small" | "home" | "office" | "document" => {
-  switch (serviceCode) {
-    case "SMALL":
-      return "small";
-    case "HOME":
-      return "home";
-    case "OFFICE":
-      return "office";
-    default:
-      return "home"; // 기본값
-  }
-};
+import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 
 export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitleSectionProps) => {
   const t = useTranslations("estimateRequest");
@@ -33,26 +20,33 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
           {estimate.isDesignated ? <MoveTypeLabel type="document" /> : ""}
         </div>
         {/* 확정견적인지 + 견적상태  모바일만 표시 */}
-
-        {estimate.status === "PROPOSED" ? (
-          <p
-            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
-          >
-            {t("estimateWaiting")}
-          </p>
-        ) : estimate.status === "ACCEPTED" ? (
-          <div className={`flex flex-row items-center justify-end gap-1 ${usedAt === "received" ? "md:hidden" : ""}`}>
-            <Image src={confirm} alt="confirm" width={16} height={16} />
-            <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
-          </div>
+        {usedAt === "detail" ? (
+          ""
         ) : (
-          <p
-            className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
-          >
-            {estimate.status === "REJECTED" || estimate.status === "AUTO_REJECTED"
-              ? t("rejectedEstimate")
-              : estimate.status}
-          </p>
+          <>
+            {estimate.status === "PROPOSED" ? (
+              <p
+                className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
+              >
+                {t("estimateWaiting")}
+              </p>
+            ) : estimate.status === "ACCEPTED" ? (
+              <div
+                className={`flex flex-row items-center justify-end gap-1 ${usedAt === "received" ? "md:hidden" : ""}`}
+              >
+                <Image src={confirm} alt="confirm" width={16} height={16} />
+                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
+              </div>
+            ) : (
+              <p
+                className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
+              >
+                {estimate.status === "REJECTED" || estimate.status === "AUTO_REJECTED"
+                  ? t("rejectedEstimate")
+                  : estimate.status}
+              </p>
+            )}
+          </>
         )}
       </div>
       <div className="flex w-full flex-row items-center justify-center gap-1">

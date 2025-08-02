@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
 import info from "@/assets/icon/info/icon-info.png";
-import { IDetailPageMainSeactionProps, TMoverInfo } from "@/types/customerEstimateRequest";
+import { IDetailPageMainSeactionProps, TEstimateResponse, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";
 
 import { MoverInfo } from "./MoverInfo";
@@ -21,11 +21,6 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
     return num.toLocaleString();
   };
 
-  const allowedTypes = ["small", "home", "office"] as const;
-  const safeMovingType = allowedTypes.includes(estimateRequest.moveType as any)
-    ? (estimateRequest.moveType as "small" | "home" | "office")
-    : "small"; // 기본값
-
   return (
     <div
       className={`flex w-full flex-col items-center justify-center px-5 lg:flex-row lg:gap-[140px] ${type === "pending" ? "lg:items-center" : "lg:items-start"}`}
@@ -37,18 +32,15 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
             <Image src={defaultProfileImg_sm} alt={t("profileImage")} fill />
           </div>
         </div>
-        {/* 라벨 ~ 타이틀, 기사님정보 영역 */}
+        {/* 라벨과 타이틀 */}
         <LabelAndTitleSection
-          type={"received"}
-          mover={estimate.mover as TMoverInfo}
-          isDesignated={estimate.isDesignated}
-          estimateState={estimate.status as "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED"}
-          estimateTitle={estimate.comment || ""}
-          usedAtDetail={true}
+          estimate={estimate as TEstimateResponse}
+          mover={estimate.mover! as TMoverInfo}
+          usedAt={"detail"}
         />
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 기사님 정보 */}
-        <MoverInfo mover={estimate.mover as TMoverInfo} usedAtDetail={true} />
+        <MoverInfo mover={estimate.mover! as TMoverInfo} usedAt={"detail"} />
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 견적가 */}
         <div className="my-2 flex w-full flex-row items-center justify-between md:justify-start md:gap-15">
@@ -60,27 +52,27 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 이사견적 상세정보들 */}
         <DetailMoveInfo
-          id={estimateRequest.id}
-          movingType={estimateRequest.moveType as "SMALL" | "HOME" | "OFFICE"}
-          movingDate={estimateRequest.moveDate}
-          createdAt={estimateRequest.createdAt}
+          id={estimateRequest!.id}
+          movingType={estimateRequest!.moveType as "SMALL" | "HOME" | "OFFICE"}
+          movingDate={estimateRequest!.moveDate}
+          createdAt={estimateRequest!.createdAt}
           departureAddr={
-            shortenRegionInAddress(estimateRequest.fromAddress.region) +
+            shortenRegionInAddress(estimateRequest!.fromAddress.region) +
             " " +
-            estimateRequest.fromAddress.city +
+            estimateRequest!.fromAddress.city +
             " " +
-            estimateRequest.fromAddress.district
+            estimateRequest!.fromAddress.district
           }
           arrivalAddr={
-            shortenRegionInAddress(estimateRequest.toAddress.region) +
+            shortenRegionInAddress(estimateRequest!.toAddress.region) +
             " " +
-            estimateRequest.toAddress.city +
+            estimateRequest!.toAddress.city +
             " " +
-            estimateRequest.toAddress.district
+            estimateRequest!.toAddress.district
           }
-          departureDetail={estimateRequest.fromAddress.detail}
-          arrivalDetail={estimateRequest.toAddress.detail}
-          status={estimateRequest.status}
+          departureDetail={estimateRequest!.fromAddress.detail}
+          arrivalDetail={estimateRequest!.toAddress.detail}
+          status={estimateRequest!.status}
           confirmedEstimateId={null}
           estimateCount={0}
           designatedEstimateCount={0}
