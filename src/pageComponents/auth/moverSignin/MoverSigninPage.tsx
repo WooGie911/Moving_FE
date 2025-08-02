@@ -10,7 +10,7 @@ const MoverSigninPage = () => {
 
   return (
     <main
-      className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[839px]"
+      className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white sm:h-screen"
       aria-label={t("signinPageBg")}
     >
       <section

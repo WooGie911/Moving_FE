@@ -53,7 +53,7 @@ const MoverRegisterPage = () => {
 
   const onSubmit = async () => {
     const profileData = {
-      moverImage: selectedImage.dataUrl,
+      moverImage: selectedImage.dataUrl === uploadSkeleton.src ? "" : selectedImage.dataUrl,
       nickname,
       career: Number(career),
       shortIntro,

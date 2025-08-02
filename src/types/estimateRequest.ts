@@ -11,7 +11,7 @@ export interface IAddress {
 
 // 폼 상태 타입
 export interface IFormState {
-  movingType: "small" | "home" | "office";
+  movingType: "" | "small" | "home" | "office";
   movingDate: string;
   isDateConfirmed: boolean;
   departure: IAddress;
@@ -54,7 +54,7 @@ export interface IEstimateRequestResponse {
 }
 
 // 기본 타입들
-export type TMovingType = "small" | "home" | "office";
+export type TMovingType = "" | "small" | "home" | "office";
 export type TAddressType = "departure" | "arrival";
 export type TSpeechBubbleType = "question" | "answer";
 
@@ -173,7 +173,7 @@ export interface IEstimateRequestStepRendererProps {
   t: (key: string) => string;
   locale: "ko" | "en" | "zh";
   isFormValid: () => boolean;
-  onSelectMovingType: (type: "small" | "home" | "office") => void;
+  onSelectMovingType: (type: "" | "small" | "home" | "office") => void;
   onDateChange: (date: string) => void;
   onDateComplete: () => void;
   onDepartureModal: () => void;

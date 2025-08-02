@@ -141,7 +141,7 @@
     "roadNameLabel": "Road Name",
     "jibunLabel": "Jibun",
     "roadAddressPlaceholder": "Please enter the road name address",
-    "jibunAddressPlaceholder": "Please enter the jibun address",
+    "jibunAddressPlaceholder": "No jibun address",
     "editAnswer": "Edit",
     "selectDeparture": "Select Departure",
     "selectArrival": "Select Arrival",
@@ -152,7 +152,10 @@
     "deleteSuccess": "Estimate request has been successfully deleted!",
     "editConfirmMessage": "Do you want to edit this item?",
     "editConfirmTitle": "Edit Item",
-    "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision."
+    "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision.",
+    "hasEstimatesMessage": "The driver has sent estimates.",
+    "viewEstimatesButton": "View Estimates",
+    "loadingText": "Preparing the estimate request page..."
   },
   "navigation": {
     "home": "Home",
@@ -165,7 +168,8 @@
     "myEstimateManagement": "My Estimate Management",
     "myReviewManagement": "My Review Management",
     "receivedRequests": "Received Requests",
-    "myEstimateManagementDriver": "My Estimate Management"
+    "myEstimateManagementDriver": "My Estimate Management",
+    "scheduleManagement": "Schedule Management"
   },
   "serviceAvailableCountry": "*Currently, the service is only available in South Korea.",
   "addressSearchScriptNotLoaded": "The address search script has not loaded yet. Please try again in a moment.",
@@ -250,7 +254,7 @@
       "careerPlaceholder": "ex) 8",
 
       "currentPassword": "Current Password",
-      "currentPasswordPlaceholder": "Enter your current password",
+      "currentPasswordPlaceholder": "Enter your current password to set a new one",
 
       "newPassword": "New Password",
       "newPasswordPlaceholder": "Enter a new password",
@@ -677,8 +681,8 @@
       "description": "Please enter a detailed description."
     },
     "invalid": {
-      "name": "Name must be 1 to 10 characters long and contain only Korean or English letters.",
-      "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
+      "name": "Name must be 1 to 15 characters in Korean, English, or Chinese only.",
+      "nickname": "Nickname must be 1–15 characters long and contain only Korean, English, Chinese, or numbers.",
       "email": "Invalid email format.",
       "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
       "password": "Password must be at least 8 characters and include letters, numbers, and special characters.",
@@ -769,26 +773,17 @@
     "title": "Schedule Management",
     "description": "Check and manage your moving schedules",
     "selectDate": "Please select a date",
-    "scheduleFor": "Schedule",
-    "noSchedules": "No schedules for this date.",
+    "schedule": "Schedule",
+    "scheduleText": "Schedule",
     "noSchedule": "No schedules for this date.",
     "selectDateToView": "Select a date on the calendar to view detailed schedules.",
-    "customerSuffix": "",
-    "type": "Type:",
-    "departure": "From:",
-    "arrival": "To:",
-    "viewDetails": "View Details",
-    "approve": "Approve",
+    "movingType": "Moving Type",
+    "from": "From",
+    "to": "To",
     "status": {
       "confirmed": "Confirmed",
       "pending": "Pending",
       "completed": "Completed"
-    },
-    "confirmed": "Confirmed",
-    "pending": "Pending",
-    "completed": "Completed",
-    "movingType": "Moving Type",
-    "from": "From",
-    "to": "To"
+    }
   }
 }

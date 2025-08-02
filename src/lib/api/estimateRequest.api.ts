@@ -38,6 +38,21 @@ function getAccessTokenFromCookie(): string | undefined {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
+// 언어 정보를 가져오는 함수
+function getCurrentLanguage(): string {
+  // localStorage에서 언어 정보 가져오기
+  const storedLanguage = localStorage.getItem("language-storage");
+  if (storedLanguage) {
+    try {
+      const parsed = JSON.parse(storedLanguage);
+      return parsed.state?.language || "ko";
+    } catch (e) {
+      console.error("언어 정보 파싱 실패:", e);
+    }
+  }
+  return "ko"; // 기본값
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const estimateRequestApi = {
@@ -47,7 +62,8 @@ const estimateRequestApi = {
   create: async (form: IFormState) => {
     const payload = toEstimateRequestPayload(form);
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/create`, {
+    const language = getCurrentLanguage();
+    const res = await fetch(`${API_URL}/estimateRequests/create?lang=${language}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +80,8 @@ const estimateRequestApi = {
    */
   getActive: async () => {
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/active`, {
+    const language = getCurrentLanguage();
+    const res = await fetch(`${API_URL}/estimateRequests/active?lang=${language}`, {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
@@ -80,7 +97,8 @@ const estimateRequestApi = {
     try {
       const payload = toEstimateRequestPayload(form);
       const token = getAccessTokenFromCookie();
-      const res = await fetch(`${API_URL}/estimateRequests/active`, {
+      const language = getCurrentLanguage();
+      const res = await fetch(`${API_URL}/estimateRequests/active?lang=${language}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +119,8 @@ const estimateRequestApi = {
    */
   cancelActive: async () => {
     const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/active`, {
+    const language = getCurrentLanguage();
+    const res = await fetch(`${API_URL}/estimateRequests/active?lang=${language}`, {
       method: "DELETE",
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

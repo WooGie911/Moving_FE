@@ -137,7 +137,7 @@
     "roadNameLabel": "도로명",
     "jibunLabel": "지번",
     "roadAddressPlaceholder": "도로명 주소를 입력해주세요",
-    "jibunAddressPlaceholder": "지번 주소를 입력해주세요",
+    "jibunAddressPlaceholder": "지번 주소가 없습니다",
     "editAnswer": "수정하기",
     "selectDeparture": "출발지 선택하기",
     "selectArrival": "도착지 선택하기",
@@ -148,7 +148,10 @@
     "deleteSuccess": "견적 요청이 성공적으로 삭제되었습니다!",
     "editConfirmMessage": "이 항목을 수정하시겠습니까?",
     "editConfirmTitle": "항목 수정",
-    "moverEstimateSubmitted": "기사님이 견적을 제출한 경우 수정할 수 없습니다. 견적을 확인한 후 결정해주세요."
+    "moverEstimateSubmitted": "기사님이 견적을 제출한 경우 수정할 수 없습니다. 견적을 확인한 후 결정해주세요.",
+    "hasEstimatesMessage": "기사님이 보낸 견적이 있습니다.",
+    "viewEstimatesButton": "보러가기",
+    "loadingText": "견적 요청 페이지를 준비하고 있습니다..."
   },
   "navigation": {
     "home": "홈",
@@ -161,7 +164,8 @@
     "myEstimateManagement": "내 견적 관리",
     "myReviewManagement": "내 리뷰 관리",
     "receivedRequests": "받은 요청",
-    "myEstimateManagementDriver": "내 견적 관리"
+    "myEstimateManagementDriver": "내 견적 관리",
+    "scheduleManagement": "일정 관리"
   },
   "serviceAvailableCountry": "*현재 서비스 가능 국가는 대한민국입니다.",
   "addressSearchScriptNotLoaded": "주소 검색 스크립트가 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.",
@@ -259,7 +263,7 @@
       "phone": "전화번호",
       "phonePlaceholder": "전화번호를 입력해 주세요",
       "currentPassword": "현재 비밀번호",
-      "currentPasswordPlaceholder": "현재 비밀번호를 입력해 주세요",
+      "currentPasswordPlaceholder": "새 비밀번호 설정을 위해 입력해주세요",
       "newPassword": "새 비밀번호",
       "newPasswordPlaceholder": "새 비밀번호를 입력해 주세요",
       "confirmNewPassword": "새 비밀번호 확인",
@@ -664,8 +668,8 @@
       "description": "상세 설명을 입력해주세요"
     },
     "invalid": {
-      "name": "이름은 1~10자의 한글, 영문만 입력 가능합니다.",
-      "nickname": "별명은 1~10자의 한글, 영문만 입력 가능합니다.",
+      "name": "이름은 1~15자의 한글, 영문, 중국어만 입력 가능합니다.",
+      "nickname": "이름은 1~15자의 한글, 영문, 중국어 숫자 만 입력 가능합니다.",
       "email": "올바른 이메일 형식이 아닙니다.",
       "phoneNumber": "올바른 전화번호 형식이 아닙니다. (예: 01012345678)",
       "password": "비밀번호는 최소 8자 이상이며 영문, 숫자, 특수문자를 각각 포함해야 합니다.",
@@ -757,26 +761,17 @@
     "title": "일정 관리",
     "description": "이사 일정을 확인하고 관리하세요",
     "selectDate": "날짜를 선택해주세요",
-    "scheduleFor": "일정",
-    "noSchedules": "해당 날짜에 예정된 일정이 없습니다.",
+    "schedule": "일정",
+    "scheduleText": "일정",
     "noSchedule": "해당 날짜에 예정된 일정이 없습니다.",
     "selectDateToView": "캘린더에서 날짜를 선택하면 상세 일정을 확인할 수 있습니다.",
-    "customerSuffix": "님",
-    "type": "유형:",
-    "departure": "출발:",
-    "arrival": "도착:",
-    "viewDetails": "상세보기",
-    "approve": "승인하기",
+    "movingType": "이사 유형",
+    "from": "출발지",
+    "to": "도착지",
     "status": {
       "confirmed": "확정",
       "pending": "대기",
       "completed": "완료"
-    },
-    "confirmed": "확정",
-    "pending": "대기",
-    "completed": "완료",
-    "movingType": "이사 유형",
-    "from": "출발지",
-    "to": "도착지"
+    }
   }
 }
