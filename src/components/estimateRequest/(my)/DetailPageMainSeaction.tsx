@@ -14,7 +14,12 @@ import { LgButtonSection } from "./LgButtonSection";
 import { Button } from "@/components/common/button/Button";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 
-export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDetailPageMainSeactionProps) => {
+export const DetailPageMainSeaction = ({
+  estimateRequest,
+  estimate,
+  type,
+  estimates,
+}: IDetailPageMainSeactionProps) => {
   const t = useTranslations("estimateRequest");
 
   const formatNumber = (num: number): string => {
@@ -102,7 +107,15 @@ export const DetailPageMainSeaction = ({ estimateRequest, estimate, type }: IDet
         <div className="border-border-light flex w-full flex-col border-b-1" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
           <ShareSection />
-          {type === "pending" ? <LastButtonSection /> : ""}
+          {type === "pending" ? (
+            <LastButtonSection
+              estimateId={estimate.id}
+              estimateStatus={estimate.status}
+              hasConfirmedEstimate={estimates?.some((e) => e.status === "ACCEPTED") || false}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="hidden lg:block">

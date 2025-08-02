@@ -198,6 +198,7 @@ export interface IDetailPageMainSeactionProps {
   estimateRequest: TEstimateRequestResponse | null;
   estimate: TEstimateResponse;
   type: "pending" | "received";
+  estimates?: TEstimateResponse[];
 }
 
 // 기존 인터페이스들 (호환성을 위해 유지)
