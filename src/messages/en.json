@@ -732,7 +732,8 @@
     "userSuffix": {
       "customer": "Customer",
       "driver": "Driver"
-    }
+    },
+    "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!"
   },
   "review": {
     "title": "Review",

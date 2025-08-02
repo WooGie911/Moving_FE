@@ -8,6 +8,7 @@ import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import LanguageSync from "./[locale]/LanguageSync";
+import { ToastContainer } from "react-toastify";
 
 const pretendard = localFont({
   src: "../assets/font/PretendardVariable.woff2",
@@ -73,6 +74,14 @@ export default async function LocaleLayout({
             <Gnb />
             {children}
             {/* <DevNavitgation /> */}
+            <ToastContainer
+              position="top-center"
+              autoClose={2000}
+              hideProgressBar
+              pauseOnHover={false}
+              draggable={false}
+              closeOnClick
+            />
           </Providers>
         </NextIntlClientProvider>
       </body>
