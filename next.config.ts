@@ -3,7 +3,20 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["part4-moving-s3.s3.ap-northeast-2.amazonaws.com", "s3.amazonaws.com", "example.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "part4-moving-s3.s3.ap-northeast-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
+    ],
   },
 
   // TODO : 추후 린트 오류 모두 해결해야함

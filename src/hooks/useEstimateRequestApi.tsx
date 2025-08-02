@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useTranslations } from "next-intl";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { useTranslations, useLocale } from "next-intl";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IFormState } from "@/types/estimateRequest";
+import { toast } from "react-toastify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // API 응답 타입 정의
@@ -17,6 +18,7 @@ interface ApiResponse<T = any> {
 export const useEstimateRequestApi = () => {
   const { open, close } = useModal();
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -137,13 +139,17 @@ export const useEstimateRequestApi = () => {
 
   // 견적 생성
   const createMutation = useMutation<ApiResponse, Error | unknown, IFormState>({
-    mutationFn: (form: IFormState) => estimateRequestApi.create(form),
+    mutationFn: (form: IFormState) => estimateRequestClientApi.create(form, locale),
     onSuccess: (result) => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        // 견적 생성 완료 후 바로 페이지 새로고침 (모달 없이)
-        window.location.reload();
+        // 견적 생성 성공 토스트 표시
+        toast.success(t("estimateRequest.createSuccess"));
+        // 토스트를 잠시 보여준 후 페이지 새로고침
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
@@ -154,13 +160,17 @@ export const useEstimateRequestApi = () => {
 
   // 견적 수정
   const updateMutation = useMutation<ApiResponse, Error | unknown, IFormState>({
-    mutationFn: (form: IFormState) => estimateRequestApi.updateActive(form),
+    mutationFn: (form: IFormState) => estimateRequestClientApi.updateActive(form, locale),
     onSuccess: (result) => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        // 견적 수정 완료 후 바로 페이지 새로고침 (모달 없이)
-        window.location.reload();
+        // 견적 수정 성공 토스트 표시
+        toast.success(t("estimateRequest.editSuccess"));
+        // 토스트를 잠시 보여준 후 페이지 새로고침
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
@@ -179,13 +189,17 @@ export const useEstimateRequestApi = () => {
 
   // 견적 삭제
   const deleteMutation = useMutation<ApiResponse, Error | unknown, void>({
-    mutationFn: () => estimateRequestApi.cancelActive(),
+    mutationFn: () => estimateRequestClientApi.cancelActive(locale),
     onSuccess: (result) => {
       if (result.success) {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
-        // 삭제 완료 후 바로 페이지 새로고침 (모달 없이)
-        window.location.reload();
+        // 삭제 성공 토스트 표시
+        toast.success(t("estimateRequest.deleteSuccess"));
+        // 토스트를 잠시 보여준 후 페이지 새로고침
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
         queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
@@ -204,8 +218,8 @@ export const useEstimateRequestApi = () => {
 
   // 활성 견적 요청 조회
   const activeQuery = useQuery<ApiResponse>({
-    queryKey: ["estimateRequest", "active"],
-    queryFn: () => estimateRequestApi.getActive(),
+    queryKey: ["estimateRequest", "active", locale],
+    queryFn: () => estimateRequestClientApi.getActive(locale),
     staleTime: 60 * 1000,
     retry: false,
   });

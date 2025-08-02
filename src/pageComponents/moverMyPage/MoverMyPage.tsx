@@ -54,7 +54,8 @@ const DEFAULT_PROFILE_DETAIL: TMoverProfileDetail = {
 const MoverMyPage = () => {
   const router = useRouter();
   const locale = useLocale();
-  const t = useTranslations();
+  const t = useTranslations("mover");
+  const tShared = useTranslations();
   const [profile, setProfile] = useState<IMoverInfo | null>(null);
   const [profileDetail, setProfileDetail] = useState<TMoverProfileDetail>(DEFAULT_PROFILE_DETAIL);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
@@ -151,7 +152,7 @@ const MoverMyPage = () => {
   if (isLoading) {
     return (
       <div className="bg-bg-primary flex min-h-screen w-full items-center justify-center">
-        <div className="text-lg">{t("common.loading")}</div>
+        <div className="text-lg">{tShared("common.loading")}</div>
       </div>
     );
   }
@@ -165,7 +166,7 @@ const MoverMyPage = () => {
             onClick={() => window.location.reload()}
             className="bg-primary-400 hover:bg-primary-500 rounded-lg px-4 py-2 text-white"
           >
-            {t("common.retry")}
+            {tShared("common.retry")}
           </button>
         </div>
       </div>
@@ -299,7 +300,7 @@ const MoverMyPage = () => {
                       {t("myPage.inProgress")}
                     </div>
                     <div className="text-primary-400 justify-center self-stretch text-center text-xl leading-loose font-bold">
-                      {profile.completedCount} {t("shared.units.cases")}
+                      {profile.completedCount} {tShared("shared.units.cases")}
                     </div>
                   </div>
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
@@ -317,7 +318,7 @@ const MoverMyPage = () => {
                       {t("myPage.totalExperience")}
                     </div>
                     <div className="text-primary-400 justify-center self-stretch text-center text-xl leading-loose font-bold">
-                      {profile.experience} {t("shared.units.years")}
+                      {profile.experience} {tShared("shared.units.years")}
                     </div>
                   </div>
                 </div>

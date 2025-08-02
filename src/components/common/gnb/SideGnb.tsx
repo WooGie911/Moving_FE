@@ -22,9 +22,13 @@ export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) 
 
   const getMenuItems = () => {
     if (userRole === "GUEST") {
-      return [...GEUST_NAVIGATION_ITEMS, { name: "auth.signin", href: "/userSignin" }];
+      return [
+        ...GEUST_NAVIGATION_ITEMS.map((item) => ({ ...item, name: `navigation.${item.name}` })),
+        { name: "auth.signin", href: "/userSignin" },
+      ];
     } else {
-      return userRole === "CUSTOMER" ? CUSTOMER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
+      const items = userRole === "CUSTOMER" ? CUSTOMER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;
+      return items.map((item) => ({ ...item, name: `navigation.${item.name}` }));
     }
   };
 
