@@ -26,7 +26,7 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
           <>
             {estimate.status === "PROPOSED" ? (
               <p
-                className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
+                className={`text-[14px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
               >
                 {t("estimateWaiting")}
               </p>
@@ -35,11 +35,11 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
                 className={`flex flex-row items-center justify-end gap-1 ${usedAt === "received" ? "md:hidden" : ""}`}
               >
                 <Image src={confirm} alt="confirm" width={16} height={16} />
-                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
+                <p className="text-primary-400 text-[14px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             ) : (
               <p
-                className={`text-[16px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
+                className={`text-[14px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}
               >
                 {estimate.status === "REJECTED" || estimate.status === "AUTO_REJECTED"
                   ? t("rejectedEstimate")

@@ -7,10 +7,49 @@ import veteran from "@/assets/icon/etc/icon-chat.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
 import { useTranslations } from "next-intl";
+import deleteIcon from "@/assets/icon/menu/icon-delete.png";
+import router from "next/router";
+import Link from "next/link";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useModal } from "@/components/common/modal/ModalContext";
 
-export const MoverInfo = ({ mover, usedAt }: IMoverInfoProps) => {
+export const MoverInfo = ({ mover, usedAt, estimateId }: IMoverInfoProps) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const t = useTranslations("estimateRequest");
+  const queryClient = useQueryClient();
+  const { open, close } = useModal();
+
+  // 견적 반려 API 호출을 위한 mutation
+  const rejectEstimateMutation = useMutation({
+    mutationFn: (estimateId: string) => customerEstimateRequestApi.cancelEstimate(estimateId),
+    onSuccess: () => {
+      // 성공 시 모달 닫기
+      close();
+
+      // 캐시 무효화하여 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+
+      console.log("견적 반려 처리 성공");
+    },
+    onError: (error) => {
+      console.error("견적 반려 처리 실패:", error);
+      // TODO: 에러 메시지 표시
+    },
+  });
+
+  // 견적 반려 핸들러
+  const handleRejectEstimate = () => {
+    if (!estimateId) {
+      console.error("견적 ID가 없습니다.");
+      return;
+    }
+
+    rejectEstimateMutation.mutate(estimateId);
+  };
+
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -57,26 +96,73 @@ export const MoverInfo = ({ mover, usedAt }: IMoverInfoProps) => {
             )}
           </div>
           {/* 기사님 평점과 경력 확정건수 영역 */}
-          <div className="flex w-full flex-row items-center justify-start">
-            <div className="flex flex-row items-center justify-center gap-1">
-              <Image src={star} alt="star" width={20} height={20} />
-              <p className="text-black-300 text-[14px] leading-[24px] font-semibold">
-                {mover.averageRating!.toFixed(1)}
-              </p>
-              <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
-            </div>
-            <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
+          <div className="flex w-full flex-row items-center justify-between">
+            <div className="flex w-full flex-row items-center justify-start">
+              <div className="flex flex-row items-center justify-center gap-1">
+                <Image src={star} alt="star" width={20} height={20} />
+                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">
+                  {mover.averageRating!.toFixed(1)}
+                </p>
+                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
+              </div>
+              <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-            <div className="flex flex-row items-center justify-center gap-1">
-              <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("experience")}</p>
-              <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("years")}`}</p>
-            </div>
-            <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
+              <div className="flex flex-row items-center justify-center gap-1">
+                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("experience")}</p>
+                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("years")}`}</p>
+              </div>
+              <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-            <div className="flex flex-row items-center justify-center gap-1">
-              <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("cases")}`}</p>
-              <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("confirmed")}</p>
+              <div className="flex flex-row items-center justify-center gap-1">
+                <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("cases")}`}</p>
+                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("confirmed")}</p>
+              </div>
             </div>
+            {usedAt === "pending" && (
+              <div className="relative">
+                <Image src={deleteIcon} alt="delete" width={20} height={20} onClick={() => setIsOpen(!isOpen)} />
+                {/*  드롭다운 메뉴  */}
+                {isOpen && (
+                  <div className="absolute top-[140%] right-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">
+                    <Link href={`/searchMover/${mover.id}`}>
+                      <div
+                        className="flex h-10 w-35 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
+                        {"기사님 보러 가기"}
+                      </div>
+                    </Link>
+                    <div
+                      className="flex h-10 w-35 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
+                      onClick={() => {
+                        setIsOpen(false);
+                        open({
+                          title: "견적 반려",
+                          children: (
+                            <div className="flex flex-col items-center justify-center">
+                              <p>정말로 이 견적을 반려하시겠습니까?</p>
+                              <p>반려된 견적은 복구할 수 없습니다.</p>
+                            </div>
+                          ),
+                          type: "bottomSheet",
+                          buttons: [
+                            {
+                              text: rejectEstimateMutation.isPending ? "처리중..." : "반려",
+                              onClick: handleRejectEstimate,
+                              disabled: rejectEstimateMutation.isPending,
+                            },
+                          ],
+                        });
+                      }}
+                    >
+                      {"견적 반려하기"}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

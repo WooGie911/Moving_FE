@@ -3,7 +3,6 @@ import React from "react";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/common/button/Button";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { getMovingTypeKey } from "@/lib/utils/getMovingTypeTranslated";
 import { formatDateWithDay, getMovingDateFormatKeys } from "@/lib/utils/dateFormatUtils";
@@ -14,7 +13,6 @@ export const RequestEstimateRequest = ({
   moveDate,
   fromAddress,
   toAddress,
-  hasConfirmedEstimate,
 }: IEstimateRequestProps) => {
   const t = useTranslations("estimateRequest");
   const tMoveTypes = useTranslations("moveTypes");
@@ -55,13 +53,6 @@ export const RequestEstimateRequest = ({
             </h1>
             <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`${t("requestDate")} ${formatDateWithDayTranslated(createdAt)}`}</p>
           </div>
-          {hasConfirmedEstimate && (
-            <div className="lg:hidden">
-              <Button variant="solid" width="w-[110px]" height="h-[44px]" rounded="rounded-[12px]">
-                이사완료
-              </Button>
-            </div>
-          )}
         </div>
         <div className="flex w-full flex-col gap-1 md:flex-row md:justify-start md:gap-3">
           <div className="flex flex-row justify-between md:flex-col">
@@ -87,14 +78,6 @@ export const RequestEstimateRequest = ({
               {formatDateWithDayTranslated(moveDate)}
             </p>
           </div>
-
-          {hasConfirmedEstimate && (
-            <div className="hidden pt-1 pl-4 lg:block">
-              <Button variant="solid" width="w-[110px]" height="h-[44px]" rounded="rounded-[12px]">
-                이사완료
-              </Button>
-            </div>
-          )}
         </div>
       </div>
     </>

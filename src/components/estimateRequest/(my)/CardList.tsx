@@ -16,7 +16,6 @@ import { formatNumber } from "@/lib/utils/formatNumber";
 
 export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) => {
   const { open, close } = useModal();
-  const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations("estimateRequest");
   const tCommon = useTranslations("common");
   const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
@@ -64,13 +63,13 @@ export const CardList = ({ estimate, estimateRequest, usedAt }: ICardListProps) 
 
   const cardContent = (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[327px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
+      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[367px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1">
         {/* 라벨과 견적상태 영역 */}
         <LabelAndTitleSection mover={estimate.mover} estimate={estimate} usedAt={usedAt} />
         {/* 기사님 프로필 영역 */}
-        <MoverInfo mover={estimate.mover} usedAt={usedAt} />
+        <MoverInfo mover={estimate.mover} usedAt={usedAt} estimateId={estimate.id} />
       </div>
 
       {/* 견적서 금액 영역 */}

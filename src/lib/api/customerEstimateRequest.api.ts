@@ -201,6 +201,40 @@ const customerEstimateRequestApi = {
       throw error;
     }
   },
+
+  /**
+   * 6. 견적 반려
+   */
+  rejectEstimate: async (estimateId: string): Promise<TCancelEstimateResponse | null> => {
+    try {
+      const accessToken = await getAccessToken();
+
+      const response = await fetch(`${API_URL}/customer-quotes/cancel?estimateId=${estimateId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("로그인이 필요합니다.");
+        } else if (response.status === 400) {
+          throw new Error("유효하지 않은 견적 ID입니다.");
+        } else if (response.status === 404) {
+          throw new Error("진행중인 견적이 없습니다.");
+        } else {
+          throw new Error("견적 반려에 실패했습니다.");
+        }
+      }
+
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error("견적 반려 실패:", error);
+      throw error;
+    }
+  },
 };
 
 export default customerEstimateRequestApi;

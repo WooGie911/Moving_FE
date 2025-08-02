@@ -8,18 +8,87 @@ import up from "@/assets/icon/arrow/icon-up-sm.png";
 import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/common/button/Button";
+import { useModal } from "@/components/common/modal/ModalContext";
+import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const EstimateListSection = ({ estimateList }: { estimateList: ICardListProps[] }) => {
+export const EstimateListSection = ({
+  estimateList,
+  estimateRequest,
+}: {
+  estimateList: ICardListProps[];
+  estimateRequest: any;
+}) => {
   const [option, setOption] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const t = useTranslations("estimateRequest");
+  const { open, close } = useModal();
+  const queryClient = useQueryClient();
+
+  // 이사완료 API 호출을 위한 mutation
+  const completeEstimateMutation = useMutation({
+    mutationFn: (estimateId: string) => customerEstimateRequestApi.completeEstimate(estimateId),
+    onSuccess: () => {
+      // 성공 시 모달 닫기
+      close();
+
+      // 캐시 무효화하여 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+
+      console.log("이사완료 처리 성공");
+    },
+    onError: (error) => {
+      console.error("이사완료 처리 실패:", error);
+      // TODO: 에러 메시지 표시
+    },
+  });
+
+  // ACCEPTED 상태의 estimateId 찾기
+  const acceptedEstimateId = estimateList?.find((estimate) => estimate.estimate.status === "ACCEPTED")?.estimate.id;
+
+  // 이사확정 API 호출 함수
+  const handleCompleteEstimate = () => {
+    if (!acceptedEstimateId) {
+      console.error("확정된 견적이 없습니다.");
+      return;
+    }
+
+    completeEstimateMutation.mutate(acceptedEstimateId);
+  };
+
+  // 버튼 상태 및 텍스트 결정
+  const getButtonState = () => {
+    if (estimateRequest?.status === "COMPLETED") {
+      return {
+        text: "확정완료",
+        disabled: true,
+        state: "disabled" as const,
+      };
+    } else if (estimateRequest?.status === "APPROVED") {
+      return {
+        text: completeEstimateMutation.isPending ? "처리중..." : "이사확정",
+        disabled: completeEstimateMutation.isPending,
+        state: completeEstimateMutation.isPending ? ("disabled" as const) : ("default" as const),
+      };
+    } else {
+      return {
+        text: "이사확정",
+        disabled: true,
+        state: "disabled" as const,
+      };
+    }
+  };
+
+  const buttonState = getButtonState();
 
   // 필터링된 리스트 생성
   const filteredList =
     option === "" || option === t("all")
       ? estimateList
       : option === t("confirmedEstimate")
-        ? estimateList.filter((item) => item.estimateState === "ACCEPTED")
+        ? estimateList.filter((item) => item.estimate.status === "ACCEPTED")
         : estimateList; // 옵션이 더 있다면 else if 추가
 
   return (
@@ -33,8 +102,9 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
           {filteredList.length}
         </p>
       </div>
-      {/* 정렬 버튼 */}
-      <div className="relative flex w-full flex-row items-center justify-start">
+
+      {/* 정렬 버튼과 이사확정 버튼 */}
+      <div className="relative flex w-full flex-row items-center justify-between gap-4">
         <button
           className={`flex h-[36px] cursor-pointer flex-row items-center justify-between gap-[6px] rounded-[8px] border-1 py-2 pr-1 pl-3 lg:h-[50px] lg:pr-3 lg:pl-5 ${option === "" ? "border-border-light" : "border-primary-400 bg-primary-100"}`}
           onClick={() => setIsOpen(!isOpen)}
@@ -53,6 +123,38 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
             <Image src={isOpen ? upLg : downLg} alt="dropdown" fill />
           </div>
         </button>
+
+        <Button
+          variant="solid"
+          state={buttonState.state}
+          width="w-[110px]"
+          height="h-[36px]"
+          rounded="rounded-[8px]"
+          disabled={buttonState.disabled}
+          style={{ cursor: buttonState.disabled ? "not-allowed" : "pointer" }}
+          onClick={() =>
+            open({
+              title: "이사확정",
+              children: (
+                <div className="flex flex-col items-center justify-center">
+                  <p>즐거운 이사가 되셨나요?</p>
+                  <p>이사확정 버튼을 눌러 이사를 완료해주세요.</p>
+                </div>
+              ),
+              type: "bottomSheet",
+              buttons: [
+                {
+                  text: completeEstimateMutation.isPending ? "처리중..." : "확정",
+                  onClick: handleCompleteEstimate,
+                  disabled: completeEstimateMutation.isPending,
+                },
+              ],
+            })
+          }
+        >
+          {buttonState.text}
+        </Button>
+
         {/*  드롭다운 메뉴  */}
         {isOpen && (
           <div className="absolute top-[110%] left-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">
@@ -77,9 +179,10 @@ export const EstimateListSection = ({ estimateList }: { estimateList: ICardListP
           </div>
         )}
       </div>
+
       <div className="flex w-full flex-col items-stretch justify-center">
         {filteredList.map((item) => (
-          <CardList key={item.estimateId} {...item} />
+          <CardList key={item.estimate.id} {...item} />
         ))}
       </div>
     </div>

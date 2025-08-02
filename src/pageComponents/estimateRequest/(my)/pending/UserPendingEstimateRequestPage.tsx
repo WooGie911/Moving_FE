@@ -72,7 +72,6 @@ export const UserPendingEstimateRequestPage = () => {
             moveDate={estimateRequest.moveDate}
             fromAddress={estimateRequest.fromAddress}
             toAddress={estimateRequest.toAddress}
-            hasConfirmedEstimate={hasConfirmedEstimate}
           />
         )}
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">

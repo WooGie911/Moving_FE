@@ -2,7 +2,6 @@ import { TEstimateRequestResponse } from "@/types/customerEstimateRequest";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { getMovingTypeKey } from "@/lib/utils/getMovingTypeTranslated";
 
 export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
   const t = useTranslations("estimateRequest");
@@ -11,8 +10,16 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
 
   // movingType에 따른 다국어 텍스트 변환 함수
   const getMovingTypeText = (type: string) => {
-    const key = getMovingTypeKey(type.toLowerCase());
-    return tMoveTypes(key);
+    switch (type.toLowerCase()) {
+      case "small":
+        return tMoveTypes("small");
+      case "home":
+        return tMoveTypes("home");
+      case "office":
+        return tMoveTypes("office");
+      default:
+        return type;
+    }
   };
 
   // Date 객체를 다국어 날짜 문자열로 변환하는 함수
@@ -48,36 +55,59 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
   const arrivalDetail = props.toAddress.detail;
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-[12px] bg-gray-50 p-6 md:gap-6 md:p-8">
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">
+    <div className="flex w-full flex-col items-center justify-center gap-4 lg:w-[400px]">
+      {/* 타이틀 및 견적 요청 날짜 부분 */}
+      <div className="flex w-full flex-row items-center justify-center md:justify-between">
+        <h1 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
+          {t("estimateInfo")}
+        </h1>
+        <p className="hidden text-[14px] leading-[24px] font-normal text-gray-500 md:block">
+          {formatDate(props.createdAt)}
+        </p>
+      </div>
+      {/* 견적 정보 부분 */}
+      <div className="flex w-full flex-col items-center justify-center gap-2">
+        {/* 이사유형 */}
+        <div className="flex w-full flex-row items-center justify-between">
+          <p className="text-primary-400 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
+            {t("movingType")}
+          </p>
+          <p className="text-black-500 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
             {getMovingTypeText(props.moveType)}
-          </h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
-            {formatDate(props.createdAt)}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("movingDate")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
+        {/* 출발지 및 도착지*/}
+        <div className="border-border-light flex w-full flex-col items-center justify-center gap-2 border-t-1 border-b-1 pt-2 pb-2">
+          <div className="flex w-full flex-row items-start justify-between">
+            <p className="text-primary-400 w-[50px] flex-shrink-0 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
+              {t("departure")}
+            </p>
+            <p className="text-black-500 flex-1 text-right text-[14px] leading-[24px] font-semibold break-words md:text-[16px] md:leading-[26px]">
+              {formatAddress(departureAddr, departureDetail)}
+            </p>
+          </div>
+          <div className="flex w-full flex-row items-start justify-between">
+            <p className="text-primary-400 w-[50px] flex-shrink-0 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
+              {t("arrival")}
+            </p>
+            <p className="text-black-500 flex-1 text-right text-[14px] leading-[24px] font-semibold break-words md:text-[16px] md:leading-[26px]">
+              {formatAddress(arrivalAddr, arrivalDetail)}
+            </p>
+          </div>
+        </div>
+        {/* 이사날짜 */}
+        <div className="flex w-full flex-row items-center justify-between">
+          <p className="text-primary-400 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
+            {t("movingDateLabel")}
+          </p>
+          <p className="text-black-500 text-[14px] leading-[24px] font-semibold md:text-[16px] md:leading-[26px]">
             {formatDate(props.moveDate)}
           </p>
         </div>
       </div>
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("departure")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
-            {formatAddress(departureAddr, departureDetail)}
-          </p>
-        </div>
-        <div className="flex w-full flex-col gap-2 md:w-1/2">
-          <h3 className="text-[16px] leading-[26px] font-semibold text-gray-500 md:text-[18px]">{t("arrival")}</h3>
-          <p className="text-[14px] leading-[22px] font-normal text-gray-400 md:text-[16px]">
-            {formatAddress(arrivalAddr, arrivalDetail)}
-          </p>
-        </div>
+      {/* 모바일용 요청 날짜 */}
+      <div className="flex w-full flex-row items-center justify-end">
+        <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:hidden">{formatDate(props.createdAt)}</p>
       </div>
     </div>
   );

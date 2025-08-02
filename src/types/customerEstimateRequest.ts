@@ -5,7 +5,6 @@ export interface IEstimateRequestProps {
   moveDate: Date;
   fromAddress: TAddress;
   toAddress: TAddress;
-  hasConfirmedEstimate: boolean;
 }
 
 // 주소 타입 (백엔드와 일치)
@@ -25,6 +24,7 @@ export interface ILabelAndTitleSectionProps {
 export interface IMoverInfoProps {
   mover: TMoverInfo;
   usedAt: "pending" | "received" | "detail";
+  estimateId?: string;
 }
 
 type TMoveType = "HOME" | "OFFICE" | "SMALL";
