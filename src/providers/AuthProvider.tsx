@@ -14,6 +14,7 @@ type TUser = {
   userType: "CUSTOMER" | "MOVER";
   customerImage?: string;
   moverImage?: string;
+  provider: "GOOGLE" | "KAKAO" | "NAVER" | "LOCAL";
 };
 
 export type TSignInResponse = {
@@ -83,24 +84,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
 
-  // 리다이렉트 로직을 별도 함수로 분리
-  const handleRedirectAfterAuth = (user: { nickname?: string | null; userType?: string }) => {
-    let targetPath = "";
-
-    if (!user?.nickname) {
-      targetPath = "/profile/register";
-    } else if (user?.userType === "CUSTOMER") {
-      targetPath = "/searchMover";
-    } else if (user?.userType === "MOVER") {
-      targetPath = "/estimate/received";
-    }
-
-    // 현재 경로와 다른 경우에만 리다이렉트
-    if (targetPath && pathname !== targetPath) {
-      router.push(targetPath);
-    }
-  };
-
   /**
    * 서버에서 현재 사용자 정보 조회
    */
@@ -136,9 +119,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
-      // 현재 경로를 고려한 리다이렉트
-      handleRedirectAfterAuth(response.user);
-
       return response;
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -163,9 +143,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       // 회원가입 성공 후 사용자 정보 조회
       await getUser();
-
-      // 현재 경로를 고려한 리다이렉트
-      handleRedirectAfterAuth(response.user);
 
       return response;
     } catch (error) {

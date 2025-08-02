@@ -10,7 +10,7 @@ const MoverSignupPage = () => {
 
   return (
     <main
-      className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[1200px]"
+      className="md:bg-primary-400 flex h-screen min-h-[1100px] w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[1200px]"
       aria-label={t("signupPageBg")}
     >
       <section
@@ -18,7 +18,7 @@ const MoverSignupPage = () => {
         aria-label={t("signupPageContainer")}
       >
         {/* 시각장애인용 제목 */}
-        <h1 id="signinPageTitle" className="sr-only">
+        <h1 id="signupPageTitle" className="sr-only">
           {t("moverSignupPageTitle")}
         </h1>
 

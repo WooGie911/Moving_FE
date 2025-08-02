@@ -6,8 +6,10 @@ import estimateRequestApi from "@/lib/api/estimateRequest.api";
 import EstimateRequestCreatePage from "@/pageComponents/estimateRequest/create/EstimateRequestCreatePage";
 import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/EstimateRequestEditPage";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { useLanguageStore } from "@/stores/languageStore";
 
 export default function EstimateRequestPageWrapper() {
+  const { t } = useLanguageStore();
   const [hasActiveEstimateRequest, setHasActiveEstimateRequest] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ export default function EstimateRequestPageWrapper() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-200">
-        <MovingTruckLoader size="lg" loadingText="견적 요청 페이지를 준비하고 있습니다..." />
+        <MovingTruckLoader size="lg" loadingText={t("estimateRequest.loadingText")} />
       </div>
     );
   }

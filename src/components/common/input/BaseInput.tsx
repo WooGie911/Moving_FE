@@ -45,6 +45,7 @@ export const BaseInput = ({
         )}
         <input
           className={`h-full w-full rounded-2xl ${icon && iconPosition === "left" ? "pl-12" : ""} ${inputStyle} ${inputClassName}`}
+          autoComplete="off"
           {...rest}
         />
         {onClear && rest.value && (
@@ -88,7 +89,7 @@ export const BaseTextarea = ({
     <div className={`mb-4 h-full ${wrapperClassName}`}>
       <div className="relative">
         <textarea
-          className={`h-[160px] w-[327px] resize-none rounded-2xl border px-3 py-2 transition outline-none ${textareaClassName}`}
+          className={`h-[160px] w-[327px] resize-none rounded-2xl px-3 py-2 transition outline-none ${error ? "!border-state-error" : "border-gray-200"} ${textareaClassName}`}
           {...rest}
         />
       </div>
