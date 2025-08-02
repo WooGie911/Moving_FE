@@ -733,7 +733,9 @@
     "userSuffix": {
       "customer": "客户",
       "driver": "司机"
-    }
+    },
+    "roleToggleLockMessage": "需完成两个身份（一般会员与搬家师傅）的资料注册，方可快速切换角色！",
+    "roleToggleText": "快速切换"
   },
   "review": {
     "title": "评价",

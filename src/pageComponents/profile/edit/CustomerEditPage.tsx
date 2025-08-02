@@ -139,10 +139,6 @@ export default function CustomerEditPage() {
     fetchProfile();
   }, [reset]);
 
-  useEffect(() => {
-    console.log(validName, validNickname, validEmail, validPhone, validServices, validRegions);
-  }, [validName, validNickname, validEmail, validPhone, validServices, validRegions]);
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
