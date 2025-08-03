@@ -7,17 +7,23 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const UserPendingEstimateRequestDetailPage = () => {
   const { id } = useParams();
   const t = useTranslations("estimateRequest");
-
+  const commonT = useTranslations("common");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["pendingEstimateRequests"],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
 
-  if (isPending) return <div>{t("common.loading")}</div>; // 또는 로딩 스피너 컴포넌트
+  if (isPending)
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    ); // 또는 로딩 스피너 컴포넌트
   if (isError) return <div>{t("common.error")}</div>;
 
   const estimateRequest = data!.estimateRequest;

@@ -3,7 +3,6 @@ import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateR
 import { RejectDetailMain } from "@/components/estimate/(my)/rejected/[id]/RejectDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
-import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";

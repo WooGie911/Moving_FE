@@ -13,16 +13,22 @@ import Link from "next/link";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";
 import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const UserPendingEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
-
+  const commonT = useTranslations("common");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["pendingEstimateRequests"],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
 
-  if (isPending) return <div>{t("common.loading")}</div>; // 또는 로딩 스피너 컴포넌트
+  if (isPending)
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    ); // 또는 로딩 스피너 컴포넌트
   if (isError) return <div>{t("common.error")}</div>;
 
   if (!data || data.estimateRequest === null) {

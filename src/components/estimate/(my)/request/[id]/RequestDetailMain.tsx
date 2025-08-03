@@ -5,7 +5,7 @@ import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { TMyEstimateResponse } from "@/types/moverEstimate";
 import { LabelArea } from "../../../LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
-import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
+import { formatDateDot } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { useTranslations } from "next-intl";
 
