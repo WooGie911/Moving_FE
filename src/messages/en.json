@@ -18,14 +18,52 @@
     "previous": "Previous",
     "completeSelection": "Complete Selection",
     "editAnswer": "Edit",
-    "success": "Success"
+    "success": "Success",
+    "retry": "Retry"
+  },
+  "shared": {
+    "units": {
+      "years": "years",
+      "cases": "cases",
+      "currency": "KRW"
+    },
+    "time": {
+      "weekdays": {
+        "sunday": "Sun",
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat"
+      },
+      "dateFormat": {
+        "year": "year",
+        "month": "month",
+        "day": "day"
+      },
+      "timeFormat": {
+        "am": "AM",
+        "pm": "PM"
+      }
+    },
+    "movingTypes": {
+      "small": "Small Move",
+      "smallDesc": "Studio, 1-room, under 20 pyeong",
+      "home": "Home Move",
+      "homeDesc": "3-room, over 20 pyeong",
+      "office": "Office Move",
+      "officeDesc": "Office, commercial space",
+      "store": "Store Move",
+      "piano": "Piano Move",
+      "art": "Art Move",
+      "storage": "Storage Move"
+    }
   },
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
-    "loading": "Loading...",
-    "error": "An error occurred.",
     "noEstimateInProgress": "No estimates in progress.",
     "requestNewEstimate": "Please request a new estimate.",
     "goToCreateEstimate": "Go to create estimate",
@@ -49,10 +87,12 @@
     "movingType": "Moving Type",
     "movingDateLabel": "Moving Date",
     "driverSuffix": "Driver",
+
     "experience": "career",
     "years": "years",
     "cases": "cases",
     "confirmed": "done",
+
     "estimateWaiting": "Pending",
     "confirmedEstimate": "Confirmed",
     "rejectedEstimate": "Rejected",
@@ -82,7 +122,6 @@
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
     "estimateAmount": "Estimate Amount",
-    "currency": "KRW",
     "notConfirmedEstimate": "This estimate was not confirmed!",
     "pleaseRetry": "Please try again.",
     "shareEstimate": "Share Estimate",
@@ -372,9 +411,7 @@
     "tryOtherSearch": "Try different search terms or filters",
     "driverSuffix": "Driver",
     "experience": "Experience",
-    "years": "years",
     "confirmed": "Confirmed",
-    "cases": "cases",
     "reviews": "Reviews",
     "totalExperience": "Total Experience",
     "inProgress": "In Progress",
@@ -415,7 +452,6 @@
     "casesMobile": "",
     "confirmedMobile": "Done",
     "myPage": {
-      "loading": "Loading...",
       "retry": "Retry",
       "profileNotFound": "Profile information not found.",
       "editProfile": "Edit My Profile",
@@ -600,8 +636,6 @@
   },
 
   "estimate": {
-    "loading": "Loading...",
-    "error": "An error occurred. Please try again.",
     "apiError": "API Error:",
     "createEstimateSuccessTitle": "Estimate Created Successfully",
     "createEstimateSuccessMessage": "Estimate has been sent successfully",
@@ -637,7 +671,6 @@
       "saturday": "Sat"
     },
     "estimateAmount": "Estimate Amount",
-    "currency": "KRW",
     "enterEstimatePrice": "Please enter the estimate price.",
     "estimatePricePlaceholder": "Please enter the estimate price.",
     "onlyNumbersMessage": "Please enter numbers only.",
@@ -675,7 +708,6 @@
     "customerSuffix": " Customer",
     "confirmedEstimate": "Confirmed Estimate",
     "profileImage": "Profile Image",
-    "currency": "KRW",
     "dateFormat": {
       "year": "",
       "month": "/",
@@ -754,7 +786,9 @@
     "userSuffix": {
       "customer": "Customer",
       "driver": "Driver"
-    }
+    },
+    "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
+    "roleToggleText": "Quick Switch"
   },
   "review": {
     "title": "Review",
@@ -762,8 +796,6 @@
     "writtenTab": "My Written Reviews",
     "writeReview": "Write Review",
     "noWritableReviews": "No writable reviews!",
-    "loading": "Loading...",
-    "error": "An error occurred.",
     "reviewWriteFailed": "Failed to write review. Please try again.",
     "noWrittenReviews": "No written reviews!",
     "noWrittenReviewsAlt": "No written reviews",
@@ -805,5 +837,15 @@
       "pending": "Pending",
       "completed": "Completed"
     }
+  },
+  "favoriteMover": {
+    "title": "Favorite Movers",
+    "selectAll": "Select All",
+    "deleteSelected": "Delete Selected",
+    "deleting": "Deleting...",
+    "deleteSuccess": " drivers have been removed from your favorites.",
+    "deleteError": "Failed to delete selected drivers. Please try again.",
+    "noFavorites": "No favorite movers yet",
+    "noFavoritesDesc": "Add movers to your favorites to see them here"
   }
 }

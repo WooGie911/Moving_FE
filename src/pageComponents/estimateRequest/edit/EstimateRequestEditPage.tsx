@@ -7,9 +7,9 @@ import { Button } from "@/components/common/button/Button";
 import { EstimateRequestLayout } from "@/components/estimateRequest/common/EstimateRequestLayout";
 import { useEstimateRequestForm } from "@/hooks/useEstimateRequestForm";
 import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
@@ -20,7 +20,8 @@ const EstimateRequestEditPage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [hasEstimates, setHasEstimates] = useState(false);
   const router = useRouter();
-  const { t, language } = useLanguageStore();
+  const t = useTranslations();
+  const locale = useLocale();
 
   // 공통 훅들 사용
   const formLogic = useEstimateRequestForm();
@@ -77,7 +78,7 @@ const EstimateRequestEditPage = () => {
   // 견적 존재 여부 확인 및 create 페이지로 리다이렉트
   const checkAndRedirectToCreate = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (!response.success || !response.hasActive) {
         // 활성 견적이 없으면 create 페이지로 리다이렉트
@@ -94,7 +95,7 @@ const EstimateRequestEditPage = () => {
 
   const fetchEstimateRequestData = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
@@ -225,7 +226,7 @@ const EstimateRequestEditPage = () => {
         <div key="movingType" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingType}>
             {form.movingType
-              ? `${t(`estimateRequest.movingTypes.${form.movingType}`)} (${t(`estimateRequest.movingTypes.${form.movingType}Desc`)})`
+              ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
               : ""}
           </SpeechBubble>
         </div>,
@@ -236,14 +237,14 @@ const EstimateRequestEditPage = () => {
       answers.push(
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
-            {formatDateByLanguage(form.movingDate, language)}
+            {formatDateByLanguage(form.movingDate, locale)}
           </SpeechBubble>
         </div>,
       );
     }
 
     return answers;
-  }, [step, form, t, language, handleEditMovingType, handleEditMovingDate]);
+  }, [step, form, t, locale, handleEditMovingType, handleEditMovingDate]);
 
   // 로딩 상태 - 전역 로딩이 표시되므로 별도 UI 불필요
   if (loading) {
@@ -267,18 +268,18 @@ const EstimateRequestEditPage = () => {
   const getMoveTypeLabel = (moveType: string): string => {
     switch (moveType) {
       case "HOME":
-        return t("estimateRequest.movingTypes.home");
+        return t("shared.movingTypes.home");
       case "OFFICE":
-        return t("estimateRequest.movingTypes.office");
+        return t("shared.movingTypes.office");
       case "SMALL":
-        return t("estimateRequest.movingTypes.small");
+        return t("shared.movingTypes.small");
       default:
         return moveType;
     }
   };
 
   // 날짜 변환
-  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, language);
+  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, locale);
 
   // 주소 표시 (null 체크 포함)
   const departureDisplay = `${estimateRequestData.departureAddress}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;

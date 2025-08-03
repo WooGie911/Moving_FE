@@ -1,5 +1,5 @@
-import React from "react";
+import FavoriteMoverPage from "@/pageComponents/favoriteMover/FavoriteMoverPage";
 
 export default function page() {
-  return <div>FavoriteMover</div>;
+  return <FavoriteMoverPage />;
 }

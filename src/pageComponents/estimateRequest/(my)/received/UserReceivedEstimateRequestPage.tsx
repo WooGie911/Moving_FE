@@ -16,10 +16,10 @@ const UserReceivedEstimateRequestPage = () => {
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(),
   });
 
-  if (isPending) return <div>{t("loading")}</div>;
+  if (isPending) return <div>{t("common.loading")}</div>;
   if (isError) {
     console.error("API 에러:", isError);
-    return <div>{t("error")}</div>;
+    return <div>{t("common.error")}</div>;
   }
   if (!data) return <div>{t("noDataAvailable")}</div>;
 

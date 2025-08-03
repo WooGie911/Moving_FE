@@ -22,6 +22,7 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
   const methods = useForm();
   const { watch, setValue } = methods;
   const t = useTranslations("estimate");
+  const tShared = useTranslations();
   const locale = useLocale();
 
   // 폼 값들을 감시
@@ -88,19 +89,19 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
                 const month = moveDate.getMonth() + 1;
                 const day = moveDate.getDate();
                 const weekday = [
-                  t("weekdays.sunday"),
-                  t("weekdays.monday"),
-                  t("weekdays.tuesday"),
-                  t("weekdays.wednesday"),
-                  t("weekdays.thursday"),
-                  t("weekdays.friday"),
-                  t("weekdays.saturday"),
+                  tShared("shared.time.weekdays.sunday"),
+                  tShared("shared.time.weekdays.monday"),
+                  tShared("shared.time.weekdays.tuesday"),
+                  tShared("shared.time.weekdays.wednesday"),
+                  tShared("shared.time.weekdays.thursday"),
+                  tShared("shared.time.weekdays.friday"),
+                  tShared("shared.time.weekdays.saturday"),
                 ][moveDate.getDay()];
 
                 // 언어별 날짜 형식
-                const yearSuffix = t("dateFormat.year");
-                const monthSuffix = t("dateFormat.month");
-                const daySuffix = t("dateFormat.day");
+                const yearSuffix = tShared("shared.time.dateFormat.year");
+                const monthSuffix = tShared("shared.time.dateFormat.month");
+                const daySuffix = tShared("shared.time.dateFormat.day");
 
                 // 영어인 경우 MM/DD/YYYY 형식
                 if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {

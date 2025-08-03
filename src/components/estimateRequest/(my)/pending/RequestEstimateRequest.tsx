@@ -15,6 +15,7 @@ export const RequestEstimateRequest = ({
   toAddress,
 }: IEstimateRequestProps) => {
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
   const tMoveTypes = useTranslations("moveTypes");
 
   // movingType을 다국어로 변환하는 함수

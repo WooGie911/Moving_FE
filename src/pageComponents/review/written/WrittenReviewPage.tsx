@@ -45,9 +45,9 @@ const WrittenReviewPage = () => {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">{t("loading")}</div>
+        <div className="py-10 text-center">{t("common.loading")}</div>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">{t("error")}</div>
+        <div className="py-10 text-center text-red-500">{t("common.error")}</div>
       ) : reviews.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Image src={noReview} alt={t("noWrittenReviewsAlt")} className="mb-6 h-50 w-60" />

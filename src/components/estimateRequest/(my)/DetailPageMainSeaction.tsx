@@ -21,6 +21,7 @@ export const DetailPageMainSeaction = ({
   estimates,
 }: IDetailPageMainSeactionProps) => {
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
 
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
@@ -52,7 +53,7 @@ export const DetailPageMainSeaction = ({
           <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
             {t("estimatePrice")}
           </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-bold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${t("currency")}`}</p>
+          <p className="text-black-300 text-[20px] leading-[32px] font-bold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${tShared("shared.units.currency")}`}</p>
         </div>
         <div className="border-border-light flex w-full flex-col border-b-1" />
         {/* 이사견적 상세정보들 */}

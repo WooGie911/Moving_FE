@@ -2,10 +2,10 @@ import React, { useCallback } from "react";
 import Calendar from "../Calendar";
 import { Button } from "@/components/common/button/Button";
 import { IDateSectionProps } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 const DateSection: React.FC<IDateSectionProps> = ({ value, onChange, onComplete, className }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   const handleDateSelect = useCallback(
     (date: Date) => {

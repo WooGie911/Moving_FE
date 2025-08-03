@@ -64,6 +64,27 @@ const authApi = {
     return responseData;
   },
 
+  // 유저 타입 변경
+  switchUserType: async (userType: "CUSTOMER" | "MOVER") => {
+    const response = await fetch(`${API_URL}/auth/switch-role`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify({ userType }),
+      credentials: "include",
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+      setTokensToCookie(responseData.accessToken);
+    }
+
+    return responseData;
+  },
+
   // 리프레쉬 토큰을 사용한 토큰 갱신
   refreshToken: async () => {
     const response = await fetch(`${API_URL}/auth/refresh-token`, {

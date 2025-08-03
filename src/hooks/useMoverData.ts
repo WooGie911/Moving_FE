@@ -1,15 +1,15 @@
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import findMoverApi from "@/lib/api/findMover.api";
 import { IMoverListParams } from "@/types/mover.types";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useLocale } from "next-intl";
 
 // 기사님 리스트 조회 (무한 스크롤)
 export const useMoverList = (params: IMoverListParams) => {
-  const { language } = useLanguageStore();
+  const locale = useLocale();
 
   return useInfiniteQuery({
-    queryKey: ["movers", params, language],
-    queryFn: ({ pageParam }) => findMoverApi.fetchMovers({ ...params, cursor: pageParam }, language),
+    queryKey: ["movers", params, locale],
+    queryFn: ({ pageParam }) => findMoverApi.fetchMovers({ ...params, cursor: pageParam }, locale),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     initialPageParam: undefined as string | undefined,
     staleTime: 5 * 60 * 1000, // 5분
@@ -19,11 +19,11 @@ export const useMoverList = (params: IMoverListParams) => {
 
 // 기사님 상세 조회
 export const useMoverDetail = (moverId: string) => {
-  const { language } = useLanguageStore();
+  const locale = useLocale();
 
   return useQuery({
-    queryKey: ["mover", moverId, language],
-    queryFn: () => findMoverApi.fetchMoverDetail(moverId, language),
+    queryKey: ["mover", moverId, locale],
+    queryFn: () => findMoverApi.fetchMoverDetail(moverId, locale),
     enabled: !!moverId,
     staleTime: 10 * 60 * 1000, // 10분
     gcTime: 30 * 60 * 1000, // 30분
@@ -32,11 +32,11 @@ export const useMoverDetail = (moverId: string) => {
 
 // 찜한 기사님 조회
 export const useFavoriteMovers = () => {
-  const { language } = useLanguageStore();
+  const locale = useLocale();
 
   return useQuery({
-    queryKey: ["favoriteMovers", language],
-    queryFn: () => findMoverApi.fetchFavoriteMovers(language),
+    queryKey: ["favoriteMovers", locale],
+    queryFn: () => findMoverApi.fetchFavoriteMovers(locale),
     staleTime: 2 * 60 * 1000, // 2분
     gcTime: 5 * 60 * 1000, // 5분
   });

@@ -17,6 +17,7 @@ import { formatNumber } from "@/lib/utils/formatNumber";
 export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstimate }: ICardListProps) => {
   const { open, close } = useModal();
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
   const tCommon = useTranslations("common");
 
   // 확정견적이 있는 경우의 추가 로직

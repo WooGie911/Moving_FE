@@ -16,11 +16,13 @@ import like from "@/assets/icon/like/icon-like-red.png";
 
 interface MoverCardProps {
   mover: IMoverInfo;
-  variant?: "list" | "favorite";
+  variant?: "list" | "favorite" | "favorite-responsive";
   showBadge?: boolean;
+  isSelected?: boolean;
+  onSelect?: (moverId: string) => void;
 }
 
-const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps) => {
+const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = false, onSelect }: MoverCardProps) => {
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
@@ -29,9 +31,13 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
 
   const renderMobileCard = () => (
     <div
-      className={`${variant === "favorite" ? "max-h-[542px]" : "max-h-[250px]"} w-[327px] rounded-2xl border-[0.5px] border-[#f2f2f2] p-5`}
+      className={`${variant === "favorite" ? "max-h-[542px]" : "max-h-[250px]"} w-full max-w-[327px] rounded-2xl border-[0.5px] bg-white p-5 ${
+        isSelected ? "border-primary-400 bg-primary-50" : "border-[#f2f2f2]"
+      }`}
       style={{
-        boxShadow: "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
+        boxShadow: isSelected
+          ? "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33, 0 0 0 0.5px #F97316"
+          : "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
       }}
     >
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
@@ -98,8 +104,8 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                   {variant === "favorite"
                     ? t("yearsFavorite")
                     : deviceType === "mobile"
-                      ? t("yearsMobile") || "年"
-                      : t("years")}
+                      ? t("yearsMobile")
+                      : t("yearsFavorite")}
                 </span>
               </div>
               <span className="text-[#e6e6e6]">|</span>
@@ -109,14 +115,14 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                   {variant === "favorite"
                     ? t("casesFavorite")
                     : deviceType === "mobile"
-                      ? t("casesMobile") || ""
-                      : t("cases")}
+                      ? t("casesMobile")
+                      : t("casesFavorite")}
                 </span>
                 <span className="text-[13px] leading-[22px] font-medium text-[#ababab]">
                   {variant === "favorite"
                     ? t("confirmedFavorite")
                     : deviceType === "mobile"
-                      ? t("confirmedMobile") || "完成"
+                      ? t("confirmedMobile")
                       : t("confirmed")}
                 </span>
               </div>
@@ -130,9 +136,13 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
   const renderDesktopCard = () => (
     <div className="gap-5">
       <div
-        className="rounded-2xl border-[0.5px] border-[#f2f2f2] p-5 md:h-[230px] md:w-[600px] md:px-6 md:py-7 lg:h-[230px] lg:w-[820px] lg:rounded-[20px]"
+        className={`w-full rounded-2xl border-[0.5px] bg-white p-5 md:h-[230px] md:max-w-[600px] md:px-6 md:py-7 lg:h-[230px] lg:max-w-[820px] lg:rounded-[20px] ${
+          isSelected ? "border-primary-400 bg-primary-50" : "border-[#f2f2f2]"
+        }`}
         style={{
-          boxShadow: "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
+          boxShadow: isSelected
+            ? "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33, 0 0 0 1px #F97316"
+            : "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
         }}
       >
         <div className="w-full">
@@ -177,14 +187,14 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
                       </span>
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
                         {mover.experience}
-                        {t("years")}
+                        {t("yearsFavorite")}
                       </span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>
                     <div className="flex min-w-0 items-center gap-1">
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap">
                         {mover.completedCount}
-                        {t("cases")}
+                        {t("casesFavorite")}
                       </span>
                       <span className="text-[13px] leading-[22px] font-medium whitespace-nowrap text-[#ababab]">
                         {t("confirmed")}
@@ -204,9 +214,38 @@ const MoverCard = ({ mover, variant = "list", showBadge = true }: MoverCardProps
     </div>
   );
 
+  const handleCardClick = () => {
+    if (onSelect) {
+      onSelect(mover.id.toString());
+    }
+  };
+
+  const cardContent = (
+    <>
+      {variant === "favorite-responsive"
+        ? deviceType === "mobile"
+          ? renderMobileCard()
+          : renderDesktopCard()
+        : variant === "favorite"
+          ? renderMobileCard()
+          : deviceType === "mobile"
+            ? renderMobileCard()
+            : renderDesktopCard()}
+    </>
+  );
+
+  // favorite-responsive variant일 때는 클릭으로 선택, 그 외에는 링크로 이동
+  if (variant === "favorite-responsive") {
+    return (
+      <div className="block cursor-pointer" onClick={handleCardClick}>
+        {cardContent}
+      </div>
+    );
+  }
+
   return (
     <Link href={`/searchMover/${mover.id}`} className="block">
-      {variant === "favorite" ? renderMobileCard() : deviceType === "mobile" ? renderMobileCard() : renderDesktopCard()}
+      {cardContent}
     </Link>
   );
 };

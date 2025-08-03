@@ -26,6 +26,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const t = useTranslations("estimate");
+  const tShared = useTranslations();
   const locale = useLocale();
 
   // 데이터 검증
@@ -40,19 +41,19 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const weekday = [
-      t("weekdays.sunday"),
-      t("weekdays.monday"),
-      t("weekdays.tuesday"),
-      t("weekdays.wednesday"),
-      t("weekdays.thursday"),
-      t("weekdays.friday"),
-      t("weekdays.saturday"),
+      tShared("shared.time.weekdays.sunday"),
+      tShared("shared.time.weekdays.monday"),
+      tShared("shared.time.weekdays.tuesday"),
+      tShared("shared.time.weekdays.wednesday"),
+      tShared("shared.time.weekdays.thursday"),
+      tShared("shared.time.weekdays.friday"),
+      tShared("shared.time.weekdays.saturday"),
     ][date.getDay()];
 
     // 언어별 날짜 형식
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = tShared("shared.time.dateFormat.year");
+    const monthSuffix = tShared("shared.time.dateFormat.month");
+    const daySuffix = tShared("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
@@ -308,7 +309,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
                 <p className="text-black-400 text-[24px] leading-[32px] font-bold">
                   {estimatePrice?.toLocaleString()}
-                  {t("currency")}
+                  {tShared("shared.units.currency")}
                 </p>
               </div>
             )}
@@ -408,7 +409,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <p className="text-black-400 text-[16px] leading-[26px] font-medium">{t("estimateAmount")}</p>
               <p className="text-black-400 text-[24px] leading-[32px] font-bold">
                 {estimatePrice?.toLocaleString()}
-                {t("currency")}
+                {tShared("shared.units.currency")}
               </p>
             </div>
           ) : (

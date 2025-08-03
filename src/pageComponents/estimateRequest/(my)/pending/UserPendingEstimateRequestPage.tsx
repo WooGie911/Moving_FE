@@ -22,8 +22,8 @@ export const UserPendingEstimateRequestPage = () => {
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
   });
 
-  if (isPending) return <div>{t("loading")}</div>; // 또는 로딩 스피너 컴포넌트
-  if (isError) return <div>{t("error")}</div>;
+  if (isPending) return <div>{t("common.loading")}</div>; // 또는 로딩 스피너 컴포넌트
+  if (isError) return <div>{t("common.error")}</div>;
 
   if (!data || data.estimateRequest === null) {
     return (

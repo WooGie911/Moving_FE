@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Providers from "./[locale]/providers";
-import { DevNavitgation } from "@/components/common/DevNavitgation";
-import { Gnb } from "@/components/common/gnb/Gnb";
 import Script from "next/script";
-import { routing } from "@/i18n/routing";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import LanguageSync from "./[locale]/LanguageSync";
 
 const pretendard = localFont({
   src: "../assets/font/PretendardVariable.woff2",
@@ -34,25 +28,9 @@ export const metadata: Metadata = {
   },
 };
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
-
-export default async function LocaleLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-}) {
-  // 들어오는 `locale`이 유효한지 확인
-  const { locale } = await params;
-
-  // 유효하지 않은 locale인 경우 기본 locale 사용
-  const validLocale = hasLocale(routing.locales, locale) ? locale : routing.locales[0];
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={validLocale}>
+    <html>
       <head>
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="무빙" />
@@ -65,17 +43,7 @@ export default async function LocaleLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={`${pretendard.variable} antialiased`}>
-        <NextIntlClientProvider>
-          {/* 언어 동기화 */}
-          <LanguageSync locale={validLocale} />
-          <Providers>
-            <Gnb />
-            {children}
-            {/* <DevNavitgation /> */}
-          </Providers>
-        </NextIntlClientProvider>
-      </body>
+      <body className={`${pretendard.variable} antialiased`}>{children}</body>
     </html>
   );
 }

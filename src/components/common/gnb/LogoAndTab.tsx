@@ -20,7 +20,7 @@ type TNavigationItem = {
 
 export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const pathname = usePathname();
-  const t = useTranslations();
+  const t = useTranslations("navigation");
 
   const cleanPath = getPathWithoutLocale(pathname);
 
@@ -55,8 +55,10 @@ export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
                   cleanPath === "/zh" ||
                   cleanPath === item.href ||
                   cleanPath.startsWith(item.href + "/") ||
-                  (item.href === "/review/writable" && (cleanPath === "/review/writable" || cleanPath === "/review/written")) ||
-                  (item.href === "/estimateRequest/pending" && (cleanPath === "/estimateRequest/pending" || cleanPath === "/estimateRequest/received"))
+                  (item.href === "/review/writable" &&
+                    (cleanPath === "/review/writable" || cleanPath === "/review/written")) ||
+                  (item.href === "/estimateRequest/pending" &&
+                    (cleanPath === "/estimateRequest/pending" || cleanPath === "/estimateRequest/received"))
                     ? "text-black"
                     : "text-gray-400"
                 } transition-colors hover:text-black`}
