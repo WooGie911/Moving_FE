@@ -10,7 +10,7 @@ import Pagination from "@/components/common/pagination/Pagination";
 // 사용자 이름 마스킹 함수
 const maskUserName = (name: string): string => {
   if (!name || name.length <= 1) return name;
-  return name.charAt(0) + '*'.repeat(name.length - 1);
+  return name.charAt(0) + "*".repeat(name.length - 1);
 };
 
 const PAGE_SIZE = 5;
