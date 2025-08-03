@@ -767,6 +767,7 @@
       "customer": "Customer",
       "driver": "Driver"
     },
+    "roleToggleAvailableMessage": "Click to easily switch roles!",
     "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
     "roleToggleText": "Quick Switch"
   },
