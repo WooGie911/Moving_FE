@@ -9,7 +9,7 @@ import { useEstimateRequestForm } from "@/hooks/useEstimateRequestForm";
 import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
@@ -78,7 +78,7 @@ const EstimateRequestEditPage = () => {
   // 견적 존재 여부 확인 및 create 페이지로 리다이렉트
   const checkAndRedirectToCreate = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (!response.success || !response.hasActive) {
         // 활성 견적이 없으면 create 페이지로 리다이렉트
@@ -95,7 +95,7 @@ const EstimateRequestEditPage = () => {
 
   const fetchEstimateRequestData = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);

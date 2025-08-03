@@ -13,21 +13,22 @@ export const DetailMoveInfo = ({
   arrivalDetail,
 }: IEstimateRequest) => {
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
   const tMoveTypes = useTranslations("moveTypes");
 
   // 요일과 시간 포맷 가져오기
   const weekdays = [
-    t("shared.time.weekdays.sunday"),
-    t("shared.time.weekdays.monday"),
-    t("shared.time.weekdays.tuesday"),
-    t("shared.time.weekdays.wednesday"),
-    t("shared.time.weekdays.thursday"),
-    t("shared.time.weekdays.friday"),
-    t("shared.time.weekdays.saturday"),
+    tShared("shared.time.weekdays.sunday"),
+    tShared("shared.time.weekdays.monday"),
+    tShared("shared.time.weekdays.tuesday"),
+    tShared("shared.time.weekdays.wednesday"),
+    tShared("shared.time.weekdays.thursday"),
+    tShared("shared.time.weekdays.friday"),
+    tShared("shared.time.weekdays.saturday"),
   ];
   const timeFormat = {
-    am: t("shared.time.timeFormat.am"),
-    pm: t("shared.time.timeFormat.pm"),
+    am: tShared("shared.time.timeFormat.am"),
+    pm: tShared("shared.time.timeFormat.pm"),
   };
 
   // movingType을 다국어로 변환하는 함수
