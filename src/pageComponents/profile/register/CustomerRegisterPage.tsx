@@ -43,7 +43,7 @@ const CustomerRegisterPage = () => {
 
   const nickname = watch("nickname");
 
-  const isNicknameValid = nickname?.trim().length >= 2 && isValidName(nickname);
+  const isNicknameValid = nickname?.trim().length >= 1 && isValidName(nickname);
   const allFilled = selectedImage && services.length > 0 && regions && isNicknameValid;
 
   const onSubmit = async (data: { nickname: string }) => {
