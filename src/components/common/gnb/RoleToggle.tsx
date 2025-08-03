@@ -2,7 +2,7 @@ import { useSwitchUserType } from "@/hooks/useSwitchUserType";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 interface IRoleToggleProps {
   disabled?: boolean;
 }
@@ -22,10 +22,6 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
   const typeToShow = fakeUserType ?? user?.userType;
 
   const windowWidth = useWindowWidth();
-
-  useEffect(() => {
-    console.log(windowWidth);
-  }, [windowWidth]);
 
   return (
     <button
