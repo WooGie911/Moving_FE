@@ -6,16 +6,17 @@ import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const UserReceivedEstimateRequestDetailPage = () => {
   const { id: estimateId } = useParams(); // id는 estimateId
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["estimateRequest"],
-    queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(),
+    queryKey: ["estimateRequest", locale],
+    queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
   });
 
   if (isPending)
@@ -24,6 +25,7 @@ export const UserReceivedEstimateRequestDetailPage = () => {
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
     );
+  console.log("data", data);
   if (isError) {
     console.error("API 에러:", isError);
     return (

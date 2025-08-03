@@ -48,9 +48,17 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
 
   // fromAddress, toAddress에서 값 추출
   const departureAddr =
-    shortenRegionInAddress(props.fromAddress.region) + " " + props.fromAddress.city + " " + props.fromAddress.district;
+    (locale === "ko" ? shortenRegionInAddress(props.fromAddress.region) : props.fromAddress.region) +
+    " " +
+    props.fromAddress.city +
+    " " +
+    props.fromAddress.district;
   const arrivalAddr =
-    shortenRegionInAddress(props.toAddress.region) + " " + props.toAddress.city + " " + props.toAddress.district;
+    (locale === "ko" ? shortenRegionInAddress(props.toAddress.region) : props.toAddress.region) +
+    " " +
+    props.toAddress.city +
+    " " +
+    props.toAddress.district;
   const departureDetail = props.fromAddress.detail;
   const arrivalDetail = props.toAddress.detail;
 

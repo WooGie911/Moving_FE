@@ -11,16 +11,17 @@ import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const UserPendingEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["pendingEstimateRequests"],
-    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
+    queryKey: ["pendingEstimateRequests", locale],
+    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
   });
 
   if (isPending)

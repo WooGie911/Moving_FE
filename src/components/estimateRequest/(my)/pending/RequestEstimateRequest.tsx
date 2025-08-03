@@ -2,7 +2,7 @@ import { IEstimateRequestProps } from "@/types/customerEstimateRequest";
 import React from "react";
 import arrow from "@/assets/icon/arrow/icon-arrow.png";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { getMovingTypeKey } from "@/lib/utils/getMovingTypeTranslated";
 import { formatDateWithDay, getMovingDateFormatKeys } from "@/lib/utils/dateFormatUtils";
@@ -17,6 +17,7 @@ export const RequestEstimateRequest = ({
   const t = useTranslations("estimateRequest");
   const tShared = useTranslations();
   const tMoveTypes = useTranslations("moveTypes");
+  const locale = useLocale();
 
   // movingType을 다국어로 변환하는 함수
   const getMovingTypeTranslated = (movingType: string): string => {
@@ -59,7 +60,7 @@ export const RequestEstimateRequest = ({
           <div className="flex flex-row justify-between md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {shortenRegionInAddress(fromAddress.region)} {fromAddress.city}
+              {locale === "ko" ? shortenRegionInAddress(fromAddress.region) : fromAddress.region} {fromAddress.city}
             </p>
           </div>
 
@@ -70,7 +71,7 @@ export const RequestEstimateRequest = ({
           <div className="flex flex-row justify-between md:flex-col">
             <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
             <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {shortenRegionInAddress(toAddress.region)} {toAddress.city}
+              {locale === "ko" ? shortenRegionInAddress(toAddress.region) : toAddress.region} {toAddress.city}
             </p>
           </div>
           <div className="flex flex-row justify-between md:ml-7 md:flex-col">

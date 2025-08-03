@@ -3,7 +3,7 @@ import React from "react";
 import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
 import info from "@/assets/icon/info/icon-info.png";
 import { IDetailPageMainSeactionProps, TEstimateResponse, TMoverInfo } from "@/types/customerEstimateRequest";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import { MoverInfo } from "./MoverInfo";
 import { LabelAndTitleSection } from "./LabelAndTitleSection";
@@ -22,6 +22,7 @@ export const DetailPageMainSeaction = ({
 }: IDetailPageMainSeactionProps) => {
   const t = useTranslations("estimateRequest");
   const tShared = useTranslations();
+  const locale = useLocale();
 
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
@@ -63,14 +64,18 @@ export const DetailPageMainSeaction = ({
           movingDate={estimateRequest!.moveDate}
           createdAt={estimateRequest!.createdAt}
           departureAddr={
-            shortenRegionInAddress(estimateRequest!.fromAddress.region) +
+            (locale === "ko"
+              ? shortenRegionInAddress(estimateRequest!.fromAddress.region)
+              : estimateRequest!.fromAddress.region) +
             " " +
             estimateRequest!.fromAddress.city +
             " " +
             estimateRequest!.fromAddress.district
           }
           arrivalAddr={
-            shortenRegionInAddress(estimateRequest!.toAddress.region) +
+            (locale === "ko"
+              ? shortenRegionInAddress(estimateRequest!.toAddress.region)
+              : estimateRequest!.toAddress.region) +
             " " +
             estimateRequest!.toAddress.city +
             " " +

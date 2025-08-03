@@ -30,11 +30,12 @@ const customerEstimateRequestApi = {
   /**
    * 1. 진행중인 견적 조회
    */
-  getPendingEstimateRequest: async (): Promise<TPendingEstimateRequestResponse | null> => {
+  getPendingEstimateRequest: async (language?: string): Promise<TPendingEstimateRequestResponse | null> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/pending`, {
+      const queryParams = language ? `?lang=${language}` : "";
+      const response = await fetch(`${API_URL}/customer-quotes/pending${queryParams}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -70,11 +71,12 @@ const customerEstimateRequestApi = {
   /**
    * 2. 완료된 견적 목록 조회
    */
-  getReceivedEstimateRequests: async (): Promise<TReceivedEstimateRequestListResponse> => {
+  getReceivedEstimateRequests: async (language?: string): Promise<TReceivedEstimateRequestListResponse> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/customer-quotes/received`, {
+      const queryParams = language ? `?lang=${language}` : "";
+      const response = await fetch(`${API_URL}/customer-quotes/received${queryParams}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
