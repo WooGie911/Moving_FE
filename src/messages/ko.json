@@ -136,7 +136,7 @@
       "arrival": "도착지"
     },
     "selectAddress": "선택하기",
-    "selectAddressTitle": "{{place}}를 선택해주세요",
+    "selectAddressTitle": "주소를 선택해주세요",
     "searchAddress": "주소 검색",
     "detailAddressPlaceholder": "상세주소 (예: 101동 202호)",
     "completeSelection": "선택완료",

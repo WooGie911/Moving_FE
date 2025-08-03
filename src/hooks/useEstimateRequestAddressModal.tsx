@@ -11,8 +11,11 @@ export const useEstimateRequestAddressModal = (onAddressUpdate: (type: TAddressT
   // 주소 모달 열기 핸들러
   const handleOpenAddressModal = useCallback(
     (type: TAddressType) => {
+      // 번역 키를 직접 계산하여 중첩 번역 호출 문제 해결
+      const placeText = type === "departure" ? t("estimateRequest.departure") : t("estimateRequest.arrival");
+
       open({
-        title: t("estimateRequest.selectAddressTitle", { place: t(`estimateRequest.${type}`) }),
+        title: t("estimateRequest.selectAddressTitle", { place: placeText }),
         children: (
           <AddressModal
             onComplete={(addr) => {
