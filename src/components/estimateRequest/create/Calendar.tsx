@@ -18,7 +18,7 @@ import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
 import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
 import Image from "next/image";
 import { ICalendarProps, IDateObj } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 // 공통 스타일 변수
 const CALENDAR_STYLES: Record<string, string> = {
@@ -95,18 +95,18 @@ const getCalendarMatrix = (date: Date): IDateObj[][] => {
 const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const today = startOfDay(new Date());
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   // 요일 배열을 번역 함수로 생성
   const daysOfWeek = useMemo(
     () => [
-      t("estimateRequest.weekdays.sunday"),
-      t("estimateRequest.weekdays.monday"),
-      t("estimateRequest.weekdays.tuesday"),
-      t("estimateRequest.weekdays.wednesday"),
-      t("estimateRequest.weekdays.thursday"),
-      t("estimateRequest.weekdays.friday"),
-      t("estimateRequest.weekdays.saturday"),
+      t("shared.time.weekdays.sunday"),
+      t("shared.time.weekdays.monday"),
+      t("shared.time.weekdays.tuesday"),
+      t("shared.time.weekdays.wednesday"),
+      t("shared.time.weekdays.thursday"),
+      t("shared.time.weekdays.friday"),
+      t("shared.time.weekdays.saturday"),
     ],
     [t],
   );

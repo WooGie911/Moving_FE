@@ -35,10 +35,6 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
     pendingAnswer,
     setPendingAnswer,
     progress,
-    isFormValid,
-    handleSelectMovingType,
-    handleDateChange,
-    handleDateComplete,
     handleAddressUpdate,
     renderAnswerBubble,
     renderPreviousAnswers,
@@ -75,7 +71,7 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
   if (isPending) {
     return (
       <div className="min-h-screen bg-gray-200">
-        <MovingTruckLoader size="lg" loadingText="견적 요청을 준비하고 있습니다..." />
+        <MovingTruckLoader size="lg" loadingText={t("estimateRequest.loadingText")} />
       </div>
     );
   }
@@ -101,14 +97,14 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
         showNextQuestion={showNextQuestion}
         form={form}
         t={t}
-        locale={locale}
-        isFormValid={isFormValid}
-        onSelectMovingType={handleSelectMovingType}
-        onDateChange={handleDateChange}
-        onDateComplete={handleDateComplete}
+        locale={locale as "ko" | "en" | "zh"}
+        isFormValid={formLogic.isFormValid}
+        onSelectMovingType={formLogic.handleSelectMovingType}
+        onDateChange={formLogic.handleDateChange}
+        onDateComplete={formLogic.handleDateComplete}
         onDepartureModal={handleDepartureModal}
         onArrivalModal={handleArrivalModal}
-        onConfirmEstimateRequest={() => onConfirm(form)}
+        onConfirmEstimateRequest={onConfirm}
         customButtonText={customButtonText}
         showConfirmModal={showConfirmModal}
       />

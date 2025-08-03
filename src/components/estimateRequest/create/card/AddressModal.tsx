@@ -4,12 +4,12 @@ import AddressCard from "./AddressCard";
 import { Button } from "@/components/common/button/Button";
 import { BaseInput } from "@/components/common/input/BaseInput";
 import { IAddressModalProps, IDaumAddress } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 const AddressModal: React.FC<IAddressModalProps> = ({ onComplete }) => {
   const [baseAddress, setBaseAddress] = useState<IDaumAddress | undefined>(undefined);
   const [detailAddress, setDetailAddress] = useState("");
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   const handleComplete = () => {
     if (baseAddress && detailAddress) {

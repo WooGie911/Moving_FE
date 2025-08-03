@@ -31,6 +31,7 @@ export const CardList = ({
   const { open, close } = useModal();
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
   const tCommon = useTranslations("common");
   const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
     mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
@@ -107,7 +108,7 @@ export const CardList = ({
           <p className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium">
             {t("estimateAmount")}
           </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
+          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${tShared("shared.units.currency")}`}</p>
         </div>
       ) : (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
@@ -127,7 +128,7 @@ export const CardList = ({
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium">
               {t("estimateAmount")}
             </p>
-            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${t("currency")}`}</p>
+            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimatePrice)}${tShared("shared.units.currency")}`}</p>
           </div>
         </div>
       )}

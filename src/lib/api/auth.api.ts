@@ -64,6 +64,28 @@ const authApi = {
     return responseData;
   },
 
+  // 유저 타입 변경
+  switchUserType: async (userType: "CUSTOMER" | "MOVER") => {
+    console.log("userType", userType);
+
+    const response = await fetch(`${API_URL}/auth/switch-role`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify({ userType }),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+      setTokensToCookie(responseData.accessToken);
+    }
+
+    return responseData;
+  },
+
   // 리프레쉬 토큰을 사용한 토큰 갱신
   refreshToken: async () => {
     const response = await fetch(`${API_URL}/auth/refresh-token`, {
@@ -76,7 +98,6 @@ const authApi = {
 
     const responseData = await response.json();
 
-    // 토큰 갱신 성공 시 쿠키에 저장
     if (responseData.success) {
       setTokensToCookie(responseData.accessToken);
     }

@@ -23,7 +23,7 @@ const MoverList = () => {
       serviceTypeId,
       search,
       sort,
-      take: 2,
+      take: 4,
     }),
     [region, serviceTypeId, search, sort],
   );
@@ -74,8 +74,8 @@ const MoverList = () => {
 
   return (
     <div className="mb-10 space-y-6 lg:space-y-5">
-      {allMovers.map((mover) => (
-        <MoverCard key={mover.id} mover={mover} variant="list" />
+      {allMovers.map((mover, index) => (
+        <MoverCard key={`${mover.id}-${index}`} mover={mover} variant="list" />
       ))}
 
       {/* 무한스크롤 감지용 div */}

@@ -18,14 +18,52 @@
     "previous": "Previous",
     "completeSelection": "Complete Selection",
     "editAnswer": "Edit",
-    "success": "Success"
+    "success": "Success",
+    "retry": "Retry"
+  },
+  "shared": {
+    "units": {
+      "years": "years",
+      "cases": "cases",
+      "currency": "KRW"
+    },
+    "time": {
+      "weekdays": {
+        "sunday": "Sun",
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat"
+      },
+      "dateFormat": {
+        "year": "year",
+        "month": "month",
+        "day": "day"
+      },
+      "timeFormat": {
+        "am": "AM",
+        "pm": "PM"
+      }
+    },
+    "movingTypes": {
+      "small": "Small Move",
+      "smallDesc": "Studio, 1-room, under 20 pyeong",
+      "home": "Home Move",
+      "homeDesc": "3-room, over 20 pyeong",
+      "office": "Office Move",
+      "officeDesc": "Office, commercial space",
+      "store": "Store Move",
+      "piano": "Piano Move",
+      "art": "Art Move",
+      "storage": "Storage Move"
+    }
   },
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
-    "loading": "Loading...",
-    "error": "An error occurred.",
     "noEstimateInProgress": "No estimates in progress.",
     "requestNewEstimate": "Please request a new estimate.",
     "goToCreateEstimate": "Go to create estimate",
@@ -50,8 +88,6 @@
     "movingDateLabel": "Moving Date",
     "driverSuffix": "Driver",
     "experience": "Experience",
-    "years": "years",
-    "cases": "cases",
     "confirmed": "confirmed",
     "estimateWaiting": "Pending",
     "confirmedEstimate": "Confirmed",
@@ -82,7 +118,6 @@
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
     "estimateAmount": "Estimate Amount",
-    "currency": "KRW",
     "notConfirmedEstimate": "This estimate was not confirmed!",
     "pleaseRetry": "Please try again.",
     "shareEstimate": "Share Estimate",
@@ -141,7 +176,7 @@
     "roadNameLabel": "Road Name",
     "jibunLabel": "Jibun",
     "roadAddressPlaceholder": "Please enter the road name address",
-    "jibunAddressPlaceholder": "Please enter the jibun address",
+    "jibunAddressPlaceholder": "No jibun address",
     "editAnswer": "Edit",
     "selectDeparture": "Select Departure",
     "selectArrival": "Select Arrival",
@@ -152,7 +187,10 @@
     "deleteSuccess": "Estimate request has been successfully deleted!",
     "editConfirmMessage": "Do you want to edit this item?",
     "editConfirmTitle": "Edit Item",
-    "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision."
+    "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision.",
+    "hasEstimatesMessage": "The driver has sent estimates.",
+    "viewEstimatesButton": "View Estimates",
+    "loadingText": "Preparing the estimate request page..."
   },
   "navigation": {
     "home": "Home",
@@ -165,25 +203,11 @@
     "myEstimateManagement": "My Estimate Management",
     "myReviewManagement": "My Review Management",
     "receivedRequests": "Received Requests",
-    "myEstimateManagementDriver": "My Estimate Management"
+    "myEstimateManagementDriver": "My Estimate Management",
+    "scheduleManagement": "Schedule Management"
   },
   "serviceAvailableCountry": "*Currently, the service is only available in South Korea.",
   "addressSearchScriptNotLoaded": "The address search script has not loaded yet. Please try again in a moment.",
-  "landing": {
-    "title": "How do you choose a moving company?",
-    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and simplifies the process of selecting a moving company",
-    "getQuote": "Request your desired moving service and get quotes",
-    "learnMore": "Compare and choose quotes from multiple companies at a glance",
-    "features": {
-      "title": "Why Choose Moving?",
-      "professional": "Professional Movers",
-      "professionalDesc": "We select only verified professional moving companies for safe service",
-      "transparent": "Transparent Quotes",
-      "transparentDesc": "Clear and fair quotes without hidden costs",
-      "support": "24/7 Customer Support",
-      "supportDesc": "Get help anytime before and after your move"
-    }
-  },
   "profile": {
     "customerTitle": "Register Profile",
     "moverTitle": "Register Mover Profile",
@@ -192,7 +216,7 @@
     "start": "Start",
     "optional": "(Optional)",
     "cancel": "Cancel",
-    "edit": "Edit",
+    "editButton": "Edit",
 
     "customerRegisterInfo": "Please provide additional information to complete your registration.",
     "moverRegisterInfo": "Please provide additional information to complete your registration.",
@@ -231,30 +255,84 @@
     "currentAreas": "Service Areas",
     "edit": {
       "title": "Edit Profile",
+      "customerTitle": "Edit Customer Profile",
       "profileImage": "Profile Image",
+
+      "name": "Name",
+      "namePlaceholder": "Enter your name",
+
       "nickname": "Nickname",
       "nicknamePlaceholder": "Enter your nickname",
+
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+
       "career": "Career",
       "careerPlaceholder": "ex) 8",
+
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter your current password to set a new one",
+
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter a new password",
+
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Re-enter your new password",
+      "confirmNewPasswordRequired": "Please confirm your new password",
+      "passwordMismatch": "Passwords do not match",
+
       "shortIntro": "Introduction",
       "shortIntroPlaceholder": "Enter a brief introduction (minimum 8 characters)",
+
       "detailIntro": "Description",
       "detailIntroPlaceholder": "Enter a detailed description (minimum 10 characters)",
+
       "providedServices": "Provided Services",
       "serviceAreas": "Service Areas",
+
       "required": "*",
       "requiredField": "Required",
       "minLength8": "Please enter at least 8 characters",
       "minLength10": "Please enter at least 10 characters",
       "minCareer": "Career must be at least 0 years",
+
       "save": "Save Changes",
       "cancel": "Cancel",
+
       "successTitle": "Profile Update Complete",
-      "successMessage": "Profile has been updated successfully.",
+      "successMessage": "Your profile has been updated successfully.",
+
       "errorTitle": "Profile Update Failed",
-      "errorMessage": "Update failed.",
+      "errorMessage": "Failed to update profile.",
       "generalError": "An error occurred.",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+
+      "optional": "(Optional)"
+    },
+    "aria": {
+      "pageLabel": "Customer profile registration page",
+      "formLabel": "Customer profile registration form",
+      "formContainerLabel": "Customer profile registration form container",
+      "headerLabel": "Profile registration header",
+      "profileImgLabel": "Profile image upload section",
+      "profileImgButtonAlt": "Selected profile image",
+      "defaultProfileImgAlt": "Default profile image",
+      "formFieldLabel": "{field} form field",
+      "serviceSelectionLabel": "Select services to use",
+      "regionSelectionLabel": "Select your current region",
+      "profileSubmitButton": "Profile submit button",
+      "pageLabelMover": "Mover profile registration page",
+      "formLabelMover": "Mover profile registration form",
+      "formLeftColumn": "Left input column",
+      "formRightColumn": "Right input column",
+      "submitButtonSection": "Profile submit button section",
+      "serviceSelectionLabelCustomer": "Select services to use",
+      "serviceSelectionLabelMover": "Select services you offer",
+      "regionSelectionLabelCustomer": "Select your current region",
+      "regionSelectionLabelMover": "Select serviceable regions"
     }
   },
   "search": {
@@ -295,9 +373,7 @@
     "tryOtherSearch": "Try different search terms or filters",
     "driverSuffix": "Driver",
     "experience": "Experience",
-    "years": "years",
     "confirmed": "Confirmed",
-    "cases": "cases",
     "reviews": "Reviews",
     "totalExperience": "Total Experience",
     "inProgress": "In Progress",
@@ -338,7 +414,6 @@
     "casesMobile": "",
     "confirmedMobile": "Done",
     "myPage": {
-      "loading": "Loading...",
       "retry": "Retry",
       "profileNotFound": "Profile information not found.",
       "editProfile": "Edit My Profile",
@@ -500,7 +575,7 @@
   },
   "landing": {
     "title": "How do you choose a moving company?",
-    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and simplifies the process of selecting a moving company",
+    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and \nsimplifies the process of selecting a moving company",
     "getQuote": "Request your desired \nmoving service and get quotes",
     "learnMore": "Compare and choose quotes from\nmultiple companies at a glance",
     "selectionProcess": "Troublesome selection process,\n choose from moving types",
@@ -523,8 +598,6 @@
   },
 
   "estimate": {
-    "loading": "Loading...",
-    "error": "An error occurred. Please try again.",
     "apiError": "API Error:",
     "createEstimateSuccessTitle": "Estimate Created Successfully",
     "createEstimateSuccessMessage": "Estimate has been sent successfully",
@@ -558,7 +631,6 @@
       "saturday": "Sat"
     },
     "estimateAmount": "Estimate Amount",
-    "currency": "KRW",
     "enterEstimatePrice": "Please enter the estimate price.",
     "estimatePricePlaceholder": "Please enter the estimate price.",
     "onlyNumbersMessage": "Please enter numbers only.",
@@ -595,7 +667,6 @@
     "customerSuffix": " Customer",
     "confirmedEstimate": "Confirmed Estimate",
     "profileImage": "Profile Image",
-    "currency": "KRW",
     "dateFormat": {
       "year": "",
       "month": "/",
@@ -621,8 +692,8 @@
       "description": "Please enter a detailed description."
     },
     "invalid": {
-      "name": "Name must be 1 to 10 characters long and contain only Korean or English letters.",
-      "nickname": "Nickname must be 1 to 10 characters long and contain only Korean or English letters.",
+      "name": "Name must be 1 to 15 characters in Korean, English, or Chinese only.",
+      "nickname": "Nickname must be 1–15 characters long and contain only Korean, English, Chinese, or numbers.",
       "email": "Invalid email format.",
       "phoneNumber": "Invalid phone number format. (e.g., 01012345678)",
       "password": "Password must be at least 8 characters and include letters, numbers, and special characters.",
@@ -674,7 +745,9 @@
     "userSuffix": {
       "customer": "Customer",
       "driver": "Driver"
-    }
+    },
+    "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
+    "roleToggleText": "Quick Switch"
   },
   "review": {
     "title": "Review",
@@ -682,8 +755,6 @@
     "writtenTab": "My Written Reviews",
     "writeReview": "Write Review",
     "noWritableReviews": "No writable reviews!",
-    "loading": "Loading...",
-    "error": "An error occurred.",
     "reviewWriteFailed": "Failed to write review. Please try again.",
     "noWrittenReviews": "No written reviews!",
     "noWrittenReviewsAlt": "No written reviews",
@@ -713,20 +784,27 @@
     "title": "Schedule Management",
     "description": "Check and manage your moving schedules",
     "selectDate": "Please select a date",
-    "scheduleFor": "Schedule",
-    "noSchedules": "No schedules for this date.",
+    "schedule": "Schedule",
+    "scheduleText": "Schedule",
+    "noSchedule": "No schedules for this date.",
     "selectDateToView": "Select a date on the calendar to view detailed schedules.",
-    "customerSuffix": "",
-    "time": "Time:",
-    "type": "Type:",
-    "departure": "From:",
-    "arrival": "To:",
-    "viewDetails": "View Details",
-    "approve": "Approve",
+    "movingType": "Moving Type",
+    "from": "From",
+    "to": "To",
     "status": {
       "confirmed": "Confirmed",
       "pending": "Pending",
       "completed": "Completed"
     }
+  },
+  "favoriteMover": {
+    "title": "Favorite Movers",
+    "selectAll": "Select All",
+    "deleteSelected": "Delete Selected",
+    "deleting": "Deleting...",
+    "deleteSuccess": " drivers have been removed from your favorites.",
+    "deleteError": "Failed to delete selected drivers. Please try again.",
+    "noFavorites": "No favorite movers yet",
+    "noFavoritesDesc": "Add movers to your favorites to see them here"
   }
 }

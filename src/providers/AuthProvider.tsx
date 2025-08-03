@@ -13,6 +13,9 @@ type TUser = {
   nickname: string | null;
   userType: "CUSTOMER" | "MOVER";
   customerImage?: string;
+  moverImage?: string;
+  provider: "GOOGLE" | "KAKAO" | "NAVER" | "LOCAL";
+  hasBothProfiles: boolean;
 };
 
 export type TSignInResponse = {
@@ -28,6 +31,14 @@ export type TSignInResponse = {
   accessToken: string;
 };
 
+interface ISwitchUserTypeResponse {
+  success: boolean;
+  message: string;
+  oldUserType: "CUSTOMER" | "MOVER";
+  newUserType: "CUSTOMER" | "MOVER";
+  accessToken: string;
+}
+
 interface IAuthContextType {
   user: TUser | null;
   isLoading: boolean;
@@ -39,6 +50,7 @@ interface IAuthContextType {
   naverLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
+  switchUserType: (targetType: "CUSTOMER" | "MOVER") => Promise<ISwitchUserTypeResponse>;
 }
 
 const AuthContext = createContext<IAuthContextType>({
@@ -62,6 +74,13 @@ const AuthContext = createContext<IAuthContextType>({
   naverLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
+  switchUserType: async (): Promise<ISwitchUserTypeResponse> => ({
+    success: false,
+    message: "AuthProvider not found",
+    oldUserType: "CUSTOMER",
+    newUserType: "CUSTOMER",
+    accessToken: "",
+  }),
 });
 
 export const useAuth = () => {
@@ -81,24 +100,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
-
-  // 리다이렉트 로직을 별도 함수로 분리
-  const handleRedirectAfterAuth = (user: { nickname?: string | null; userType?: string }) => {
-    let targetPath = "";
-
-    if (!user?.nickname) {
-      targetPath = "/profile/register";
-    } else if (user?.userType === "CUSTOMER") {
-      targetPath = "/searchMover";
-    } else if (user?.userType === "MOVER") {
-      targetPath = "/estimate/received";
-    }
-
-    // 현재 경로와 다른 경우에만 리다이렉트
-    if (targetPath && pathname !== targetPath) {
-      router.push(targetPath);
-    }
-  };
 
   /**
    * 서버에서 현재 사용자 정보 조회
@@ -135,9 +136,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 로그인 성공 후 사용자 정보 조회
       await getUser();
 
-      // 현재 경로를 고려한 리다이렉트
-      handleRedirectAfterAuth(response.user);
-
       return response;
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -163,9 +161,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 회원가입 성공 후 사용자 정보 조회
       await getUser();
 
-      // 현재 경로를 고려한 리다이렉트
-      handleRedirectAfterAuth(response.user);
-
       return response;
     } catch (error) {
       console.error("회원가입 실패:", error);
@@ -187,6 +182,27 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       router.push("/");
     } catch (error) {
       console.error("로그아웃 실패:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
+   *  유저타입 변경 함수
+   */
+
+  const switchUserType = async (targetType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      const response = await authApi.switchUserType(targetType); // 새로운 토큰 발급
+
+      // 2. 유저 상태 갱신
+      await getUser();
+
+      return response;
+    } catch (error) {
+      console.error("유저 타입 전환 실패:", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -244,9 +260,30 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   useEffect(() => {
     const initializeAuth = async () => {
       // 인증이 필요하지 않은 페이지들
-      const publicRoutes = ["/", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
+      const publicRoutes = [
+        "/",
+        "/ko",
+        "/en",
+        "/zh",
+        "/userSignin",
+        "/userSignup",
+        "/moverSignin",
+        "/moverSignup",
+        "/ko/searchMover",
+        "/en/searchMover",
+        "/zh/searchMover",
+      ];
 
-      if (!pathname || publicRoutes.includes(pathname)) {
+      // 기사님 상세 페이지도 비회원 접근 가능하도록 체크
+      const isSearchMoverDetailPage =
+        pathname?.startsWith("/ko/searchMover/") ||
+        pathname?.startsWith("/en/searchMover/") ||
+        pathname?.startsWith("/zh/searchMover/");
+
+      // locale이 포함된 랜딩페이지 체크
+      const isLandingPage = pathname === "/" || pathname === "/ko" || pathname === "/en" || pathname === "/zh";
+
+      if (!pathname || publicRoutes.includes(pathname) || isLandingPage || isSearchMoverDetailPage) {
         setIsLoading(false);
         return;
       }
@@ -269,6 +306,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     naverLogin,
     logout,
     getUser,
+    switchUserType,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

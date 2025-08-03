@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations } from "next-intl";
-import google from "@/assets/icon/auth/icon-login-google-lg.png";
-import kakao from "@/assets/icon/auth/icon-login-kakao-lg.png";
-import naver from "@/assets/icon/auth/icon-login-naver-lg.png";
+import google from "@/assets/icon/auth/icon-login-google.webp";
+import kakao from "@/assets/icon/auth/icon-login-kakao.webp";
+import naver from "@/assets/icon/auth/icon-login-naver.webp";
 import { TUserType } from "@/types/user";
 
 const SocialLoginButtons = ({ userType }: { userType: TUserType }) => {
@@ -23,7 +23,7 @@ const SocialLoginButtons = ({ userType }: { userType: TUserType }) => {
           aria-label={t("loginWithGoogle")}
           className="cursor-pointer"
         >
-          <Image src={google} alt="Google" width={62} height={62} />
+          <Image src={google} alt="Google" width={62} height={62} sizes="62px" quality={100} />
         </button>
 
         <button
@@ -32,7 +32,7 @@ const SocialLoginButtons = ({ userType }: { userType: TUserType }) => {
           aria-label={t("loginWithKakao")}
           className="cursor-pointer"
         >
-          <Image src={kakao} alt="Kakao" width={62} height={62} />
+          <Image src={kakao} alt="Kakao" width={62} height={62} sizes="62px" quality={100} />
         </button>
 
         <button
@@ -41,7 +41,7 @@ const SocialLoginButtons = ({ userType }: { userType: TUserType }) => {
           aria-label={t("loginWithNaver")}
           className="cursor-pointer"
         >
-          <Image src={naver} alt="Naver" width={62} height={62} />
+          <Image src={naver} alt="Naver" width={62} height={62} sizes="62px" quality={100} />
         </button>
       </div>
     </div>

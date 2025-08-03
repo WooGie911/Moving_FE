@@ -1,7 +1,7 @@
 import React from "react";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { IAddressCardProps } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 // 공통 스타일 변수
 const ADDRESS_CARD_STYLES = {
@@ -11,11 +11,12 @@ const ADDRESS_CARD_STYLES = {
   unselected: "border-border-light bg-white",
   postalCode: "text-black-250 text-[14px] leading-6 font-semibold md:text-base md:leading-[26px]",
   addressText: "text-black-250 text-[14px] leading-6 font-normal md:text-base",
-  addressRow: "flex w-full items-start gap-2",
+  addressRow: "flex w-full items-center gap-2",
+  labelContainer: "flex-shrink-0 w-16", // 라벨 고정 너비
 } as const;
 
 const AddressCard: React.FC<IAddressCardProps> = ({ postalCode, roadAddress, jibunAddress, selected = false }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   const containerClass = `${ADDRESS_CARD_STYLES.container} ${
     selected ? ADDRESS_CARD_STYLES.selected : ADDRESS_CARD_STYLES.unselected
@@ -28,7 +29,9 @@ const AddressCard: React.FC<IAddressCardProps> = ({ postalCode, roadAddress, jib
 
       {/* 도로명 주소 */}
       <div className={ADDRESS_CARD_STYLES.addressRow}>
-        <CircleTextLabel text={t("estimateRequest.roadNameLabel")} />
+        <div className={ADDRESS_CARD_STYLES.labelContainer}>
+          <CircleTextLabel text={t("estimateRequest.roadNameLabel")} />
+        </div>
         <span className={ADDRESS_CARD_STYLES.addressText}>
           {roadAddress || t("estimateRequest.roadAddressPlaceholder")}
         </span>
@@ -36,7 +39,9 @@ const AddressCard: React.FC<IAddressCardProps> = ({ postalCode, roadAddress, jib
 
       {/* 지번 주소 */}
       <div className={ADDRESS_CARD_STYLES.addressRow}>
-        <CircleTextLabel text={t("estimateRequest.jibunLabel")} />
+        <div className={ADDRESS_CARD_STYLES.labelContainer}>
+          <CircleTextLabel text={t("estimateRequest.jibunLabel")} />
+        </div>
         <span className={ADDRESS_CARD_STYLES.addressText}>
           {jibunAddress || t("estimateRequest.jibunAddressPlaceholder")}
         </span>

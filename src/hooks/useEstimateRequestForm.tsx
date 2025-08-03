@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useLocale, useTranslations } from "next-intl";
 import { IFormState, TAddressType } from "@/types/estimateRequest";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
@@ -9,7 +9,7 @@ const ESTIMATE_REQUEST_SESSION_KEY = "estimateRequest_draft";
 
 // 초기 폼 상태
 const initialForm: IFormState = {
-  movingType: "small",
+  movingType: "",
   movingDate: "",
   isDateConfirmed: false,
   departure: { roadAddress: "", detailAddress: "", zoneCode: "", jibunAddress: "", extraAddress: "" },
@@ -64,7 +64,8 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   const [step, setStep] = useState(1);
   const [showNextQuestion, setShowNextQuestion] = useState(true);
   const [pendingAnswer, setPendingAnswer] = useState<string | undefined>(undefined);
-  const { t, language } = useLanguageStore();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const progress = step === 4 ? 100 : step * 33;
 
@@ -79,7 +80,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   }, [form]);
 
   // 이사 종류 선택 핸들러
-  const handleSelectMovingType = useCallback((type: "small" | "home" | "office") => {
+  const handleSelectMovingType = useCallback((type: "" | "small" | "home" | "office") => {
     setForm((prev) => ({ ...prev, movingType: type }));
     setPendingAnswer(type);
     setShowNextQuestion(false);
@@ -136,13 +137,13 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
       if (!pendingAnswer) return "";
 
       if (step === 1) {
-        return `${t(`estimateRequest.movingTypes.${pendingAnswer}`)} (${t(`estimateRequest.movingTypes.${pendingAnswer}Desc`)})`;
+        return `${t(`shared.movingTypes.${pendingAnswer}`)} (${t(`shared.movingTypes.${pendingAnswer}Desc`)})`;
       } else if (step === 2) {
-        return formatDateByLanguage(pendingAnswer, language);
+        return formatDateByLanguage(pendingAnswer, locale);
       }
       return pendingAnswer;
     },
-    [t, language],
+    [t, locale],
   );
 
   // 편집 핸들러들
@@ -174,7 +175,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
         <div key="movingType" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingType}>
             {form.movingType
-              ? `${t(`estimateRequest.movingTypes.${form.movingType}`)} (${t(`estimateRequest.movingTypes.${form.movingType}Desc`)})`
+              ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
               : ""}
           </SpeechBubble>
         </div>,
@@ -185,14 +186,14 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
       answers.push(
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
-            {formatDateByLanguage(form.movingDate, language)}
+            {formatDateByLanguage(form.movingDate, locale)}
           </SpeechBubble>
         </div>,
       );
     }
 
     return answers;
-  }, [step, form, t, language, handleEditMovingType, handleEditMovingDate]);
+  }, [step, form, t, locale, handleEditMovingType, handleEditMovingDate]);
 
   return {
     form,
@@ -218,6 +219,6 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
     renderAnswerBubble,
     renderPreviousAnswers,
     t,
-    locale: language,
+    locale,
   };
 };

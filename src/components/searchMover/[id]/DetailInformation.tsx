@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useAuth } from "@/providers/AuthProvider";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
 import ReviewAvg from "./ReviewAvg";
@@ -8,7 +9,7 @@ import RequestButton from "./RequestButton";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
 import type { DetailInformationProps } from "@/types/mover.types";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import findMoverApi from "@/lib/api/findMover.api";
 import type { IReview, IApiReview } from "@/types/review";
 
@@ -16,9 +17,11 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
   const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
-  const [isLoadingQuote, setIsLoadingQuote] = useState(true);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(false);
   const deviceType = useWindowWidth();
+  const { isLoggedIn, user } = useAuth();
   const t = useTranslations("mover");
+  const locale = useLocale();
 
   // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
   useEffect(() => {
@@ -55,9 +58,16 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   useEffect(() => {
     const fetchActiveQuote = async () => {
+      // 로그인한 고객 사용자만 활성 견적 조회
+      if (!isLoggedIn || user?.userType !== "CUSTOMER") {
+        setQuoteId(undefined);
+        setIsLoadingQuote(false);
+        return;
+      }
+
       try {
         setIsLoadingQuote(true);
-        const response = await estimateRequestApi.getActive();
+        const response = await estimateRequestClientApi.getActive(locale);
 
         if (response.success && response.data && response.data.id) {
           setQuoteId(String(response.data.id));
@@ -73,7 +83,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     };
 
     fetchActiveQuote();
-  }, []);
+  }, [isLoggedIn, user?.userType]);
 
   return (
     <div

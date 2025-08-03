@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import profile from "@/assets/icon/auth/icon-profile-lg.png";
+import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.png";
 import { TDeviceType } from "@/types/deviceType";
@@ -11,45 +11,30 @@ import { TUserRole } from "@/types/user.types";
 import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
-import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations } from "next-intl";
-
-const USER_ACTION_LIST = [
-  {
-    label: "gnb.userActions.editProfile",
-    href: "/profile/edit",
-  },
-  {
-    label: "gnb.userActions.favoriteDrivers",
-    href: "/user/favorite",
-  },
-];
-
-const MOVER_USER_ACTION_LIST = [
-  {
-    label: "gnb.userActions.editProfile",
-    href: "/profile/edit",
-  },
-  {
-    label: "gnb.userActions.myPage",
-    href: "/moverMyPage",
-  },
-  {
-    label: "gnb.userActions.scheduleManagement",
-    href: "/moverMyPage/schedule",
-  },
-];
+import ProfileModal from "./ProfileModal";
 
 interface IGnbActionsProps {
   userRole: TUserRole;
   userName: string;
   deviceType: TDeviceType;
-  toggleSideMenu: () => void;
   isSideMenuOpen: boolean;
+  hasBothProfiles: boolean;
+  profileImage?: string;
+  logout: () => void;
+  toggleSideMenu: () => void;
 }
 
-export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isSideMenuOpen }: IGnbActionsProps) => {
-  const { logout } = useAuth();
+export const GnbActions = ({
+  userRole,
+  logout,
+  userName,
+  hasBothProfiles,
+  deviceType,
+  toggleSideMenu,
+  isSideMenuOpen,
+  profileImage,
+}: IGnbActionsProps) => {
   const t = useTranslations();
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -81,6 +66,8 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
   const closeProfileModal = () => {
     setIsProfileOpen(false);
   };
+
+  //
 
   // 프로필 모달창 외부 클릭 감지
   useEffect(() => {
@@ -130,6 +117,11 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
     }
   }, [userRole, fetchNotifications]);
 
+  // userRole이나 userName 변경 시 프로필 모달 상태 초기화
+  useEffect(() => {
+    setIsProfileOpen(false);
+  }, [userRole, userName]);
+
   return (
     <div className="flex items-center gap-4">
       {/* 언어 변경 버튼 */}
@@ -177,44 +169,31 @@ export const GnbActions = ({ userRole, userName, deviceType, toggleSideMenu, isS
             <button
               ref={profileButtonRef}
               onClick={handleProfileClick}
-              className="flex cursor-pointer gap-3 p-2 text-black"
+              className="flex w-auto cursor-pointer items-center gap-3 p-2 text-black"
               aria-label={t("gnb.profile")}
             >
-              <Image src={profile} alt={t("gnb.profile")} width={24} height={24} />
+              <div className="h-10 w-10 overflow-hidden rounded-full">
+                <Image
+                  src={profileImage || baseProfileImage.src}
+                  alt={t("gnb.profile")}
+                  width={40}
+                  height={40}
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <div className="hidden lg:block">{userName}</div>
             </button>
 
             {/* 프로필 모달창 */}
             {isProfileOpen && (
-              <div
-                ref={profileModalRef}
-                className="absolute top-full right-0 z-50 mt-2 w-[180px] rounded-2xl border-2 border-[#F2F2F2] bg-white px-2 py-2.5 font-bold shadow-lg lg:w-[248px]"
-              >
-                <nav className="flex flex-col items-start justify-start border-b border-[#F2F2F2]">
-                  <span className="w-full px-2 py-2 text-left text-lg">
-                    {userName} {userRole === "CUSTOMER" ? t("gnb.userSuffix.customer") : t("gnb.userSuffix.driver")}
-                  </span>
-                  <ul className="flex w-full flex-col">
-                    {userRole === "CUSTOMER"
-                      ? USER_ACTION_LIST.map((item, index) => (
-                          <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
-                          </Link>
-                        ))
-                      : MOVER_USER_ACTION_LIST.map((item, index) => (
-                          <Link href={item.href} key={index} onClick={closeProfileModal}>
-                            <li className="text-md w-full px-2 py-3 text-left font-medium">{t(item.label)}</li>
-                          </Link>
-                        ))}
-                  </ul>
-                </nav>
-                <button
-                  className="w-full cursor-pointer px-3 py-3 text-xs text-gray-500 transition-colors hover:text-gray-700 lg:text-lg"
-                  onClick={() => logout()}
-                >
-                  {t("gnb.logout")}
-                </button>
-              </div>
+              <ProfileModal
+                userName={userName}
+                userRole={userRole}
+                hasBothProfiles={hasBothProfiles}
+                logout={logout}
+                profileModalRef={profileModalRef}
+                closeProfileModal={closeProfileModal}
+              />
             )}
           </div>
         </>

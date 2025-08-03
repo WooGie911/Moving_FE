@@ -5,14 +5,11 @@ import { useRouter } from "next/navigation";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 import { Button } from "@/components/common/button/Button";
 import { EstimateRequestLayout } from "@/components/estimateRequest/common/EstimateRequestLayout";
-import { EstimateRequestStepRenderer } from "@/components/estimateRequest/common/EstimateRequestStepRenderer";
 import { useEstimateRequestForm } from "@/hooks/useEstimateRequestForm";
 import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
-import { useEstimateRequestAddressModal } from "@/hooks/useEstimateRequestAddressModal";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
-import { shortenRegionInAddress } from "@/utils/regionMapping";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
@@ -21,8 +18,10 @@ const EstimateRequestEditPage = () => {
   const [estimateRequestData, setEstimateRequestData] = useState<IEstimateRequestResponse | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [hasEstimates, setHasEstimates] = useState(false);
   const router = useRouter();
-  const { t, language } = useLanguageStore();
+  const t = useTranslations();
+  const locale = useLocale();
 
   // 공통 훅들 사용
   const formLogic = useEstimateRequestForm();
@@ -38,34 +37,12 @@ const EstimateRequestEditPage = () => {
     pendingAnswer,
     setPendingAnswer,
     progress,
-    isFormValid,
-    handleSelectMovingType,
-    handleDateChange,
-    handleDateComplete,
     handleEditStep,
     handleAddressUpdate,
     getAnswerText,
   } = formLogic;
 
   const { updateMutation, deleteMutation, showErrorModal } = apiLogic;
-
-  // 주소 모달 훅 사용
-  const { handleDepartureModal, handleArrivalModal } = useEstimateRequestAddressModal(handleAddressUpdate);
-
-  // 기사님이 보낸 견적이 있는지 확인하는 공통 함수
-  const checkEstimatesAndRedirect = useCallback(async () => {
-    try {
-      const response = await estimateRequestApi.getActive();
-      if (response.success && response.data && response.data.hasEstimates) {
-        // 기사님이 보낸 견적이 있으면 pending 페이지로 리다이렉트
-        router.push("/estimateRequest/pending");
-        return true;
-      }
-    } catch (error) {
-      console.error("견적 상태 확인 실패:", error);
-    }
-    return false;
-  }, [router]);
 
   // 견적 데이터로 폼을 초기화하는 공통 함수
   const initializeFormFromData = useCallback(
@@ -101,7 +78,7 @@ const EstimateRequestEditPage = () => {
   // 견적 존재 여부 확인 및 create 페이지로 리다이렉트
   const checkAndRedirectToCreate = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (!response.success || !response.hasActive) {
         // 활성 견적이 없으면 create 페이지로 리다이렉트
@@ -118,10 +95,11 @@ const EstimateRequestEditPage = () => {
 
   const fetchEstimateRequestData = async () => {
     try {
-      const response = await estimateRequestApi.getActive();
+      const response = await estimateRequestClientApi.getActive(locale);
 
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
+        setHasEstimates(response.hasEstimate || false);
         initializeFormFromData(response.data);
       } else if (response.success && !response.hasActive) {
         showErrorModal(t("estimateRequest.noActiveEstimateRequest"));
@@ -172,7 +150,8 @@ const EstimateRequestEditPage = () => {
     }
 
     // 기사님이 보낸 견적이 있는지 확인
-    if (await checkEstimatesAndRedirect()) {
+    if (hasEstimates) {
+      router.push("/estimateRequest/pending");
       return;
     }
 
@@ -195,13 +174,19 @@ const EstimateRequestEditPage = () => {
   // 삭제 핸들러
   const handleDeleteClick = async () => {
     // 기사님이 보낸 견적이 있는지 확인
-    if (await checkEstimatesAndRedirect()) {
+    if (hasEstimates) {
+      router.push("/estimateRequest/pending");
       return;
     }
 
     apiLogic.showDeleteConfirmModal(() => {
       deleteMutation.mutate();
     });
+  };
+
+  // 보러가기 핸들러
+  const handleViewEstimates = () => {
+    router.push("/estimateRequest/pending");
   };
 
   // 편집 핸들러들
@@ -241,7 +226,7 @@ const EstimateRequestEditPage = () => {
         <div key="movingType" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingType}>
             {form.movingType
-              ? `${t(`estimateRequest.movingTypes.${form.movingType}`)} (${t(`estimateRequest.movingTypes.${form.movingType}Desc`)})`
+              ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
               : ""}
           </SpeechBubble>
         </div>,
@@ -252,14 +237,14 @@ const EstimateRequestEditPage = () => {
       answers.push(
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
-            {formatDateByLanguage(form.movingDate, language)}
+            {formatDateByLanguage(form.movingDate, locale)}
           </SpeechBubble>
         </div>,
       );
     }
 
     return answers;
-  }, [step, form, t, language, handleEditMovingType, handleEditMovingDate]);
+  }, [step, form, t, locale, handleEditMovingType, handleEditMovingDate]);
 
   // 로딩 상태 - 전역 로딩이 표시되므로 별도 UI 불필요
   if (loading) {
@@ -283,22 +268,22 @@ const EstimateRequestEditPage = () => {
   const getMoveTypeLabel = (moveType: string): string => {
     switch (moveType) {
       case "HOME":
-        return t("estimateRequest.movingTypes.home");
+        return t("shared.movingTypes.home");
       case "OFFICE":
-        return t("estimateRequest.movingTypes.office");
+        return t("shared.movingTypes.office");
       case "SMALL":
-        return t("estimateRequest.movingTypes.small");
+        return t("shared.movingTypes.small");
       default:
         return moveType;
     }
   };
 
   // 날짜 변환
-  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, language);
+  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, locale);
 
   // 주소 표시 (null 체크 포함)
-  const departureDisplay = `${shortenRegionInAddress(estimateRequestData.departureAddress)}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;
-  const arrivalDisplay = `${shortenRegionInAddress(estimateRequestData.arrivalAddress)}${estimateRequestData.arrivalDetailAddress ? ` ${estimateRequestData.arrivalDetailAddress}` : ""}`;
+  const departureDisplay = `${estimateRequestData.departureAddress}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;
+  const arrivalDisplay = `${estimateRequestData.arrivalAddress}${estimateRequestData.arrivalDetailAddress ? ` ${estimateRequestData.arrivalDetailAddress}` : ""}`;
 
   // edit 모드일 때 공통 컴포넌트 사용
   if (isEditMode) {
@@ -337,36 +322,60 @@ const EstimateRequestEditPage = () => {
         </SpeechBubble>
       </section>
 
-      {/* 수정/삭제 질문 말풍선 */}
-      <section className="fade-in-up" role="region" aria-label="견적 요청 수정 또는 삭제">
-        <SpeechBubble type="question">
-          <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
-            <p className="text-black-400">{t("estimateRequest.editQuestion")}</p>
-            <div className="flex gap-3">
-              <Button
-                variant="outlined"
-                width="flex-1"
-                height="h-[54px]"
-                rounded="rounded-[16px]"
-                onClick={handleEdit}
-                aria-label="견적 요청 수정하기"
-              >
-                {t("estimateRequest.editButton")}
-              </Button>
-              <Button
-                variant="solid"
-                width="flex-1"
-                height="h-[54px]"
-                rounded="rounded-[16px]"
-                onClick={handleDeleteClick}
-                aria-label="견적 요청 삭제하기"
-              >
-                {t("estimateRequest.deleteButton")}
-              </Button>
+      {/* 기사님이 보낸 견적이 있는 경우와 없는 경우 분기 처리 */}
+      {hasEstimates ? (
+        // 기사님이 보낸 견적이 있는 경우 - 보러가기 버튼
+        <section className="fade-in-up" role="region" aria-label="견적 확인">
+          <SpeechBubble type="question">
+            <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
+              <p className="text-black-400">{t("estimateRequest.hasEstimatesMessage")}</p>
+              <div className="flex gap-3">
+                <Button
+                  variant="solid"
+                  width="w-full"
+                  height="h-[54px]"
+                  rounded="rounded-[16px]"
+                  onClick={handleViewEstimates}
+                  aria-label="견적 보러가기"
+                >
+                  {t("estimateRequest.viewEstimatesButton")}
+                </Button>
+              </div>
             </div>
-          </div>
-        </SpeechBubble>
-      </section>
+          </SpeechBubble>
+        </section>
+      ) : (
+        // 기사님이 보낸 견적이 없는 경우 - 수정/삭제 버튼
+        <section className="fade-in-up" role="region" aria-label="견적 요청 수정 또는 삭제">
+          <SpeechBubble type="question">
+            <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
+              <p className="text-black-400">{t("estimateRequest.editQuestion")}</p>
+              <div className="flex gap-3">
+                <Button
+                  variant="outlined"
+                  width="flex-1"
+                  height="h-[54px]"
+                  rounded="rounded-[16px]"
+                  onClick={handleEdit}
+                  aria-label="견적 요청 수정하기"
+                >
+                  {t("estimateRequest.editButton")}
+                </Button>
+                <Button
+                  variant="solid"
+                  width="flex-1"
+                  height="h-[54px]"
+                  rounded="rounded-[16px]"
+                  onClick={handleDeleteClick}
+                  aria-label="견적 요청 삭제하기"
+                >
+                  {t("estimateRequest.deleteButton")}
+                </Button>
+              </div>
+            </div>
+          </SpeechBubble>
+        </section>
+      )}
     </EstimateRequestLayout>
   );
 };
