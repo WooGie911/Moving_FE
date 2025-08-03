@@ -7,11 +7,12 @@ import { LabelArea } from "../../../LabelArea";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { formatDateDot } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const t = useTranslations("estimate");
   const tShared = useTranslations();
+  const locale = useLocale();
 
   const estimateT = useTranslations("estimateRequest");
   const formatNumber = (num: number): string => {
@@ -74,7 +75,9 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           createdAt={formatDateDot(data.estimateRequest.createdAt)}
           movingDate={data.estimateRequest.moveDate}
           departureAddr={
-            shortenRegionInAddress(data.estimateRequest.fromAddress.region) +
+            (locale === "ko"
+              ? shortenRegionInAddress(data.estimateRequest.fromAddress.region)
+              : data.estimateRequest.fromAddress.region) +
             " " +
             data.estimateRequest.fromAddress.city +
             " " +
@@ -83,7 +86,9 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
             data.estimateRequest.fromAddress.detail
           }
           arrivalAddr={
-            shortenRegionInAddress(data.estimateRequest.toAddress.region) +
+            (locale === "ko"
+              ? shortenRegionInAddress(data.estimateRequest.toAddress.region)
+              : data.estimateRequest.toAddress.region) +
             " " +
             data.estimateRequest.toAddress.city +
             " " +

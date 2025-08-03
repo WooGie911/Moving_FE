@@ -6,16 +6,17 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RejectedDetailPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyRejectedEstimate"],
-    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
+    queryKey: ["MyRejectedEstimate", locale],
+    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
 
   if (isPending) {

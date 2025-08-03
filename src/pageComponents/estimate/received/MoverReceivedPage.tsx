@@ -5,19 +5,23 @@ import { IFilterState } from "@/types/moverEstimate";
 import { CardList } from "@/components/estimate/CardList";
 import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const MoverReceivedPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["receivedEstimateRequest"],
+    queryKey: ["receivedEstimateRequest", locale],
     queryFn: () =>
-      moverEstimateApi.getAllEstimateRequests({
-        region: true,
-        designated: true,
-      }),
+      moverEstimateApi.getAllEstimateRequests(
+        {
+          region: true,
+          designated: true,
+        },
+        locale,
+      ),
   });
 
   // 필터 상태 관리
@@ -124,7 +128,6 @@ export const MoverReceivedPage = () => {
     console.error(`${t("apiError")}`, error);
     return <div>{t("common.error")}</div>;
   }
-  console.log("데이터", data);
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (

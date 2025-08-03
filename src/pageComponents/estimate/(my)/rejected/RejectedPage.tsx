@@ -5,15 +5,16 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RejectedPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyRejectedEstimates"],
-    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
+    queryKey: ["MyRejectedEstimates", locale],
+    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
 
   // 로딩 상태

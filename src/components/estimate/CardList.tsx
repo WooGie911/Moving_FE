@@ -283,7 +283,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))}
+                    {locale === "ko"
+                      ? shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
+                      : (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")}
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
@@ -292,7 +294,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))}
+                    {locale === "ko"
+                      ? shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
+                      : (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")}
                   </p>
                 </div>
               </div>
@@ -344,7 +348,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress((data.fromAddress?.city || "") + " " + (data.fromAddress?.district || ""))}
+                  {locale === "ko"
+                    ? shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
+                    : (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")}
                 </p>
               </div>
               <div className="flex flex-col justify-end pb-1">
@@ -353,7 +359,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {shortenRegionInAddress((data.toAddress?.city || "") + " " + (data.toAddress?.district || ""))}
+                  {locale === "ko"
+                    ? shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
+                    : (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")}
                 </p>
               </div>
             </div>

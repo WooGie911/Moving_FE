@@ -4,15 +4,16 @@ import { CardList } from "@/components/estimate/CardList";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RequsetPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyCreateEstimate"],
-    queryFn: () => moverEstimateApi.getMyEstimates(),
+    queryKey: ["MyCreateEstimate", locale],
+    queryFn: () => moverEstimateApi.getMyEstimates(locale),
   });
   // 로딩 상태
   if (isPending) {

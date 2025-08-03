@@ -7,15 +7,16 @@ import { mockMyEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 export const RequsetDetailPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
+  const locale = useLocale();
   const { id: estimateId } = useParams();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyEstimates"],
-    queryFn: () => moverEstimateApi.getMyEstimates(),
+    queryKey: ["MyEstimates", locale],
+    queryFn: () => moverEstimateApi.getMyEstimates(locale),
   });
   if (isPending) {
     return (
