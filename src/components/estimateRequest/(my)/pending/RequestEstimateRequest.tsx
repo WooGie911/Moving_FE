@@ -12,6 +12,7 @@ export const RequestEstimateRequest = ({
   endPoint,
 }: IEstimateRequestProps) => {
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
   const tMoveTypes = useTranslations("moveTypes");
 
   // movingType을 다국어로 변환하는 함수
@@ -38,9 +39,9 @@ export const RequestEstimateRequest = ({
     const day = date.getDate();
 
     // 다국어 날짜 포맷
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = tShared("shared.time.dateFormat.year");
+    const monthSuffix = tShared("shared.time.dateFormat.month");
+    const daySuffix = tShared("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
@@ -59,20 +60,20 @@ export const RequestEstimateRequest = ({
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const weekdays = [
-      t("weekdays.sunday"),
-      t("weekdays.monday"),
-      t("weekdays.tuesday"),
-      t("weekdays.wednesday"),
-      t("weekdays.thursday"),
-      t("weekdays.friday"),
-      t("weekdays.saturday"),
+      tShared("shared.time.weekdays.sunday"),
+      tShared("shared.time.weekdays.monday"),
+      tShared("shared.time.weekdays.tuesday"),
+      tShared("shared.time.weekdays.wednesday"),
+      tShared("shared.time.weekdays.thursday"),
+      tShared("shared.time.weekdays.friday"),
+      tShared("shared.time.weekdays.saturday"),
     ];
     const dayOfWeek = weekdays[date.getDay()];
 
     // 다국어 날짜 포맷 - 언어별로 다른 형식 적용
-    const yearSuffix = t("dateFormat.year");
-    const monthSuffix = t("dateFormat.month");
-    const daySuffix = t("dateFormat.day");
+    const yearSuffix = tShared("shared.time.dateFormat.year");
+    const monthSuffix = tShared("shared.time.dateFormat.month");
+    const daySuffix = tShared("shared.time.dateFormat.day");
 
     // 영어인 경우 MM/DD/YYYY 형식
     if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {

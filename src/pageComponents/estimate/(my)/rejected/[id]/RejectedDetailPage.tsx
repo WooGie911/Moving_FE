@@ -18,11 +18,11 @@ export const RejectedDetailPage = () => {
   });
 
   if (isPending) {
-    return <div>{t("loading")}</div>;
+    return <div>{t("common.loading")}</div>;
   }
   if (isError) {
     console.error(`${t("apiError")}`, error);
-    return <div>{t("error")}</div>;
+    return <div>{t("common.error")}</div>;
   }
 
   // data에서 estimateRequestId와 일치하는 항목 찾기

@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 import AddressModal from "@/components/estimateRequest/create/card/AddressModal";
 import { TAddressType } from "@/types/estimateRequest";
 
 export const useEstimateRequestAddressModal = (onAddressUpdate: (type: TAddressType, address: any) => void) => {
   const { open, close } = useModal();
-  const { t } = useLanguageStore();
+  const t = useTranslations();
 
   // 주소 모달 열기 핸들러
   const handleOpenAddressModal = useCallback(

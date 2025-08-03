@@ -1,10 +1,10 @@
 import React from "react";
 import ChooseAddressBtn from "../ChooseAddressBtn";
 import { IAddressSectionProps } from "@/types/estimateRequest";
-import { useLanguageStore } from "@/stores/languageStore";
+import { useTranslations } from "next-intl";
 
 const AddressSection: React.FC<IAddressSectionProps> = ({ label, value, onClick }) => {
-  const { t } = useLanguageStore();
+  const t = useTranslations();
   const hasAddress = value.roadAddress;
 
   return (

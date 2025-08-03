@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const t = useTranslations("estimate");
+  const tShared = useTranslations();
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
@@ -47,7 +48,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
             {t("estimatePrice")}
           </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-bold md:text-[24px] md:font-bold">{`${formatNumber(data.price || 0)}${t("currency")}`}</p>
+          <p className="text-black-300 text-[20px] leading-[32px] font-bold md:text-[24px] md:font-bold">{`${formatNumber(data.price || 0)}${tShared("shared.units.currency")}`}</p>
         </div>
 
         {/* 이사견적 상세정보들 */}

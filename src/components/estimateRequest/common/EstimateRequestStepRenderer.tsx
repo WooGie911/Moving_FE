@@ -100,7 +100,7 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
                 <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.movingType")}:{" "}
                   {form.movingType
-                    ? `${t(`estimateRequest.movingTypes.${form.movingType}`)} (${t(`estimateRequest.movingTypes.${form.movingType}Desc`)})`
+                    ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
                     : ""}
                 </div>
                 <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">

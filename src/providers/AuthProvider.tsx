@@ -15,6 +15,7 @@ type TUser = {
   customerImage?: string;
   moverImage?: string;
   provider: "GOOGLE" | "KAKAO" | "NAVER" | "LOCAL";
+  hasBothProfiles: boolean;
 };
 
 export type TSignInResponse = {
@@ -30,6 +31,14 @@ export type TSignInResponse = {
   accessToken: string;
 };
 
+interface ISwitchUserTypeResponse {
+  success: boolean;
+  message: string;
+  oldUserType: "CUSTOMER" | "MOVER";
+  newUserType: "CUSTOMER" | "MOVER";
+  accessToken: string;
+}
+
 interface IAuthContextType {
   user: TUser | null;
   isLoading: boolean;
@@ -41,6 +50,7 @@ interface IAuthContextType {
   naverLogin: (userType: "CUSTOMER" | "MOVER") => Promise<void>;
   logout: () => void;
   getUser: () => Promise<void>;
+  switchUserType: (targetType: "CUSTOMER" | "MOVER") => Promise<ISwitchUserTypeResponse>;
 }
 
 const AuthContext = createContext<IAuthContextType>({
@@ -64,6 +74,13 @@ const AuthContext = createContext<IAuthContextType>({
   naverLogin: async () => {},
   logout: () => {},
   getUser: async () => {},
+  switchUserType: async (): Promise<ISwitchUserTypeResponse> => ({
+    success: false,
+    message: "AuthProvider not found",
+    oldUserType: "CUSTOMER",
+    newUserType: "CUSTOMER",
+    accessToken: "",
+  }),
 });
 
 export const useAuth = () => {
@@ -171,6 +188,27 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   };
 
   /**
+   *  유저타입 변경 함수
+   */
+
+  const switchUserType = async (targetType: "CUSTOMER" | "MOVER") => {
+    try {
+      setIsLoading(true);
+      const response = await authApi.switchUserType(targetType); // 새로운 토큰 발급
+
+      // 2. 유저 상태 갱신
+      await getUser();
+
+      return response;
+    } catch (error) {
+      console.error("유저 타입 전환 실패:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
    * 구글 로그인 함수
    */
   const googleLogin = async (userType: "CUSTOMER" | "MOVER") => {
@@ -268,6 +306,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     naverLogin,
     logout,
     getUser,
+    switchUserType,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

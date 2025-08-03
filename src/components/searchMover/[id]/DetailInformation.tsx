@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useAuth } from "@/providers/AuthProvider";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
@@ -9,7 +9,7 @@ import RequestButton from "./RequestButton";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
 import type { DetailInformationProps } from "@/types/mover.types";
-import estimateRequestApi from "@/lib/api/estimateRequest.api";
+import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import findMoverApi from "@/lib/api/findMover.api";
 import type { IReview, IApiReview } from "@/types/review";
 
@@ -21,6 +21,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const deviceType = useWindowWidth();
   const { isLoggedIn, user } = useAuth();
   const t = useTranslations("mover");
+  const locale = useLocale();
 
   // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
   useEffect(() => {
@@ -66,7 +67,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
       try {
         setIsLoadingQuote(true);
-        const response = await estimateRequestApi.getActive();
+        const response = await estimateRequestClientApi.getActive(locale);
 
         if (response.success && response.data && response.data.id) {
           setQuoteId(String(response.data.id));

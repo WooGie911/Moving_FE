@@ -15,13 +15,13 @@ export const RequsetPage = () => {
   });
   // 로딩 상태
   if (isPending) {
-    return <div>{t("loading")}</div>;
+    return <div>{t("common.loading")}</div>;
   }
 
   // 에러 상태
   if (isError) {
     console.error(`${t("apiError")}`, error);
-    return <div>{t("error")}</div>;
+    return <div>{t("common.error")}</div>;
   }
   // 데이터가 없는 경우
   if (!data || data.length === 0) {
