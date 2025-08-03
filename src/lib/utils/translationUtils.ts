@@ -12,7 +12,7 @@ export const getServiceTypeTranslation = (serviceName: string, t: any): string =
 
 // 지역명 번역 함수
 export const getRegionTranslation = (regionCode: string, t: any): string => {
-  return t(`regions.${regionCode}`) || regionCode;
+  return t(regionCode) || regionCode;
 };
 
 // 모바일용 지역명 번역 함수
