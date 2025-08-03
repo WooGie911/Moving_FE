@@ -757,5 +757,15 @@
       "pending": "대기",
       "completed": "완료"
     }
+  },
+  "favoriteMover": {
+    "title": "찜한 기사님",
+    "selectAll": "전체선택",
+    "deleteSelected": "선택 항목 삭제",
+    "deleting": "삭제 중...",
+    "deleteSuccess": "명의 기사님이 찜 목록에서 삭제되었습니다.",
+    "deleteError": "선택된 기사님 삭제에 실패했습니다. 다시 시도해주세요.",
+    "noFavorites": "찜한 기사님이 없습니다",
+    "noFavoritesDesc": "기사님을 찜하면 여기에 표시됩니다"
   }
 }

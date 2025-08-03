@@ -20,7 +20,7 @@ const USER_ACTION_LIST = [
   },
   {
     label: "gnb.userActions.favoriteDrivers",
-    href: "/user/favorite",
+    href: "/favoriteMover",
   },
 ];
 
