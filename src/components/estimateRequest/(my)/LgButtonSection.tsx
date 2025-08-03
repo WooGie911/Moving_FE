@@ -21,6 +21,7 @@ export const LgButtonSection = ({
 }: LgButtonSectionProps) => {
   const t = useTranslations("estimateRequest");
   const tCommon = useTranslations("common");
+  const tShared = useTranslations();
   const { open, close } = useModal();
   const queryClient = useQueryClient();
 

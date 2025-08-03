@@ -6,9 +6,11 @@ import { CardList } from "@/components/estimate/CardList";
 import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useTranslations } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const MoverReceivedPage = () => {
   const t = useTranslations("estimate");
+  const commonT = useTranslations("common");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["receivedEstimateRequest"],
     queryFn: () =>
@@ -110,7 +112,11 @@ export const MoverReceivedPage = () => {
 
   // 로딩 상태
   if (isPending) {
-    return <div>{t("common.loading")}</div>;
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    );
   }
 
   // 에러 상태
@@ -118,11 +124,11 @@ export const MoverReceivedPage = () => {
     console.error(`${t("apiError")}`, error);
     return <div>{t("common.error")}</div>;
   }
-
+  console.log("데이터", data);
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
+      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
         <div className="flex w-full justify-start">
           <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
             {t("receivedRequests")}

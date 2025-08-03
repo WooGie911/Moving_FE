@@ -147,7 +147,9 @@
     "updateConfirmMessage": "정말로 이 견적을 수정하시겠습니까?",
     "confirmEstimateRequestTitle": "견적 확정",
     "confirmEstimateRequestMessage": "견적 요청이 성공적으로 전송되었습니다. 견적을 확정하시겠습니까?",
-
+    "years": "년",
+    "cases": "건",
+    "currency": "원",
     "result": {
       "movingType": "이사 종류",
       "movingDate": "이사 예정일",
@@ -177,7 +179,21 @@
     "moverEstimateSubmitted": "기사님이 견적을 제출한 경우 수정할 수 없습니다. 견적을 확인한 후 결정해주세요.",
     "hasEstimatesMessage": "기사님이 보낸 견적이 있습니다.",
     "viewEstimatesButton": "보러가기",
-    "loadingText": "견적 요청 페이지를 준비하고 있습니다..."
+    "loadingText": "견적 요청 페이지를 준비하고 있습니다...",
+    "dateFormat": {
+      "year": "년",
+      "month": "월",
+      "day": "일"
+    },
+    "weekdays": {
+      "sunday": "일",
+      "monday": "월",
+      "tuesday": "화",
+      "wednesday": "수",
+      "thursday": "목",
+      "friday": "금",
+      "saturday": "토"
+    }
   },
   "navigation": {
     "home": "홈",

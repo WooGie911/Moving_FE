@@ -6,9 +6,11 @@ import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useTranslations } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RejectedPage = () => {
   const t = useTranslations("estimate");
+  const commonT = useTranslations("common");
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["MyRejectedEstimates"],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
@@ -16,13 +18,17 @@ export const RejectedPage = () => {
 
   // 로딩 상태
   if (isPending) {
-    return <div>{t("common.loading")}</div>;
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    );
   }
 
   // 에러 상태
   if (isError) {
     console.error(`${t("apiError")}`, error);
-    return <div>{t("common.error")}</div>;
+    return <div>{commonT("error")}</div>;
   }
 
   // 데이터가 없는 경우

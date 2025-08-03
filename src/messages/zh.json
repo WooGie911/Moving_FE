@@ -88,6 +88,8 @@
     "movingDateLabel": "搬家日期",
     "driverSuffix": "司机",
     "experience": "经验",
+    "years": "年",
+    "cases": "件",
     "confirmed": "已确认",
     "estimateWaiting": "等待中",
     "confirmedEstimate": "已确认",
@@ -97,6 +99,20 @@
     "requestDateShort": "申请日期",
     "service": "服务",
     "usageDate": "使用日期",
+    "dateFormat": {
+      "year": "年",
+      "month": "月",
+      "day": "日"
+    },
+    "weekdays": {
+      "sunday": "日",
+      "monday": "一",
+      "tuesday": "二",
+      "wednesday": "三",
+      "thursday": "四",
+      "friday": "五",
+      "saturday": "六"
+    },
 
     "profileImage": "个人资料图片",
     "estimatePrice": "报价",
@@ -194,7 +210,21 @@
     "moverEstimateSubmitted": "当司机提交了报价时无法修改。请查看报价并做出决定。",
     "hasEstimatesMessage": "司机已发送报价。",
     "viewEstimatesButton": "查看报价",
-    "loadingText": "正在准备报价请求页面..."
+    "loadingText": "正在准备报价请求页面...",
+    "dateFormat": {
+      "year": "年",
+      "month": "月",
+      "day": "日"
+    },
+    "weekdays": {
+      "sunday": "日",
+      "monday": "一",
+      "tuesday": "二",
+      "wednesday": "三",
+      "thursday": "四",
+      "friday": "五",
+      "saturday": "六"
+    }
   },
   "navigation": {
     "home": "首页",
