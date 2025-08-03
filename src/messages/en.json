@@ -173,21 +173,6 @@
   },
   "serviceAvailableCountry": "*Currently, the service is only available in South Korea.",
   "addressSearchScriptNotLoaded": "The address search script has not loaded yet. Please try again in a moment.",
-  "landing": {
-    "title": "How do you choose a moving company?",
-    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and simplifies the process of selecting a moving company",
-    "getQuote": "Request your desired moving service and get quotes",
-    "learnMore": "Compare and choose quotes from multiple companies at a glance",
-    "features": {
-      "title": "Why Choose Moving?",
-      "professional": "Professional Movers",
-      "professionalDesc": "We select only verified professional moving companies for safe service",
-      "transparent": "Transparent Quotes",
-      "transparentDesc": "Clear and fair quotes without hidden costs",
-      "support": "24/7 Customer Support",
-      "supportDesc": "Get help anytime before and after your move"
-    }
-  },
   "profile": {
     "customerTitle": "Register Profile",
     "moverTitle": "Register Mover Profile",
@@ -558,7 +543,7 @@
   },
   "landing": {
     "title": "How do you choose a moving company?",
-    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and simplifies the process of selecting a moving company",
+    "subtitle": "Moving makes it easy to compare multiple quotes at a glance and \nsimplifies the process of selecting a moving company",
     "getQuote": "Request your desired \nmoving service and get quotes",
     "learnMore": "Compare and choose quotes from\nmultiple companies at a glance",
     "selectionProcess": "Troublesome selection process,\n choose from moving types",
