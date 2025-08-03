@@ -2,7 +2,6 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
 import React from "react";
 import { useTranslations } from "next-intl";
-import { getServiceTypeForLabel } from "@/lib/utils/translationUtils";
 import badge from "@/assets/icon/etc/icon-chat.png";
 import like from "@/assets/icon/like/icon-like-black-lg.png";
 import star from "@/assets/icon/star/icon-star-active-lg.png";
@@ -16,7 +15,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
     <div>
       <div className="flex gap-2">
         {mover.serviceTypes.map((serviceType, idx) => (
-          <MoveTypeLabel key={idx} type={getServiceTypeForLabel(serviceType.service?.name || "기타")} />
+          <MoveTypeLabel key={idx} type={serviceType.service?.name || "기타"} />
         ))}
       </div>
       <h2 className="text-2lg mt-2 mb-4 font-semibold md:mt-3 md:mb-5 md:text-2xl">{mover.description}</h2>

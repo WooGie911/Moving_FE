@@ -362,10 +362,10 @@
     "service": "Service",
     "all": "All",
     "reset": "Reset",
-    "sortByReview": "Most Reviews",
-    "sortByRating": "Highest Rating",
-    "sortByCareer": "Most Experience",
-    "sortByConfirmed": "Most Confirmed",
+    "sortByReview": "Reviews",
+    "sortByRating": "Rating",
+    "sortByCareer": "Experience",
+    "sortByConfirmed": "Confirmed",
     "shareMessage": "Is this mover too good to keep to yourself?",
     "retryMessage": "Please try again.",
     "noDataMessage": "Unable to load data.",
@@ -428,7 +428,8 @@
     "serviceTypes": {
       "small": "Small Move",
       "home": "Home Move",
-      "office": "Office Move"
+      "office": "Office Move",
+      "document": "Designated Quote Request"
     },
     "regions": {
       "SEOUL": "Seoul",
@@ -706,7 +707,25 @@
   "service": {
     "소형이사": "Small Move",
     "가정이사": "Home Move",
-    "사무실이사": "Office Move"
+    "사무실이사": "Office Move",
+    "Small Movers": "Small Move",
+    "Moving home": "Home Move",
+    "Office Director": "Office Move",
+    "Small Move": "Small Move",
+    "Home Move": "Home Move",
+    "Office Move": "Office Move",
+    "小型搬家": "Small Move",
+    "家庭搬家": "Home Move",
+    "办公室搬家": "Office Move",
+    "小型搬家公司": "Small Move",
+    "家庭搬家公司": "Home Move",
+    "办公室搬家公司": "Office Move",
+    "搬家": "Home Move",
+    "办公室主任": "Office Move",
+    "small": "Small Move",
+    "home": "Home Move",
+    "office": "Office Move",
+    "document": "Designated Quote Request"
   },
   "region": {
     "서울": "Seoul",

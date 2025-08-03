@@ -7,5 +7,5 @@ export interface ICircleTextLabelProps {
   isSelected?: boolean;
 }
 export interface IMoveTypeLabelProps {
-  type: "small" | "home" | "office" | "document";
+  type: "small" | "home" | "office" | "document" | string;
 }
