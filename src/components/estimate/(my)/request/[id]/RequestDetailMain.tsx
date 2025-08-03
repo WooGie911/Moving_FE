@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const t = useTranslations("estimate");
+  const tShared = useTranslations();
 
   const estimateT = useTranslations("estimateRequest");
   const formatNumber = (num: number): string => {
