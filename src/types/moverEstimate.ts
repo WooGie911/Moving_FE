@@ -224,7 +224,7 @@ export interface IFilterState {
 export interface ICardListProps {
   id: string;
   data: TEstimateRequestResponse;
-  estimateStatus?: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
+  estimateStatus?: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED"|undefined;
   isDesignated: boolean;
   estimatePrice?: number;
   mover?: TMover;
