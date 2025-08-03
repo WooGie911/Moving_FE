@@ -36,21 +36,21 @@ const SortDropdown: React.FC<BaseDropdownProps> = ({
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`flex h-10 w-[120px] items-center justify-between gap-0.5 pr-[6px] pl-2 text-left text-[12px] font-medium text-[#999999] ${buttonClassName}`}
+        className={`flex h-10 w-[114px] items-center justify-between px-[10px] py-[8px] text-left text-[12px] font-medium text-[#999999] ${buttonClassName}`}
       >
-        <span className={selectedOption ? "text-gray-900" : "text-gray-250"}>
+        <span className={`${selectedOption ? "text-gray-900" : "text-gray-250"} text-md`}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <Image
           src={isOpen ? iconUp : iconDown}
           alt={isOpen ? "위쪽 화살표" : "아래쪽 화살표"}
-          className="h-5 w-5 transition-transform duration-200"
+          className="h-4 w-4 transition-transform duration-200"
         />
       </button>
       {isOpen && (
         <div
           className="rounded-2 absolute z-50 bg-white"
-          style={{ width: 120, boxShadow: "4px 4px 10px 0px #E0E0E040" }}
+          style={{ width: 114, boxShadow: "4px 4px 10px 0px #E0E0E040" }}
         >
           <div className="rounded-[8px] border-1 border-gray-200 bg-white" style={{ width: 120 }}>
             {options.map((option) => (
