@@ -66,8 +66,6 @@ const authApi = {
 
   // 유저 타입 변경
   switchUserType: async (userType: "CUSTOMER" | "MOVER") => {
-    console.log("userType", userType);
-
     const response = await fetch(`${API_URL}/auth/switch-role`, {
       method: "POST",
       headers: {
@@ -75,6 +73,7 @@ const authApi = {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: JSON.stringify({ userType }),
+      credentials: "include",
     });
 
     const responseData = await response.json();
