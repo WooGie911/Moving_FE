@@ -157,7 +157,7 @@ export const GnbActions = ({
               <Image src={notification} alt="" width={24} height={24} />
               {hasUnread && (
                 <span
-                  className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"
+                  className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"
                   aria-label="읽지 않은 알림이 있습니다"
                 />
               )}
