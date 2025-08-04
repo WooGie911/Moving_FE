@@ -1,6 +1,6 @@
 import type { IReview } from "./review";
 
-// 기사님 정보 타입
+// 기사님 정보 타입 (기본)
 export interface IMover {
   id: string;
   name: string;
@@ -26,6 +26,11 @@ export interface IMover {
   }>;
   serviceTypes: string[];
   favorites?: Array<{ id: string }>;
+}
+
+// 기사님 정보 타입 (API 응답용)
+export interface IMoverInfo extends IMover {
+  // IMover의 모든 속성을 상속받음
 }
 
 // 기사님 목록 조회 파라미터 타입

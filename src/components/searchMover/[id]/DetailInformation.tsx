@@ -89,7 +89,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     <div
       className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[100px]`}
     >
-      <div className="w-full md:w-[600px] lg:w-[742px] ">
+      <div className="w-full md:w-[600px] lg:w-[742px]">
         <div>
           <MoverIntro mover={mover} reviews={allReviews} />
         </div>

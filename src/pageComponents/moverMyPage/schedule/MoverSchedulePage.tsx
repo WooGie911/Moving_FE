@@ -6,7 +6,6 @@ import CalendarWithSchedule from "@/components/moverMyPage/schedule/CalendarWith
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useMoverScheduleApi } from "@/hooks/useMoverScheduleApi";
 import {
-  Schedule,
   ScheduleDisplay,
   ScheduleItemProps,
   ScheduleListProps,

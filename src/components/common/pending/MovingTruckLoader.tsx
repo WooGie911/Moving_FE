@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import CarLg from "@/assets/img/etc/car-lg.png";
+import CarLg from "@/assets/img/etc/car-lg.webp";
 interface MovingTruckLoaderProps {
   size?: "sm" | "md" | "lg";
   className?: string;

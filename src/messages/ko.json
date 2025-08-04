@@ -61,6 +61,11 @@
   "estimateRequest": {
     "title": "견적요청",
     "editTitle": "견적 수정",
+    "metadata": {
+      "title": "견적 요청 | 무빙",
+      "description": "이사 견적을 요청하고 관리하세요"
+    },
+    "loadingText": "견적 정보를 확인하는 중...",
     "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
     "noEstimateInProgress": "진행중인 견적이 없습니다.",
     "requestNewEstimate": "새로운 견적을 요청해보세요.",
@@ -825,6 +830,10 @@
     "allNotificationsLoaded": "모든 알림을 불러왔습니다."
   },
   "schedule": {
+    "metadata": {
+      "title": "일정 관리 | 무빙",
+      "description": "이사 일정을 확인하고 관리하세요"
+    },
     "title": "일정 관리",
     "description": "이사 일정을 확인하고 관리하세요",
     "selectDate": "날짜를 선택해주세요",
@@ -842,6 +851,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "찜한 기사님 | 무빙",
+      "description": "찜한 기사님을 확인하고 관리하세요"
+    },
     "title": "찜한 기사님",
     "selectAll": "전체선택",
     "deleteSelected": "선택 항목 삭제",
