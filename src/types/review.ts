@@ -10,35 +10,29 @@ export interface IAddress {
   postalCode: string;
 }
 
-// 무버 정보 타입
+// 무버 정보 타입 (실제 사용하는 데이터만)
 export interface IMover {
   id: string;
   profileImage: string | null;
   nickname: string;
   shortIntro: string;
-  experience: number; // 경력 (년)
-  averageRating: number; // 평균 평점
-  totalReviews: number; // 총 리뷰 수
 }
 
-// 고객 정보 타입
+// 고객 정보 타입 (실제 사용하는 데이터만)
 export interface ICustomer {
   id: string;
   profileImage: string | null;
   nickname: string;
 }
 
-// 견적 정보 타입
+// 견적 정보 타입 (실제 사용하는 데이터만)
 export interface IEstimate {
   id: string;
   price: number;
   comment: string | null;
   status: string;
   isDesignated: boolean;
-  workHours: number; // 작업시간
-  includesPacking: boolean; // 포장포함
-  insuranceAmount: number; // 보험금액
-  validUntil: string; // 유효기간
+  validUntil: string;
   createdAt: string;
 }
 
@@ -52,7 +46,7 @@ export interface IPaginationResponse {
   hasPrevPage: boolean;
 }
 
-// 작성 가능한 리뷰 카드 데이터
+// 작성 가능한 리뷰 카드 데이터 (실제 사용하는 데이터만)
 export interface IWritableCardData {
   id: string;
   reviewId: string;
@@ -65,7 +59,7 @@ export interface IWritableCardData {
   estimate: IEstimate;
 }
 
-// 작성된 리뷰 카드 데이터
+// 작성된 리뷰 카드 데이터 (실제 사용하는 데이터만)
 export interface IWrittenCardData {
   id: string;
   mover: IMover;
@@ -78,7 +72,7 @@ export interface IWrittenCardData {
   updatedAt: string;
 }
 
-// 받은 리뷰 카드 데이터
+// 받은 리뷰 카드 데이터 (실제 사용하는 데이터만)
 export interface IReceivedCardData {
   id: string;
   customer: ICustomer;
