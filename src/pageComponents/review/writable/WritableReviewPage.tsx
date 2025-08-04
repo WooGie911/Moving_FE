@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import reviewApi from "@/lib/api/review.api";
 import WritableMoverCardList from "@/components/review/writable/WritableMoverCardList";
-import noReview from "@/assets/img/mascot/notfound.png";
+import noReview from "@/assets/img/mascot/notfound.webp";
 import Image from "next/image";
 import { IWritableCardData, IReviewForm } from "@/types/review";
 
@@ -62,23 +62,29 @@ const WritableReviewPage = () => {
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || 4)) : 1;
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-10">
+    <main className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">{t("common.loading")}</div>
+        <section className="py-10 text-center" aria-label="로딩 중">
+          <p>{t("loading")}</p>
+        </section>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">{t("common.error")}</div>
+        <section className="py-10 text-center text-red-500" aria-label="오류 발생">
+          <p>{t("error")}</p>
+        </section>
       ) : cards.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20">
+        <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
           <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
-          <div className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</div>
-        </div>
+          <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
+        </section>
       ) : (
-        <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+        <section className="w-full" aria-label="작성 가능한 리뷰 목록">
+          <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+        </section>
       )}
-      <div className="mt-8 flex justify-center">
+      <footer className="mt-8 flex justify-center">
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
-      </div>
-    </div>
+      </footer>
+    </main>
   );
 };
 
