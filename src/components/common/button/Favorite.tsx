@@ -12,6 +12,7 @@ interface IFavoriteProps {
   heartPosition?: "left" | "right";
   onFavoriteChange?: (status: IFavoriteStatus) => void;
   onClick?: () => void; // 부모 컴포넌트에서 전달받는 onClick
+  disabled?: boolean; // 클릭 비활성화 옵션 추가
 }
 
 const Favorite = ({
@@ -24,6 +25,7 @@ const Favorite = ({
   heartPosition = "left",
   onFavoriteChange,
   onClick,
+  disabled = false, // 기본값은 false
 }: IFavoriteProps) => {
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
   const [favoriteCount, setFavoriteCount] = useState(initialFavoriteCount);
@@ -33,7 +35,7 @@ const Favorite = ({
     e.stopPropagation(); // 이벤트 전파 방지
     e.preventDefault(); // 기본 동작 방지
 
-    if (isLoading) return; // 중복 클릭 방지
+    if (isLoading || disabled) return; // disabled 상태일 때도 클릭 방지
 
     setIsLoading(true);
     try {
@@ -77,9 +79,9 @@ const Favorite = ({
 
   return (
     <button
-      className={`flex cursor-pointer items-center justify-center gap-[2px] ${isLoading ? "opacity-50" : ""}`}
+      className={`flex items-center justify-center gap-[2px] ${isLoading ? "opacity-50" : ""} ${disabled ? "cursor-default" : "cursor-pointer"}`}
       onClick={handleFavoriteClick}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
     >
       {heartPosition === "left" ? (
         <>
