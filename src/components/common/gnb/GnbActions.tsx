@@ -37,7 +37,6 @@ export const GnbActions = ({
 }: IGnbActionsProps) => {
   const t = useTranslations();
 
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const profileButtonRef = useRef<HTMLButtonElement>(null);
@@ -45,16 +44,18 @@ export const GnbActions = ({
 
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const hasUnread = useNotificationStore((state) => state.hasUnread);
+  const isNotificationOpen = useNotificationStore((state) => state.isNotificationOpen);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
+  const openNotificationModal = useNotificationStore((state) => state.openNotificationModal);
+  const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
 
   const handleNotificationClick = () => {
-    setIsNotificationOpen((prev) => {
-      const willOpen = !prev;
-      if (willOpen) {
-        fetchNotifications(4, 0); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
-      }
-      return willOpen;
-    });
+    if (isNotificationOpen) {
+      closeNotificationModal();
+    } else {
+      openNotificationModal();
+      fetchNotifications(4, 0); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
+    }
   };
 
   // 프로필 버튼 클릭 시 프로필 모달창 열기
@@ -66,8 +67,6 @@ export const GnbActions = ({
   const closeProfileModal = () => {
     setIsProfileOpen(false);
   };
-
-  //
 
   // 프로필 모달창 외부 클릭 감지
   useEffect(() => {
@@ -117,6 +116,13 @@ export const GnbActions = ({
     }
   }, [userRole, fetchNotifications]);
 
+  // 알림 모달이 열릴 때마다 최신 상태로 동기화
+  useEffect(() => {
+    if (isNotificationOpen && userRole !== "GUEST") {
+      fetchNotifications(4, 0);
+    }
+  }, [isNotificationOpen, userRole, fetchNotifications]);
+
   // userRole이나 userName 변경 시 프로필 모달 상태 초기화
   useEffect(() => {
     setIsProfileOpen(false);
@@ -158,7 +164,7 @@ export const GnbActions = ({
             </button>
             <UserActionDropdown
               type="alert"
-              onClose={() => setIsNotificationOpen(false)}
+              onClose={closeNotificationModal}
               isOpen={isNotificationOpen}
               triggerRef={notificationButtonRef}
             >

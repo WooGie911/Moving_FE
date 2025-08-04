@@ -15,6 +15,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const hasMore = useNotificationStore((state) => state.hasMore);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const markAsRead = useNotificationStore((state) => state.markAsRead);
+  const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
   const limit = 4;
   const loadingRef = useRef(false);
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
     try {
       await markAsRead(notification.id);
       onClose?.();
+      closeNotificationModal();
       router.push(notification.path);
     } catch (e) {
       console.error(e);
