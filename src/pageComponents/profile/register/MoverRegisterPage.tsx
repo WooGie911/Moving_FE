@@ -42,7 +42,7 @@ const MoverRegisterPage = () => {
     dataUrl: uploadSkeleton.src,
   });
 
-  const isNicknameValid = nickname?.trim().length >= 2 && isValidName(nickname);
+  const isNicknameValid = nickname?.trim().length >= 1 && isValidName(nickname);
   const allFilled =
     isNicknameValid &&
     career?.trim() &&

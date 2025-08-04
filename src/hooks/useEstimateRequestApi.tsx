@@ -146,11 +146,10 @@ export const useEstimateRequestApi = () => {
         localStorage.removeItem("estimateRequest_draft");
         // 견적 생성 성공 토스트 표시
         toast.success(t("estimateRequest.createSuccess"));
-        // 토스트를 잠시 보여준 후 페이지 새로고침
+        // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();
         }, 1500);
-        queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
       }
@@ -167,11 +166,10 @@ export const useEstimateRequestApi = () => {
         localStorage.removeItem("estimateRequest_draft");
         // 견적 수정 성공 토스트 표시
         toast.success(t("estimateRequest.editSuccess"));
-        // 토스트를 잠시 보여준 후 페이지 새로고침
+        // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();
         }, 1500);
-        queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
@@ -196,11 +194,10 @@ export const useEstimateRequestApi = () => {
         localStorage.removeItem("estimateRequest_draft");
         // 삭제 성공 토스트 표시
         toast.success(t("estimateRequest.deleteSuccess"));
-        // 토스트를 잠시 보여준 후 페이지 새로고침
+        // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();
         }, 1500);
-        queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active"] });
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {

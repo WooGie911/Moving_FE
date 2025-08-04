@@ -7,24 +7,34 @@ import document from "../../../assets/icon/document/icon-document.png";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
 export const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
-  const t = useTranslations("moveTypes");
+  const t = useTranslations("service");
 
-  const MOVE_TYPE_LABELS = {
-    small: t("small"),
-    home: t("home"),
-    office: t("office"),
-    document: t("document"),
-  } as const;
+  const getIconSrc = (serviceName: string) => {
+    if (serviceName.includes("소형") || serviceName.includes("Small") || serviceName.includes("小型")) {
+      return small;
+    } else if (
+      serviceName.includes("가정") ||
+      serviceName.includes("Home") ||
+      serviceName.includes("家庭") ||
+      serviceName === "搬家"
+    ) {
+      return home;
+    } else if (
+      serviceName.includes("사무실") ||
+      serviceName.includes("Office") ||
+      serviceName.includes("办公室") ||
+      serviceName.includes("主任")
+    ) {
+      return office;
+    } else if (serviceName === "document") {
+      return document;
+    }
+    return small;
+  };
 
-  const MOVE_TYPE_ICONS = {
-    small: small,
-    home: home,
-    office: office,
-    document: document,
-  } as const;
+  const iconSrc = getIconSrc(type);
 
-  const label = MOVE_TYPE_LABELS[type];
-  const iconSrc = MOVE_TYPE_ICONS[type];
+  const label = t(type);
 
   return (
     <div>

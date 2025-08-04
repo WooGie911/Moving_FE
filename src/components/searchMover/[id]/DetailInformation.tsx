@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { useAuth } from "@/providers/AuthProvider";
 import Chip from "./Chip";
 import MoverIntro from "./MoverIntro";
 import ReviewAvg from "./ReviewAvg";
@@ -16,8 +17,9 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
   const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
-  const [isLoadingQuote, setIsLoadingQuote] = useState(true);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(false);
   const deviceType = useWindowWidth();
+  const { isLoggedIn, user } = useAuth();
   const t = useTranslations("mover");
   const locale = useLocale();
 
@@ -56,6 +58,13 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   useEffect(() => {
     const fetchActiveQuote = async () => {
+      // 로그인한 고객 사용자만 활성 견적 조회
+      if (!isLoggedIn || user?.userType !== "CUSTOMER") {
+        setQuoteId(undefined);
+        setIsLoadingQuote(false);
+        return;
+      }
+
       try {
         setIsLoadingQuote(true);
         const response = await estimateRequestClientApi.getActive(locale);
@@ -74,13 +83,13 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     };
 
     fetchActiveQuote();
-  }, []);
+  }, [isLoggedIn, user?.userType]);
 
   return (
     <div
       className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[100px]`}
     >
-      <div>
+      <div className="w-full md:w-[600px] lg:w-[742px] ">
         <div>
           <MoverIntro mover={mover} reviews={allReviews} />
         </div>

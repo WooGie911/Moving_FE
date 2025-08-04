@@ -7,7 +7,6 @@ import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IMoverInfo } from "@/types/mover.types";
-import { getServiceTypeForLabel } from "@/lib/utils/translationUtils";
 import defaultProfileLg from "@/assets/img/mascot/profile-lg.png";
 import defaultProfileSm from "@/assets/img/mascot/profile-sm.png";
 import badge from "@/assets/icon/etc/icon-chat.png";
@@ -43,7 +42,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
         {mover.serviceTypes.map((serviceType, index) => {
           const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-          return <MoveTypeLabel key={index} type={getServiceTypeForLabel(serviceName)} />;
+          return <MoveTypeLabel key={index} type={serviceName} />;
         })}
       </div>
 
@@ -149,7 +148,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
             {mover.serviceTypes.map((serviceType, index) => {
               const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-              return <MoveTypeLabel key={index} type={getServiceTypeForLabel(serviceName)} />;
+              return <MoveTypeLabel key={index} type={serviceName} />;
             })}
           </div>
 
