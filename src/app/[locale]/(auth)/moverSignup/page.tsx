@@ -1,11 +1,13 @@
 import MoverSignupPage from "@/pageComponents/auth/moverSignup/MoverSignupPage";
 import React from "react";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.moverSignupMetadata");
   return {
-    title: "기사님 회원가입 | Moving",
-    description: "기사님 회원가입 페이지입니다.",
+    title: t("title"),
+    description: t("description"),
   };
 }
 

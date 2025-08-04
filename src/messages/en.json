@@ -600,7 +600,24 @@
     "customerSigninPageTitle": "Customer Sign-in Page",
     "moverSigninPageTitle": "Mover Sign-in Page",
     "customerSignupPageTitle": "Customer Sign-up Page",
-    "moverSignupPageTitle": "Mover Sign-up Page"
+    "moverSignupPageTitle": "Mover Sign-up Page",
+
+    "userSigninMetadata": {
+      "title": "Customer Login | Moving",
+      "description": "This is the login page for customers."
+    },
+    "userSignupMetadata": {
+      "title": "Customer Signup | Moving",
+      "description": "This is the signup page for customers."
+    },
+    "moverSigninMetadata": {
+      "title": "Mover Login | Moving",
+      "description": "This is the login page for movers."
+    },
+    "moverSignupMetadata": {
+      "title": "Mover Signup | Moving",
+      "description": "This is the signup page for movers."
+    }
   },
   "landing": {
     "title": "How do you choose a moving company?",

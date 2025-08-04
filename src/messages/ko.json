@@ -582,7 +582,27 @@
     "customerSigninPageTitle": "일반유저 로그인 페이지",
     "moverSigninPageTitle": "기사님 로그인 페이지",
     "customerSignupPageTitle": "일반유저 회원가입 페이지",
-    "moverSignupPageTitle": "기사님 회원가입 페이지"
+    "moverSignupPageTitle": "기사님 회원가입 페이지",
+
+    "userSigninMetadata": {
+      "title": "일반 유저 로그인 | Moving",
+      "description": "일반 유저 로그인 페이지입니다."
+    },
+
+    "userSignupMetadata": {
+      "title": "일반 유저 회원가입 | Moving",
+      "description": "일반 유저 회원가입 페이지입니다."
+    },
+
+    "moverSigninMetadata": {
+      "title": "기사님 로그인 | Moving",
+      "description": "기사님 회원가입 로그인 페이지입니다."
+    },
+
+    "moverSignupMetadata": {
+      "title": "기사님 회원가입 | Moving",
+      "description": "기사님 회원가입 페이지입니다."
+    }
   },
   "landing": {
     "title": "이사업체, 어떻게 고르세요?",

@@ -1,10 +1,12 @@
 import UserSignupPage from "@/pageComponents/auth/userSignup/UserSignupPage";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.userSignupMetadata");
   return {
-    title: "일반 유저 회원가입 | Moving",
-    description: "일반 유저 회원가입 페이지입니다.",
+    title: t("title"),
+    description: t("description"),
   };
 }
 
