@@ -8,6 +8,7 @@ const Chip = ({ mover }: MoverProps) => {
   const t = useTranslations("mover");
   const tRegions = useTranslations("regions");
   const tService = useTranslations("service");
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2 md:gap-4">
@@ -28,7 +29,7 @@ const Chip = ({ mover }: MoverProps) => {
       <div className="flex flex-col gap-2 md:gap-4">
         <p className="text-lg font-semibold md:text-xl">{t("serviceAreas")}</p>
         <div className="flex gap-2 md:gap-3">
-          {(mover.serviceAreas || []).map((region, idx) => {
+          {(mover.serviceRegions || []).map((region, idx) => {
             const regionCode = region.region;
             return <CircleTextLabel key={idx} text={getRegionTranslation(regionCode, tRegions)} hasBorder1={true} />;
           })}
