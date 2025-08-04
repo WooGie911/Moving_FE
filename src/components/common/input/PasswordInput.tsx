@@ -14,6 +14,7 @@ interface IInputProps {
   inputClassName?: string;
   errorClassName?: string;
   wrapperClassName?: string;
+  showInit?: boolean;
 }
 
 export const PasswordInput = ({
@@ -23,13 +24,14 @@ export const PasswordInput = ({
   inputClassName,
   errorClassName,
   wrapperClassName,
+  showInit = false,
 }: IInputProps) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
   const error = get(errors, name)?.message;
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(showInit);
 
   const toggleIcon = (
     <button

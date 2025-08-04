@@ -48,16 +48,24 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
 
   // fromAddress, toAddress에서 값 추출
   const departureAddr =
-    shortenRegionInAddress(props.fromAddress.region) + " " + props.fromAddress.city + " " + props.fromAddress.district;
+    (locale === "ko" ? shortenRegionInAddress(props.fromAddress.region) : props.fromAddress.region) +
+    " " +
+    props.fromAddress.city +
+    " " +
+    props.fromAddress.district;
   const arrivalAddr =
-    shortenRegionInAddress(props.toAddress.region) + " " + props.toAddress.city + " " + props.toAddress.district;
+    (locale === "ko" ? shortenRegionInAddress(props.toAddress.region) : props.toAddress.region) +
+    " " +
+    props.toAddress.city +
+    " " +
+    props.toAddress.district;
   const departureDetail = props.fromAddress.detail;
   const arrivalDetail = props.toAddress.detail;
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 lg:w-[400px]">
       {/* 타이틀 및 견적 요청 날짜 부분 */}
-      <div className="flex w-full flex-row items-center justify-between">
+      <div className="flex w-full flex-row items-center justify-center md:justify-between">
         <h1 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
           {t("estimateInfo")}
         </h1>

@@ -48,12 +48,10 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
         // 찜하기 해제
         const result = await removeFavoriteMutation.mutateAsync(moverId);
         setIsLiked(result.isFavorited);
-        console.log(`${moverId} 찜 해제 완료`);
       } else {
         // 찜하기 등록
         const result = await addFavoriteMutation.mutateAsync(moverId);
         setIsLiked(result.isFavorited);
-        console.log(`${moverId} 찜 등록 완료`);
       }
 
       if (onToggle) {

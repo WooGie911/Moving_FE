@@ -11,17 +11,25 @@ import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const UserPendingEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
-
+  const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["pendingEstimateRequests"],
-    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(),
+    queryKey: ["pendingEstimateRequests", locale],
+    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
   });
 
-  if (isPending) return <div>{t("common.loading")}</div>; // 또는 로딩 스피너 컴포넌트
+  if (isPending)
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    ); // 또는 로딩 스피너 컴포넌트
   if (isError) return <div>{t("common.error")}</div>;
 
   if (!data || data.estimateRequest === null) {
@@ -55,42 +63,21 @@ export const UserPendingEstimateRequestPage = () => {
 
   const estimateRequest = data.estimateRequest;
   const estimates = data.estimates ?? [];
-  // estimateRequest가 null이 아님을 타입가드로 보장
+
+  // estimates 배열에서 ACCEPTED 상태인 견적이 있는지 확인
+  const hasConfirmedEstimate = estimates.some((estimate) => estimate.status === "ACCEPTED");
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
         <EstimateRequestAndEstimateTab userType="User" />
         {estimateRequest && (
           <RequestEstimateRequest
-            movingType={estimateRequest.moveType.toLowerCase() as "small" | "home" | "office" | "document"}
-            requestDate={
-              typeof estimateRequest.createdAt === "string"
-                ? estimateRequest.createdAt
-                : estimateRequest.createdAt.toISOString()
-            }
-            movingDate={
-              typeof estimateRequest.moveDate === "string"
-                ? estimateRequest.moveDate
-                : estimateRequest.moveDate.toISOString()
-            }
-            startPoint={shortenRegionInAddress(
-              shortenRegionInAddress(estimateRequest.fromAddress.region) +
-                " " +
-                estimateRequest.fromAddress.city +
-                " " +
-                estimateRequest.fromAddress.district +
-                " " +
-                estimateRequest.fromAddress.detail,
-            )}
-            endPoint={shortenRegionInAddress(
-              shortenRegionInAddress(estimateRequest.toAddress.region) +
-                " " +
-                estimateRequest.toAddress.city +
-                " " +
-                estimateRequest.toAddress.district +
-                " " +
-                estimateRequest.toAddress.detail,
-            )}
+            moveType={mapServiceTypeToMoveType(estimateRequest.moveType)}
+            createdAt={estimateRequest.createdAt}
+            moveDate={estimateRequest.moveDate}
+            fromAddress={estimateRequest.fromAddress}
+            toAddress={estimateRequest.toAddress}
           />
         )}
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
@@ -107,13 +94,10 @@ export const UserPendingEstimateRequestPage = () => {
               {estimates.map((item) => (
                 <CardList
                   key={item.id}
-                  mover={item.mover as TMoverInfo}
-                  isDesignated={false}
-                  estimateId={item.id}
-                  estimateState={item.status as "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED"}
-                  estimateTitle={item.comment || ""}
-                  estimatePrice={item.price}
-                  type="pending"
+                  estimateRequest={estimateRequest}
+                  estimate={item}
+                  usedAt="pending"
+                  hasConfirmedEstimate={hasConfirmedEstimate}
                 />
               ))}
             </div>

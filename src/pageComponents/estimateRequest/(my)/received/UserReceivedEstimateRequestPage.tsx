@@ -6,17 +6,24 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
 import notfound from "@/assets/img/mascot/notfound.png";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const UserReceivedEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
-
+  const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["estimateRequest"],
-    queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(),
+    queryKey: ["estimateRequest", locale],
+    queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
   });
 
-  if (isPending) return <div>{t("common.loading")}</div>;
+  if (isPending)
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    );
   if (isError) {
     console.error("API 에러:", isError);
     return <div>{t("common.error")}</div>;

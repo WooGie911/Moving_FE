@@ -3,22 +3,28 @@ import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateR
 import { RejectDetailMain } from "@/components/estimate/(my)/rejected/[id]/RejectDetailMain";
 import { DetailPageImgSection } from "@/components/estimateRequest/(my)/DetailPageImgSection";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
-import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RejectedDetailPage = () => {
   const t = useTranslations("estimate");
+  const commonT = useTranslations("common");
+  const locale = useLocale();
   const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyRejectedEstimate"],
-    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
+    queryKey: ["MyRejectedEstimate", locale],
+    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
 
   if (isPending) {
-    return <div>{t("common.loading")}</div>;
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    );
   }
   if (isError) {
     console.error(`${t("apiError")}`, error);

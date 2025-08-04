@@ -35,5 +35,8 @@ export const EstimateRequestAndEstimateTab = ({ userType }: IUserType) => {
     }
   };
 
-  return <Tab tabList={getTabList()} />;
+  // Detail 케이스일 때 CSS 추가
+  const detailClassName = userType === "Detail" ? "[&_a]:text-black-400" : "";
+
+  return <Tab tabList={getTabList()} className={detailClassName} />;
 };
