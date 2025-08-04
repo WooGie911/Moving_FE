@@ -79,7 +79,7 @@ const userApi = {
 
   // 프로필 조회
   getProfile: async (language?: string) => {
-    const queryParams = language ? `?lang=${language}` : '';
+    const queryParams = language ? `?lang=${language}` : "";
     const response = await fetchWithAuth(`${API_URL}/users/profile${queryParams}`);
     return response;
   },
