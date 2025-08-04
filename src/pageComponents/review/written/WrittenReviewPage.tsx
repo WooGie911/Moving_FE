@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import noReview from "@/assets/img/mascot/notfound.png";
+import noReview from "@/assets/img/mascot/notfound.webp";
 import Image from "next/image";
 import { IWrittenCardData } from "@/types/review";
 import WrittenMoverCard from "@/components/review/written/WrittenMoverCard";
@@ -43,42 +43,48 @@ const WrittenReviewPage = () => {
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || PAGE_SIZE)) : 1;
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-10">
+    <main className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">{t("common.loading")}</div>
+        <section className="py-10 text-center" aria-label="로딩 중">
+          <p>{t("loading")}</p>
+        </section>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">{t("common.error")}</div>
+        <section className="py-10 text-center text-red-500" aria-label="오류 발생">
+          <p>{t("error")}</p>
+        </section>
       ) : reviews.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20">
+        <section className="flex flex-col items-center justify-center py-20" aria-label="작성된 리뷰 없음">
           <Image src={noReview} alt={t("noWrittenReviewsAlt")} className="mb-6 h-50 w-60" />
-          <div className="text-lg font-semibold text-gray-400">{t("noWrittenReviews")}</div>
-        </div>
+          <p className="text-lg font-semibold text-gray-400">{t("noWrittenReviews")}</p>
+        </section>
       ) : (
-        <div className="flex w-full flex-col items-center gap-6">
+        <section className="flex w-full flex-col items-center gap-6" aria-label="작성된 리뷰 목록">
           {reviews.map((card) => (
-            <button key={card.id} onClick={() => handleNavigateDetail(card.moverId)}>
-              <WrittenMoverCard
-                id={card.id}
-                profileImage={card.profileImage}
-                nickname={card.nickname}
-                moverIntroduction={card.moverIntroduction}
-                isDesigned={card.isDesigned}
-                moveType={card.moveType as "SMALL" | "HOME" | "OFFICE"}
-                fromAddress={card.fromAddress}
-                toAddress={card.toAddress}
-                moveDate={card.moveDate}
-                rating={card.rating}
-                content={card.content}
-                createdAt={card.createdAt}
-              />
-            </button>
+            <article key={card.id}>
+              <button onClick={() => handleNavigateDetail(card.moverId)}>
+                <WrittenMoverCard
+                  id={card.id}
+                  profileImage={card.profileImage}
+                  nickname={card.nickname}
+                  moverIntroduction={card.moverIntroduction}
+                  isDesigned={card.isDesigned}
+                  moveType={card.moveType as "SMALL" | "HOME" | "OFFICE"}
+                  fromAddress={card.fromAddress}
+                  toAddress={card.toAddress}
+                  moveDate={card.moveDate}
+                  rating={card.rating}
+                  content={card.content}
+                  createdAt={card.createdAt}
+                />
+              </button>
+            </article>
           ))}
-        </div>
+        </section>
       )}
-      <div className="mt-8 flex justify-center">
+      <footer className="mt-8 flex justify-center">
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
-      </div>
-    </div>
+      </footer>
+    </main>
   );
 };
 
