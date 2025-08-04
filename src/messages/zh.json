@@ -372,6 +372,14 @@
       "serviceSelectionLabelMover": "选择您提供的服务",
       "regionSelectionLabelCustomer": "选择您所在的地区",
       "regionSelectionLabelMover": "选择您可提供服务的地区"
+    },
+    "editMetadata": {
+      "title": "编辑资料 | Moving",
+      "description": "编辑您的个人资料页面"
+    },
+    "registerMetadata": {
+      "title": "注册资料 | Moving",
+      "description": "资料注册页面"
     }
   },
   "search": {
