@@ -269,9 +269,9 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
         "/userSignup",
         "/moverSignin",
         "/moverSignup",
-        "/ko/searchMover",
-        "/en/searchMover",
-        "/zh/searchMover",
+        // "/ko/searchMover",
+        // "/en/searchMover",
+        // "/zh/searchMover",
       ];
 
       // 기사님 상세 페이지도 비회원 접근 가능하도록 체크
