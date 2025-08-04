@@ -20,15 +20,17 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       {/* 에러 메시지 */}
       <section className="text-center">
         <header>
-          <h1 className="mb-4 text-2xl font-bold text-gray-800 md:text-3xl">앗! 문제가 발생했습니다</h1>
+          <h1 className="mb-6 text-3xl font-extrabold text-red-600 drop-shadow-lg md:text-4xl lg:text-5xl">
+            Oops! Something went wrong
+          </h1>
         </header>
 
         <article className="mb-8">
           <p className="mb-2 text-base text-gray-600 md:text-lg">
-            페이지를 불러오는 중 예상치 못한 오류가 발생했습니다.
+            An unexpected error occurred while loading the page.
           </p>
           <p className="text-sm text-gray-500 md:text-base">
-            잠시 후 다시 시도하거나, 문제가 지속되면 고객센터로 문의해주세요.
+            Please try again later, or contact our support if the problem persists.
           </p>
         </article>
 
