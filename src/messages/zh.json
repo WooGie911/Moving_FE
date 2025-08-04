@@ -630,7 +630,24 @@
     "customerSigninPageTitle": "普通用户登录页面",
     "moverSigninPageTitle": "搬家师傅登录页面",
     "customerSignupPageTitle": "普通用户注册页面",
-    "moverSignupPageTitle": "搬家师傅注册页面"
+    "moverSignupPageTitle": "搬家师傅注册页面",
+
+    "userSigninMetadata": {
+      "title": "普通用户登录 | Moving",
+      "description": "这是普通用户的登录页面。"
+    },
+    "userSignupMetadata": {
+      "title": "普通用户注册 | Moving",
+      "description": "这是普通用户的注册页面。"
+    },
+    "moverSigninMetadata": {
+      "title": "搬家师傅登录 | Moving",
+      "description": "这是搬家师傅的登录页面。"
+    },
+    "moverSignupMetadata": {
+      "title": "搬家师傅注册 | Moving",
+      "description": "这是搬家师傅的注册页面。"
+    }
   },
   "landing": {
     "title": "如何选择搬家公司？",
@@ -816,7 +833,10 @@
     },
     "roleToggleAvailableMessage": "点击即可轻松切换身份！",
     "roleToggleLockMessage": "需完成两个身份（一般会员与搬家师傅）的资料注册，方可快速切换角色！",
-    "roleToggleText": "快速切换"
+    "roleToggleText": "快速切换",
+    "customerSuccessToast": "您已切换为普通用户。",
+    "moverSuccessToast": "您已切换为搬家师傅。",
+    "switchUserTypeError": "切换用户类型失败。"
   },
   "review": {
     "title": "评价",

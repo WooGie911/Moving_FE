@@ -15,7 +15,7 @@ export const RequsetDetailPage = () => {
   const locale = useLocale();
   const { id: estimateId } = useParams();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyEstimates", locale],
+    queryKey: ["MyRequestEstimates", locale],
     queryFn: () => moverEstimateApi.getMyEstimates(locale),
   });
   if (isPending) {

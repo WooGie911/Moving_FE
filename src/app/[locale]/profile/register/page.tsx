@@ -5,7 +5,6 @@ import MoverRegisterPage from "@/pageComponents/profile/register/MoverRegisterPa
 import { useAuth } from "@/providers/AuthProvider";
 import React from "react";
 
-// 분기 처리?
 export default function Page() {
   const { user } = useAuth();
 

@@ -12,17 +12,6 @@ export const MoverReceivedPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ["receivedEstimateRequest", locale],
-    queryFn: () =>
-      moverEstimateApi.getAllEstimateRequests(
-        {
-          region: true,
-          designated: true,
-        },
-        locale,
-      ),
-  });
 
   // 필터 상태 관리
   const [filters, setFilters] = useState<IFilterState>({
@@ -31,6 +20,18 @@ export const MoverReceivedPage = () => {
     isServiceAreaOnly: false,
     searchKeyword: "",
     sortBy: "createdAt",
+  });
+
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["receivedEstimateRequests", locale, filters],
+    queryFn: () =>
+      moverEstimateApi.getAllEstimateRequests(
+        {
+          region: true,
+          designated: true,
+        },
+        locale,
+      ),
   });
 
   // 필터링된 데이터
