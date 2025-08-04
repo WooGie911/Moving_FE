@@ -42,7 +42,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
         {mover.serviceTypes.map((serviceType, index) => {
           const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-          return <MoveTypeLabel key={index} type={serviceName} />;
+          return <MoveTypeLabel key={index} type={serviceName} variant={variant} />;
         })}
       </div>
 
@@ -148,7 +148,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
             {mover.serviceTypes.map((serviceType, index) => {
               const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-              return <MoveTypeLabel key={index} type={serviceName} />;
+              return <MoveTypeLabel key={index} type={serviceName} variant={variant} />;
             })}
           </div>
 
