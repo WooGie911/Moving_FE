@@ -16,7 +16,7 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
     const current = user.userType;
     const target = current === "CUSTOMER" ? "MOVER" : "CUSTOMER";
     setFakeUserType(target);
-    setTimeout(() => mutate(), 300);
+    mutate();
   };
 
   const typeToShow = fakeUserType ?? user?.userType;

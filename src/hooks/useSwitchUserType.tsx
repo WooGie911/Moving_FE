@@ -4,10 +4,12 @@ import { useAuth } from "@/providers/AuthProvider";
 import authApi from "@/lib/api/auth.api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export const useSwitchUserType = () => {
   const router = useRouter();
   const { user, getUser } = useAuth();
+  const t = useTranslations("gnb");
 
   return useMutation({
     mutationFn: async () => {
@@ -17,7 +19,11 @@ export const useSwitchUserType = () => {
     },
     onSuccess: async (res) => {
       // 토스트 메시지
-      toast.success(`${res.newUserType === "CUSTOMER" ? "일반 유저" : "기사님"}(으)로 전환되었습니다`);
+      if (res.newUserType === "CUSTOMER") {
+        toast.success(t("customerSuccessToast"));
+      } else {
+        toast.success(t("moverSuccessToast"));
+      }
 
       // 유저 정보 다시 불러오기
       await getUser();
@@ -28,8 +34,8 @@ export const useSwitchUserType = () => {
         router.replace("/estimate/received");
       }
     },
-    onError: (err: any) => {
-      toast.error(err?.message || "전환에 실패했습니다");
+    onError: (err: Error) => {
+      toast.error(err?.message || t("switchUserTypeError"));
     },
   });
 };
