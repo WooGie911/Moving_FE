@@ -49,9 +49,9 @@
     },
     "movingTypes": {
       "small": "小型搬家",
-      "smallDesc": "单间，双间，20坪以下",
+      "smallDesc": "单间，双间，66㎡以下",
       "home": "家庭搬家",
-      "homeDesc": "三间，20坪以上",
+      "homeDesc": "三间，66㎡以上",
       "office": "办公室搬家",
       "officeDesc": "办公室，商业空间",
       "store": "商店搬家",
@@ -152,7 +152,7 @@
       "arrival": "目的地"
     },
     "selectAddress": "选择",
-    "selectAddressTitle": "请选择{{place}}",
+    "selectAddressTitle": "请选择地址",
     "searchAddress": "地址搜索",
     "detailAddressPlaceholder": "详细地址（例如：101栋202室）",
     "serviceAvailableCountry": "*目前仅在大韩民国提供服务。",
@@ -757,6 +757,7 @@
       "customer": "客户",
       "driver": "司机"
     },
+    "roleToggleAvailableMessage": "点击即可轻松切换身份！",
     "roleToggleLockMessage": "需完成两个身份（一般会员与搬家师傅）的资料注册，方可快速切换角色！",
     "roleToggleText": "快速切换"
   },

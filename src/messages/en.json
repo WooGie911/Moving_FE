@@ -49,9 +49,9 @@
     },
     "movingTypes": {
       "small": "Small Move",
-      "smallDesc": "Studio, 1-room, under 20 pyeong",
+      "smallDesc": "Studio, 1-room, under 66㎡",
       "home": "Home Move",
-      "homeDesc": "3-room, over 20 pyeong",
+      "homeDesc": "3-room, over 66㎡",
       "office": "Office Move",
       "officeDesc": "Office, commercial space",
       "store": "Store Move",
@@ -166,8 +166,10 @@
       "departure": "Departure",
       "arrival": "Arrival"
     },
+    "departure": "Departure",
+    "arrival": "Arrival",
     "selectAddress": "Select",
-    "selectAddressTitle": "Please select {{place}}",
+    "selectAddressTitle": "Please select the address",
     "searchAddress": "Search Address",
     "detailAddressPlaceholder": "Detail address (e.g. Apt 101, Unit 202)",
     "serviceAvailableCountry": "*Currently, the service is only available in South Korea.",
@@ -767,6 +769,7 @@
       "customer": "Customer",
       "driver": "Driver"
     },
+    "roleToggleAvailableMessage": "Click to easily switch roles!",
     "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
     "roleToggleText": "Quick Switch"
   },
