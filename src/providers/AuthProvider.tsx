@@ -260,19 +260,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   useEffect(() => {
     const initializeAuth = async () => {
       // 인증이 필요하지 않은 페이지들
-      const publicRoutes = [
-        "/",
-        "/ko",
-        "/en",
-        "/zh",
-        "/userSignin",
-        "/userSignup",
-        "/moverSignin",
-        "/moverSignup",
-        // "/ko/searchMover",
-        // "/en/searchMover",
-        // "/zh/searchMover",
-      ];
+      const publicRoutes = ["/", "/ko", "/en", "/zh", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
 
       // 기사님 상세 페이지도 비회원 접근 가능하도록 체크
       const isSearchMoverDetailPage =
