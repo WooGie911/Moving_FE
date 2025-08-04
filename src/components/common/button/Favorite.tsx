@@ -16,6 +16,7 @@ interface IFavoriteProps {
   heartPosition?: "left" | "right";
   onFavoriteChange?: () => void;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const Favorite = ({
