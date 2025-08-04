@@ -36,6 +36,9 @@ export const LgButtonSection = ({
       // 캐시 무효화하여 데이터 새로고침
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 기사님 관련 페이지 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
     },
     onError: (error) => {
       console.error("견적 확정 처리 실패:", error);
