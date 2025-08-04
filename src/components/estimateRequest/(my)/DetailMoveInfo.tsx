@@ -2,6 +2,7 @@ import { IEstimateRequest } from "@/types/customerEstimateRequest";
 import React from "react";
 import { formatDateDot, formatDateWithDayAndTime } from "@/utils/dateUtils";
 import { useTranslations } from "next-intl";
+import { getMovingTypeKey } from "@/lib/utils/getMovingTypeTranslated";
 
 export const DetailMoveInfo = ({
   movingType,
@@ -33,16 +34,8 @@ export const DetailMoveInfo = ({
 
   // movingType을 다국어로 변환하는 함수
   const getMovingTypeText = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "small":
-        return tMoveTypes("small");
-      case "home":
-        return tMoveTypes("home");
-      case "office":
-        return tMoveTypes("office");
-      default:
-        return type;
-    }
+    const key = getMovingTypeKey(type.toLowerCase());
+    return tMoveTypes(key);
   };
 
   return (

@@ -6,10 +6,11 @@ import { TEstimateRequestResponse } from "@/types/moverEstimate";
 import confirm from "@/assets/icon/etc/icon-confirm.png";
 import { formatDateDot } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) => {
   const t = useTranslations("estimate");
+  const locale = useLocale();
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
@@ -59,14 +60,18 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
           createdAt={data.createdAt}
           movingDate={data.moveDate}
           departureAddr={
-            shortenRegionInAddress(data.fromAddress.region) +
+            (locale === "ko" ? shortenRegionInAddress(data.fromAddress.region) : data.fromAddress.region) +
             " " +
             data.fromAddress.city +
             " " +
             data.fromAddress.district
           }
           arrivalAddr={
-            shortenRegionInAddress(data.toAddress.region) + " " + data.toAddress.city + " " + data.toAddress.district
+            (locale === "ko" ? shortenRegionInAddress(data.toAddress.region) : data.toAddress.region) +
+            " " +
+            data.toAddress.city +
+            " " +
+            data.toAddress.district
           }
           departureDetail={data.fromAddress.detail || ""}
           arrivalDetail={data.toAddress.detail || ""}

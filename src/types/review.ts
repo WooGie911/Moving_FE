@@ -1,19 +1,31 @@
 // 프론트엔드 리뷰 타입
 export interface IReview {
   id: string;
+  customerId: string;
+  moverId: string;
+  estimateRequestId: string;
   rating: number;
   content: string;
-  createdAt: string;
-  userId: string;
-  moverId: string;
-  quoteId: string;
-  estimateId: string;
-  status: "PENDING" | "COMPLETED";
-  isPublic: boolean;
-  updatedAt?: string;
-  user: {
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+  estimateRequest: {
     id: string;
-    name: string;
+    customerId: string;
+    moveType: string;
+    moveDate: Date;
+    fromAddress: TAddress;
+    toAddress: TAddress;
+    description: string | null;
+    status: string;
+  };
+  estimate: {
+    id: string;
+    price: number;
+    comment: string | null;
+    status: string;
+    isDesignated: boolean;
+    createdAt: Date;
   };
 }
 

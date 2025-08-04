@@ -12,14 +12,15 @@ type TTabItem = {
 
 interface ITabProps {
   tabList: TTabItem[];
+  className?: string;
 }
 
-export const Tab = ({ tabList }: ITabProps) => {
+export const Tab = ({ tabList, className = "" }: ITabProps) => {
   const pathname = usePathname();
   const cleanPath = getPathWithoutLocale(pathname);
 
   return (
-    <div className="border-border-light flex w-full justify-center border-b-[1px] px-6">
+    <div className={`border-border-light flex w-full justify-center border-b-[1px] px-6 ${className}`}>
       <nav className="flex w-[var(--breakpoint-lg)] gap-10 overflow-x-auto">
         {tabList.map((tab) => {
           return (

@@ -16,7 +16,6 @@ import {
 import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-// const API_URL = "http://localhost:5050";
 
 // 토큰 가져오기 함수
 const getAccessToken = async () => {
@@ -76,7 +75,10 @@ const moverEstimateApi = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          estimateRequestId: data.estimateRequestId,
+          comment: data.comment,
+        }),
       });
 
       if (!response.ok) {
@@ -104,7 +106,10 @@ const moverEstimateApi = {
   /**
    * 서비스 가능 지역 견적 조회
    */
-  getRegionEstimateRequests: async (params: IEstimateRequestFilterOptions): Promise<TEstimateRequestResponse[]> => {
+  getRegionEstimateRequests: async (
+    params: IEstimateRequestFilterOptions,
+    language?: string,
+  ): Promise<TEstimateRequestResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
@@ -112,6 +117,7 @@ const moverEstimateApi = {
       if (params.sortBy) query.append("sortBy", params.sortBy);
       if (params.customerName) query.append("customerName", params.customerName);
       if (params.movingType) query.append("movingType", params.movingType);
+      if (language) query.append("lang", language);
 
       const response = await fetch(`${API_URL}/mover-estimates/region?${query.toString()}`, {
         headers: {
@@ -146,6 +152,7 @@ const moverEstimateApi = {
    */
   getDesignatedEstimateRequests: async (
     params?: IDesignatedEstimateRequestFilterOptions,
+    language?: string,
   ): Promise<TEstimateRequestResponse[]> => {
     try {
       const accessToken = await getAccessToken();
@@ -155,6 +162,7 @@ const moverEstimateApi = {
       if (params?.sortBy) query.append("sortBy", params.sortBy);
       if (params?.customerName) query.append("customerName", params.customerName);
       if (params?.movingType) query.append("movingType", params.movingType);
+      if (language) query.append("lang", language);
 
       const response = await fetch(`${API_URL}/mover-estimates/designated?${query.toString()}`, {
         headers: {
@@ -185,14 +193,17 @@ const moverEstimateApi = {
   /**
    * 지역/지정 견적 통합 조회
    */
-  getAllEstimateRequests: async (params: {
-    region?: boolean;
-    designated?: boolean;
-    availableRegion?: string;
-    sortBy?: "moveDate" | "createdAt";
-    customerName?: string;
-    movingType?: "SMALL" | "HOME" | "OFFICE";
-  }): Promise<{
+  getAllEstimateRequests: async (
+    params: {
+      region?: boolean;
+      designated?: boolean;
+      availableRegion?: string;
+      sortBy?: "moveDate" | "createdAt";
+      customerName?: string;
+      movingType?: "SMALL" | "HOME" | "OFFICE";
+    },
+    language?: string,
+  ): Promise<{
     regionEstimateRequests?: TEstimateRequestResponse[];
     designatedEstimateRequests?: TEstimateRequestResponse[];
   }> => {
@@ -206,6 +217,7 @@ const moverEstimateApi = {
       if (params.sortBy) query.append("sortBy", params.sortBy);
       if (params.customerName) query.append("customerName", params.customerName);
       if (params.movingType) query.append("movingType", params.movingType);
+      if (language) query.append("lang", language);
 
       const response = await fetch(`${API_URL}/mover-estimates/list?${query.toString()}`, {
         headers: {
@@ -275,11 +287,12 @@ const moverEstimateApi = {
   /**
    * 내가 보낸 견적서 조회
    */
-  getMyEstimates: async (): Promise<TMyEstimateResponse[]> => {
+  getMyEstimates: async (language?: string): Promise<TMyEstimateResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/my-estimates`, {
+      const queryParams = language ? `?lang=${language}` : "";
+      const response = await fetch(`${API_URL}/mover-estimates/my-estimates${queryParams}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -308,11 +321,12 @@ const moverEstimateApi = {
   /**
    * 내가 반려한 견적 조회
    */
-  getMyRejectedEstimateRequests: async (): Promise<TMyRejectedEstimateResponse[]> => {
+  getMyRejectedEstimateRequests: async (language?: string): Promise<TMyRejectedEstimateResponse[]> => {
     try {
       const accessToken = await getAccessToken();
 
-      const response = await fetch(`${API_URL}/mover-estimates/my-rejected`, {
+      const queryParams = language ? `?lang=${language}` : "";
+      const response = await fetch(`${API_URL}/mover-estimates/my-rejected${queryParams}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
