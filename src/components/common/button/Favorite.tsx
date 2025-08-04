@@ -28,6 +28,7 @@ const Favorite = ({
   heartPosition = "left",
   onFavoriteChange,
   onClick,
+  disabled = false, // 기본값은 false
 }: IFavoriteProps) => {
   const { isLiked, toggleLike, isLoading } = useLikeToggle({
     moverId: String(moverId),
@@ -55,9 +56,9 @@ const Favorite = ({
 
   return (
     <button
-      className={`flex cursor-pointer items-center justify-center gap-[2px] ${isLoading ? "opacity-50" : ""}`}
+      className={`flex items-center justify-center gap-[2px] ${isLoading ? "opacity-50" : ""} ${disabled ? "cursor-default" : "cursor-pointer"}`}
       onClick={handleFavoriteClick}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
     >
       {heartPosition === "left" ? (
         <>

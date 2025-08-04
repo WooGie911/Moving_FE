@@ -78,6 +78,7 @@ export default function MoverEditPage() {
   const locale = useLocale();
   const t = useTranslations("profile");
   const moverT = useTranslations("mover");
+  const tRegions = useTranslations("regions");
   const { open, close } = useModal();
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
@@ -323,6 +324,7 @@ export default function MoverEditPage() {
                     }}
                     inputClassName="w-[327px] h-[54px] lg:w-[500px] lg:h-[64px]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
+                    maxLength={30}
                   />
                 </div>
               </div>
@@ -347,6 +349,7 @@ export default function MoverEditPage() {
                     }}
                     textareaClassName="w-[327px] h-[100px] lg:w-[500px] lg:h-[160px] border border-[1px] !border-[#E6E6E6]"
                     wrapperClassName="w-[327px] lg:w-[500px]"
+                    maxLength={300}
                   />
                 </div>
               </div>
@@ -391,7 +394,7 @@ export default function MoverEditPage() {
                     {REGION_OPTIONS.map((region) => (
                       <CircleTextLabel
                         key={region}
-                        text={getRegionTranslation(regionTypeMapping[region], moverT)}
+                        text={getRegionTranslation(regionTypeMapping[region], tRegions)}
                         clickAble={true}
                         isSelected={regions.includes(region)}
                         onClick={() =>
