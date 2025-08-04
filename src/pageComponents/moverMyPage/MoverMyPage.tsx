@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
 import defaultHeader from "@/assets/img/etc/detailHeader.png";
+import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.png";
 import editIcon from "@/assets/icon/edit/icon-edit.png";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
@@ -55,6 +56,7 @@ const MoverMyPage = () => {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("mover");
+  const tRegions = useTranslations("regions");
   const tShared = useTranslations();
   const [profile, setProfile] = useState<IMoverInfo | null>(null);
   const [profileDetail, setProfileDetail] = useState<TMoverProfileDetail>(DEFAULT_PROFILE_DETAIL);
@@ -210,9 +212,13 @@ const MoverMyPage = () => {
                       className="h-20 w-20 rounded-[20px] object-cover"
                     />
                   ) : (
-                    <div className="rounded-24 flex h-20 w-20 items-center justify-center bg-gray-200">
-                      <span className="text-lg text-gray-500">👤</span>
-                    </div>
+                    <Image
+                      src={defaultProfileImage}
+                      alt="default-profile-image"
+                      width={80}
+                      height={85}
+                      className="h-20 w-20 rounded-[20px] object-cover"
+                    />
                   )}
                   <div className="inline-flex flex-col items-start justify-end gap-2">
                     <div className="inline-flex items-center justify-start gap-1">
@@ -350,7 +356,7 @@ const MoverMyPage = () => {
                   (region: any, idx: number) => (
                     <CircleTextLabel
                       key={idx}
-                      text={getRegionTranslation(typeof region === "string" ? region : region.region, t)}
+                      text={getRegionTranslation(typeof region === "string" ? region : region.region, tRegions)}
                       clickAble={false}
                       hasBorder1={true}
                       hasBorder2={false}
