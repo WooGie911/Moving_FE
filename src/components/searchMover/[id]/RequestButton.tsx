@@ -17,7 +17,7 @@ interface RequestButtonProps extends MoverProps {
 const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) => {
   const { isLiked, toggleLike, isLoading } = useLikeToggle({
     moverId: String(mover.id),
-    initialIsLiked: mover.isFavorited || false,
+    initialIsLiked: (mover.favorites && mover.favorites.length > 0) || false,
     onToggle: onMoverUpdate,
   });
   const deviceType = useWindowWidth();
