@@ -6,7 +6,7 @@ import { IMoverInfoProps } from "@/types/customerEstimateRequest";
 import veteran from "@/assets/icon/etc/icon-chat.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import deleteIcon from "@/assets/icon/menu/icon-delete.png";
 import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
@@ -19,17 +19,18 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
   const t = useTranslations("estimateRequest");
   const queryClient = useQueryClient();
   const { open, close } = useModal();
+  const locale = useLocale();
 
   // 견적 반려 API 호출을 위한 mutation
   const rejectEstimateMutation = useMutation({
-    mutationFn: (estimateId: string) => customerEstimateRequestApi.cancelEstimate(estimateId),
+    mutationFn: (estimateId: string) => customerEstimateRequestApi.rejectEstimate(estimateId),
     onSuccess: () => {
       // 성공 시 모달 닫기
       close();
 
       // 캐시 무효화하여 데이터 새로고침
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
     },
     onError: (error) => {
       console.error("견적 반려 처리 실패:", error);

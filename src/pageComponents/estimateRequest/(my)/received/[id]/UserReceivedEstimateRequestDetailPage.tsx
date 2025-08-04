@@ -15,7 +15,7 @@ export const UserReceivedEstimateRequestDetailPage = () => {
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["estimateRequest", locale],
+    queryKey: ["receivedEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
   });
 

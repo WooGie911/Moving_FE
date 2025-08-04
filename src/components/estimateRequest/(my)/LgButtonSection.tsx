@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/common/button/Button";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useModal } from "@/components/common/modal/ModalContext";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ export const LgButtonSection = ({
   const tShared = useTranslations();
   const { open, close } = useModal();
   const queryClient = useQueryClient();
+  const locale = useLocale();
 
   // 견적 확정 API 호출을 위한 mutation
   const confirmEstimateMutation = useMutation({
@@ -33,8 +34,8 @@ export const LgButtonSection = ({
       close();
 
       // 캐시 무효화하여 데이터 새로고침
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
     },
     onError: (error) => {
       console.error("견적 확정 처리 실패:", error);
