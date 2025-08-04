@@ -63,6 +63,11 @@
   "estimateRequest": {
     "title": "报价请求",
     "editTitle": "编辑报价",
+    "metadata": {
+      "title": "报价请求 | 무빙",
+      "description": "申请和管理您的搬家报价"
+    },
+    "loadingText": "正在检查报价信息...",
     "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
     "noEstimateInProgress": "没有进行中的报价。",
     "requestNewEstimate": "请申请新的报价。",
@@ -845,6 +850,10 @@
     "allNotificationsLoaded": "已加载所有通知。"
   },
   "schedule": {
+    "metadata": {
+      "title": "日程管理 | 무빙",
+      "description": "查看和管理您的搬家日程"
+    },
     "title": "日程管理",
     "description": "查看和管理您的搬家日程",
     "selectDate": "请选择日期",
@@ -862,6 +871,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "收藏的司机 | 무빙",
+      "description": "查看和管理您的收藏的司机"
+    },
     "title": "收藏的司机",
     "selectAll": "全选",
     "deleteSelected": "删除选中",

@@ -6,6 +6,7 @@ import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IFormState } from "@/types/estimateRequest";
 import { toast } from "react-toastify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { logDevError } from "@/utils/logDevError";
 
 // API 응답 타입 정의
 interface ApiResponse<T = any> {
@@ -123,6 +124,8 @@ export const useEstimateRequestApi = () => {
   // 공통 에러 처리 함수
   const handleApiError = useCallback(
     (error: Error | unknown, defaultMessage: string) => {
+      logDevError(error, `견적 요청 API 에러: ${defaultMessage}`);
+
       if (error instanceof Error) {
         try {
           const errorData = JSON.parse(error.message);

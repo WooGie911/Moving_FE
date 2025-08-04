@@ -63,6 +63,11 @@
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
+    "metadata": {
+      "title": "Estimate Request | 무빙",
+      "description": "Request and manage your moving estimates"
+    },
+    "loadingText": "Checking estimate information...",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
     "noEstimateInProgress": "No estimates in progress.",
     "requestNewEstimate": "Please request a new estimate.",
@@ -832,6 +837,10 @@
     "allNotificationsLoaded": "All notifications loaded."
   },
   "schedule": {
+    "metadata": {
+      "title": "Schedule Management | 무빙",
+      "description": "Check and manage your moving schedules"
+    },
     "title": "Schedule Management",
     "description": "Check and manage your moving schedules",
     "selectDate": "Please select a date",
@@ -849,6 +858,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "Favorite Movers | 무빙",
+      "description": "Check and manage your favorite movers"
+    },
     "title": "Favorite Movers",
     "selectAll": "Select All",
     "deleteSelected": "Delete Selected",
