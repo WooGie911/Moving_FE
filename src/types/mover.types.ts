@@ -24,8 +24,20 @@ export interface IMover {
     region: string;
     userId: string;
   }>;
-  serviceTypes: string[];
+  serviceTypes: Array<{
+    service: {
+      name: string;
+    };
+  }>;
   favorites?: Array<{ id: string }>;
+  // 추가 속성들
+  description?: string;
+  introduction?: string;
+  completedCount?: number;
+  favoriteCount?: number;
+  experience?: number;
+  reviewCount?: number;
+  avgRating?: number;
 }
 
 // 기사님 정보 타입 (API 응답용)

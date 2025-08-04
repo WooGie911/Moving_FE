@@ -31,18 +31,31 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
         const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
           id: apiReview.id,
+          customerId: apiReview.customerId,
+          moverId: apiReview.moverId,
+          estimateRequestId: apiReview.estimateRequestId,
           rating: apiReview.rating,
           content: apiReview.content,
-          createdAt: apiReview.createdAt,
-          userId: apiReview.customerId,
-          moverId: apiReview.moverId,
-          quoteId: apiReview.estimateRequestId,
-          estimateId: apiReview.estimate?.id || "",
-          status: "COMPLETED" as const,
-          isPublic: true,
-          user: {
-            id: apiReview.customerId,
-            name: apiReview.nickname,
+          createdAt: new Date(apiReview.createdAt),
+          updatedAt: new Date(apiReview.createdAt),
+          deletedAt: null,
+          estimateRequest: {
+            id: apiReview.estimateRequestId,
+            customerId: apiReview.customerId,
+            moveType: apiReview.moveType,
+            moveDate: new Date(apiReview.moveDate),
+            fromAddress: apiReview.fromAddress,
+            toAddress: apiReview.toAddress,
+            description: null,
+            status: "COMPLETED",
+          },
+          estimate: {
+            id: apiReview.estimate?.id || "",
+            price: apiReview.estimate?.price || 0,
+            comment: null,
+            status: "COMPLETED",
+            isDesignated: apiReview.isDesigned,
+            createdAt: new Date(apiReview.createdAt),
           },
         }));
 
