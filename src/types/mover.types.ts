@@ -1,29 +1,31 @@
 import type { IReview } from "./review";
 
 // 기사님 정보 타입
-export interface IMoverInfo {
+export interface IMover {
   id: string;
-  userId: string;
-  nickname: string;
-  profileImage: string | null;
-  experience: number;
-  introduction: string;
-  description: string;
-  completedCount: number;
-  avgRating: number;
-  reviewCount: number;
-  favoriteCount: number;
-  isFavorited?: boolean;
-  lastActivityAt: Date | null;
-  user: {
+  name: string;
+  userType: string[];
+  moverImage: string | null;
+  nickname: string | null;
+  isVeteran: boolean | null;
+  shortIntro: string | null;
+  detailIntro: string | null;
+  career: number | null;
+  workedCount: number | null;
+  averageRating: number | null;
+  totalReviewCount: number | null;
+  totalFavoriteCount: number;
+  serviceAreas: Array<{
     id: string;
-    name: string;
-    email: string;
-  };
-  serviceRegions: any[];
-  serviceTypes: any[];
-  quoteId: string;
-  estimateRequestId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    district: string | null;
+    region: string;
+    userId: string;
+  }>;
+  serviceTypes: string[];
+  favorites?: Array<{ id: string }>;
 }
 
 // 기사님 목록 조회 파라미터 타입

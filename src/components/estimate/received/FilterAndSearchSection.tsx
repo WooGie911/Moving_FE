@@ -36,9 +36,14 @@ export const FilterAndSearchSection = ({ filters, onFiltersChange, totalCount }:
   return (
     <>
       {/* 하단 인풋 영역 */}
-      <div className="flex w-full flex-col gap-4 md:gap-7 lg:gap-6">
+      <div className="mt-[10px] flex w-full flex-col gap-4 md:gap-7 lg:gap-6">
         <FormProvider {...methods}>
-          <SearchInput name="search" placeholder={t("searchPlaceholder")} />
+          <SearchInput
+            name="search"
+            inputClassName="w-full bg-bg-secondary"
+            wrapperClassName="w-full"
+            placeholder={t("searchPlaceholder")}
+          />
         </FormProvider>
         <div className="lg:hidden">
           <SmallFilterSection filters={filters} onFiltersChange={onFiltersChange} totalCount={totalCount} />

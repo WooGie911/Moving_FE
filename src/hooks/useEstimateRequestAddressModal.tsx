@@ -2,9 +2,11 @@ import React, { useCallback } from "react";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useTranslations } from "next-intl";
 import AddressModal from "@/components/estimateRequest/create/card/AddressModal";
-import { TAddressType } from "@/types/estimateRequest";
+import { TAddressType, IDaumAddress } from "@/types/estimateRequest";
 
-export const useEstimateRequestAddressModal = (onAddressUpdate: (type: TAddressType, address: any) => void) => {
+export const useEstimateRequestAddressModal = (
+  onAddressUpdate: (type: TAddressType, address: IDaumAddress) => void,
+) => {
   const { open, close } = useModal();
   const t = useTranslations();
 

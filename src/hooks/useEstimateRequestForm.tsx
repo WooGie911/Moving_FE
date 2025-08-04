@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { IFormState, TAddressType } from "@/types/estimateRequest";
+import { IFormState, TAddressType, IDaumAddress } from "@/types/estimateRequest";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 
@@ -107,7 +107,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
   // 주소 업데이트 핸들러
   const handleAddressUpdate = useCallback(
-    (type: TAddressType, address: any) => {
+    (type: TAddressType, address: IDaumAddress) => {
       setForm((prev) => ({
         ...prev,
         [type]: {
@@ -139,7 +139,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
       if (step === 1) {
         return `${t(`shared.movingTypes.${pendingAnswer}`)} (${t(`shared.movingTypes.${pendingAnswer}Desc`)})`;
       } else if (step === 2) {
-        return formatDateByLanguage(pendingAnswer, locale);
+        return formatDateByLanguage(pendingAnswer, locale as "ko" | "en" | "zh");
       }
       return pendingAnswer;
     },
@@ -186,7 +186,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
       answers.push(
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
-            {formatDateByLanguage(form.movingDate, locale)}
+            {formatDateByLanguage(form.movingDate, locale as "ko" | "en" | "zh")}
           </SpeechBubble>
         </div>,
       );

@@ -5,24 +5,31 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export const RejectedPage = () => {
   const t = useTranslations("estimate");
+  const commonT = useTranslations("common");
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyRejectedEstimates"],
-    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(),
+    queryKey: ["MyRejectedEstimates", locale],
+    queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
 
   // 로딩 상태
   if (isPending) {
-    return <div>{t("common.loading")}</div>;
+    return (
+      <div>
+        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+      </div>
+    );
   }
 
   // 에러 상태
   if (isError) {
     console.error(`${t("apiError")}`, error);
-    return <div>{t("common.error")}</div>;
+    return <div>{commonT("error")}</div>;
   }
 
   // 데이터가 없는 경우
@@ -50,13 +57,14 @@ export const RejectedPage = () => {
       <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa] px-6 pt-8 pb-6 md:gap-10 md:px-7 md:pb-8 lg:gap-14 lg:px-10 lg:pt-11 lg:pb-9">
         <div className="flex w-full flex-col items-center justify-center">
           <div className="mb-[66px] flex w-full max-w-[1200px] flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
-            {data.map((item: any) => (
+            {data.map((item: any, index: number) => (
               <CardList
                 key={item.id}
                 data={item.estimateRequest}
                 id={item.id}
                 isDesignated={item.isDesignated}
-                type="rejected"
+                usedAt="rejected"
+                index={index}
               />
             ))}
           </div>

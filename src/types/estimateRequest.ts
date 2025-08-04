@@ -85,7 +85,7 @@ export interface IMovingTypeCardProps {
 }
 
 export interface IAddressCardProps {
-  postalCode?: string;
+  zoneCode?: string;
   roadAddress?: string;
   jibunAddress?: string;
   selected?: boolean;
@@ -181,19 +181,4 @@ export interface IEstimateRequestStepRendererProps {
   onConfirmEstimateRequest: (form: IFormState) => void;
   customButtonText?: string;
   showConfirmModal?: (onConfirm: () => void) => void;
-}
-
-// 기타 컴포넌트 Props 타입들
-export interface IMoverInfoProps {
-  mover: import("@/types/customerEstimateRequest").TMoverInfo;
-  usedAtDetail: boolean;
-}
-
-export interface ILabelAndTitleSectionProps {
-  mover: import("@/types/customerEstimateRequest").TMoverInfo;
-  isDesignated: boolean;
-  estimateState: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
-  estimateTitle: string;
-  type: "pending" | "received";
-  usedAtDetail: boolean;
 }
