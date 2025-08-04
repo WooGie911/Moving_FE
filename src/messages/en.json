@@ -834,6 +834,14 @@
     "switchUserTypeError": "Failed to switch user type."
   },
   "review": {
+    "metadata": {
+      "title": "Review | 무빙",
+      "description": "Write and manage your moving reviews",
+      "writableTitle": "Writable Reviews | 무빙",
+      "writableDescription": "Check reviews you can write after completing your move",
+      "writtenTitle": "My Written Reviews | 무빙",
+      "writtenDescription": "Check and manage your written moving reviews"
+    },
     "title": "Review",
     "writableTab": "Writable Reviews",
     "writtenTab": "My Written Reviews",

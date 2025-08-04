@@ -847,6 +847,14 @@
     "switchUserTypeError": "切换用户类型失败。"
   },
   "review": {
+    "metadata": {
+      "title": "评价 | 무빙",
+      "description": "撰写和管理您的搬家评价",
+      "writableTitle": "可写评价 | 무빙",
+      "writableDescription": "查看搬家完成后可以撰写的评价",
+      "writtenTitle": "我写的评价 | 무빙",
+      "writtenDescription": "查看和管理您撰写的搬家评价"
+    },
     "title": "评价",
     "writableTab": "可写评价",
     "writtenTab": "我写的评价",
