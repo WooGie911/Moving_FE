@@ -3,14 +3,12 @@ import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateR
 import { CardList } from "@/components/estimateRequest/(my)/CardList";
 import { RequestEstimateRequest } from "@/components/estimateRequest/(my)/pending/RequestEstimateRequest";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
-import { shortenRegionInAddress } from "@/utils/regionMapping";
+import React from "react";
 import Image from "next/image";
 import noEstimate from "@/assets/img/etc/noEstimate.png";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
-import { TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations, useLocale } from "next-intl";
 import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";

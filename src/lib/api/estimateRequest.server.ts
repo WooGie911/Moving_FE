@@ -34,8 +34,8 @@ export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayl
   }
 }
 
-function getAccessTokenFromServer(): string | undefined {
-  const cookieStore = cookies();
+async function getAccessTokenFromServer(): Promise<string | undefined> {
+  const cookieStore = await cookies();
   return cookieStore.get("accessToken")?.value;
 }
 
@@ -46,7 +46,7 @@ export const estimateRequestServerApi = {
    * 활성 견적 요청 조회 (서버 사이드)
    */
   getActive: async (locale: string) => {
-    const token = getAccessTokenFromServer();
+    const token = await getAccessTokenFromServer();
     const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

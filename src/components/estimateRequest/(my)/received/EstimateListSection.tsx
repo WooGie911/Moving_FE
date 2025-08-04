@@ -7,7 +7,7 @@ import downLg from "@/assets/icon/arrow/icon-down-lg.png";
 import up from "@/assets/icon/arrow/icon-up-sm.png";
 import upLg from "@/assets/icon/arrow/icon-up-lg.png";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/common/button/Button";
 import { useModal } from "@/components/common/modal/ModalContext";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
@@ -25,6 +25,7 @@ export const EstimateListSection = ({
   const t = useTranslations("estimateRequest");
   const { open, close } = useModal();
   const queryClient = useQueryClient();
+  const locale = useLocale();
 
   // 이사완료 API 호출을 위한 mutation
   const completeEstimateMutation = useMutation({
@@ -34,8 +35,8 @@ export const EstimateListSection = ({
       close();
 
       // 캐시 무효화하여 데이터 새로고침
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
     },
     onError: (error) => {
       console.error("이사완료 처리 실패:", error);

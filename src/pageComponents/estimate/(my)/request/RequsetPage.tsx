@@ -12,7 +12,7 @@ export const RequsetPage = () => {
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyCreateEstimate", locale],
+    queryKey: ["MyRequestEstimates", locale],
     queryFn: () => moverEstimateApi.getMyEstimates(locale),
   });
   // 로딩 상태
@@ -29,6 +29,8 @@ export const RequsetPage = () => {
     console.error(`${t("apiError")}`, error);
     return <div>{commonT("error")}</div>;
   }
+
+  console.log("테이스용", data);
   // 데이터가 없는 경우
   if (!data || data.length === 0) {
     return (
