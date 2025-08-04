@@ -334,6 +334,14 @@
       "serviceSelectionLabelMover": "제공 서비스 선택",
       "regionSelectionLabelCustomer": "내가 사는 지역 선택",
       "regionSelectionLabelMover": "서비스 가능 지역 선택"
+    },
+    "editMetadata": {
+      "title": "프로필 수정 | Moving",
+      "description": "프로필 수정 페이지"
+    },
+    "registerMetadata": {
+      "title": "프로필 등록 | Moving",
+      "description": "프로필 등록 페이지"
     }
   },
   "search": {

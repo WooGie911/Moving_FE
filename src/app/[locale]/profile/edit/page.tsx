@@ -1,15 +1,14 @@
-"use client";
+import IndexEditPage from "@/pageComponents/profile/edit/IndexEditPage";
+import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-import CustomerEditPage from "@/pageComponents/profile/edit/CustomerEditPage";
-import MoverEditPage from "@/pageComponents/profile/edit/MoverEditPage";
-import { useAuth } from "@/providers/AuthProvider";
-
-export default function EditPage() {
-  const { user } = useAuth();
-
-  if (user?.userType === "CUSTOMER") {
-    return <CustomerEditPage />;
-  } else if (user?.userType === "MOVER") {
-    return <MoverEditPage />;
-  }
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("profile.editMetadata");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
+export default function Page() {
+  return <IndexEditPage />;
 }
