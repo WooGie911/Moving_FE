@@ -62,7 +62,7 @@
     "title": "견적요청",
     "editTitle": "견적 수정",
     "metadata": {
-      "title": "견적 요청 | 무빙",
+      "title": "견적 요청 | Moving",
       "description": "이사 견적을 요청하고 관리하세요"
     },
     "loadingText": "견적 정보를 확인하는 중...",
@@ -198,6 +198,10 @@
       "thursday": "목",
       "friday": "금",
       "saturday": "토"
+    },
+    "calendar": {
+      "today": "당일 이사는 선택할 수 없습니다",
+      "pastDate": "과거 날짜는 선택할 수 없습니다"
     }
   },
   "navigation": {
@@ -839,7 +843,7 @@
   },
   "schedule": {
     "metadata": {
-      "title": "일정 관리 | 무빙",
+      "title": "일정 관리 | Moving",
       "description": "이사 일정을 확인하고 관리하세요"
     },
     "title": "일정 관리",
@@ -860,7 +864,7 @@
   },
   "favoriteMover": {
     "metadata": {
-      "title": "찜한 기사님 | 무빙",
+      "title": "찜한 기사님 | Moving",
       "description": "찜한 기사님을 확인하고 관리하세요"
     },
     "title": "찜한 기사님",

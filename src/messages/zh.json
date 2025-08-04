@@ -64,7 +64,7 @@
     "title": "报价请求",
     "editTitle": "编辑报价",
     "metadata": {
-      "title": "报价请求 | 무빙",
+      "title": "报价请求 | Moving",
       "description": "申请和管理您的搬家报价"
     },
     "loadingText": "正在检查报价信息...",
@@ -229,6 +229,10 @@
       "thursday": "四",
       "friday": "五",
       "saturday": "六"
+    },
+    "calendar": {
+      "today": "当日搬家无法选择",
+      "pastDate": "过去的日期无法选择"
     }
   },
   "navigation": {
@@ -879,7 +883,7 @@
   },
   "schedule": {
     "metadata": {
-      "title": "日程管理 | 무빙",
+      "title": "日程管理 | Moving",
       "description": "查看和管理您的搬家日程"
     },
     "title": "日程管理",
@@ -900,7 +904,7 @@
   },
   "favoriteMover": {
     "metadata": {
-      "title": "收藏的司机 | 무빙",
+      "title": "收藏的司机 | Moving",
       "description": "查看和管理您的收藏的司机"
     },
     "title": "收藏的司机",
