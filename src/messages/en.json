@@ -798,7 +798,10 @@
     },
     "roleToggleAvailableMessage": "Click to easily switch roles!",
     "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
-    "roleToggleText": "Quick Switch"
+    "roleToggleText": "Quick Switch",
+    "customerSuccessToast": "You have switched to customer mode.",
+    "moverSuccessToast": "You have switched to mover mode.",
+    "switchUserTypeError": "Failed to switch user type."
   },
   "review": {
     "title": "Review",

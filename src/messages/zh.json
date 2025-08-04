@@ -811,7 +811,10 @@
     },
     "roleToggleAvailableMessage": "点击即可轻松切换身份！",
     "roleToggleLockMessage": "需完成两个身份（一般会员与搬家师傅）的资料注册，方可快速切换角色！",
-    "roleToggleText": "快速切换"
+    "roleToggleText": "快速切换",
+    "customerSuccessToast": "您已切换为普通用户。",
+    "moverSuccessToast": "您已切换为搬家师傅。",
+    "switchUserTypeError": "切换用户类型失败。"
   },
   "review": {
     "title": "评价",

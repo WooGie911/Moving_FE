@@ -768,7 +768,10 @@
     },
     "roleToggleAvailableMessage": "클릭시 역할 간편 전환이 가능합니다!",
     "roleToggleLockMessage": "두 역할(일반회원, 기사님) 모두 프로필 등록을 완료해야 간편 전환이 가능합니다!",
-    "roleToggleText": "간편 전환"
+    "roleToggleText": "간편 전환",
+    "customerSuccessToast": "일반 유저로 전환 하셨습니다.",
+    "moverSuccessToast": "기사님으로 전환 하셨습니다.",
+    "switchUserTypeError": "전환에 실패하였습니다."
   },
   "review": {
     "title": "리뷰",
