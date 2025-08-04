@@ -364,6 +364,14 @@
       "serviceSelectionLabelMover": "Select services you offer",
       "regionSelectionLabelCustomer": "Select your current region",
       "regionSelectionLabelMover": "Select serviceable regions"
+    },
+    "editMetadata": {
+      "title": "Edit Profile | Moving",
+      "description": "Edit your profile information"
+    },
+    "registerMetadata": {
+      "title": "Register Profile | Moving",
+      "description": "Profile registration page"
     }
   },
   "search": {
