@@ -1,4 +1,5 @@
 import { getServerSideToken, setServerSideTokens } from "@/lib/actions/auth.actions";
+import { logDevError } from "./logDevError";
 
 const base64UrlDecode = (input: string): string => {
   input = input.replace(/-/g, "+").replace(/_/g, "/");
@@ -24,7 +25,7 @@ export function setTokensToCookie(accessToken: string) {
 
     document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=Strict; Secure`;
   } catch (error) {
-    console.error("❌ Failed to decode JWT:", error);
+    logDevError(error, "Failed to decode JWT");
   }
 }
 
