@@ -56,6 +56,7 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
     confirmEstimate(estimate.id);
   };
 
+  console.log("데이터", estimate);
   const openConfirmModal = () => {
     open({
       title: t("confirmEstimate"),

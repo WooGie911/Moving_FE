@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import FavoriteService, { IFavoriteStatus } from "../../../services/favoriteService";
+import { useLikeToggle } from "@/hooks/useLikeToggle";
+import { useAuth } from "@/providers/AuthProvider";
+import { useModal } from "@/components/common/modal/ModalContext";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface IFavoriteProps {
   isFavorited: boolean;
@@ -10,13 +14,13 @@ interface IFavoriteProps {
   unfavoritedColor?: string;
   textColor?: string;
   heartPosition?: "left" | "right";
-  onFavoriteChange?: (status: IFavoriteStatus) => void;
-  onClick?: () => void; // 부모 컴포넌트에서 전달받는 onClick
+  onFavoriteChange?: () => void;
+  onClick?: () => void;
 }
 
 const Favorite = ({
   isFavorited: initialIsFavorited,
-  favoriteCount: initialFavoriteCount,
+  favoriteCount,
   moverId,
   favoritedColor = "text-red-500",
   unfavoritedColor = "text-gray-100",
@@ -25,55 +29,29 @@ const Favorite = ({
   onFavoriteChange,
   onClick,
 }: IFavoriteProps) => {
-  const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
-  const [favoriteCount, setFavoriteCount] = useState(initialFavoriteCount);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLiked, toggleLike, isLoading } = useLikeToggle({
+    moverId: String(moverId),
+    initialIsLiked: initialIsFavorited,
+    onToggle: onFavoriteChange,
+  });
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // 이벤트 전파 방지
-    e.preventDefault(); // 기본 동작 방지
-
-    if (isLoading) return; // 중복 클릭 방지
-
-    setIsLoading(true);
-    try {
-      let response;
-
-      if (isFavorited) {
-        // 찜하기 제거
-        response = await FavoriteService.removeFavorite(moverId);
-      } else {
-        // 찜하기 추가
-        response = await FavoriteService.addFavorite(moverId);
-      }
-
-      if (response.success && response.data) {
-        setIsFavorited(response.data.isFavorited);
-        setFavoriteCount(response.data.favoriteCount);
-
-        // 부모 컴포넌트에 상태 변경 알림
-        onFavoriteChange?.(response.data);
-
-        // 부모 컴포넌트의 onClick 호출
-        onClick?.();
-      }
-    } catch (error) {
-      console.error("찜하기 처리 오류:", error);
-      // 에러 발생 시 원래 상태로 되돌리기
-      setIsFavorited(initialIsFavorited);
-      setFavoriteCount(initialFavoriteCount);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const heartIcon = isFavorited ? (
+  const heartIcon = isLiked ? (
     <AiFillHeart className={favoritedColor} size={24} />
   ) : (
     <AiOutlineHeart className={unfavoritedColor} size={24} />
   );
 
   const countText = <span className={`text-md leading-6 font-normal ${textColor}`}>{favoriteCount}</span>;
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (isLoading) return;
+
+    await toggleLike();
+    onClick?.();
+  };
 
   return (
     <button
