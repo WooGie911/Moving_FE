@@ -25,7 +25,6 @@ export const UserReceivedEstimateRequestDetailPage = () => {
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
     );
-  console.log("data", data);
   if (isError) {
     console.error("API 에러:", isError);
     return (

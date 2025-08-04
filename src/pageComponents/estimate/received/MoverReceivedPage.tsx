@@ -33,7 +33,6 @@ export const MoverReceivedPage = () => {
     sortBy: "createdAt",
   });
 
-  console.log("data", data);
   // 필터링된 데이터
   const filteredData = useMemo(() => {
     let filtered: any[] = [];
