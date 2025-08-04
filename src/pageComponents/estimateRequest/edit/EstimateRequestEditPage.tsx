@@ -11,6 +11,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
+import { logDevError } from "@/utils/logDevError";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
 
@@ -107,7 +108,7 @@ const EstimateRequestEditPage = () => {
         showErrorModal(response.message || t("estimateRequest.failedToLoadEstimateData"));
       }
     } catch (error) {
-      console.error("견적 데이터를 불러오는데 실패했습니다:", error);
+      logDevError(error, "견적 데이터를 불러오는데 실패했습니다");
 
       // API 응답에서 에러 메시지 추출
       if (error instanceof Error) {

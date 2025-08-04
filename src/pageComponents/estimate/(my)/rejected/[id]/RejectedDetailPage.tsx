@@ -15,7 +15,7 @@ export const RejectedDetailPage = () => {
   const locale = useLocale();
   const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["MyRejectedEstimate", locale],
+    queryKey: ["MyRejectedEstimates", locale],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
 

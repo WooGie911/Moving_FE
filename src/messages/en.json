@@ -63,6 +63,11 @@
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
+    "metadata": {
+      "title": "Estimate Request | 무빙",
+      "description": "Request and manage your moving estimates"
+    },
+    "loadingText": "Checking estimate information...",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
     "noEstimateInProgress": "No estimates in progress.",
     "requestNewEstimate": "Please request a new estimate.",
@@ -600,7 +605,24 @@
     "customerSigninPageTitle": "Customer Sign-in Page",
     "moverSigninPageTitle": "Mover Sign-in Page",
     "customerSignupPageTitle": "Customer Sign-up Page",
-    "moverSignupPageTitle": "Mover Sign-up Page"
+    "moverSignupPageTitle": "Mover Sign-up Page",
+
+    "userSigninMetadata": {
+      "title": "Customer Login | Moving",
+      "description": "This is the login page for customers."
+    },
+    "userSignupMetadata": {
+      "title": "Customer Signup | Moving",
+      "description": "This is the signup page for customers."
+    },
+    "moverSigninMetadata": {
+      "title": "Mover Login | Moving",
+      "description": "This is the login page for movers."
+    },
+    "moverSignupMetadata": {
+      "title": "Mover Signup | Moving",
+      "description": "This is the signup page for movers."
+    }
   },
   "landing": {
     "title": "How do you choose a moving company?",
@@ -798,7 +820,10 @@
     },
     "roleToggleAvailableMessage": "Click to easily switch roles!",
     "roleToggleLockMessage": "You need to complete profile registration for both roles (Customer and Mover) to switch roles easily!",
-    "roleToggleText": "Quick Switch"
+    "roleToggleText": "Quick Switch",
+    "customerSuccessToast": "You have switched to customer mode.",
+    "moverSuccessToast": "You have switched to mover mode.",
+    "switchUserTypeError": "Failed to switch user type."
   },
   "review": {
     "title": "Review",
@@ -832,6 +857,10 @@
     "allNotificationsLoaded": "All notifications loaded."
   },
   "schedule": {
+    "metadata": {
+      "title": "Schedule Management | 무빙",
+      "description": "Check and manage your moving schedules"
+    },
     "title": "Schedule Management",
     "description": "Check and manage your moving schedules",
     "selectDate": "Please select a date",
@@ -849,6 +878,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "Favorite Movers | 무빙",
+      "description": "Check and manage your favorite movers"
+    },
     "title": "Favorite Movers",
     "selectAll": "Select All",
     "deleteSelected": "Delete Selected",

@@ -10,6 +10,7 @@ interface IInputProps {
   inputClassName?: string;
   errorClassName?: string;
   wrapperClassName?: string;
+  maxLength?: number;
 }
 
 export const TextInput = ({
@@ -19,6 +20,7 @@ export const TextInput = ({
   inputClassName,
   errorClassName,
   wrapperClassName,
+  maxLength,
 }: IInputProps) => {
   const {
     register,
@@ -34,6 +36,7 @@ export const TextInput = ({
       inputClassName={inputClassName}
       errorClassName={errorClassName}
       wrapperClassName={wrapperClassName}
+      maxLength={maxLength}
       {...register(name, rules)}
     />
   );

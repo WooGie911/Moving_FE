@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import like from "@/assets/icon/like/icon-like-black.png";
 import { Button } from "@/components/common/button/Button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useModal } from "@/components/common/modal/ModalContext";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEsti
   const tCommon = useTranslations("common");
   const { open, close } = useModal();
   const queryClient = useQueryClient();
+  const locale = useLocale();
 
   // 견적 확정 API 호출을 위한 mutation
   const confirmEstimateMutation = useMutation({
@@ -28,8 +29,11 @@ export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEsti
       close();
 
       // 캐시 무효화하여 데이터 새로고침
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 기사님 관련 페이지 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
     },
     onError: (error) => {
       console.error("견적 확정 처리 실패:", error);

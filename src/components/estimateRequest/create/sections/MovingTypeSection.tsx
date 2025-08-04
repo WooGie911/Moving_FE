@@ -39,7 +39,7 @@ const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect 
           description={t(`shared.movingTypes.${type}Desc`)}
           image={
             <div className="relative h-30 w-30">
-              <Image src={image} alt={t(`shared.movingTypes.${type}`)} fill className="object-contain" />
+              <Image src={image} alt={t(`shared.movingTypes.${type}`)} fill className="object-contain" priority />
             </div>
           }
           onClick={() => onSelect(type)}

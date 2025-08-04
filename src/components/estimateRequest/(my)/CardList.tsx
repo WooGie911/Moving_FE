@@ -10,8 +10,8 @@ import { MoverInfo } from "./MoverInfo";
 import { useModal } from "@/components/common/modal/ModalContext";
 import Image from "next/image";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
-import { useMutation } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations, useLocale } from "next-intl";
 import { formatNumber } from "@/lib/utils/formatNumber";
 
 export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstimate }: ICardListProps) => {
@@ -19,6 +19,8 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
   const t = useTranslations("estimateRequest");
   const tShared = useTranslations();
   const tCommon = useTranslations("common");
+  const queryClient = useQueryClient();
+  const locale = useLocale();
 
   // 확정견적이 있는 경우의 추가 로직
   const isConfirmedEstimate = estimate.status === "ACCEPTED";
@@ -26,6 +28,13 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
   const { mutate: confirmEstimate, isPending: isConfirming } = useMutation({
     mutationFn: (id: string) => customerEstimateRequestApi.confirmEstimate(id),
     onSuccess: () => {
+      // 캐시 무효화하여 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 기사님 관련 페이지 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
+
       open({
         title: t("confirmSuccess"),
         children: <div className="py-4 text-center">{t("estimateConfirmed")}</div>,
@@ -47,6 +56,7 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
     confirmEstimate(estimate.id);
   };
 
+  console.log("데이터", estimate);
   const openConfirmModal = () => {
     open({
       title: t("confirmEstimate"),

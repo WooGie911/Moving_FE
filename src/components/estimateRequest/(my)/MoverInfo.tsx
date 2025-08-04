@@ -1,35 +1,62 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
 import { IMoverInfoProps } from "@/types/customerEstimateRequest";
 import veteran from "@/assets/icon/etc/icon-chat.png";
 import star from "@/assets/icon/star/icon-star-active-sm.png";
 import Favorite from "@/components/common/button/Favorite";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import deleteIcon from "@/assets/icon/menu/icon-delete.png";
 import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/common/modal/ModalContext";
 
-export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
+export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
+  const [mover, setMover] = useState(initialMover);
   const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const t = useTranslations("estimateRequest");
   const queryClient = useQueryClient();
   const { open, close } = useModal();
+  const locale = useLocale();
+
+  // initialMover가 변경될 때마다 로컬 mover 상태 업데이트
+  useEffect(() => {
+    setMover(initialMover);
+  }, [initialMover]);
+
+  // mover 상태 업데이트 함수
+  const handleMoverUpdate = async () => {
+    // 캐시에서 최신 mover 데이터를 가져와서 상태 업데이트
+    queryClient.invalidateQueries({ queryKey: ["mover", mover.id] });
+    // 견적 요청 관련 캐시도 무효화
+    queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+    queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+
+    // 캐시 무효화 후 잠시 기다린 후 최신 데이터를 가져와서 상태 업데이트
+    setTimeout(() => {
+      const updatedMover = queryClient.getQueryData(["mover", mover.id]) as typeof mover | undefined;
+      if (updatedMover) {
+        setMover(updatedMover);
+      }
+    }, 100);
+  };
 
   // 견적 반려 API 호출을 위한 mutation
   const rejectEstimateMutation = useMutation({
-    mutationFn: (estimateId: string) => customerEstimateRequestApi.cancelEstimate(estimateId),
+    mutationFn: (estimateId: string) => customerEstimateRequestApi.rejectEstimate(estimateId),
     onSuccess: () => {
       // 성공 시 모달 닫기
       close();
 
       // 캐시 무효화하여 데이터 새로고침
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 기사님 관련 페이지 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
     },
     onError: (error) => {
       console.error("견적 반려 처리 실패:", error);
@@ -84,11 +111,17 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
                   heartPosition="right"
                   favoriteCount={mover.totalFavoriteCount}
                   moverId={mover.id}
+                  onFavoriteChange={handleMoverUpdate}
                 />
               </div>
             ) : (
               <div className="flex flex-row items-center justify-center gap-1">
-                <Favorite isFavorited={mover.isFavorite} favoriteCount={mover.totalFavoriteCount} moverId={mover.id} />
+                <Favorite
+                  isFavorited={mover.isFavorite}
+                  favoriteCount={mover.totalFavoriteCount}
+                  moverId={mover.id}
+                  onFavoriteChange={handleMoverUpdate}
+                />
               </div>
             )}
           </div>

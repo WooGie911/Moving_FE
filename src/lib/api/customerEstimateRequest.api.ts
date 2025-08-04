@@ -1,8 +1,6 @@
 import {
   TPendingEstimateRequestResponse,
   TReceivedEstimateRequestListResponse,
-  TEstimateRequestDetailResponse,
-  IDesignateEstimateRequestRequest,
   TConfirmEstimateResponse,
   TCancelEstimateResponse,
   TCompleteEstimateResponse,

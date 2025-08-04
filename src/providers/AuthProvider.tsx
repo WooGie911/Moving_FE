@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import authApi from "@/lib/api/auth.api";
 import userApi from "@/lib/api/user.api";
 import { ISignUpFormValues } from "@/types/auth";
+import { logDevError } from "@/utils/logDevError";
 
 // 사용자 타입 정의 - API 응답에 맞게 수정
 type TUser = {
@@ -114,7 +115,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
         setUser(null);
       }
     } catch (e) {
-      console.error("사용자 정보 조회 실패:", e);
+      logDevError(e, "Failed to get user");
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -138,7 +139,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       return response;
     } catch (error) {
-      console.error("로그인 실패:", error);
+      logDevError(error, "Failed to login");
       setUser(null);
       throw error;
     } finally {
@@ -163,7 +164,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       return response;
     } catch (error) {
-      console.error("회원가입 실패:", error);
+      logDevError(error, "Failed to sign up");
       setUser(null);
       throw error;
     } finally {
@@ -181,7 +182,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       await authApi.logout();
       router.push("/");
     } catch (error) {
-      console.error("로그아웃 실패:", error);
+      logDevError(error, "Failed to logout");
     } finally {
       setIsLoading(false);
     }
@@ -201,7 +202,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       return response;
     } catch (error) {
-      console.error("유저 타입 전환 실패:", error);
+      logDevError(error, "Failed to switch user type");
       throw error;
     } finally {
       setIsLoading(false);
@@ -218,7 +219,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       await authApi.googleLogin(userType);
       // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
     } catch (error: unknown) {
-      console.error("구글 로그인 실패:", error);
+      logDevError(error, "Failed to google login");
       setIsLoading(false);
       throw error;
     }
@@ -234,7 +235,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       await authApi.kakaoLogin(userType);
       // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
     } catch (error: unknown) {
-      console.error("카카오 로그인 실패:", error);
+      logDevError(error, "Failed to kakao login");
       setIsLoading(false);
       throw error;
     }
@@ -248,7 +249,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       setIsLoading(true);
       await authApi.naverLogin(userType);
     } catch (error: unknown) {
-      console.error("네이버 로그인 실패:", error);
+      logDevError(error, "Failed to naver login");
       setIsLoading(false);
       throw error;
     }

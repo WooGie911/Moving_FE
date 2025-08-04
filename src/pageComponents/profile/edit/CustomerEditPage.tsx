@@ -19,6 +19,7 @@ import {
 } from "@/components/profile/edit";
 import { useAuth } from "@/providers/AuthProvider";
 import { isValidEmail, isValidName, isValidPhoneNumber } from "@/utils/validators";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export default function CustomerEditPage() {
   const { user } = useAuth();
@@ -142,7 +143,7 @@ export default function CustomerEditPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div>프로필 정보를 불러오는 중...</div>
+        <MovingTruckLoader size="md" loadingText="프로필 정보를 불러오는 중..." />
       </div>
     );
   }

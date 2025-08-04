@@ -74,7 +74,10 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
         moverId: user?.id || "",
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequest"] });
+      // 관련된 모든 페이지의 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
       setCurrentModalType(null); // useEffect 비활성화
       // 성공 모달 표시
       open({
@@ -106,7 +109,10 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
         comment: data.comment,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequest"] });
+      // 관련된 모든 페이지의 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
+      queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
       setCurrentModalType(null); // useEffect 비활성화
       // 성공 모달 표시
       open({
@@ -224,24 +230,23 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   };
   return (
     <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
-      {isPastDate ||
-        (estimateStatus === "AUTO_REJECTED" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
-            <Link href={`/estimate/request/${id}`} className="cursor-pointer">
-              <Button
-                variant="outlined"
-                state="default"
-                width="w-[254px] lg:w-[233px]"
-                height="h-[54px]"
-                rounded="rounded-[12px]"
-                className="bg-primary-100"
-              >
-                {t("viewEstimateDetail")}
-              </Button>
-            </Link>
-          </div>
-        ))}
+      {(isPastDate || estimateStatus === "AUTO_REJECTED") && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
+          <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
+          <Link href={`/estimate/request/${id}`} className="cursor-pointer">
+            <Button
+              variant="outlined"
+              state="default"
+              width="w-[254px] lg:w-[233px]"
+              height="h-[54px]"
+              rounded="rounded-[12px]"
+              className="bg-primary-100"
+            >
+              {t("viewEstimateDetail")}
+            </Button>
+          </Link>
+        </div>
+      )}
       {usedAt === "rejected" && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           <p className="text-[18px] leading-[26px] font-semibold text-white">{t("rejectedRequestMessage")}</p>
