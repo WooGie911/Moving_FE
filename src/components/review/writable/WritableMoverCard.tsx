@@ -4,10 +4,11 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import { Button } from "@/components/common/button/Button";
 import Image from "next/image";
 import React from "react";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.png";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
 import { IWritableCardData } from "@/types/review";
-import defaultProfile from "@/assets/img/mascot/moverprofile-lg.png";
+import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations } from "next-intl";
+import { formatDateByLanguage } from "@/utils/dateUtils";
 
 export interface IMoverCardProps extends Omit<IWritableCardData, "id" | "isFavorite" | "reviewId"> {
   onClickWrite: () => void;
@@ -74,7 +75,7 @@ const WritableMoverCard = ({
 
             <div className="border-gray-100 text-[14px] md:border-r-2 md:px-3 md:text-[16px] lg:border-r-0">
               <div className="text-gray-500">{t("moveDate")}</div>
-              <div className="text-black-500">{new Date(moveDate).toLocaleDateString("ko-KR")}</div>
+              <div className="text-black-500">{formatDateByLanguage(moveDate, "ko")}</div>
             </div>
           </div>
 

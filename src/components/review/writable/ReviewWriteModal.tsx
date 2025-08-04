@@ -7,11 +7,12 @@ import { IWritableCardData, IReviewForm } from "@/types/review";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.png";
-import arrowIcon from "@/assets/icon/arrow/icon-arrow.png";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
+import arrowIcon from "@/assets/icon/arrow/icon-arrow.webp";
 import { Button } from "@/components/common/button/Button";
-import defaultProfile from "@/assets/img/mascot/moverprofile-lg.png";
+import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations } from "next-intl";
+import { formatDateByLanguage } from "@/utils/dateUtils";
 
 interface ReviewWriteModalProps {
   card: IWritableCardData;
@@ -72,7 +73,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
 
                 <div className="border-gray-100">
                   <div className="text-gray-500">{t("moveDate")}</div>
-                  <div className="text-black-500">{new Date(card.moveDate).toLocaleDateString("ko-KR")}</div>
+                  <div className="text-black-500">{formatDateByLanguage(card.moveDate, "ko")}</div>
                 </div>
               </div>
             </div>

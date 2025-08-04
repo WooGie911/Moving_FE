@@ -1,13 +1,14 @@
 "use client";
 
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
-import StarFill from "@/assets/icon/star/icon-star-active-lg.png";
-import Star from "@/assets/icon/star/icon-star-inactive-lg.png";
+import StarFill from "@/assets/icon/star/icon-star-active-lg.webp";
+import Star from "@/assets/icon/star/icon-star-inactive-lg.webp";
 import Image from "next/image";
 import React from "react";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.png";
-import defaultProfile from "@/assets/img/mascot/moverprofile-lg.png";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
+import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations } from "next-intl";
+import { formatDateByLanguage } from "@/utils/dateUtils";
 
 import { IWrittenCardData } from "@/types/review";
 
@@ -73,7 +74,7 @@ const WrittenMoverCard = ({
 
             <div className="flex flex-col items-start md:px-3">
               <div className="text-gray-500">{t("moveDate")}</div>
-              <div className="text-black-500">{new Date(moveDate).toLocaleDateString("ko-KR")}</div>
+              <div className="text-black-500">{formatDateByLanguage(moveDate, "ko")}</div>
             </div>
           </div>
         </div>
@@ -94,7 +95,7 @@ const WrittenMoverCard = ({
 
       <div className="flex justify-end text-[12px] text-gray-300 md:hidden">
         <span>{t("writeDate")} </span>
-        <span>{new Date(createdAt).toLocaleDateString("ko-KR")}</span>
+        <span>{formatDateByLanguage(createdAt, "ko")}</span>
       </div>
     </div>
   );
