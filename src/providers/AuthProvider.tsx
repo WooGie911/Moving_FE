@@ -263,21 +263,15 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       // 인증이 필요하지 않은 페이지들
       const publicRoutes = ["/", "/ko", "/en", "/zh", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
 
-      // 기사님 상세 페이지도 비회원 접근 가능하도록 체크
-      const isSearchMoverDetailPage =
-        pathname?.startsWith("/ko/searchMover/") ||
-        pathname?.startsWith("/en/searchMover/") ||
-        pathname?.startsWith("/zh/searchMover/");
-
       // locale이 포함된 랜딩페이지 체크
       const isLandingPage = pathname === "/" || pathname === "/ko" || pathname === "/en" || pathname === "/zh";
 
-      if (!pathname || publicRoutes.includes(pathname) || isLandingPage || isSearchMoverDetailPage) {
+      if (!pathname || publicRoutes.includes(pathname) || isLandingPage) {
         setIsLoading(false);
         return;
       }
 
-      // 인증된 페이지에서는 사용자 정보 조회
+      // 모든 페이지에서 사용자 정보 조회 (기사님 상세 페이지 포함)
       await getUser();
     };
 

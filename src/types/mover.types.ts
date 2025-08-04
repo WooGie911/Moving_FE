@@ -38,6 +38,7 @@ export interface IMover {
   experience?: number;
   reviewCount?: number;
   avgRating?: number;
+  isFavorited?: boolean;
 }
 
 // 기사님 정보 타입 (API 응답용)
