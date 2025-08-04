@@ -10,7 +10,7 @@ import WrittenMoverCard from "@/components/review/written/WrittenMoverCard";
 import reviewApi from "@/lib/api/review.api";
 import { useAuth } from "@/providers/AuthProvider";
 import Pagination from "@/components/common/pagination/Pagination";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const PAGE_SIZE = 4;
 
@@ -20,6 +20,7 @@ const WrittenReviewPage = () => {
   const { user } = useAuth();
   const customerId = user?.id ? String(user.id) : null;
   const t = useTranslations("review");
+  const locale = useLocale();
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -30,10 +31,10 @@ const WrittenReviewPage = () => {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["writtenReviews", customerId, page],
+    queryKey: ["writtenReviews", customerId, page, locale],
     queryFn: () =>
       customerId
-        ? reviewApi.fetchWrittenReviews(customerId, page, PAGE_SIZE)
+        ? reviewApi.fetchWrittenReviews(customerId, page, PAGE_SIZE, locale)
         : Promise.resolve({ items: [], total: 0, page, pageSize: PAGE_SIZE }),
     enabled: !!customerId,
     placeholderData: { items: [], total: 0, page, pageSize: PAGE_SIZE },

@@ -11,7 +11,7 @@ import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
 import arrowIcon from "@/assets/icon/arrow/icon-arrow.webp";
 import { Button } from "@/components/common/button/Button";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 
 interface ReviewWriteModalProps {
@@ -21,12 +21,13 @@ interface ReviewWriteModalProps {
 }
 
 const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProps) => {
-  const formMethods = useForm<IReviewForm>({ mode: "onChange" });
-  const { control, handleSubmit, formState } = formMethods;
   const t = useTranslations("review");
+  const locale = useLocale();
+  const methods = useForm<IReviewForm>();
+  const { control, handleSubmit, formState } = methods;
 
   return (
-    <FormProvider {...formMethods}>
+    <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full justify-center md:min-w-[375px] lg:w-[600px]">
         <div className="flex flex-col gap-y-5">
           <div className="flex flex-col gap-y-5">
@@ -73,7 +74,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProp
 
                 <div className="border-gray-100">
                   <div className="text-gray-500">{t("moveDate")}</div>
-                  <div className="text-black-500">{formatDateByLanguage(card.moveDate, "ko")}</div>
+                  <div className="text-black-500">{formatDateByLanguage(card.moveDate, locale as "ko" | "en" | "zh")}</div>
                 </div>
               </div>
             </div>

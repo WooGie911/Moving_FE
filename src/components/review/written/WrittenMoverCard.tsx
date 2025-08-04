@@ -7,7 +7,7 @@ import Image from "next/image";
 import React from "react";
 import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 
 import { IWrittenCardData } from "@/types/review";
@@ -28,6 +28,7 @@ const WrittenMoverCard = ({
   createdAt,
 }: WrittenMoverCardProps) => {
   const t = useTranslations("review");
+  const locale = useLocale();
 
   return (
     <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between">
@@ -74,7 +75,7 @@ const WrittenMoverCard = ({
 
             <div className="flex flex-col items-start md:px-3">
               <div className="text-gray-500">{t("moveDate")}</div>
-              <div className="text-black-500">{formatDateByLanguage(moveDate, "ko")}</div>
+              <div className="text-black-500">{formatDateByLanguage(moveDate, locale as "ko" | "en" | "zh")}</div>
             </div>
           </div>
         </div>
@@ -95,7 +96,7 @@ const WrittenMoverCard = ({
 
       <div className="flex justify-end text-[12px] text-gray-300 md:hidden">
         <span>{t("writeDate")} </span>
-        <span>{formatDateByLanguage(createdAt, "ko")}</span>
+        <span>{formatDateByLanguage(createdAt, locale as "ko" | "en" | "zh")}</span>
       </div>
     </div>
   );

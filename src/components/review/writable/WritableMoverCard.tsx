@@ -7,7 +7,7 @@ import React from "react";
 import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
 import { IWritableCardData } from "@/types/review";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 
 export interface IMoverCardProps extends Omit<IWritableCardData, "id" | "isFavorite" | "reviewId"> {
@@ -27,6 +27,7 @@ const WritableMoverCard = ({
   onClickWrite,
 }: IMoverCardProps) => {
   const t = useTranslations("review");
+  const locale = useLocale();
 
   return (
     <div className="mb-6 flex w-full max-w-[327px] min-w-[327px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] lg:h-[242px] lg:w-[1120px] lg:max-w-none lg:flex-row lg:justify-between">
@@ -75,7 +76,7 @@ const WritableMoverCard = ({
 
             <div className="border-gray-100 text-[14px] md:border-r-2 md:px-3 md:text-[16px] lg:border-r-0">
               <div className="text-gray-500">{t("moveDate")}</div>
-              <div className="text-black-500">{formatDateByLanguage(moveDate, "ko")}</div>
+              <div className="text-black-500">{formatDateByLanguage(moveDate, locale as "ko" | "en" | "zh")}</div>
             </div>
           </div>
 

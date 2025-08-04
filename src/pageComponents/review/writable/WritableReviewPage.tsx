@@ -12,7 +12,7 @@ import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import Pagination from "@/components/common/pagination/Pagination";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
@@ -20,22 +20,23 @@ const WritableReviewPage = () => {
   const queryClient = useQueryClient();
   const deviceType = useWindowWidth();
   const t = useTranslations("review");
+  const locale = useLocale();
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["writableReviews", page],
-    queryFn: () => reviewApi.fetchWritableReviews(page),
+    queryKey: ["writableReviews", page, locale],
+    queryFn: () => reviewApi.fetchWritableReviews(page, 4, locale),
     placeholderData: { items: [], total: 0, page, pageSize: 4 },
   });
 
   const { mutate: postReview, isPending } = useMutation({
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
-      reviewApi.postReview(reviewId, rating, content),
+      reviewApi.postReview(reviewId, rating, content, locale),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["writableReviews", page] });
+      queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
       close();
     },
     onError: () => {
