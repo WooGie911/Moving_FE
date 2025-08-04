@@ -29,7 +29,7 @@ const WritableReviewPage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["writableReviews", page, locale],
     queryFn: () => reviewApi.fetchWritableReviews(page, 4, locale),
-    placeholderData: { items: [], total: 0, page, pageSize: 4 },
+    placeholderData: { items: [], total: 0, page, pageSize: 4, hasNextPage: false, hasPrevPage: false },
   });
 
   const { mutate: postReview, isPending } = useMutation({
@@ -78,7 +78,7 @@ const WritableReviewPage = () => {
           <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
         </section>
       ) : (
-        <section className="w-full" aria-label="작성 가능한 리뷰 목록">
+        <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
           <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
         </section>
       )}

@@ -865,7 +865,16 @@
     "reviewRequired": "Please enter a detailed review.",
     "reviewMinLength": "Please enter at least 10 characters",
     "submitting": "Submitting...",
-    "registerReview": "Register Review"
+    "registerReview": "Register Review",
+    "experience": "Experience",
+    "averageRating": "Average Rating",
+    "totalReviews": "Total Reviews",
+    "workHours": "Work Hours",
+    "includesPacking": "Includes Packing",
+    "insuranceAmount": "Insurance Amount",
+    "currency": "KRW",
+    "yes": "Yes",
+    "no": "No"
   },
   "notification": {
     "title": "Notifications",

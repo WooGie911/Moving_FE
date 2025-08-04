@@ -35,9 +35,9 @@ const WrittenReviewPage = () => {
     queryFn: () =>
       customerId
         ? reviewApi.fetchWrittenReviews(customerId, page, PAGE_SIZE, locale)
-        : Promise.resolve({ items: [], total: 0, page, pageSize: PAGE_SIZE }),
+        : Promise.resolve({ items: [], total: 0, page, pageSize: PAGE_SIZE, hasNextPage: false, hasPrevPage: false }),
     enabled: !!customerId,
-    placeholderData: { items: [], total: 0, page, pageSize: PAGE_SIZE },
+    placeholderData: { items: [], total: 0, page, pageSize: PAGE_SIZE, hasNextPage: false, hasPrevPage: false },
   });
 
   const reviews = (data?.items ?? []) as unknown as IWrittenCardData[];
@@ -62,14 +62,15 @@ const WrittenReviewPage = () => {
         <section className="flex w-full flex-col items-center gap-6" aria-label="작성된 리뷰 목록">
           {reviews.map((card) => (
             <article key={card.id}>
-              <button onClick={() => handleNavigateDetail(card.moverId)}>
+              <button onClick={() => handleNavigateDetail(card.mover.id)}>
                 <WrittenMoverCard
                   id={card.id}
-                  profileImage={card.profileImage}
-                  nickname={card.nickname}
-                  moverIntroduction={card.moverIntroduction}
-                  isDesigned={card.isDesigned}
-                  moveType={card.moveType as "SMALL" | "HOME" | "OFFICE"}
+                  profileImage={card.mover.profileImage}
+                  nickname={card.mover.nickname}
+                  shortIntro={card.mover.shortIntro}
+                  experience={card.mover.experience}
+                  averageRating={card.mover.averageRating}
+                  totalReviews={card.mover.totalReviews}
                   fromAddress={card.fromAddress}
                   toAddress={card.toAddress}
                   moveDate={card.moveDate}

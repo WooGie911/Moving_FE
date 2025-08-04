@@ -9,17 +9,33 @@ import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
+import { shortenRegionName } from "@/utils/regionMapping";
 
-import { IWrittenCardData } from "@/types/review";
+import { IWrittenCardData, IAddress } from "@/types/review";
 
-type WrittenMoverCardProps = Omit<IWrittenCardData, "moverId">;
+type WrittenMoverCardProps = {
+  id: string;
+  profileImage: string | null;
+  nickname: string;
+  shortIntro: string;
+  experience: number;
+  averageRating: number;
+  totalReviews: number;
+  fromAddress: IAddress;
+  toAddress: IAddress;
+  moveDate: string;
+  rating: number;
+  content: string;
+  createdAt: string;
+};
 
 const WrittenMoverCard = ({
   profileImage,
   nickname,
-  moveType,
-  isDesigned,
-  moverIntroduction,
+  shortIntro,
+  experience,
+  averageRating,
+  totalReviews,
   fromAddress,
   toAddress,
   moveDate,
@@ -34,8 +50,7 @@ const WrittenMoverCard = ({
     <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between">
       <div className="flex flex-col gap-y-1 md:gap-y-1">
         <div className="flex gap-2 md:hidden">
-          <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
-          {isDesigned && <MoveTypeLabel type="document" />}
+          <MoveTypeLabel type="small" />
         </div>
         <div className="flex flex-row items-start justify-between">
           {/* 프로필 이미지 */}
@@ -50,12 +65,13 @@ const WrittenMoverCard = ({
           <div className="order-1 mt-3 ml-0 flex-1 md:order-2 md:mt-0 md:ml-4">
             <div className="flex flex-col items-start md:flex-row md:items-center md:gap-1">
               <Image src={estimateIcon} alt={t("verifiedDriver")} className="h-4 w-3" />
-              <div className="text-lg font-bold">{nickname} {t("driverSuffix")}</div>
+              <div className="text-lg font-bold">
+                {nickname} {t("driverSuffix")}
+              </div>
             </div>
-            <div className="hidden max-w-[180px] truncate text-sm text-gray-500 md:block">{moverIntroduction}</div>
+            <div className="hidden text-start truncate text-sm text-gray-500 md:block">{shortIntro}</div>
             <div className="hidden md:my-1 md:flex md:gap-2">
-              <MoveTypeLabel type={moveType.toLowerCase() as "small" | "home" | "office"} />
-              {isDesigned && <MoveTypeLabel type="document" />}
+              <MoveTypeLabel type="small" />
             </div>
           </div>
         </div>
@@ -65,11 +81,15 @@ const WrittenMoverCard = ({
             <div className="flex gap-3">
               <div className="flex flex-col items-start">
                 <div className="text-gray-500">{t("departure")}</div>
-                <div className="text-black-500">{fromAddress.city}</div>
+                <div className="text-black-500">
+                  {locale === "ko" ? shortenRegionName(fromAddress.region) : fromAddress.region} {fromAddress.city}
+                </div>
               </div>
               <div className="flex flex-col items-start border-gray-100 px-3 md:border-x-2">
                 <div className="text-gray-500">{t("arrival")}</div>
-                <div className="text-black-500">{toAddress.city}</div>
+                <div className="text-black-500">
+                  {locale === "ko" ? shortenRegionName(toAddress.region) : toAddress.region} {toAddress.city}
+                </div>
               </div>
             </div>
 

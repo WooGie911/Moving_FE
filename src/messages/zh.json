@@ -878,7 +878,16 @@
     "reviewRequired": "请输入详细评价。",
     "reviewMinLength": "请输入至少10个字符",
     "submitting": "提交中...",
-    "registerReview": "注册评价"
+    "registerReview": "注册评价",
+    "experience": "经验",
+    "averageRating": "平均评分",
+    "totalReviews": "总评价数",
+    "workHours": "工作时间",
+    "includesPacking": "包含包装",
+    "insuranceAmount": "保险金额",
+    "currency": "韩元",
+    "yes": "是",
+    "no": "否"
   },
   "notification": {
     "title": "通知",
