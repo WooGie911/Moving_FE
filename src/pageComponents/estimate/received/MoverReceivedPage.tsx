@@ -126,7 +126,7 @@ export const MoverReceivedPage = () => {
   // 에러 상태
   if (isError) {
     console.error(`${t("apiError")}`, error);
-    return <div>{tCommon("error")}</div>;
+    return <div>{commonT("error")}</div>;
   }
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {

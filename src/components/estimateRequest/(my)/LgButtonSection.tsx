@@ -35,8 +35,6 @@ export const LgButtonSection = ({
       // 캐시 무효화하여 데이터 새로고침
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
-
-      console.log("견적 확정 처리 성공");
     },
     onError: (error) => {
       console.error("견적 확정 처리 실패:", error);

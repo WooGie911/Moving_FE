@@ -64,7 +64,6 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
       return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
     }
   };
-  // console.log("카드데이터", data);
   // 견적 생성 mutation
   const createEstimateMutation = useMutation({
     mutationFn: (data: { estimateRequestId: string; price: number; comment: string }) =>

@@ -36,8 +36,6 @@ export const EstimateListSection = ({
       // 캐시 무효화하여 데이터 새로고침
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequest"] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
-
-      console.log("이사완료 처리 성공");
     },
     onError: (error) => {
       console.error("이사완료 처리 실패:", error);

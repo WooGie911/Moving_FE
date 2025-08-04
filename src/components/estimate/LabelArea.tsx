@@ -16,7 +16,6 @@ export const LabelArea = ({ movingType, isDesignated, createdAt, usedAt, estimat
   const t = useTranslations("relativeTime");
   const estimateT = useTranslations("estimateRequest");
   const locale = useLocale();
-  console.log("디테일페이지", estimateStatus);
   return (
     <div className="flex w-full flex-row items-center justify-between gap-2">
       <div className="flex flex-row items-center justify-center gap-2">
