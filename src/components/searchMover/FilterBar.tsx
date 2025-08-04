@@ -14,6 +14,7 @@ const FilterBar = () => {
   const { region, setRegion, serviceTypeId, setServiceTypeId, reset } = useSearchMoverStore();
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
+  const tRegions = useTranslations("regions");
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isServiceOpen, setIsServiceOpen] = useState(false);
 
@@ -25,9 +26,9 @@ const FilterBar = () => {
   const regionOptions: Option[] = React.useMemo(
     () => [
       { value: "", label: t("all") },
-      ...regions.map((region) => ({ value: region, label: getRegionTranslation(region, t) })),
+      ...regions.map((region) => ({ value: region, label: getRegionTranslation(region, tRegions) })),
     ],
-    [regions, t],
+    [regions, t, tRegions],
   );
 
   const serviceOptions: Option[] = React.useMemo(
