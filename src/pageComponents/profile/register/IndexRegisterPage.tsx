@@ -15,6 +15,6 @@ export default function IndexRegisterPage() {
   } else if (user?.userType === "MOVER" && !user?.nickname) {
     return <MoverRegisterPage />;
   } else {
-    return <MovingTruckLoader size="lg" loadingText="등록페이지 불러오는 중..." />;
+    return <MovingTruckLoader size="lg" loadingText="프로필등록 페이지 불러오는 중..." />;
   }
 }
