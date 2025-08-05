@@ -1,3 +1,5 @@
+import type { TAddress } from "./customerEstimateRequest";
+
 // 프론트엔드 리뷰 타입
 export interface IReview {
   id: string;
@@ -37,6 +39,13 @@ export interface IApiReview {
   moverId: string;
   profileImage: string | null;
   nickname: string;
+  customer?: {
+    id: string;
+    nickname: string;
+    profileImage: string;
+    detailIntro: string | null;
+    shortIntro: string | null;
+  };
   moveType: string;
   isDesigned: boolean;
   moverIntroduction: string | null;
