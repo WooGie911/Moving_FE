@@ -112,7 +112,7 @@ export const DetailPageMainSeaction = ({
 
         <div className="border-border-light flex w-full flex-col border-b-1" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
-          <ShareSection />
+          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
           {type === "pending" ? (
             <LastButtonSection
               estimateId={estimate.id}
@@ -137,7 +137,7 @@ export const DetailPageMainSeaction = ({
             ""
           )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
-          <ShareSection />
+          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
         </div>
       </div>
     </div>

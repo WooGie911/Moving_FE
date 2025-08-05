@@ -24,6 +24,7 @@ export const ShareButton = ({
   url = "",
   title,
   description,
+  imageUrl,
   className = "",
   onSuccess,
   onError,
@@ -68,7 +69,7 @@ export const ShareButton = ({
   const handleKakaoShare = () => {
     try {
       const shareUrl = url || getCurrentPageUrl();
-      shareToKakao(shareUrl);
+      shareToKakao(shareUrl, title, description, imageUrl);
       showShareSuccess("kakao");
       onSuccess?.();
     } catch (error) {

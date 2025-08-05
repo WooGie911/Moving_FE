@@ -32,6 +32,7 @@ export interface IShareButtonProps {
   url?: string; // 현재 페이지 URL 자동 사용
   title?: string;
   description?: string;
+  imageUrl?: string; // 공유 이미지 URL
   className?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
@@ -42,6 +43,7 @@ export interface IShareButtonGroupProps {
   url?: string;
   title?: string;
   description?: string;
+  imageUrl?: string; // 공유 이미지 URL
   className?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
