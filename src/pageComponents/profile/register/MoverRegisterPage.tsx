@@ -8,7 +8,7 @@ import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ProfileFormHeader,
   ProfileImageUpload,
@@ -24,6 +24,7 @@ const MoverRegisterPage = () => {
   const { open, close } = useModal();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
+  const currentLocale = useLocale();
 
   const methods = useForm({
     mode: "onChange",
@@ -73,7 +74,7 @@ const MoverRegisterPage = () => {
             text: "확인",
             onClick: () => {
               close();
-              router.push("/estimate/received");
+              router.push(`/${currentLocale}/estimate/received`);
             },
           },
         ],
