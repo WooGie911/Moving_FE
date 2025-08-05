@@ -3,6 +3,7 @@
 import { useAuth } from "@/providers/AuthProvider";
 import CustomerRegisterPage from "./CustomerRegisterPage";
 import MoverRegisterPage from "./MoverRegisterPage";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export default function IndexRegisterPage() {
   const { user } = useAuth();
@@ -13,12 +14,9 @@ export default function IndexRegisterPage() {
     return <MoverRegisterPage />;
   }
 
-  // nickname이 있는 경우 기본 페이지 렌더링
-  if (user?.userType === "CUSTOMER") {
-    return <CustomerRegisterPage />;
-  } else if (user?.userType === "MOVER") {
-    return <MoverRegisterPage />;
-  }
-
-  return null; // 로딩 상태 또는 인증되지 않은 상태
+  return (
+    <>
+      <MovingTruckLoader size="lg" loadingText="데이터를 불러오는 중..." />
+    </>
+  );
 }

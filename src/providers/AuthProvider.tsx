@@ -114,6 +114,10 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       } else {
         setUser(null);
       }
+
+      if (response.status === 404) {
+        logout();
+      }
     } catch (e) {
       logDevError(e, "Failed to get user");
       setUser(null);
