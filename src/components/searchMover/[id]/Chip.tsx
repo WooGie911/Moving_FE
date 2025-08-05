@@ -8,15 +8,21 @@ const Chip = ({ mover }: MoverProps) => {
   const t = useTranslations("mover");
   const tRegions = useTranslations("regions");
   const tService = useTranslations("service");
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2 md:gap-4">
         <p className="text-lg font-semibold md:text-xl">{t("providedServices")}</p>
         <div className="flex gap-2 md:gap-3">
           {(mover.serviceTypes || []).map((serviceType, idx) => {
-            const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-
-            return <CircleTextLabel key={idx} text={tService(serviceName)} hasBorder1={true} hasBorder2={true} />;
+            return (
+              <CircleTextLabel
+                key={idx}
+                text={tService(serviceType.service.name)}
+                hasBorder1={true}
+                hasBorder2={true}
+              />
+            );
           })}
         </div>
       </div>

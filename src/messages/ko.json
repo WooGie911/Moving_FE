@@ -61,6 +61,11 @@
   "estimateRequest": {
     "title": "견적요청",
     "editTitle": "견적 수정",
+    "metadata": {
+      "title": "견적 요청 | Moving",
+      "description": "이사 견적을 요청하고 관리하세요"
+    },
+    "loadingText": "견적 정보를 확인하는 중...",
     "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
     "noEstimateInProgress": "진행중인 견적이 없습니다.",
     "requestNewEstimate": "새로운 견적을 요청해보세요.",
@@ -193,6 +198,10 @@
       "thursday": "목",
       "friday": "금",
       "saturday": "토"
+    },
+    "calendar": {
+      "today": "당일 이사는 선택할 수 없습니다",
+      "pastDate": "과거 날짜는 선택할 수 없습니다"
     }
   },
   "navigation": {
@@ -334,7 +343,17 @@
       "serviceSelectionLabelMover": "제공 서비스 선택",
       "regionSelectionLabelCustomer": "내가 사는 지역 선택",
       "regionSelectionLabelMover": "서비스 가능 지역 선택"
-    }
+    },
+    "editMetadata": {
+      "title": "프로필 수정 | Moving",
+      "description": "프로필 수정 페이지"
+    },
+    "registerMetadata": {
+      "title": "프로필 등록 | Moving",
+      "description": "프로필 등록 페이지"
+    },
+    "registerLoadingText": "프로필 등록 페이지 불러오는 중...",
+    "editLoadingText": "프로필 수정 페이지 불러오는 중..."
   },
   "search": {
     "title": "이사업체 검색",
@@ -796,6 +815,14 @@
     "switchUserTypeError": "전환에 실패하였습니다."
   },
   "review": {
+    "metadata": {
+      "title": "리뷰 | 무빙",
+      "description": "이사 리뷰를 작성하고 관리하세요",
+      "writableTitle": "작성 가능한 리뷰 | 무빙",
+      "writableDescription": "이사 완료 후 작성할 수 있는 리뷰를 확인하세요",
+      "writtenTitle": "내가 작성한 리뷰 | 무빙",
+      "writtenDescription": "내가 작성한 이사 리뷰를 확인하고 관리하세요"
+    },
     "title": "리뷰",
     "writableTab": "작성 가능한 리뷰",
     "writtenTab": "내가 작성한 리뷰",
@@ -819,7 +846,16 @@
     "reviewRequired": "상세 후기를 입력해주세요.",
     "reviewMinLength": "최소 10자 이상 입력해주세요",
     "submitting": "요청 중...",
-    "registerReview": "리뷰 등록"
+    "registerReview": "리뷰 등록",
+    "experience": "경력",
+    "averageRating": "평균 평점",
+    "totalReviews": "총 리뷰",
+    "workHours": "작업시간",
+    "includesPacking": "포장포함",
+    "insuranceAmount": "보험금액",
+    "currency": "원",
+    "yes": "예",
+    "no": "아니오"
   },
   "notification": {
     "title": "알림",
@@ -827,6 +863,10 @@
     "allNotificationsLoaded": "모든 알림을 불러왔습니다."
   },
   "schedule": {
+    "metadata": {
+      "title": "일정 관리 | Moving",
+      "description": "이사 일정을 확인하고 관리하세요"
+    },
     "title": "일정 관리",
     "description": "이사 일정을 확인하고 관리하세요",
     "selectDate": "날짜를 선택해주세요",
@@ -844,6 +884,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "찜한 기사님 | Moving",
+      "description": "찜한 기사님을 확인하고 관리하세요"
+    },
     "title": "찜한 기사님",
     "selectAll": "전체선택",
     "deleteSelected": "선택 항목 삭제",

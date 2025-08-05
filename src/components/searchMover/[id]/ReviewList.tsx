@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { IReview, IApiReview, IReviewListProps } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
 import Image from "next/image";
@@ -10,17 +10,19 @@ import Pagination from "@/components/common/pagination/Pagination";
 // 사용자 이름 마스킹 함수
 const maskUserName = (name: string): string => {
   if (!name || name.length <= 1) return name;
-  return name.charAt(0) + "*".repeat(name.length - 1);
+  return name.charAt(0) + "***"; 
 };
 
 const PAGE_SIZE = 5;
 
 const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   const [reviews, setReviews] = useState<IReview[]>([]);
+  const [apiReviews, setApiReviews] = useState<IApiReview[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const t = useTranslations("mover");
+  const locale = useLocale();
 
   useEffect(() => {
     if (!moverId) return;
@@ -28,26 +30,40 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
     const fetchReviews = async () => {
       setLoading(true);
       try {
-        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE);
+        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE, locale);
 
         const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
           id: apiReview.id,
+          customerId: apiReview.customerId,
+          moverId: apiReview.moverId,
+          estimateRequestId: apiReview.estimateRequestId,
           rating: apiReview.rating,
           content: apiReview.content,
-          createdAt: apiReview.createdAt,
-          userId: apiReview.customerId,
-          moverId: apiReview.moverId,
-          quoteId: apiReview.estimateRequestId,
-          estimateId: apiReview.estimate?.id || "",
-          status: "COMPLETED" as const,
-          isPublic: true,
-          user: {
-            id: apiReview.customerId,
-            name: apiReview.nickname,
+          createdAt: new Date(apiReview.createdAt),
+          updatedAt: new Date(apiReview.createdAt),
+          deletedAt: null,
+          estimateRequest: {
+            id: apiReview.estimateRequestId,
+            customerId: apiReview.customerId,
+            moveType: apiReview.moveType,
+            moveDate: new Date(apiReview.moveDate),
+            fromAddress: apiReview.fromAddress,
+            toAddress: apiReview.toAddress,
+            description: null,
+            status: "COMPLETED",
+          },
+          estimate: {
+            id: apiReview.estimate?.id || "",
+            price: apiReview.estimate?.price || 0,
+            comment: null,
+            status: "COMPLETED",
+            isDesignated: apiReview.isDesigned,
+            createdAt: new Date(apiReview.createdAt),
           },
         }));
 
         setReviews(convertedReviews);
+        setApiReviews(response.data.items);
         setTotalPages(Math.ceil(response.data.total / PAGE_SIZE));
 
         if (onReviewsFetched) {
@@ -107,22 +123,27 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   return (
     <div className="mt-4">
       <ul className="mb-[109px]">
-        {reviews.map((review, idx) => (
-          <React.Fragment key={review.id}>
-            <li className="py-5 md:py-6">
-              <div className="mb-4 flex flex-col gap-2 md:mb-6">
-                <div className="flex items-center gap-3 md:gap-[14px]">
-                  <span className="text-md md:text-2lg font-normal">{maskUserName(review.user.name)}</span>
-                  <div className="text-[#E6E6E6]">|</div>
-                  <span className="text-md md:text-2lg text-[#ABABAB]">{formatDate(review.createdAt)}</span>
+        {reviews.map((review, idx) => {
+          const apiReview = apiReviews[idx];
+          return (
+            <React.Fragment key={review.id}>
+              <li className="py-5 md:py-6">
+                <div className="mb-4 flex flex-col gap-2 md:mb-6">
+                  <div className="flex items-center gap-3 md:gap-[14px]">
+                    <span className="text-md md:text-2lg font-normal">
+                      {maskUserName(apiReview?.customer?.nickname || "익명")}
+                    </span>
+                    <div className="text-[#E6E6E6]">|</div>
+                    <span className="text-md md:text-2lg text-[#ABABAB]">{formatDate(apiReview?.createdAt || "")}</span>
+                  </div>
+                  <div className="flex items-center">{renderStars(review.rating)}</div>
                 </div>
-                <div className="flex items-center">{renderStars(review.rating)}</div>
-              </div>
-              <div className="text-md md:text-2lg leading-[24px]">{review.content}</div>
-            </li>
-            {idx !== reviews.length - 1 && <div className="mx-2 border-b border-gray-200" />}
-          </React.Fragment>
-        ))}
+                <div className="text-md md:text-2lg leading-[24px]">{review.content}</div>
+              </li>
+              {idx !== reviews.length - 1 && <div className="mx-2 border-b border-gray-200" />}
+            </React.Fragment>
+          );
+        })}
       </ul>
       {totalPages > 1 && (
         <div className="flex justify-center py-[34px] lg:my-[109px]">

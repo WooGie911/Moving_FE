@@ -4,8 +4,9 @@ import { useModal } from "@/components/common/modal/ModalContext";
 import { useTranslations, useLocale } from "next-intl";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IFormState } from "@/types/estimateRequest";
-import { toast } from "react-toastify";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { logDevError } from "@/utils/logDevError";
 
 // API 응답 타입 정의
 interface ApiResponse<T = any> {
@@ -123,6 +124,8 @@ export const useEstimateRequestApi = () => {
   // 공통 에러 처리 함수
   const handleApiError = useCallback(
     (error: Error | unknown, defaultMessage: string) => {
+      logDevError(error, `견적 요청 API 에러: ${defaultMessage}`);
+
       if (error instanceof Error) {
         try {
           const errorData = JSON.parse(error.message);
@@ -145,7 +148,7 @@ export const useEstimateRequestApi = () => {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
         // 견적 생성 성공 토스트 표시
-        toast.success(t("estimateRequest.createSuccess"));
+        showSuccessToast(t("estimateRequest.createSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();
@@ -165,7 +168,7 @@ export const useEstimateRequestApi = () => {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
         // 견적 수정 성공 토스트 표시
-        toast.success(t("estimateRequest.editSuccess"));
+        showSuccessToast(t("estimateRequest.editSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();
@@ -193,7 +196,7 @@ export const useEstimateRequestApi = () => {
         // 세션 데이터 삭제
         localStorage.removeItem("estimateRequest_draft");
         // 삭제 성공 토스트 표시
-        toast.success(t("estimateRequest.deleteSuccess"));
+        showSuccessToast(t("estimateRequest.deleteSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
         setTimeout(() => {
           window.location.reload();

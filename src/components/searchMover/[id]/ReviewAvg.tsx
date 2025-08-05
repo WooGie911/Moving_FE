@@ -8,8 +8,8 @@ import Image from "next/image";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
-  const total = mover.reviewCount;
-  const avg = mover.avgRating;
+  const total = mover.reviewCount || 0;
+  const avg = mover.avgRating || 0;
   const t = useTranslations("mover");
 
   // 점수별 개수 계산

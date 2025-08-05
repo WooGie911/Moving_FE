@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import reviewApi from "@/lib/api/review.api";
 import WritableMoverCardList from "@/components/review/writable/WritableMoverCardList";
-import noReview from "@/assets/img/mascot/notfound.png";
+import noReview from "@/assets/img/mascot/notfound.webp";
 import Image from "next/image";
 import { IWritableCardData, IReviewForm } from "@/types/review";
 
@@ -12,73 +13,103 @@ import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import Pagination from "@/components/common/pagination/Pagination";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
-  const { open, close } = useModal();
+  const { open: openModal, close: closeModal } = useModal();
   const queryClient = useQueryClient();
   const deviceType = useWindowWidth();
   const t = useTranslations("review");
+  const locale = useLocale();
+  const searchParams = useSearchParams();
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["writableReviews", page],
-    queryFn: () => reviewApi.fetchWritableReviews(page),
-    placeholderData: { items: [], total: 0, page, pageSize: 4 },
+    queryKey: ["writableReviews", page, locale],
+    queryFn: () => reviewApi.fetchWritableReviews(page, 4, locale),
+    placeholderData: { items: [], total: 0, page, pageSize: 4, hasNextPage: false, hasPrevPage: false },
   });
 
   const { mutate: postReview, isPending } = useMutation({
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
-      reviewApi.postReview(reviewId, rating, content),
+      reviewApi.postReview(reviewId, rating, content, locale),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["writableReviews", page] });
-      close();
+      queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
+      closeModal();
     },
     onError: () => {
       alert(t("reviewWriteFailed"));
     },
   });
 
-  const onSubmit = (reviewId: string, data: IReviewForm) => {
-    postReview({ reviewId, ...data });
-  };
+  const onSubmit = useCallback(
+    (reviewId: string, data: IReviewForm) => {
+      postReview({ reviewId, ...data });
+    },
+    [postReview],
+  );
 
-  const handleWriteModalOpen = (card: IWritableCardData) => {
-    const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
-    open({
-      title: t("writeReview"),
-      type: modalType,
-      children: card ? (
-        <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
-      ) : null,
-    });
-  };
+  const handleWriteModalOpen = useCallback(
+    (card: IWritableCardData) => {
+      const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
+      openModal({
+        title: t("writeReview"),
+        type: modalType,
+        children: card ? (
+          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
+        ) : null,
+      });
+    },
+    [deviceType, openModal, t, onSubmit, isPending],
+  );
+
+  // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
+  useEffect(() => {
+    const modal = searchParams.get("modal");
+    const reviewId = searchParams.get("reviewId");
+
+    if (modal === "write" && reviewId) {
+      // 데이터가 로드된 후에 해당 리뷰 카드를 찾아서 모달 열기
+      if (data?.items && data.items.length > 0) {
+        const targetCard = data.items.find((card: IWritableCardData) => card.reviewId === reviewId);
+        if (targetCard) {
+          handleWriteModalOpen(targetCard);
+        }
+      }
+    }
+  }, [searchParams, data?.items, handleWriteModalOpen]);
 
   const cards = (data?.items ?? []) as unknown as IWritableCardData[];
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || 4)) : 1;
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-10">
+    <main className="flex flex-col items-center justify-center px-6 py-10">
       {isLoading ? (
-        <div className="py-10 text-center">{t("common.loading")}</div>
+        <section className="py-10 text-center" aria-label="로딩 중">
+          <p>{t("loading")}</p>
+        </section>
       ) : isError ? (
-        <div className="py-10 text-center text-red-500">{t("common.error")}</div>
+        <section className="py-10 text-center text-red-500" aria-label="오류 발생">
+          <p>{t("error")}</p>
+        </section>
       ) : cards.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20">
+        <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
           <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
-          <div className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</div>
-        </div>
+          <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
+        </section>
       ) : (
-        <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+        <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
+          <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+        </section>
       )}
-      <div className="mt-8 flex justify-center">
+      <footer className="mt-8 flex justify-center">
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
-      </div>
-    </div>
+      </footer>
+    </main>
   );
 };
 

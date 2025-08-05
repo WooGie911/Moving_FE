@@ -16,7 +16,7 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
     const current = user.userType;
     const target = current === "CUSTOMER" ? "MOVER" : "CUSTOMER";
     setFakeUserType(target);
-    mutate();
+    setTimeout(() => mutate(), 300);
   };
 
   const typeToShow = fakeUserType ?? user?.userType;
@@ -38,8 +38,8 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
           initial={false}
           transition={{
             type: "spring",
-            stiffness: 500,
-            damping: 30,
+            stiffness: 600,
+            damping: 40,
           }}
         >
           {typeToShow === "MOVER" ? "🚚" : "👤"}
@@ -51,8 +51,8 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
           initial={false}
           transition={{
             type: "spring",
-            stiffness: 500,
-            damping: 30,
+            stiffness: 600,
+            damping: 40,
           }}
         >
           {typeToShow === "MOVER" ? "🚚" : "👤"}

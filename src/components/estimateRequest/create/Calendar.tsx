@@ -119,7 +119,8 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
 
   const handleDateClick = useCallback(
     (date: Date) => {
-      if (isBefore(startOfDay(date), today)) {
+      // 과거 날짜나 오늘 날짜는 선택할 수 없음
+      if (isBefore(startOfDay(date), today) || isToday(date)) {
         return;
       }
       // 날짜를 정확하게 설정하여 타임존 문제 방지
@@ -133,18 +134,19 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
     (dateObj: IDateObj, isSelected: boolean): string => {
       const isPastDate = isBefore(startOfDay(dateObj.date), today);
       const isCurrentDay = isToday(dateObj.date);
+      const isTodayDate = isToday(dateObj.date);
 
       const classes = [CALENDAR_STYLES.dateCell];
 
       if (dateObj.isOtherMonth) {
         classes.push(CALENDAR_STYLES.otherMonth);
-      } else if (isPastDate) {
+      } else if (isPastDate || isTodayDate) {
         classes.push(CALENDAR_STYLES.pastDate);
       } else {
         classes.push(CALENDAR_STYLES.currentDate);
       }
 
-      if (isCurrentDay && !isPastDate) {
+      if (isCurrentDay && !isPastDate && !isTodayDate) {
         classes.push(CALENDAR_STYLES.today);
       }
 
@@ -216,14 +218,21 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
           {week.map((dateObj, dayIndex) => {
             const isSelected = isDateSelected(dateObj);
             const cellClass = getDateCellClass(dateObj, isSelected);
-            const isDisabled = dateObj.isOtherMonth || isBefore(startOfDay(dateObj.date), today);
+            const isDisabled =
+              dateObj.isOtherMonth || isBefore(startOfDay(dateObj.date), today) || isToday(dateObj.date);
 
             return (
               <div
                 key={dayIndex}
                 onClick={() => handleDateClick(dateObj.date)}
                 className={cellClass}
-                title={isDisabled ? "과거 날짜는 선택할 수 없습니다" : ""}
+                title={
+                  isDisabled
+                    ? isToday(dateObj.date)
+                      ? t("estimateRequest.calendar.today")
+                      : t("estimateRequest.calendar.pastDate")
+                    : ""
+                }
               >
                 {dateObj.day}
               </div>

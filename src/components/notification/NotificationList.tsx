@@ -5,31 +5,21 @@ import { useInView } from "react-intersection-observer";
 import { useNotificationStore } from "@/stores/notificationStore";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/ko";
-import "dayjs/locale/en";
-import "dayjs/locale/zh";
 import { useRouter } from "next/navigation";
 import { INotification } from "@/types/notification.types";
 import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
-
-dayjs.extend(relativeTime);
+import { formatRelativeTime } from "@/utils/dateUtils";
 
 export default function NotificationList({ onClose }: { onClose?: () => void }) {
   const notifications = useNotificationStore((state) => state.notifications);
   const hasMore = useNotificationStore((state) => state.hasMore);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const markAsRead = useNotificationStore((state) => state.markAsRead);
+  const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
   const limit = 4;
   const loadingRef = useRef(false);
   const router = useRouter();
   const t = useTranslations("notification");
-  const locale = useLocale();
-
-  // dayjs 로케일 설정
-  dayjs.locale(locale);
 
   const { ref, inView } = useInView({ threshold: 0.2 });
 
@@ -51,6 +41,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
     try {
       await markAsRead(notification.id);
       onClose?.();
+      closeNotificationModal();
       router.push(notification.path);
     } catch (e) {
       console.error(e);
@@ -59,40 +50,63 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
 
   if (notifications.length === 0) {
     return (
-      <div className="flex w-full items-center justify-center">
-        <div className="p-2 text-center text-gray-400">{t("noNotifications")}</div>
-      </div>
+      <section className="flex w-full items-center justify-center" aria-label={t("noNotifications")}>
+        <p className="p-2 text-center text-gray-400">{t("noNotifications")}</p>
+      </section>
     );
   }
 
   return (
-    <div className="text-black-400 max-h-[215px] w-full overflow-y-auto">
-      {notifications.map((notification, idx) =>
-        notification.path ? (
-          <div
-            key={`${notification.id}-${idx}`}
-            className={`flex cursor-pointer flex-col items-start p-4 hover:bg-gray-50 ${
-              notification.isRead ? "bg-gray-100" : ""
-            } ${idx !== notifications.length - 1 ? "border-b border-gray-200" : ""}`}
-            onClick={() => handleClick(notification)}
-          >
-            <div className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</div>
-            <div className="mt-1 text-xs text-gray-400">{dayjs(notification.createdAt).fromNow()}</div>
-          </div>
-        ) : (
-          <div
-            key={`${notification.id}-${idx}`}
-            className={`flex flex-col items-start p-4 ${
-              idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
-            }`}
-          >
-            <div className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</div>
-            <div className="mt-1 text-xs text-gray-400">{dayjs(notification.createdAt).fromNow()}</div>
-          </div>
-        ),
+    <section className="text-black-400 max-h-[215px] w-full overflow-y-auto" aria-label="알림 목록">
+      <ul className="list-none">
+        {notifications.map((notification, idx) => (
+          <li key={`${notification.id}-${idx}`}>
+            {notification.path ? (
+              <article
+                className={`flex cursor-pointer flex-col items-start p-4 hover:bg-gray-50 ${
+                  notification.isRead ? "bg-gray-100" : ""
+                } ${idx !== notifications.length - 1 ? "border-b border-gray-200" : ""}`}
+                onClick={() => handleClick(notification)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleClick(notification);
+                  }
+                }}
+                aria-label={`${parse(DOMPurify.sanitize(notification.title))} - ${formatRelativeTime(new Date(notification.createdAt))}`}
+              >
+                <header className="text-sm break-words">
+                  {parse(DOMPurify.sanitize(notification.title))}
+                </header>
+                <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
+                  {formatRelativeTime(new Date(notification.createdAt))}
+                </time>
+              </article>
+            ) : (
+              <article
+                className={`flex flex-col items-start p-4 ${
+                  idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
+                }`}
+              >
+                <header className="text-sm break-words">
+                  {parse(DOMPurify.sanitize(notification.title))}
+                </header>
+                <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
+                  {formatRelativeTime(new Date(notification.createdAt))}
+                </time>
+              </article>
+            )}
+          </li>
+        ))}
+      </ul>
+      {hasMore && <div ref={ref} style={{ height: 40 }} aria-hidden="true" />}
+      {!hasMore && (
+        <footer className="py-2 text-center text-xs text-gray-400" aria-label="모든 알림 로드 완료">
+          {t("allNotificationsLoaded")}
+        </footer>
       )}
-      {hasMore && <div ref={ref} style={{ height: 40 }} />}
-      {!hasMore && <div className="py-2 text-center text-xs text-gray-400">{t("allNotificationsLoaded")}</div>}
-    </div>
+    </section>
   );
 }

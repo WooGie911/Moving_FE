@@ -8,8 +8,8 @@ import star from "@/assets/icon/star/icon-star-active-lg.png";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
-  const total = mover.reviewCount;
-  const avg = mover.avgRating;
+  const total = mover.reviewCount || 0;
+  const avg = mover.avgRating || 0;
   const t = useTranslations("mover");
   const tShared = useTranslations("shared");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,7 +21,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
     if (descriptionRef.current) {
       const element = descriptionRef.current;
       const lineHeight = parseInt(window.getComputedStyle(element).lineHeight);
-      const maxHeight = lineHeight * 2; 
+      const maxHeight = lineHeight * 2;
 
       if (element.scrollHeight > maxHeight) {
         setShowMoreButton(true);
@@ -65,13 +65,13 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
       </div>
       <div className="mb-4 flex justify-between">
         <div className="flex items-center gap-1">
-          {mover.completedCount > 30 && <Image src={badge} alt="badge-image" className="h-[23px] w-[20px]" />}
+          {(mover.completedCount || 0) > 30 && <Image src={badge} alt="badge-image" className="h-[23px] w-[20px]" />}
           <p className="md:text-2lg text-lg font-semibold">
             {mover.nickname} {t("driverSuffix")}
           </p>
         </div>
         <div className="flex items-center gap-1">
-          <p className="text-md md:text-2lg font-medium text-[#808080]">{mover.favoriteCount}</p>
+          <p className="text-md md:text-2lg font-medium text-[#808080]">{mover.favoriteCount || 0}</p>
           <Image src={like} alt="like-image" className="h-6 w-6" />
         </div>
       </div>
@@ -82,7 +82,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
         <div className="flex w-full flex-col items-center">
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("inProgress")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
-            {mover.completedCount}
+            {mover.completedCount || 0}
             {tShared("units.cases")}
           </p>
         </div>
@@ -97,7 +97,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
         <div className="flex w-full flex-col items-center">
           <p className="text-[13px] text-[#808080] md:mb-1 md:text-lg md:text-[#302F2D]">{t("totalExperience")}</p>
           <p className="text-lg font-semibold md:text-xl md:font-bold">
-            {mover.experience}
+            {mover.experience || 0}
             {tShared("units.years")}
           </p>
         </div>

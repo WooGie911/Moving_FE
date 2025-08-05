@@ -7,8 +7,8 @@ import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IMoverInfo } from "@/types/mover.types";
-import defaultProfileLg from "@/assets/img/mascot/profile-lg.png";
-import defaultProfileSm from "@/assets/img/mascot/profile-sm.png";
+import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.webp";
+import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.webp";
 import badge from "@/assets/icon/etc/icon-chat.png";
 import star from "@/assets/icon/star/icon-star-active-lg.png";
 import like from "@/assets/icon/like/icon-like-red.png";
@@ -26,7 +26,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   const t = useTranslations("mover");
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
 
-  const shouldShowBadge = showBadge && mover.completedCount > 30;
+  const shouldShowBadge = showBadge && (mover.completedCount || 0) > 30;
 
   const renderMobileCard = () => (
     <div
@@ -42,7 +42,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
         {mover.serviceTypes.map((serviceType, index) => {
           const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-          return <MoveTypeLabel key={index} type={serviceName} />;
+          return <MoveTypeLabel key={index} type={serviceName} variant={variant} />;
         })}
       </div>
 
@@ -80,7 +80,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               </div>
             </div>
             <div
-              className={`flex items-center ${variant === "favorite" && mover.experience >= 10 ? "gap-1.5" : "gap-2"}`}
+              className={`flex items-center ${variant === "favorite" && (mover.experience || 0) >= 10 ? "gap-1.5" : "gap-2"}`}
             >
               <div className="flex items-center gap-0.5">
                 <Image src={star} alt="star-img" className="h-5 w-5" />
@@ -148,7 +148,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
             {mover.serviceTypes.map((serviceType, index) => {
               const serviceName = typeof serviceType === "string" ? serviceType : serviceType.service?.name || "기타";
-              return <MoveTypeLabel key={index} type={serviceName} />;
+              return <MoveTypeLabel key={index} type={serviceName} variant={variant} />;
             })}
           </div>
 
@@ -176,7 +176,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-0.5">
                       <Image src={star} alt="star-img" className="h-5 w-5" />
-                      <span className="text-[13px] leading-[22px] font-medium">{mover.avgRating.toFixed(1)}</span>
+                      <span className="text-[13px] leading-[22px] font-medium">
+                        {(mover.avgRating || 0).toFixed(1)}
+                      </span>
                       <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>

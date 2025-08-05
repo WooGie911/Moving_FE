@@ -8,7 +8,7 @@ import userApi from "@/lib/api/user.api";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "use-intl";
 import {
   ProfileFormHeader,
   ProfileImageUpload,
@@ -24,6 +24,7 @@ const CustomerRegisterPage = () => {
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const { open, close } = useModal();
+  const currentLocale = useLocale();
 
   const methods = useForm({
     mode: "onChange", // 실시간 벨리데이션
@@ -63,7 +64,7 @@ const CustomerRegisterPage = () => {
             text: "확인",
             onClick: () => {
               close();
-              router.push("/searchMover");
+              router.push(`/${currentLocale}/searchMover`);
             },
           },
         ],

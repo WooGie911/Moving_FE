@@ -38,7 +38,7 @@ const SearchMoverPage = () => {
     <div
       className={`mx-auto flex max-w-[327px] justify-center md:max-w-[600px] lg:${shouldShowBookmarked ? "max-w-[1200px]" : "max-w-[820px]"}`}
     >
-      <div className="flex flex-col items-center">
+      <div className="flex flex-1 flex-col items-center">
         {/* 제목 */}
         {deviceType === "desktop" ? (
           <div className="w-full py-8">

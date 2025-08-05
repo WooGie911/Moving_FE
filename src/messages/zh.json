@@ -63,6 +63,11 @@
   "estimateRequest": {
     "title": "报价请求",
     "editTitle": "编辑报价",
+    "metadata": {
+      "title": "报价请求 | Moving",
+      "description": "申请和管理您的搬家报价"
+    },
+    "loadingText": "正在检查报价信息...",
     "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
     "noEstimateInProgress": "没有进行中的报价。",
     "requestNewEstimate": "请申请新的报价。",
@@ -224,6 +229,10 @@
       "thursday": "四",
       "friday": "五",
       "saturday": "六"
+    },
+    "calendar": {
+      "today": "当日搬家无法选择",
+      "pastDate": "过去的日期无法选择"
     }
   },
   "navigation": {
@@ -367,7 +376,17 @@
       "serviceSelectionLabelMover": "选择您提供的服务",
       "regionSelectionLabelCustomer": "选择您所在的地区",
       "regionSelectionLabelMover": "选择您可提供服务的地区"
-    }
+    },
+    "editMetadata": {
+      "title": "编辑资料 | Moving",
+      "description": "编辑您的个人资料页面"
+    },
+    "registerMetadata": {
+      "title": "注册资料 | Moving",
+      "description": "资料注册页面"
+    },
+    "registerLoadingText": "正在加载个人资料注册页面...",
+    "editLoadingText": "正在加载个人资料编辑页面..."
   },
   "search": {
     "title": "搜索搬家公司",
@@ -836,6 +855,14 @@
     "switchUserTypeError": "切换用户类型失败。"
   },
   "review": {
+    "metadata": {
+      "title": "评价 | 무빙",
+      "description": "撰写和管理您的搬家评价",
+      "writableTitle": "可写评价 | 무빙",
+      "writableDescription": "查看搬家完成后可以撰写的评价",
+      "writtenTitle": "我写的评价 | 무빙",
+      "writtenDescription": "查看和管理您撰写的搬家评价"
+    },
     "title": "评价",
     "writableTab": "可写评价",
     "writtenTab": "我写的评价",
@@ -859,7 +886,16 @@
     "reviewRequired": "请输入详细评价。",
     "reviewMinLength": "请输入至少10个字符",
     "submitting": "提交中...",
-    "registerReview": "注册评价"
+    "registerReview": "注册评价",
+    "experience": "经验",
+    "averageRating": "平均评分",
+    "totalReviews": "总评价数",
+    "workHours": "工作时间",
+    "includesPacking": "包含包装",
+    "insuranceAmount": "保险金额",
+    "currency": "韩元",
+    "yes": "是",
+    "no": "否"
   },
   "notification": {
     "title": "通知",
@@ -867,6 +903,10 @@
     "allNotificationsLoaded": "已加载所有通知。"
   },
   "schedule": {
+    "metadata": {
+      "title": "日程管理 | Moving",
+      "description": "查看和管理您的搬家日程"
+    },
     "title": "日程管理",
     "description": "查看和管理您的搬家日程",
     "selectDate": "请选择日期",
@@ -884,6 +924,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "收藏的司机 | Moving",
+      "description": "查看和管理您的收藏的司机"
+    },
     "title": "收藏的司机",
     "selectAll": "全选",
     "deleteSelected": "删除选中",

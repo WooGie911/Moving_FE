@@ -245,6 +245,7 @@ const findMoverApi = {
     moverId: string,
     page: number = 1,
     pageSize: number = 5,
+    language?: string,
   ): Promise<{
     success: boolean;
     message: string;
@@ -273,7 +274,12 @@ const findMoverApi = {
     };
   }> => {
     try {
-      const response = await fetch(`${API_URL}/reviews/mover/${moverId}?page=${page}&pageSize=${pageSize}`);
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", page.toString());
+      queryParams.append("pageSize", pageSize.toString());
+      if (language) queryParams.append("lang", language);
+
+      const response = await fetch(`${API_URL}/reviews/mover/${moverId}?${queryParams.toString()}`);
 
       if (!response.ok) {
         throw new Error("리뷰 조회에 실패했습니다.");

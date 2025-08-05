@@ -19,6 +19,7 @@ export const ShareButtonGroup = ({
   url = "",
   title,
   description,
+  imageUrl,
   className = "",
   onSuccess,
   onError,
@@ -34,6 +35,7 @@ export const ShareButtonGroup = ({
         url={url}
         title={title}
         description={description}
+        imageUrl={imageUrl}
         onSuccess={onSuccess}
         onError={onError}
       />
@@ -42,6 +44,7 @@ export const ShareButtonGroup = ({
         url={url}
         title={title}
         description={description}
+        imageUrl={imageUrl}
         onSuccess={onSuccess}
         onError={onError}
       />
@@ -50,6 +53,7 @@ export const ShareButtonGroup = ({
         url={url}
         title={title}
         description={description}
+        imageUrl={imageUrl}
         onSuccess={onSuccess}
         onError={onError}
       />

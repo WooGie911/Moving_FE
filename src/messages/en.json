@@ -63,6 +63,11 @@
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
+    "metadata": {
+      "title": "Estimate Request | 무빙",
+      "description": "Request and manage your moving estimates"
+    },
+    "loadingText": "Checking estimate information...",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
     "noEstimateInProgress": "No estimates in progress.",
     "requestNewEstimate": "Please request a new estimate.",
@@ -216,7 +221,11 @@
     "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision.",
     "hasEstimatesMessage": "The driver has sent estimates.",
     "viewEstimatesButton": "View Estimates",
-    "loadingText": "Preparing the estimate request page..."
+    "loadingText": "Preparing the estimate request page...",
+    "calendar": {
+      "today": "Same-day moving is not available",
+      "pastDate": "Past dates cannot be selected"
+    }
   },
   "navigation": {
     "home": "Home",
@@ -359,7 +368,17 @@
       "serviceSelectionLabelMover": "Select services you offer",
       "regionSelectionLabelCustomer": "Select your current region",
       "regionSelectionLabelMover": "Select serviceable regions"
-    }
+    },
+    "editMetadata": {
+      "title": "Edit Profile | Moving",
+      "description": "Edit your profile information"
+    },
+    "registerMetadata": {
+      "title": "Register Profile | Moving",
+      "description": "Profile registration page"
+    },
+    "registerLoadingText": "Loading profile registration page...",
+    "editLoadingText": "Loading profile edit page..."
   },
   "search": {
     "title": "Search Moving Companies",
@@ -823,6 +842,14 @@
     "switchUserTypeError": "Failed to switch user type."
   },
   "review": {
+    "metadata": {
+      "title": "Review | Moving",
+      "description": "Write and manage your moving reviews",
+      "writableTitle": "Writable Reviews | Moving",
+      "writableDescription": "Check reviews you can write after completing your move",
+      "writtenTitle": "My Written Reviews | Moving",
+      "writtenDescription": "Check and manage your written moving reviews"
+    },
     "title": "Review",
     "writableTab": "Writable Reviews",
     "writtenTab": "My Written Reviews",
@@ -846,7 +873,16 @@
     "reviewRequired": "Please enter a detailed review.",
     "reviewMinLength": "Please enter at least 10 characters",
     "submitting": "Submitting...",
-    "registerReview": "Register Review"
+    "registerReview": "Register Review",
+    "experience": "Experience",
+    "averageRating": "Average Rating",
+    "totalReviews": "Total Reviews",
+    "workHours": "Work Hours",
+    "includesPacking": "Includes Packing",
+    "insuranceAmount": "Insurance Amount",
+    "currency": "KRW",
+    "yes": "Yes",
+    "no": "No"
   },
   "notification": {
     "title": "Notifications",
@@ -854,6 +890,10 @@
     "allNotificationsLoaded": "All notifications loaded."
   },
   "schedule": {
+    "metadata": {
+      "title": "Schedule Management | Moving",
+      "description": "Check and manage your moving schedules"
+    },
     "title": "Schedule Management",
     "description": "Check and manage your moving schedules",
     "selectDate": "Please select a date",
@@ -871,6 +911,10 @@
     }
   },
   "favoriteMover": {
+    "metadata": {
+      "title": "Favorite Movers | Moving",
+      "description": "Check and manage your favorite movers"
+    },
     "title": "Favorite Movers",
     "selectAll": "Select All",
     "deleteSelected": "Delete Selected",

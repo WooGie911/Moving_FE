@@ -3,13 +3,14 @@
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactNode } from "react";
+import { logDevError } from "@/utils/logDevError";
 
 const isServer = typeof window === "undefined";
 
 function makeQueryClient() {
   const queryCache = new QueryCache({
-    onError: (error, query) => {
-      alert(`오류 발생: ${query.meta?.name || "알 수 없는 쿼리"} - ${error.message}`);
+    onError: (error) => {
+      logDevError(error, error.message);
     },
   });
 

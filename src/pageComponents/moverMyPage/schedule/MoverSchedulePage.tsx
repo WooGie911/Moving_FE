@@ -6,7 +6,6 @@ import CalendarWithSchedule from "@/components/moverMyPage/schedule/CalendarWith
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useMoverScheduleApi } from "@/hooks/useMoverScheduleApi";
 import {
-  Schedule,
   ScheduleDisplay,
   ScheduleItemProps,
   ScheduleListProps,
@@ -20,7 +19,8 @@ import { useLocale } from "next-intl";
 
 // 페이지 스타일 상수
 const PAGE_STYLES = {
-  container: "min-h-screen bg-gray-50 p-4 lg:p-6",
+  container: "min-h-screen bg-gray-50 p-6",
+  content: "mx-auto max-w-[1600px]",
   header: "mb-6",
   title: "mb-2 text-2xl font-bold text-gray-900 lg:text-3xl",
   description: "text-gray-600",
@@ -259,23 +259,25 @@ const MoverSchedulePage = () => {
 
   return (
     <main className={PAGE_STYLES.container} role="main" aria-label="기사님 일정 관리 페이지">
-      <PageHeader t={t} />
+      <div className={PAGE_STYLES.content}>
+        <PageHeader t={t} />
 
-      <div className={PAGE_STYLES.grid} role="application" aria-label="스케줄 관리 인터페이스">
-        <CalendarSection
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          getSchedulesForSelectedDate={getSchedulesForSelectedDate}
-          setCurrentMonth={setCurrentMonth}
-        />
+        <div className={PAGE_STYLES.grid} role="application" aria-label="스케줄 관리 인터페이스">
+          <CalendarSection
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            getSchedulesForSelectedDate={getSchedulesForSelectedDate}
+            setCurrentMonth={setCurrentMonth}
+          />
 
-        <DetailSection
-          headerText={headerText}
-          isLoadingMonthly={isLoadingMonthly}
-          selectedDate={selectedDate}
-          selectedDateSchedules={selectedDateSchedules}
-          t={t}
-        />
+          <DetailSection
+            headerText={headerText}
+            isLoadingMonthly={isLoadingMonthly}
+            selectedDate={selectedDate}
+            selectedDateSchedules={selectedDateSchedules}
+            t={t}
+          />
+        </div>
       </div>
     </main>
   );

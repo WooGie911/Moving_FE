@@ -5,8 +5,7 @@ import SectionHeader from "@/components/common/SectionHeader";
 import MoverCard from "@/components/searchMover/MoverCard";
 import findMoverApi from "@/lib/api/findMover.api";
 import { IMoverInfo } from "@/types/mover.types";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import { toast } from "react-toastify";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const FavoriteMoverPage = () => {
@@ -75,11 +74,11 @@ const FavoriteMoverPage = () => {
       setSelectAll(false);
 
       // 성공 토스트 표시
-      toast.success(`${selectedMovers.size}${t("deleteSuccess")}`);
+      showSuccessToast(`${selectedMovers.size}${t("deleteSuccess")}`);
     } catch (error) {
       console.error("선택된 항목 삭제 실패:", error);
       // 에러 토스트 표시
-      toast.error(t("deleteError"));
+      showErrorToast(t("deleteError"));
     } finally {
       setDeleting(false);
     }
@@ -93,7 +92,7 @@ const FavoriteMoverPage = () => {
         </div>
       </SectionHeader>
       <section className="min-h-screen bg-gray-100 pt-[22px]">
-        <div className="mb-[10px] flex items-center justify-between px-6">
+        <div className="mx-auto mb-[10px] flex w-[327px] items-center justify-between md:w-150 lg:w-[814px]">
           <div className="flex items-center gap-2">
             <button
               className={`h-5 w-5 rounded-[4px] border border-gray-200 ${selectAll ? "bg-primary-400" : "bg-gray-50"}`}

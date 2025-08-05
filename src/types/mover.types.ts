@@ -1,6 +1,6 @@
 import type { IReview } from "./review";
 
-// 기사님 정보 타입
+// 기사님 정보 타입 (기본)
 export interface IMover {
   id: string;
   name: string;
@@ -24,8 +24,36 @@ export interface IMover {
     region: string;
     userId: string;
   }>;
-  serviceTypes: string[];
+  serviceRegions: Array<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    district: string | null;
+    region: string;
+    userId: string;
+  }>;
+  serviceTypes: Array<{
+    service: {
+      name: string;
+    };
+  }>;
   favorites?: Array<{ id: string }>;
+  // 추가 속성들
+  description?: string;
+  introduction?: string;
+  completedCount?: number;
+  favoriteCount?: number;
+  experience?: number;
+  reviewCount?: number;
+  avgRating?: number;
+  isFavorited?: boolean;
+  profileImage?: string;
+}
+
+// 기사님 정보 타입 (API 응답용)
+export interface IMoverInfo extends IMover {
+  // IMover의 모든 속성을 상속받음
 }
 
 // 기사님 목록 조회 파라미터 타입

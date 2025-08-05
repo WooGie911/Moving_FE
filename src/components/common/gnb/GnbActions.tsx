@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
-import notification from "@/assets/icon/notification/icon-notification-lg.png";
+import notification from "@/assets/icon/notification/icon-notification-lg.webp";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
@@ -37,7 +37,6 @@ export const GnbActions = ({
 }: IGnbActionsProps) => {
   const t = useTranslations();
 
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const profileButtonRef = useRef<HTMLButtonElement>(null);
@@ -45,16 +44,18 @@ export const GnbActions = ({
 
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const hasUnread = useNotificationStore((state) => state.hasUnread);
+  const isNotificationOpen = useNotificationStore((state) => state.isNotificationOpen);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
+  const openNotificationModal = useNotificationStore((state) => state.openNotificationModal);
+  const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
 
   const handleNotificationClick = () => {
-    setIsNotificationOpen((prev) => {
-      const willOpen = !prev;
-      if (willOpen) {
-        fetchNotifications(4, 0); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
-      }
-      return willOpen;
-    });
+    if (isNotificationOpen) {
+      closeNotificationModal();
+    } else {
+      openNotificationModal();
+      fetchNotifications(4, 0); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
+    }
   };
 
   // 프로필 버튼 클릭 시 프로필 모달창 열기
@@ -66,8 +67,6 @@ export const GnbActions = ({
   const closeProfileModal = () => {
     setIsProfileOpen(false);
   };
-
-  //
 
   // 프로필 모달창 외부 클릭 감지
   useEffect(() => {
@@ -117,6 +116,13 @@ export const GnbActions = ({
     }
   }, [userRole, fetchNotifications]);
 
+  // 알림 모달이 열릴 때마다 최신 상태로 동기화
+  useEffect(() => {
+    if (isNotificationOpen && userRole !== "GUEST") {
+      fetchNotifications(4, 0);
+    }
+  }, [isNotificationOpen, userRole, fetchNotifications]);
+
   // userRole이나 userName 변경 시 프로필 모달 상태 초기화
   useEffect(() => {
     setIsProfileOpen(false);
@@ -139,30 +145,32 @@ export const GnbActions = ({
       {userRole !== "GUEST" && (
         <>
           {/* 알림 버튼 */}
-          <div
-            className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
-            aria-label={t("gnb.notification")}
-          >
-            <div className="relative h-6 w-6">
-              <button
-                ref={notificationButtonRef}
-                onClick={handleNotificationClick}
-                className="cursor-pointer"
-                aria-label={t("gnb.notification")}
-              >
-                <Image src={notification} alt={t("gnb.notification")} width={24} height={24} />
-                {hasUnread && <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></div>}
-              </button>
-              <UserActionDropdown
-                type="alert"
-                onClose={() => setIsNotificationOpen(false)}
-                isOpen={isNotificationOpen}
-                triggerRef={notificationButtonRef}
-              >
-                <NotificationList />
-              </UserActionDropdown>
-            </div>
-          </div>
+          <nav className="relative" aria-label="알림 메뉴">
+            <button
+              ref={notificationButtonRef}
+              onClick={handleNotificationClick}
+              className="hover:text-black-400 cursor-pointer p-2 text-gray-400 transition-colors"
+              aria-label={t("gnb.notification")}
+              aria-expanded={isNotificationOpen}
+              aria-haspopup="true"
+            >
+              <Image src={notification} alt="" width={24} height={24} />
+              {hasUnread && (
+                <span
+                  className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"
+                  aria-label="읽지 않은 알림이 있습니다"
+                />
+              )}
+            </button>
+            <UserActionDropdown
+              type="alert"
+              onClose={closeNotificationModal}
+              isOpen={isNotificationOpen}
+              triggerRef={notificationButtonRef}
+            >
+              <NotificationList />
+            </UserActionDropdown>
+          </nav>
 
           {/* 프로필 버튼 */}
           <div className="relative">

@@ -107,7 +107,7 @@ const UserActionDropdown = ({ type, onClose, isOpen, children, name, triggerRef 
   return (
     <div className="" ref={dropdownRef}>
       {type === "alert" ? (
-        <DropdownContainer className="absolute -right-30 w-78 md:-right-7 lg:w-[359px]" rounded="rounded-24">
+        <DropdownContainer className="absolute -right-30 mt-3 w-78 md:-right-7 lg:w-[359px]" rounded="rounded-24">
           <DropdownHeader title={t("gnb.notification")} onClose={onClose} closeLabel={t("gnb.close")} />
           {children}
         </DropdownContainer>
