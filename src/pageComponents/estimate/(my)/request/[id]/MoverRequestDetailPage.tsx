@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
-export const RequsetDetailPage = () => {
+export const MoverRequestDetailPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();

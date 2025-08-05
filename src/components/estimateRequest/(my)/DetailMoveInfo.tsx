@@ -8,9 +8,13 @@ export const DetailMoveInfo = ({
   movingType,
   createdAt,
   movingDate,
-  departureAddr,
-  arrivalAddr,
+  departureRegion,
+  departureCity,
+  departureDistrict,
   departureDetail,
+  arrivalRegion,
+  arrivalCity,
+  arrivalDistrict,
   arrivalDetail,
 }: IEstimateRequest) => {
   const t = useTranslations("estimateRequest");
@@ -68,20 +72,38 @@ export const DetailMoveInfo = ({
             {formatDateWithDayAndTime(movingDate, weekdays, timeFormat)}
           </p>
         </div>
-        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+        <div className="flex w-full flex-row items-start justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
             {t("departure")}
           </p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {departureAddr + " " + departureDetail}
+            <span className="md:hidden">
+              <span className="block text-right">
+                {departureRegion} {departureCity}
+              </span>
+              <span className="block text-right">{departureDistrict}</span>
+              <span className="block text-right">{departureDetail}</span>
+            </span>
+            <span className="hidden md:inline">
+              {departureRegion} {departureCity} {departureDistrict} {departureDetail}
+            </span>
           </p>
         </div>
-        <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
+        <div className="flex w-full flex-row items-start justify-between md:justify-start md:gap-6">
           <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
             {t("arrival")}
           </p>
           <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
-            {arrivalAddr + " " + arrivalDetail}
+            <span className="md:hidden">
+              <span className="block text-right">
+                {arrivalRegion} {arrivalCity}
+              </span>
+              <span className="block text-right">{arrivalDistrict}</span>
+              <span className="block text-right">{arrivalDetail}</span>
+            </span>
+            <span className="hidden md:inline">
+              {arrivalRegion} {arrivalCity} {arrivalDistrict} {arrivalDetail}
+            </span>
           </p>
         </div>
       </div>

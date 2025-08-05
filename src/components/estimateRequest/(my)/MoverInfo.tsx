@@ -84,7 +84,7 @@ export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirme
   return (
     <div className={`flex w-full ${usedAt === "received" ? "border-border-light rounded-lg border-2 p-2" : ""}`}>
       <div
-        className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
+        className={`flex w-full flex-row items-center justify-center gap-1 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
       >
         {/* 좌측 프로필 이미지 */}
         <Image src={mover.moverImage ? mover.moverImage : defaultProfile} alt="profile" width={50} height={50} />
@@ -128,22 +128,22 @@ export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirme
           {/* 기사님 평점과 경력 확정건수 영역 */}
           <div className="flex w-full flex-row items-center justify-between">
             <div className="flex w-full flex-row items-center justify-start">
-              <div className="flex flex-row items-center justify-center gap-1">
+              <div className="flex flex-row items-center justify-center">
                 <Image src={star} alt="star" width={20} height={20} />
                 <p className="text-black-300 text-[14px] leading-[24px] font-semibold">
                   {mover.averageRating!.toFixed(1)}
                 </p>
-                <p className="text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
+                <p className="pl-1 text-[14px] leading-[24px] font-normal text-gray-500">{`(${mover.totalReviewCount})`}</p>
               </div>
               <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-              <div className="flex flex-row items-center justify-center gap-1">
+              <div className="flex flex-row items-center justify-center gap-[3px]">
                 <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("experience")}</p>
                 <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.career}${t("years")}`}</p>
               </div>
               <div className="border-border-light mx-2 h-[14px] w-[1px] border-1"></div>
 
-              <div className="flex flex-row items-center justify-center gap-1">
+              <div className="flex flex-row items-center justify-center gap-[3px]">
                 <p className="text-black-300 text-[14px] leading-[24px] font-semibold">{`${mover.workedCount}${t("cases")}`}</p>
                 <p className="text-[14px] leading-[24px] font-normal text-gray-500">{t("confirmed")}</p>
               </div>

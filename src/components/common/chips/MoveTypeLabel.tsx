@@ -14,6 +14,17 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
   const t = useTranslations("service");
 
   const getIconSrc = (serviceName: string) => {
+    // mapServiceTypeToMoveType에서 반환되는 값들에 대한 직접 매핑 (대소문자 구분 없이)
+    if (serviceName.toLowerCase() === "small") {
+      return small;
+    } else if (serviceName.toLowerCase() === "home") {
+      return home;
+    } else if (serviceName.toLowerCase() === "office") {
+      return office;
+    } else if (serviceName.toLowerCase() === "document") {
+      return document;
+    }
+    // 기존 로직도 유지 (다른 경우를 위해)
     if (serviceName.includes("소형") || serviceName.includes("Small") || serviceName.includes("小型")) {
       return small;
     } else if (
@@ -30,10 +41,8 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
       serviceName.includes("主任")
     ) {
       return office;
-    } else if (serviceName === "document") {
-      return document;
     }
-    return small;
+    return small; // 기본값
   };
 
   const iconSrc = getIconSrc(type);

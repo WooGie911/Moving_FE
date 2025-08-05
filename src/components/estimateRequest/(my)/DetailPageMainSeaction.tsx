@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import defaultProfileImg_sm from "@/assets/img/mascot/moverprofile-sm.png";
+import defaultProfileImg from "@/assets/img/mascot/moverprofile-xl.png";
 import info from "@/assets/icon/info/icon-info.png";
 import { IDetailPageMainSeactionProps, TEstimateResponse, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations, useLocale } from "next-intl";
@@ -35,8 +35,13 @@ export const DetailPageMainSeaction = ({
       <div className="flex w-full max-w-[744px] flex-col gap-3 md:gap-5">
         {/* 프로필사진 영역 */}
         <div className="relative w-full">
-          <div className="absolute -top-[88px] left-[32px] z-10 h-[64px] w-[64px] -translate-x-1/2 rounded-[12px] bg-white shadow-lg md:-top-[155px] md:left-[50px] md:h-[100px] md:w-[100px] lg:-top-[175px] lg:left-[67px] lg:h-[134px] lg:w-[134px]">
-            <Image src={defaultProfileImg_sm} alt={t("profileImage")} fill />
+          <div className="absolute -top-[88px] left-[32px] z-10 h-[64px] w-[64px] -translate-x-1/2 overflow-hidden rounded-[12px] bg-white shadow-lg md:-top-[155px] md:left-[50px] md:h-[100px] md:w-[100px] lg:-top-[175px] lg:left-[67px] lg:h-[134px] lg:w-[134px]">
+            <Image
+              src={estimate.mover?.moverImage || defaultProfileImg}
+              alt={t("profileImage")}
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
         {/* 라벨과 타이틀 */}
@@ -63,25 +68,21 @@ export const DetailPageMainSeaction = ({
           movingType={estimateRequest!.moveType as "SMALL" | "HOME" | "OFFICE"}
           movingDate={estimateRequest!.moveDate}
           createdAt={estimateRequest!.createdAt}
-          departureAddr={
-            (locale === "ko"
+          departureRegion={
+            locale === "ko"
               ? shortenRegionInAddress(estimateRequest!.fromAddress.region)
-              : estimateRequest!.fromAddress.region) +
-            " " +
-            estimateRequest!.fromAddress.city +
-            " " +
-            estimateRequest!.fromAddress.district
+              : estimateRequest!.fromAddress.region
           }
-          arrivalAddr={
-            (locale === "ko"
-              ? shortenRegionInAddress(estimateRequest!.toAddress.region)
-              : estimateRequest!.toAddress.region) +
-            " " +
-            estimateRequest!.toAddress.city +
-            " " +
-            estimateRequest!.toAddress.district
-          }
+          departureCity={estimateRequest!.fromAddress.city}
+          departureDistrict={estimateRequest!.fromAddress.district}
           departureDetail={estimateRequest!.fromAddress.detail}
+          arrivalRegion={
+            locale === "ko"
+              ? shortenRegionInAddress(estimateRequest!.toAddress.region)
+              : estimateRequest!.toAddress.region
+          }
+          arrivalCity={estimateRequest!.toAddress.city}
+          arrivalDistrict={estimateRequest!.toAddress.district}
           arrivalDetail={estimateRequest!.toAddress.detail}
           status={estimateRequest!.status}
           confirmedEstimateId={null}
@@ -112,7 +113,10 @@ export const DetailPageMainSeaction = ({
 
         <div className="border-border-light flex w-full flex-col border-b-1" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
-          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
+          <ShareSection
+            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimateRequest={estimateRequest || undefined}
+          />
           {type === "pending" ? (
             <LastButtonSection
               estimateId={estimate.id}
@@ -137,7 +141,10 @@ export const DetailPageMainSeaction = ({
             ""
           )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
-          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
+          <ShareSection
+            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimateRequest={estimateRequest || undefined}
+          />
         </div>
       </div>
     </div>

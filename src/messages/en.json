@@ -38,9 +38,9 @@
         "saturday": "Sat"
       },
       "dateFormat": {
-        "year": "year",
-        "month": "month",
-        "day": "day"
+        "year": "Y.",
+        "month": "M.",
+        "day": "D."
       },
       "timeFormat": {
         "am": "AM",
@@ -48,16 +48,16 @@
       }
     },
     "movingTypes": {
-      "small": "Small Move",
+      "small": "Small",
       "smallDesc": "Studio, 1-room, under 66㎡",
-      "home": "Home Move",
+      "home": "Home",
       "homeDesc": "3-room, over 66㎡",
-      "office": "Office Move",
+      "office": "Office",
       "officeDesc": "Office, commercial space",
-      "store": "Store Move",
-      "piano": "Piano Move",
-      "art": "Art Move",
-      "storage": "Storage Move"
+      "store": "Store",
+      "piano": "Piano",
+      "art": "Art",
+      "storage": "Storage"
     }
   },
   "estimateRequest": {
@@ -93,9 +93,9 @@
     "movingDateLabel": "Moving Date",
     "driverSuffix": "Driver",
 
-    "experience": "career",
-    "years": "years",
-    "cases": "cases",
+    "experience": "exp.",
+    "years": "y.",
+    "cases": "c.",
     "currency": "KRW",
     "confirmed": "done",
 
@@ -121,20 +121,20 @@
       "pm": "PM"
     },
     "dateFormat": {
-      "year": "",
-      "month": "/",
-      "day": ""
+      "year": "Y.",
+      "month": "M.",
+      "day": "D."
     },
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
-    "estimateAmount": "Estimate Amount",
+    "estimateAmount": "Amount",
     "notConfirmedEstimate": "This estimate was not confirmed!",
     "pleaseRetry": "Please try again.",
     "shareEstimate": "Share Estimate",
     "shareDriverMessage": "Too good a driver to keep to yourself?",
     "confirmEstimateButton": "Confirm Estimate",
     "alreadyConfirmed": "Already Confirmed",
-    "otherEstimateConfirmed": "Another Estimate Confirmed",
+    "otherEstimateConfirmed": "Rejected Estimate",
     "viewDetails": "View Details",
     "copyLinkLabel": "Copy Link",
     "shareKakaoLabel": "Share on KakaoTalk",
@@ -417,8 +417,8 @@
     "noSearchResult": "No search results found",
     "tryOtherSearch": "Try different search terms or filters",
     "driverSuffix": "Driver",
-    "experience": "Experience",
-    "confirmed": "Confirmed",
+    "experience": "exp.",
+    "confirmed": "done",
     "reviews": "Reviews",
     "totalExperience": "Total Experience",
     "inProgress": "In Progress",
@@ -452,13 +452,13 @@
     "likeErrorTitle": "Error",
     "likeFailedMessage": "Failed to process favorite action.",
     "favoriteMoversTitle": "Favorite Drivers",
-    "experienceFavorite": "",
-    "yearsFavorite": "years",
-    "casesFavorite": "cases",
-    "confirmedFavorite": "",
+    "experienceFavorite": "Exp.",
+    "yearsFavorite": "y.",
+    "casesFavorite": "c.",
+    "confirmedFavorite": "done",
     "experienceMobile": "Exp",
-    "yearsMobile": "y",
-    "casesMobile": "",
+    "yearsMobile": "y.",
+    "casesMobile": "c.",
     "confirmedMobile": "Done",
     "myPage": {
       "retry": "Retry",
@@ -473,10 +473,10 @@
       "serviceAreas": "Service Areas"
     },
     "serviceTypes": {
-      "small": "Small Move",
-      "home": "Home Move",
-      "office": "Office Move",
-      "document": "Designated Quote Request"
+      "small": "Small",
+      "home": "Home",
+      "office": "Office",
+      "document": "Designated"
     }
   },
   "regions": {
@@ -659,7 +659,7 @@
     "small": "Small",
     "home": "Home",
     "office": "Office",
-    "document": "Designated Request"
+    "document": "Designated"
   },
 
   "estimate": {
@@ -681,6 +681,7 @@
     "completedMoveMessage": "This is a completed move estimate.",
     "viewEstimateDetail": "View Estimate Details",
     "rejectedRequestMessage": "This is a rejected request.",
+    "rejectedRequestCardMessage": "This estimate was rejected by the customer.",
     "estimateWaiting": "Waiting",
     "rejectedEstimate": "Rejected",
     "confirmedEstimate": "Confirmed",
@@ -697,11 +698,12 @@
       "friday": "Fri",
       "saturday": "Sat"
     },
-    "estimateAmount": "Estimate Amount",
+    "estimateAmount": "Amount",
     "enterEstimatePrice": "Please enter the estimate price.",
     "estimatePricePlaceholder": "Please enter the estimate price.",
     "onlyNumbersMessage": "Please enter numbers only.",
     "enterComment": "Please enter a comment.",
+    "enterRejectionReason": "Please enter the rejection reason.",
     "commentPlaceholder": "Please enter at least 10 characters.",
     "commentMinLengthMessage": "Please enter at least 10 characters.",
     "totalCount": "Total",
@@ -711,9 +713,9 @@
     "regionAndEstimate": "Region & Quote",
     "search": "Search",
     "movingTypesFilter": {
-      "small": "Small Moving",
-      "home": "Home Moving",
-      "office": "Office Moving"
+      "small": "Small ",
+      "home": "Home",
+      "office": "Office"
     },
     "designatedEstimateRequest": "Designated Quote Request",
     "serviceAvailableArea": "Service Available Area",
@@ -729,16 +731,16 @@
     "estimateNotFound": "The requested estimate could not be found.",
     "rejectedEstimateMessage": "This estimate has been rejected.",
     "customerEstimate": "'s Estimate",
-    "rejectedEstimateNoPrice": "Estimate price is not available as the estimate was rejected.",
+    "rejectedEstimateNoPrice": "Estimate price is not available<br />as the estimate was rejected.",
     "rejectionDate": "Rejection Date",
     "estimatePrice": "Estimate Price",
     "customerSuffix": " Customer",
     "confirmedEstimate": "Confirmed Estimate",
     "profileImage": "Profile Image",
     "dateFormat": {
-      "year": "",
-      "month": "/",
-      "day": ""
+      "year": "Y.",
+      "month": "M.",
+      "day": "D."
     }
   },
   "relativeTime": {
@@ -772,27 +774,27 @@
     }
   },
   "service": {
-    "소형이사": "Small Move",
-    "가정이사": "Home Move",
-    "사무실이사": "Office Move",
-    "Small Movers": "Small Move",
-    "Moving home": "Home Move",
-    "Office Director": "Office Move",
-    "Small Move": "Small Move",
-    "Home Move": "Home Move",
-    "Office Move": "Office Move",
-    "小型搬家": "Small Move",
-    "家庭搬家": "Home Move",
-    "办公室搬家": "Office Move",
-    "小型搬家公司": "Small Move",
-    "家庭搬家公司": "Home Move",
-    "办公室搬家公司": "Office Move",
-    "搬家": "Home Move",
-    "办公室主任": "Office Move",
-    "small": "Small Move",
-    "home": "Home Move",
-    "office": "Office Move",
-    "document": "Designated Quote Request"
+    "소형이사": "Small",
+    "가정이사": "Home",
+    "사무실이사": "Office",
+    "Small Movers": "Small",
+    "Moving home": "Home",
+    "Office Director": "Office",
+    "Small Move": "Small",
+    "Home Move": "Home",
+    "Office Move": "Office",
+    "小型搬家": "Small",
+    "家庭搬家": "Home",
+    "办公室搬家": "Office",
+    "小型搬家公司": "Small",
+    "家庭搬家公司": "Home",
+    "办公室搬家公司": "Office",
+    "搬家": "Home",
+    "办公室主任": "Office",
+    "small": "Small",
+    "home": "Home",
+    "office": "Office",
+    "document": "Designated"
   },
   "region": {
     "서울": "Seoul",
@@ -862,7 +864,7 @@
     "arrival": "Arrival",
     "moveDate": "Move Date",
     "writeDate": "Write Date",
-    "estimateAmount": "Estimate Amount",
+    "estimateAmount": "Amount",
     "writeReviewButton": "Write Review",
     "selectRating": "Please select a rating",
     "selectRatingError": "Please select a rating.",

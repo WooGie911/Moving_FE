@@ -55,9 +55,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
     const monthSuffix = tShared("shared.time.dateFormat.month");
     const daySuffix = tShared("shared.time.dateFormat.day");
 
-    // 영어인 경우 MM/DD/YYYY 형식
-    if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
-      return `${month}/${day}/${year} (${weekday})`;
+    // 영어인 경우 Y. M. D. 형식
+    if (yearSuffix === "Y." && monthSuffix === "M." && daySuffix === "D.") {
+      return `${year}${yearSuffix} ${month}${monthSuffix} ${day}${daySuffix} (${weekday})`;
     }
     // 한국어, 중국어인 경우 YYYY년 MM월 DD일 형식
     else {
@@ -194,7 +194,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
     open({
       title: t("rejectRequest"),
       children: (
-        <ModalChild data={data} isDesignated={isDesignated} type={"rejected"} onFormChange={handleFormChange} />
+        <ModalChild data={data} isDesignated={isDesignated} usedAt={"rejected"} onFormChange={handleFormChange} />
       ),
       type: "bottomSheet",
       buttons: [
@@ -215,7 +215,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
 
     open({
       title: t("sendEstimateTitle"),
-      children: <ModalChild data={data} isDesignated={isDesignated} type={"sent"} onFormChange={handleFormChange} />,
+      children: <ModalChild data={data} isDesignated={isDesignated} usedAt={"sent"} onFormChange={handleFormChange} />,
       type: "bottomSheet",
       buttons: [
         {
@@ -229,10 +229,15 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
     });
   };
   return (
-    <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-5 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px]">
+    <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-4 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px] lg:px-5">
       {(isPastDate || estimateStatus === "AUTO_REJECTED") && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
-          <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
+          {isPastDate && (
+            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
+          )}
+          {estimateStatus === "AUTO_REJECTED" && (
+            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("rejectedRequestCardMessage")}</p>
+          )}
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
             <Button
               variant="outlined"
@@ -287,9 +292,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {locale === "ko"
-                      ? shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
-                      : (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")}
+                    {locale === "zn" || locale === "zh" ? (
+                      (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")
+                    ) : locale === "ko" ? (
+                      shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
+                    ) : (
+                      <>
+                        {data.fromAddress?.region || ""}
+                        <br />
+                        {data.fromAddress?.city || ""}
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
@@ -298,9 +311,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {locale === "ko"
-                      ? shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
-                      : (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")}
+                    {locale === "zn" || locale === "zh" ? (
+                      (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")
+                    ) : locale === "ko" ? (
+                      shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
+                    ) : (
+                      <>
+                        {data.toAddress?.region || ""}
+                        <br />
+                        {data.toAddress?.city || ""}
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
@@ -352,9 +373,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {locale === "ko"
-                    ? shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
-                    : (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")}
+                  {locale === "zn" || locale === "zh" ? (
+                    (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")
+                  ) : locale === "ko" ? (
+                    shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
+                  ) : (
+                    <>
+                      {data.fromAddress?.region || ""}
+                      <br />
+                      {data.fromAddress?.city || ""}
+                    </>
+                  )}
                 </p>
               </div>
               <div className="flex flex-col justify-end pb-1">
@@ -363,9 +392,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {locale === "ko"
-                    ? shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
-                    : (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")}
+                  {locale === "zn" || locale === "zh" ? (
+                    (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")
+                  ) : locale === "ko" ? (
+                    shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
+                  ) : (
+                    <>
+                      {data.toAddress?.region || ""}
+                      <br />
+                      {data.toAddress?.city || ""}
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -382,7 +419,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <Button
                 variant="outlined"
                 state="default"
-                width="w-[254px] lg:w-[233px]"
+                width="w-[288px] lg:w-[253px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
                 onClick={openRejectModal}
@@ -393,7 +430,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <Button
                 variant="solid"
                 state={isMaxEstimates ? "disabled" : "default"}
-                width="w-[254px] lg:w-[233px]"
+                width="w-[288px] lg:w-[253px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
                 onClick={isMaxEstimates ? undefined : openSendEstimateModal}
@@ -407,7 +444,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <Button
                 variant="outlined"
                 state="default"
-                width="w-[254px] lg:w-[233px]"
+                width="w-[288px] lg:w-[253px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
                 onClick={openRejectModal}

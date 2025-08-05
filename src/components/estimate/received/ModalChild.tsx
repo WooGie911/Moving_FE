@@ -14,11 +14,11 @@ interface IModalProps {
   data: TEstimateRequestResponse;
   isDesignated: boolean;
   estimatePrice?: number;
-  type: "received" | "sent" | "rejected";
+  usedAt: "received" | "sent" | "rejected";
   onFormChange?: (isValid: boolean, formData?: { price?: number; comment?: string }) => void;
 }
 
-export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalProps) => {
+export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalProps) => {
   const methods = useForm();
   const { watch, setValue } = methods;
   const t = useTranslations("estimate");
@@ -29,30 +29,59 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
   const estimatePrice = watch("estimatePrice");
   const comment = watch("comment");
 
+  // 코멘트 유효성 검사 함수
+  const isCommentValid = (comment: string) => {
+    if (!comment) return false;
+    // 공백 제거 후 길이 확인
+    const trimmedComment = comment.trim();
+    return trimmedComment.length >= 10;
+  };
+
+  // 숫자를 3자리마다 쉼표로 포맷팅하는 함수
+  const formatNumberWithCommas = (value: string) => {
+    if (!value) return "";
+    // 숫자가 아닌 문자 제거
+    const numericOnly = value.replace(/[^0-9]/g, "");
+    // 3자리마다 쉼표 추가
+    return numericOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  // 견적가 입력값 정리 - 숫자가 아닌 문자 제거하고 포맷팅
+  useEffect(() => {
+    if (estimatePrice) {
+      const numericOnly = estimatePrice.replace(/[^0-9]/g, "");
+      const formatted = formatNumberWithCommas(numericOnly);
+      if (formatted !== estimatePrice) {
+        setValue("estimatePrice", formatted);
+      }
+    }
+  }, [estimatePrice, setValue]);
+
   // 폼 유효성 검사
   useEffect(() => {
-    const isEstimateValid = type === "rejected" || (estimatePrice && estimatePrice.length > 0);
-    const isCommentValid = comment && comment.length >= 10;
+    const numericPrice = estimatePrice ? estimatePrice.replace(/[^0-9]/g, "") : "";
+    const isEstimateValid = usedAt === "rejected" || (numericPrice && numericPrice.length > 0);
+    const isCommentValidResult = isCommentValid(comment);
 
-    const isValid = isEstimateValid && isCommentValid;
+    const isValid = isEstimateValid && isCommentValidResult;
 
     if (onFormChange) {
       onFormChange(isValid, {
-        price: estimatePrice ? parseInt(estimatePrice) : undefined,
+        price: numericPrice ? parseInt(numericPrice) : undefined,
         comment: comment,
       });
     }
-  }, [estimatePrice, comment, type, onFormChange]);
+  }, [estimatePrice, comment, usedAt, onFormChange]);
 
   return (
     <div>
-      <div className="bg-[#ffffff]py-6 flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] md:max-w-[600px] lg:max-w-[588px]">
+      <div className="flex w-full flex-col gap-6">
         {/* 라벨과 확정견적/견적서시간/부분 */}
         <div className="flex w-full flex-row items-center justify-between">
           <LabelArea
             movingType={data.moveType.toLowerCase() as "small" | "home" | "office"}
             isDesignated={isDesignated}
-            type={type}
+            usedAt={usedAt}
           />
         </div>
         {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
@@ -118,7 +147,7 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
         <div className="flex w-full flex-col gap-1">
           <FormProvider {...methods}>
             {/* 견적가 입력 부분 */}
-            <div className={`flex w-full flex-col justify-between ${type === "rejected" ? "hidden" : ""}`}>
+            <div className={`flex w-full flex-col justify-between ${usedAt === "rejected" ? "hidden" : ""}`}>
               <p className="text-black-300 pb-4 text-[18px] leading-[26px] font-semibold">{t("enterEstimatePrice")}</p>
               <PasswordInput
                 name="estimatePrice"
@@ -126,20 +155,22 @@ export const ModalChild = ({ data, isDesignated, type, onFormChange }: IModalPro
                 wrapperClassName="w-full"
                 showInit={true}
               />
-              {estimatePrice && !/^[0-9]*$/.test(estimatePrice) && (
+              {estimatePrice && !/^[0-9,]*$/.test(estimatePrice) && (
                 <p className="pb-2 pl-2 text-sm text-red-500">{t("onlyNumbersMessage")}</p>
               )}
             </div>
             {/* 코멘트 입력 부분 */}
             <div className="flex flex-col justify-between">
-              <p className="text-black-300 pb-4 text-[18px] leading-[26px] font-semibold">{t("enterComment")}</p>
+              <p className="text-black-300 pb-4 text-[18px] leading-[26px] font-semibold">
+                {usedAt === "rejected" ? t("enterRejectionReason") : t("enterComment")}
+              </p>
               <TextAreaInput
                 textareaClassName="h-40 border w-full border-gray-200 rounded-[16px]"
                 name="comment"
                 placeholder={t("commentPlaceholder")}
                 wrapperClassName="w-full"
               />
-              {comment && comment.length < 10 && (
+              {comment && !isCommentValid(comment) && (
                 <p className="pb-2 pl-2 text-sm text-red-500">{t("commentMinLengthMessage")}</p>
               )}
             </div>

@@ -1,6 +1,6 @@
-import { RejectedDetailPage } from "@/pageComponents/estimate/(my)/rejected/[id]/RejectedDetailPage";
+import { MoverRejectedDetailPage } from "@/pageComponents/estimate/(my)/rejected/[id]/MoverRejectedDetailPage";
 import React from "react";
 
 export default function page() {
-  return <RejectedDetailPage />;
+  return <MoverRejectedDetailPage />;
 }

@@ -1,6 +1,6 @@
-import { RequsetDetailPage } from "@/pageComponents/estimate/(my)/request/[id]/RequsetDetailPage";
+import { MoverRequestDetailPage } from "@/pageComponents/estimate/(my)/request/[id]/MoverRequestDetailPage";
 import React from "react";
 
 export default function page() {
-  return <RequsetDetailPage />;
+  return <MoverRequestDetailPage />;
 }

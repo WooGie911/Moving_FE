@@ -52,7 +52,7 @@ export const Checkbox = ({
       className={`flex cursor-pointer items-center gap-2 px-2 py-2 ${disabled ? "cursor-not-allowed opacity-50" : ""} ${className}`}
       onClick={handleClick}
     >
-      <div className="relative h-5 w-5">
+      <div className="relative h-8 w-8">
         <Image src={getIconSrc()} alt={isChecked ? "checked" : "unchecked"} fill className="object-contain" />
       </div>
       {label && <span className="text-black-500 text-[16px] leading-[26px] font-normal">{label}</span>}
