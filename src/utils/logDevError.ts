@@ -1,5 +1,5 @@
 export const logDevError = (error: unknown, context?: string) => {
-  if (process.env.NEXT_PUBLIC_ENV !== "production") {
+  if (process.env.VERCEL_ENV !== "production") {
     console.error(`[ERROR] ${context ?? ""}`, error);
   }
 };
