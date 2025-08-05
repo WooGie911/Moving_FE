@@ -1,15 +1,15 @@
 import React from "react";
 import ProgressBar from "@/components/estimateRequest/create/ProgressBar";
-import { fadeInUpAnimation } from "@/constant/quoteStyles";
+import { fadeInUpAnimation } from "@/constant/estimateRequestStyles";
 import { IEstimateRequestLayoutProps } from "@/types/estimateRequest";
 
 // 공통 스타일 변수
 export const ESTIMATE_REQUEST_STYLES = {
   container: "min-h-screen bg-gray-200",
-  header: "sticky top-[72px] z-10 bg-white p-6 shadow-sm",
-  headerContent: "mx-auto min-w-[330px] md:min-w-175 md:px-3 lg:max-w-225 lg:px-5",
+  header: "sticky top-[72px] z-10 bg-white py-6 shadow-sm",
+  headerContent: "mx-auto min-w-[330px] md:min-w-175 px-3 md:px-5 lg:max-w-225 lg:px-6",
   title: "text-2lg text-black-400 leading-lg mb-4 font-semibold",
-  content: "mx-auto min-w-[330px] space-y-4 py-6 px-1 md:min-w-175 md:px-3 lg:max-w-225 lg:px-5",
+  content: "mx-auto min-w-[330px] space-y-4 py-6 px-3 md:min-w-175 md:px-5 lg:max-w-225 lg:px-6",
   button: "h-[54px] rounded-[16px]",
   buttonFull: "w-full",
   buttonFlex: "flex-1",
