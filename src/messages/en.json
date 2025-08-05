@@ -835,11 +835,11 @@
   },
   "review": {
     "metadata": {
-      "title": "Review | 무빙",
+      "title": "Review | Moving",
       "description": "Write and manage your moving reviews",
-      "writableTitle": "Writable Reviews | 무빙",
+      "writableTitle": "Writable Reviews | Moving",
       "writableDescription": "Check reviews you can write after completing your move",
-      "writtenTitle": "My Written Reviews | 무빙",
+      "writtenTitle": "My Written Reviews | Moving",
       "writtenDescription": "Check and manage your written moving reviews"
     },
     "title": "Review",
@@ -883,7 +883,7 @@
   },
   "schedule": {
     "metadata": {
-      "title": "Schedule Management | 무빙",
+      "title": "Schedule Management | Moving",
       "description": "Check and manage your moving schedules"
     },
     "title": "Schedule Management",
@@ -904,7 +904,7 @@
   },
   "favoriteMover": {
     "metadata": {
-      "title": "Favorite Movers | 무빙",
+      "title": "Favorite Movers | Moving",
       "description": "Check and manage your favorite movers"
     },
     "title": "Favorite Movers",
