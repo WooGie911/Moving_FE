@@ -376,7 +376,9 @@
     "registerMetadata": {
       "title": "Register Profile | Moving",
       "description": "Profile registration page"
-    }
+    },
+    "registerLoadingText": "Loading profile registration page...",
+    "editLoadingText": "Loading profile edit page..."
   },
   "search": {
     "title": "Search Moving Companies",

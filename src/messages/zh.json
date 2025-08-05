@@ -384,7 +384,9 @@
     "registerMetadata": {
       "title": "注册资料 | Moving",
       "description": "资料注册页面"
-    }
+    },
+    "registerLoadingText": "正在加载个人资料注册页面...",
+    "editLoadingText": "正在加载个人资料编辑页面..."
   },
   "search": {
     "title": "搜索搬家公司",
