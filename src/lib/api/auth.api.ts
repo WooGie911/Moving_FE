@@ -21,8 +21,6 @@ const authApi = {
 
     const responseData = await response.json();
 
-    console.log("responseData", responseData);
-
     return responseData;
   },
 

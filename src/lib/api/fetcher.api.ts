@@ -24,8 +24,6 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
     await authApi.refreshToken();
     const accessToken = await getTokenFromCookie();
 
-    console.log("accessToken", accessToken);
-
     if (accessToken) {
       return fetchWithAuth<T>(
         input,
