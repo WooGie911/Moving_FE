@@ -66,7 +66,12 @@ export const getCurrentPageUrl = (): string => {
 };
 
 // 카카오톡 공유 (카카오톡 웹 API 사용)
-export const shareToKakao = async (url: string, title?: string, description?: string): Promise<void> => {
+export const shareToKakao = async (
+  url: string,
+  title?: string,
+  description?: string,
+  imageUrl?: string,
+): Promise<void> => {
   try {
     // 카카오톡 SDK 로드
     await loadKakaoSDK();
@@ -77,7 +82,7 @@ export const shareToKakao = async (url: string, title?: string, description?: st
       content: {
         title: title || "무빙 - 이사 견적",
         description: description || "안전하고 신뢰할 수 있는 이사 서비스를 찾아보세요",
-        imageUrl: "https://gomoving.site/logo-m.png", // 로고 이미지 사용
+        imageUrl: imageUrl || "https://gomoving.site/logo-m.png", // 기사님 프로필 이미지 또는 기본 로고 사용
         link: {
           mobileWebUrl: url,
           webUrl: url,
@@ -85,7 +90,7 @@ export const shareToKakao = async (url: string, title?: string, description?: st
       },
       buttons: [
         {
-          title: "웹으로 보기",
+          title: "상세 페이지 보기",
           link: {
             mobileWebUrl: url,
             webUrl: url,
@@ -135,24 +140,40 @@ const setOpenGraphMetaTags = (title?: string, description?: string) => {
 // 페이스북 공유
 export const shareToFacebook = (url: string, title?: string, description?: string): void => {
   try {
-    let shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-
-    if (title) {
-      shareUrl += `&quote=${encodeURIComponent(title)}`;
+    // Open Graph 메타 태그 동적 설정
+    if (title || description) {
+      setOpenGraphMetaTags(title, description);
     }
 
-    if (description) {
-      shareUrl += `&description=${encodeURIComponent(description)}`;
+    // 제목과 설명을 결합하여 공유할 텍스트 생성
+    let shareText = "";
+    if (title && description) {
+      shareText = `${title}\n\n${description}`;
+    } else if (title) {
+      shareText = title;
+    } else if (description) {
+      shareText = description;
+    }
+
+    // 상세 페이지 링크 추가
+    if (shareText && url) {
+      shareText += `\n\n상세 페이지: ${url}`;
+    }
+
+    // 페이스북 공유 URL 생성
+    let shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+
+    if (shareText) {
+      // 페이스북에서 지원하는 파라미터 추가
+      shareUrl += `&quote=${encodeURIComponent(shareText)}`;
+    }
+
+    // 먼저 클립보드에 공유 텍스트 복사
+    if (shareText) {
+      copyToClipboard(shareText);
     }
 
     const popup = window.open(shareUrl, "_blank", "width=600,height=400");
-    // 페이스북 공유 후 안내 메시지
-    if (popup) {
-      // 팝업이 열린 후 안내 메시지 표시
-      setTimeout(() => {
-        showShareSuccess("facebook");
-      }, 1000);
-    }
   } catch (error) {
     console.error("페이스북 공유 실패:", error);
     throw new Error("페이스북 공유에 실패했습니다.");
@@ -170,7 +191,7 @@ export const showShareSuccess = (type: "clip" | "kakao" | "facebook"): void => {
       message = "카카오톡으로 공유되었어요";
       break;
     case "facebook":
-      message = "페이스북으로 공유되었어요";
+      message = "페이스북 공유 창이 열렸어요. 공유할 내용이 클립보드에 복사되었습니다.";
       break;
   }
 
