@@ -5,7 +5,7 @@ import SectionHeader from "@/components/common/SectionHeader";
 import MoverCard from "@/components/searchMover/MoverCard";
 import findMoverApi from "@/lib/api/findMover.api";
 import { IMoverInfo } from "@/types/mover.types";
-import { toast } from "react-toastify";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const FavoriteMoverPage = () => {
@@ -74,11 +74,11 @@ const FavoriteMoverPage = () => {
       setSelectAll(false);
 
       // 성공 토스트 표시
-      toast.success(`${selectedMovers.size}${t("deleteSuccess")}`);
+      showSuccessToast(`${selectedMovers.size}${t("deleteSuccess")}`);
     } catch (error) {
       console.error("선택된 항목 삭제 실패:", error);
       // 에러 토스트 표시
-      toast.error(t("deleteError"));
+      showErrorToast(t("deleteError"));
     } finally {
       setDeleting(false);
     }

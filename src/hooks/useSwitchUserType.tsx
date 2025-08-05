@@ -2,7 +2,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
 import authApi from "@/lib/api/auth.api";
-import { toast } from "react-toastify";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -20,9 +20,9 @@ export const useSwitchUserType = () => {
     onSuccess: async (res) => {
       // 토스트 메시지
       if (res.newUserType === "CUSTOMER") {
-        toast.success(t("customerSuccessToast"));
+        showSuccessToast(t("customerSuccessToast"));
       } else {
-        toast.success(t("moverSuccessToast"));
+        showSuccessToast(t("moverSuccessToast"));
       }
 
       // 유저 정보 다시 불러오기
@@ -35,7 +35,7 @@ export const useSwitchUserType = () => {
       }
     },
     onError: (err: Error) => {
-      toast.error(err?.message || t("switchUserTypeError"));
+      showErrorToast(err?.message || t("switchUserTypeError"));
     },
   });
 };
