@@ -184,7 +184,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       setUser(null);
 
       await authApi.logout();
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       logDevError(error, "Failed to logout");
     } finally {

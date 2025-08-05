@@ -103,6 +103,7 @@ const userApi = {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: JSON.stringify(profile),
+      credentials: "include",
     });
 
     const data = await response.json();
