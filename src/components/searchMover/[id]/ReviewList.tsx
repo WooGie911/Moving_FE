@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { IReview, IApiReview, IReviewListProps } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
 import Image from "next/image";
@@ -22,6 +22,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const t = useTranslations("mover");
+  const locale = useLocale();
 
   useEffect(() => {
     if (!moverId) return;
@@ -29,7 +30,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
     const fetchReviews = async () => {
       setLoading(true);
       try {
-        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE);
+        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE, locale);
 
         const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
           id: apiReview.id,
