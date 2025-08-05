@@ -3,18 +3,18 @@
 import { useAuth } from "@/providers/AuthProvider";
 import CustomerRegisterPage from "./CustomerRegisterPage";
 import MoverRegisterPage from "./MoverRegisterPage";
-import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { useTranslations } from "next-intl";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 export default function IndexRegisterPage() {
   const { user } = useAuth();
   const t = useTranslations("profile");
 
-  if (user?.userType === "CUSTOMER" && !user?.nickname) {
+  if (user?.userType === "CUSTOMER") {
     return <CustomerRegisterPage />;
-  } else if (user?.userType === "MOVER" && !user?.nickname) {
+  } else if (user?.userType === "MOVER") {
     return <MoverRegisterPage />;
   } else {
-    return <MovingTruckLoader size="lg" loadingText="프로필등록 페이지 불러오는 중..." />;
+    return <MovingTruckLoader size="lg" loadingText={t("registerLoadingText")} />;
   }
 }
