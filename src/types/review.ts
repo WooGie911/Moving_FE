@@ -150,11 +150,10 @@ export interface IApiReview {
     nickname: string;
     profileImage: string;
     detailIntro: string | null;
-    shortIntro: string | null;
   };
   moveType: string;
   isDesigned: boolean;
-  shortIntro: string | null;
+  moverIntroduction: string | null;
   fromAddress: any;
   toAddress: any;
   moveDate: string;
