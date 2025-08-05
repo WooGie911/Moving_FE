@@ -12,11 +12,7 @@ export default function IndexRegisterPage() {
     return <CustomerRegisterPage />;
   } else if (user?.userType === "MOVER" && !user?.nickname) {
     return <MoverRegisterPage />;
+  } else {
+    return <MovingTruckLoader size="lg" loadingText="데이터를 불러오는 중..." />;
   }
-
-  return (
-    <>
-      <MovingTruckLoader size="lg" loadingText="데이터를 불러오는 중..." />
-    </>
-  );
 }

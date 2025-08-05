@@ -12,11 +12,7 @@ export default function EditPage() {
     return <CustomerEditPage />;
   } else if (user?.userType === "MOVER") {
     return <MoverEditPage />;
+  } else {
+    return <MovingTruckLoader size="lg" loadingText="데이터를 불러오는 중..." />;
   }
-
-  return (
-    <>
-      <MovingTruckLoader size="lg" loadingText="데이터를 불러오는 중..." />
-    </>
-  );
 }
