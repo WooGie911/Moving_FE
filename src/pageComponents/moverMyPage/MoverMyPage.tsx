@@ -254,14 +254,14 @@ const MoverMyPage = () => {
               <div className="flex w-full flex-col gap-4 md:hidden">
                 <button
                   onClick={() => router.push(`/${locale}/profile/edit`)}
-                  className="bg-primary-400 rounded-24 hover:bg-primary-500 flex h-16 w-full cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
+                  className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 w-full cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
                 >
                   {t("myPage.editProfile")}
                   <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
                 </button>
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-24 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -277,7 +277,7 @@ const MoverMyPage = () => {
               <div className="hidden w-full flex-row gap-4 md:flex lg:hidden">
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-24 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -290,7 +290,7 @@ const MoverMyPage = () => {
                 </button>
                 <button
                   onClick={() => router.push(`/${locale}/profile/edit`)}
-                  className="bg-primary-400 rounded-24 hover:bg-primary-500 flex h-16 flex-1 cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
+                  className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 flex-1 cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
                 >
                   {t("myPage.editProfile")}
                   <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
@@ -301,30 +301,30 @@ const MoverMyPage = () => {
                 <div className="justify-start self-stretch text-xl leading-loose font-semibold text-neutral-800">
                   {t("myPage.activityStatus")}
                 </div>
-                <div className="bg-bg-secondary rounded-24 inline-flex h-28 items-center justify-between self-stretch border border-gray-200 px-40">
+                <div className="bg-bg-secondary rounded-24 inline-flex h-28 items-center justify-between self-stretch border border-gray-200 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40">
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start self-stretch text-center text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start self-stretch text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
                       {t("myPage.inProgress")}
                     </div>
-                    <div className="text-primary-400 justify-center self-stretch text-center text-xl leading-loose font-bold">
+                    <div className="text-primary-400 justify-center self-stretch text-center text-lg sm:text-xl leading-loose font-bold">
                       {profile.completedCount} {tShared("shared.units.cases")}
                     </div>
                   </div>
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start text-center text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
                       {t("myPage.reviews")}
                     </div>
                     <div className="inline-flex items-center justify-start gap-1.5">
-                      <div className="text-primary-400 justify-center text-xl leading-loose font-bold">
+                      <div className="text-primary-400 justify-center text-lg sm:text-xl leading-loose font-bold">
                         {profile.avgRating.toFixed(1)}
                       </div>
                     </div>
                   </div>
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start self-stretch text-center text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start self-stretch text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
                       {t("myPage.totalExperience")}
                     </div>
-                    <div className="text-primary-400 justify-center self-stretch text-center text-xl leading-loose font-bold">
+                    <div className="text-primary-400 justify-center self-stretch text-center text-lg sm:text-xl leading-loose font-bold">
                       {profile.experience} {tShared("shared.units.years")}
                     </div>
                   </div>
@@ -380,14 +380,14 @@ const MoverMyPage = () => {
           <div className="mt-16 hidden min-w-[200px] flex-col gap-4 lg:flex">
             <button
               onClick={() => router.push(`/${locale}/profile/edit`)}
-              className="bg-primary-400 rounded-24 hover:bg-primary-500 flex cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors lg:h-16 lg:w-[283px]"
+              className="bg-primary-400 rounded-16 hover:bg-primary-500 flex cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors lg:h-16 lg:w-[283px]"
             >
               {t("myPage.editProfile")}
               <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
             </button>
             <button
               onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-              className="rounded-24 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
+              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
             >
               <div className="flex items-center justify-start gap-1.5">
                 <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">

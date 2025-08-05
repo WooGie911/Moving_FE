@@ -326,6 +326,11 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={30}
                   />
+                  <div className="flex justify-end mt-2">
+                    <div className={`text-sm ${intro.length >= 30 ? 'text-red-500' : 'text-gray-500'}`}>
+                      {intro.length}/30
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -351,6 +356,11 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={300}
                   />
+                  <div className="flex justify-end mt-2">
+                    <div className={`text-sm ${desc.length >= 300 ? 'text-red-500' : 'text-gray-500'}`}>
+                      {desc.length}/300
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
