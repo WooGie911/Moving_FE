@@ -24,6 +24,15 @@ export interface IMover {
     region: string;
     userId: string;
   }>;
+  serviceRegions: Array<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    district: string | null;
+    region: string;
+    userId: string;
+  }>;
   serviceTypes: Array<{
     service: {
       name: string;
@@ -39,6 +48,7 @@ export interface IMover {
   reviewCount?: number;
   avgRating?: number;
   isFavorited?: boolean;
+  profileImage?: string;
 }
 
 // 기사님 정보 타입 (API 응답용)

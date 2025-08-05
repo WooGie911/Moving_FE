@@ -221,7 +221,11 @@
     "moverEstimateSubmitted": "Cannot modify when a mover has submitted an estimate. Please review the estimate and make a decision.",
     "hasEstimatesMessage": "The driver has sent estimates.",
     "viewEstimatesButton": "View Estimates",
-    "loadingText": "Preparing the estimate request page..."
+    "loadingText": "Preparing the estimate request page...",
+    "calendar": {
+      "today": "Same-day moving is not available",
+      "pastDate": "Past dates cannot be selected"
+    }
   },
   "navigation": {
     "home": "Home",

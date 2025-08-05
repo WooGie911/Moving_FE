@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations("moverMyPage.schedule.metadata");
+  const t = await getTranslations("schedule.metadata");
 
   return {
     title: t("title"),

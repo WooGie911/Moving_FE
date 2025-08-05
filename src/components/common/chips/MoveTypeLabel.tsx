@@ -1,12 +1,16 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import small from "../../../assets/icon/box/icon-box.png";
 import home from "../../../assets/icon/home/icon-home.png";
 import office from "../../../assets/icon/etc/icon-office.png";
 import document from "../../../assets/icon/document/icon-document.png";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
-export const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
+interface ExtendedMoveTypeLabelProps extends IMoveTypeLabelProps {
+  variant?: "list" | "favorite" | "favorite-responsive";
+}
+
+export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => {
   const t = useTranslations("service");
 
   const getIconSrc = (serviceName: string) => {
@@ -33,8 +37,17 @@ export const MoveTypeLabel = ({ type }: IMoveTypeLabelProps) => {
   };
 
   const iconSrc = getIconSrc(type);
+  const locale = useLocale();
 
-  const label = t(type);
+  const getLabel = () => {
+    const translatedLabel = t(type);
+    if (locale === "en" && variant === "favorite") {
+      return translatedLabel.replace(" Move", "");
+    }
+    return translatedLabel;
+  };
+
+  const label = getLabel();
 
   return (
     <div>
