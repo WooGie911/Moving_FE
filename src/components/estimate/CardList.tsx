@@ -236,7 +236,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
             <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
           )}
           {estimateStatus === "AUTO_REJECTED" && (
-            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("completedMoveMessage")}</p>
+            <p className="text-[18px] leading-[26px] font-semibold text-white">{t("rejectedRequestCardMessage")}</p>
           )}
           <Link href={`/estimate/request/${id}`} className="cursor-pointer">
             <Button
