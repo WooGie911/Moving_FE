@@ -310,3 +310,123 @@ body {
   border-radius: 100px;
   opacity: 1;
 }
+
+/* React Toastify 커스텀 스타일 */
+.custom-toast {
+  background: var(--primary-200);
+  color: var(--primary-400);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 12px 16px;
+  min-height: auto;
+  margin: 0;
+  width: 100% !important;
+}
+
+.custom-toast .Toastify__toast-body {
+  padding: 0;
+  margin: 0;
+}
+
+.custom-toast .Toastify__close-button {
+  display: none;
+}
+
+.custom-toast .Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* 토스트 아이콘 스타일링 */
+.custom-toast .Toastify__toast-icon {
+  color: var(--primary-400);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 성공 토스트 아이콘은 브랜드 오렌지 색상 */
+.custom-toast.Toastify__toast--success .Toastify__toast-icon {
+  color: var(--primary-400);
+}
+
+/* react-toastify 기본 성공 아이콘 오버라이드 */
+.custom-toast.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: var(--primary-400);
+}
+
+.custom-toast.Toastify__toast--success .Toastify__toast-icon path {
+  fill: var(--primary-400);
+}
+
+/* 에러 토스트 아이콘은 빨간색 */
+.custom-toast.Toastify__toast--error .Toastify__toast-icon {
+  color: #dc3545;
+}
+
+/* 경고 토스트 아이콘은 노란색 */
+.custom-toast.Toastify__toast--warning .Toastify__toast-icon {
+  color: #ffc107;
+}
+
+/* 성공 토스트 - 브랜드 오렌지 색상 */
+.custom-toast.Toastify__toast--success {
+  background: var(--primary-200);
+  color: var(--primary-400);
+  border-left: 4px solid var(--primary-400);
+}
+
+/* 에러 토스트 - 빨간색으로 구분 */
+.custom-toast.Toastify__toast--error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+/* 경고 토스트 - 노란색으로 구분 */
+.custom-toast.Toastify__toast--warning {
+  background: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+/* 정보 토스트 - 브랜드 오렌지 색상 */
+.custom-toast.Toastify__toast--info {
+  background: var(--primary-200);
+  color: var(--primary-400);
+  border-left: 4px solid var(--primary-400);
+}
+
+/* 토스트 컨테이너 스타일 */
+.Toastify__toast-container {
+  z-index: 9999;
+}
+
+/* 토스트 애니메이션 커스터마이징 */
+.Toastify__toast-container--top-center {
+  top: 1rem;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 24px) !important;
+  max-width: 600px;
+}
+
+/* 반응형 토스트 */
+@media (max-width: 768px) {
+  .custom-toast {
+    font-size: 13px;
+    padding: 10px 14px;
+    margin: 0;
+    width: 100% !important;
+  }
+
+  .Toastify__toast-container--top-center {
+    top: 0.5rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 24px) !important;
+    max-width: none;
+  }
+}
