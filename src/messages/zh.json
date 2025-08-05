@@ -129,7 +129,7 @@
     "shareDriverMessage": "这么好的司机只有你知道太可惜了？",
     "confirmEstimateButton": "确认报价",
     "alreadyConfirmed": "已确认",
-    "otherEstimateConfirmed": "已确认其他报价",
+    "otherEstimateConfirmed": "已拒绝的报价",
     "viewDetails": "查看详情",
     "copyLinkLabel": "复制链接",
     "shareKakaoLabel": "在KakaoTalk上分享",
@@ -753,7 +753,7 @@
     "rejectionDate": "拒绝日期",
     "estimatePrice": "报价",
     "customerSuffix": " 客户",
-    "confirmedEstimate": "已确认报价",
+    "confirmedEstimate": "已确认",
     "profileImage": "个人资料图片"
   },
   "relativeTime": {

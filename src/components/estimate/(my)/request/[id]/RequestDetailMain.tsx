@@ -98,12 +98,26 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
-          <ShareSection estimate={data} estimateRequest={data.estimateRequest} />
+          <ShareSection
+            estimate={{
+              ...data,
+              price: data.price || 0,
+              mover: { ...data.mover, nickname: data.mover.nickname || "" },
+            }}
+            estimateRequest={data.estimateRequest}
+          />
         </div>
       </div>
       <div className="hidden lg:block">
         <div className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start">
-          <ShareSection estimate={data} estimateRequest={data.estimateRequest} />
+          <ShareSection
+            estimate={{
+              ...data,
+              price: data.price || 0,
+              mover: { ...data.mover, nickname: data.mover.nickname || "" },
+            }}
+            estimateRequest={data.estimateRequest}
+          />
         </div>
       </div>
     </div>

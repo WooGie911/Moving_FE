@@ -113,7 +113,10 @@ export const DetailPageMainSeaction = ({
 
         <div className="border-border-light flex w-full flex-col border-b-1" />
         <div className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden">
-          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
+          <ShareSection
+            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimateRequest={estimateRequest || undefined}
+          />
           {type === "pending" ? (
             <LastButtonSection
               estimateId={estimate.id}
@@ -138,7 +141,10 @@ export const DetailPageMainSeaction = ({
             ""
           )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
-          <ShareSection estimate={estimate} estimateRequest={estimateRequest} />
+          <ShareSection
+            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimateRequest={estimateRequest || undefined}
+          />
         </div>
       </div>
     </div>

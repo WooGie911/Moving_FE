@@ -292,7 +292,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {locale === "ko" ? (
+                    {locale === "zn" || locale === "zh" ? (
+                      (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")
+                    ) : locale === "ko" ? (
                       shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
                     ) : (
                       <>
@@ -309,7 +311,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                   <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                    {locale === "ko" ? (
+                    {locale === "zn" || locale === "zh" ? (
+                      (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")
+                    ) : locale === "ko" ? (
                       shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
                     ) : (
                       <>
@@ -369,7 +373,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {locale === "ko" ? (
+                  {locale === "zn" || locale === "zh" ? (
+                    (data.fromAddress?.region || "") + " " + (data.fromAddress?.city || "")
+                  ) : locale === "ko" ? (
                     shortenRegionInAddress((data.fromAddress?.region || "") + " " + (data.fromAddress?.city || ""))
                   ) : (
                     <>
@@ -386,7 +392,9 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
                 <p className="text-black-500 text-[16px] leading-[26px] font-semibold">
-                  {locale === "ko" ? (
+                  {locale === "zn" || locale === "zh" ? (
+                    (data.toAddress?.region || "") + " " + (data.toAddress?.city || "")
+                  ) : locale === "ko" ? (
                     shortenRegionInAddress((data.toAddress?.region || "") + " " + (data.toAddress?.city || ""))
                   ) : (
                     <>
