@@ -18,116 +18,103 @@ export const LandingPage = () => {
   const t = useTranslations("landing");
 
   return (
-    <>
-      {/* SEO 최적화 */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: t("title"),
-            description: t("subtitle"),
-            url: "https://gomoving.site",
-            mainEntity: {
-              "@type": "Service",
-              name: "무빙 서비스",
-              description: "전문 이사 서비스",
-              provider: {
-                "@type": "Organization",
-                name: "무빙",
-                url: "https://gomoving.site",
-              },
-            },
-          }),
-        }}
-      />
+    <main className="flex flex-col items-center" role="main">
+      <section className="relative h-[313px] w-full sm:h-[405px]" aria-label="메인 배너">
+        <picture>
+          <source media="(min-width: 1024px)" srcSet={landingBgLg.src} />
+          <source media="(min-width: 768px)" srcSet={landingBgMd.src} />
+          <Image
+            src={landingBgSm}
+            alt="무빙 서비스 메인 배경"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+            quality={75}
+          />
+        </picture>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center text-gray-50">
+          <Image
+            src={truck}
+            alt="트럭 아이콘"
+            width={160}
+            height={160}
+            className="truck-slide-in mb-3"
+            priority
+            sizes="160px"
+          />
+          <h1 className="text-xl font-bold md:text-3xl">{t("title")}</h1>
+          <p className="md:text-2lg px-10 text-lg font-normal whitespace-pre-line">{t("subtitle")}</p>
+        </div>
+      </section>
 
-      <main className="flex flex-col items-center" role="main">
-        <section className="relative h-[313px] w-full sm:h-[405px]" aria-label="메인 배너">
-          <picture>
-            <source media="(min-width: 1024px)" srcSet={landingBgLg.src} />
-            <source media="(min-width: 768px)" srcSet={landingBgMd.src} />
-            <Image
-              src={landingBgSm}
-              alt="무빙 서비스 메인 배경"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-              quality={85}
-            />
-          </picture>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center text-gray-50">
-            <Image src={truck} alt="트럭 아이콘" width={160} className="truck-slide-in mb-3" priority />
-            <h1 className="text-xl font-bold md:text-3xl">{t("title")}</h1>
-            <p className="md:text-2lg px-10 text-lg font-normal whitespace-pre-line">{t("subtitle")}</p>
+      <section className="sm:flex sm:w-full sm:justify-center md:flex md:justify-center" aria-label="서비스 선택 과정">
+        <div className="mb-[61px] flex flex-col md:mb-[108.5px] lg:mt-[115px] lg:mb-[124.5px] lg:flex-row lg:items-center lg:justify-center">
+          <h2 className="mt-[53px] mb-[34px] ml-8 text-xl font-bold whitespace-pre-line md:mt-[69px] md:mb-10 md:ml-0 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
+            {t("selectionProcess")}
+          </h2>
+          <div className="overflow-hidden">
+            <picture>
+              <source media="(min-width: 1024px)" srcSet={moveType.src} />
+              <source media="(min-width: 768px)" srcSet={moveType.src} />
+              <Image
+                src={moveType}
+                alt="서비스 선택 과정 이미지"
+                width={693}
+                height={400}
+                className="slow-pulse object-cover lg:pr-8"
+                priority
+                quality={75}
+                sizes="(max-width: 768px) 400px, (max-width: 1024px) 677px, 693px"
+              />
+            </picture>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section
-          className="sm:flex sm:w-full sm:justify-center md:flex md:justify-center"
-          aria-label="서비스 선택 과정"
-        >
-          <div className="mb-[61px] flex flex-col md:mb-[108.5px] lg:mt-[115px] lg:mb-[124.5px] lg:flex-row lg:items-center lg:justify-center">
-            <h2 className="mt-[53px] mb-[34px] ml-8 text-xl font-bold whitespace-pre-line md:mt-[69px] md:mb-10 md:ml-0 md:text-3xl lg:mt-[53px] lg:mr-[175.25px] lg:mb-[34px] lg:ml-[32px]">
-              {t("selectionProcess")}
-            </h2>
-            <div className="overflow-hidden">
-              <picture>
-                <source media="(min-width: 1024px)" srcSet={moveType.src} />
-                <source media="(min-width: 768px)" srcSet={moveType.src} />
-                <Image
-                  src={moveType}
-                  alt="서비스 선택 과정 이미지"
-                  width={693}
-                  className="slow-pulse object-cover lg:pr-8"
-                  priority
-                  quality={85}
-                  sizes="(max-width: 768px) 400px, (max-width: 1024px) 677px, 693px"
-                />
-              </picture>
-            </div>
-          </div>
-        </section>
+      <section className="relative flex" aria-label="견적 요청 안내">
+        <picture>
+          <source media="(min-width: 1024px)" srcSet={explainLg.src} />
+          <source media="(min-width: 768px)" srcSet={explainMd.src} />
+          <Image
+            src={explainSm}
+            alt="견적 요청 안내 배너"
+            className="md:px-8 lg:mb-[61px] lg:max-w-[1200px]"
+            priority
+            quality={75}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 1200px"
+          />
+        </picture>
+        <p className="absolute top-[10%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold whitespace-pre-line text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[16%] lg:left-[53.0%] lg:text-start">
+          {t("getQuote")}
+        </p>
+      </section>
 
-        <section className="relative flex" aria-label="견적 요청 안내">
-          <picture>
-            <source media="(min-width: 1024px)" srcSet={explainLg.src} />
-            <source media="(min-width: 768px)" srcSet={explainMd.src} />
-            <Image
-              src={explainSm}
-              alt="견적 요청 안내 배너"
-              className="md:px-8 lg:mb-[61px] lg:max-w-[1200px]"
-              priority
-              quality={85}
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 1200px"
-            />
-          </picture>
-          <p className="absolute top-[10%] right-[10%] flex max-w-[calc(100%-32px)] flex-col items-start text-end text-xl font-bold whitespace-pre-line text-white md:top-[7.3%] md:right-[11.5%] md:text-3xl lg:top-[16%] lg:left-[53.0%] lg:text-start">
-            {t("getQuote")}
-          </p>
-        </section>
+      <section className="relative flex" aria-label="자세한 정보">
+        <picture>
+          <source media="(min-width: 1024px)" srcSet={bottomLg.src} />
+          <source media="(min-width: 768px)" srcSet={bottomMd.src} />
+          <Image src={bottomSm} alt="자세한 정보 배너" quality={75} loading="lazy" sizes="100vw" />
+        </picture>
+        <p className="absolute top-[10%] left-[5%] flex w-full flex-col items-start text-xl font-bold whitespace-pre-line md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[8%]">
+          {t("learnMore")}
+        </p>
+      </section>
 
-        <section className="relative flex" aria-label="자세한 정보">
-          <picture>
-            <source media="(min-width: 1024px)" srcSet={bottomLg.src} />
-            <source media="(min-width: 768px)" srcSet={bottomMd.src} />
-            <Image src={bottomSm} alt="자세한 정보 배너" quality={85} loading="lazy" />
-          </picture>
-          <p className="absolute top-[10%] left-[5%] flex w-full flex-col items-start text-xl font-bold whitespace-pre-line md:top-[7%] md:left-[4%] md:text-3xl lg:top-[10.3%] lg:left-[8%]">
-            {t("learnMore")}
-          </p>
-        </section>
-
-        <section
-          className="bg-orange-gradient flex h-50 w-full flex-col items-center justify-center md:h-[311px] lg:h-[355px]"
-          aria-label="무빙 아이콘"
-        >
-          <Image src={appIcon} alt="서비스 아이콘" className="mb-3 w-[56px] md:mb-8 md:w-27" />
-          <p className="text-center text-xl font-bold text-white md:text-[28px]">{t("complexMoving")}</p>
-        </section>
-      </main>
-    </>
+      <section
+        className="bg-orange-gradient flex h-50 w-full flex-col items-center justify-center md:h-[311px] lg:h-[355px]"
+        aria-label="앱 다운로드"
+      >
+        <Image
+          src={appIcon}
+          alt="앱 아이콘"
+          className="mb-3 w-[56px] md:mb-8 md:w-27"
+          width={56}
+          height={56}
+          sizes="56px"
+        />
+        <p className="text-center text-xl font-bold text-white md:text-[28px]">{t("complexMoving")}</p>
+      </section>
+    </main>
   );
 };
