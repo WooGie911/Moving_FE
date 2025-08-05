@@ -17,7 +17,7 @@ import { useTranslations, useLocale } from "next-intl";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
-  const { open, close } = useModal();
+  const { open: openModal, close: closeModal } = useModal();
   const queryClient = useQueryClient();
   const deviceType = useWindowWidth();
   const t = useTranslations("review");
@@ -39,7 +39,7 @@ const WritableReviewPage = () => {
       reviewApi.postReview(reviewId, rating, content, locale),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
-      close();
+      closeModal();
     },
     onError: () => {
       alert(t("reviewWriteFailed"));
@@ -53,22 +53,25 @@ const WritableReviewPage = () => {
     [postReview],
   );
 
-  const handleWriteModalOpen = (card: IWritableCardData) => {
-    const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
-    open({
-      title: t("writeReview"),
-      type: modalType,
-      children: card ? (
-        <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
-      ) : null,
-    });
-  }, [deviceType, open, t, onSubmit, isPending]);
+  const handleWriteModalOpen = useCallback(
+    (card: IWritableCardData) => {
+      const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
+      openModal({
+        title: t("writeReview"),
+        type: modalType,
+        children: card ? (
+          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
+        ) : null,
+      });
+    },
+    [deviceType, openModal, t, onSubmit, isPending],
+  );
 
   // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
   useEffect(() => {
     const modal = searchParams.get("modal");
     const reviewId = searchParams.get("reviewId");
-    
+
     if (modal === "write" && reviewId) {
       // 데이터가 로드된 후에 해당 리뷰 카드를 찾아서 모달 열기
       if (data?.items && data.items.length > 0) {
