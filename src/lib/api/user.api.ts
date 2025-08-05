@@ -1,4 +1,4 @@
-import { getTokenFromCookie, setTokensToCookie } from "@/utils/auth";
+import { getTokenFromCookie } from "@/utils/auth";
 import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -46,9 +46,19 @@ interface IMoverProfileUpdateInput {
 
 const userApi = {
   getUser: async () => {
-    const response = await fetchWithAuth(`${API_URL}/users`);
+    const response = await fetch(`${API_URL}/users`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    console.log("responseData", responseData);
+
+    return responseData;
   },
 
   uploadFilesToS3: async (file: File) => {
@@ -97,10 +107,6 @@ const userApi = {
 
     const data = await response.json();
 
-    if (data.success && data.accessToken) {
-      await setTokensToCookie(data.accessToken); // 토큰 저장
-    }
-
     return data;
   },
 
@@ -124,19 +130,17 @@ const userApi = {
     currentPassword?: string;
     newPassword?: string;
   }) => {
-    const accessToken = await getAccessToken();
-    
     // CSRF 토큰을 항상 새로 요청 (안정성을 위해)
     let csrfToken;
     try {
       const csrfResponse = await fetch(`${API_URL}/csrf-token`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${await getAccessToken()}`,
         },
         credentials: "include",
       });
-      
+
       if (csrfResponse.ok) {
         const csrfData = await csrfResponse.json();
         csrfToken = csrfData.data?.token;
@@ -144,28 +148,27 @@ const userApi = {
     } catch (error) {
       console.error("CSRF 토큰 요청 실패:", error);
     }
-    
+
     const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${await getAccessToken()}`,
         ...(csrfToken && { "X-CSRF-Token": csrfToken }),
       },
       body: JSON.stringify(data),
       credentials: "include",
     });
-    
+
     return response.json();
   },
 
   updateMoverProfile: async (data: IMoverProfileUpdateInput) => {
-    const accessToken = await getAccessToken();
     const response = await fetch(`${API_URL}/users/profile/mover`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: JSON.stringify(data),
       credentials: "include",
