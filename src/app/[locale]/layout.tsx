@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import Providers from "./providers";
 import { Gnb } from "@/components/common/gnb/Gnb";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -39,6 +40,8 @@ export default async function LocaleLayout({
           pauseOnHover={false}
           draggable={false}
           closeOnClick
+          theme="light"
+          toastClassName="custom-toast"
         />
       </Providers>
     </NextIntlClientProvider>

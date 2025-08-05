@@ -811,6 +811,14 @@
     "switchUserTypeError": "전환에 실패하였습니다."
   },
   "review": {
+    "metadata": {
+      "title": "리뷰 | 무빙",
+      "description": "이사 리뷰를 작성하고 관리하세요",
+      "writableTitle": "작성 가능한 리뷰 | 무빙",
+      "writableDescription": "이사 완료 후 작성할 수 있는 리뷰를 확인하세요",
+      "writtenTitle": "내가 작성한 리뷰 | 무빙",
+      "writtenDescription": "내가 작성한 이사 리뷰를 확인하고 관리하세요"
+    },
     "title": "리뷰",
     "writableTab": "작성 가능한 리뷰",
     "writtenTab": "내가 작성한 리뷰",
@@ -834,7 +842,16 @@
     "reviewRequired": "상세 후기를 입력해주세요.",
     "reviewMinLength": "최소 10자 이상 입력해주세요",
     "submitting": "요청 중...",
-    "registerReview": "리뷰 등록"
+    "registerReview": "리뷰 등록",
+    "experience": "경력",
+    "averageRating": "평균 평점",
+    "totalReviews": "총 리뷰",
+    "workHours": "작업시간",
+    "includesPacking": "포장포함",
+    "insuranceAmount": "보험금액",
+    "currency": "원",
+    "yes": "예",
+    "no": "아니오"
   },
   "notification": {
     "title": "알림",

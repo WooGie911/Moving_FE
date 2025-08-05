@@ -1,4 +1,5 @@
 import logo from "@/assets/img/logo/logo-m.png";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 /**
  * 공유 관련 유틸리티 함수들
  */
@@ -160,18 +161,6 @@ export const shareToFacebook = (url: string, title?: string, description?: strin
 
 // 공유 성공 알림 표시
 export const showShareSuccess = (type: "clip" | "kakao" | "facebook"): void => {
-  // 이미 존재하는 알림 제거
-  const existingAlert = document.getElementById("share-success-alert");
-  if (existingAlert) {
-    existingAlert.remove();
-  }
-
-  // 새로운 알림 생성
-  const alert = document.createElement("div");
-  alert.id = "share-success-alert";
-  alert.className =
-    "w-full max-w-[320px] md:max-w-[660px] lg:max-w-[1200px] h-[54px] lg:h-[66px] fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-primary-200 text-primary-400 px-4 py-2 leading-[26px] font-semibold text-[16px] rounded-lg shadow-lg transition-all duration-300 items-center justify-center py-[16px] lg:py-[22px] pl-[24px] md:pl-[32px]";
-
   let message = "";
   switch (type) {
     case "clip":
@@ -185,37 +174,10 @@ export const showShareSuccess = (type: "clip" | "kakao" | "facebook"): void => {
       break;
   }
 
-  alert.textContent = message;
-  document.body.appendChild(alert);
-
-  // 3초 후 알림 제거
-  setTimeout(() => {
-    if (alert.parentNode) {
-      alert.parentNode.removeChild(alert);
-    }
-  }, 3000);
+  showSuccessToast(message);
 };
 
 // 공유 실패 알림 표시
 export const showShareError = (message: string): void => {
-  // 이미 존재하는 알림 제거
-  const existingAlert = document.getElementById("share-error-alert");
-  if (existingAlert) {
-    existingAlert.remove();
-  }
-
-  // 새로운 알림 생성
-  const alert = document.createElement("div");
-  alert.id = "share-error-alert";
-  alert.className =
-    "fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center";
-  alert.textContent = message;
-  document.body.appendChild(alert);
-
-  // 3초 후 알림 제거
-  setTimeout(() => {
-    if (alert.parentNode) {
-      alert.parentNode.removeChild(alert);
-    }
-  }, 3000);
+  showErrorToast(message);
 };

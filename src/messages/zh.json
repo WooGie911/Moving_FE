@@ -851,6 +851,14 @@
     "switchUserTypeError": "切换用户类型失败。"
   },
   "review": {
+    "metadata": {
+      "title": "评价 | 무빙",
+      "description": "撰写和管理您的搬家评价",
+      "writableTitle": "可写评价 | 무빙",
+      "writableDescription": "查看搬家完成后可以撰写的评价",
+      "writtenTitle": "我写的评价 | 무빙",
+      "writtenDescription": "查看和管理您撰写的搬家评价"
+    },
     "title": "评价",
     "writableTab": "可写评价",
     "writtenTab": "我写的评价",
@@ -874,7 +882,16 @@
     "reviewRequired": "请输入详细评价。",
     "reviewMinLength": "请输入至少10个字符",
     "submitting": "提交中...",
-    "registerReview": "注册评价"
+    "registerReview": "注册评价",
+    "experience": "经验",
+    "averageRating": "平均评分",
+    "totalReviews": "总评价数",
+    "workHours": "工作时间",
+    "includesPacking": "包含包装",
+    "insuranceAmount": "保险金额",
+    "currency": "韩元",
+    "yes": "是",
+    "no": "否"
   },
   "notification": {
     "title": "通知",
