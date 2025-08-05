@@ -154,7 +154,10 @@ const EditPage = () => {
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("phone")}</div>
+                <div className="inline-flex items-center gap-1">
+                  <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-lg">{t("phone")}</div>
+                  <div className="text-base leading-relaxed font-semibold text-red-500 lg:text-lg">*</div>
+                </div>
                 <TextInput
                   name="phone"
                   rules={validationRules.phoneNumber}
@@ -224,7 +227,7 @@ const EditPage = () => {
             <div className={`mt-8 flex w-full flex-col-reverse gap-3 ${!isSocialLogin ? 'col-span-1 lg:col-span-2 lg:flex-row lg:justify-end' : 'lg:mx-auto lg:max-w-[500px] lg:flex-row lg:justify-end'} lg:gap-4`}>
               <button
                 type="button"
-                className="h-[54px] w-full rounded-xl px-6 py-4 text-base font-semibold text-neutral-400 shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 lg:h-[60px] lg:w-[240px]"
+                className="h-[54px] w-full rounded-xl px-6 py-4 text-base font-semibold text-neutral-400 shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 lg:h-[60px] lg:w-[240px] cursor-pointer"
                 onClick={() => router.back()}
               >
                 {t("cancel")}
