@@ -59,7 +59,9 @@ const authApi = {
 
     const responseData = await response.json();
 
-    await clearServerSideTokens();
+    if (responseData.success) {
+      await clearServerSideTokens();
+    }
 
     return responseData;
   },

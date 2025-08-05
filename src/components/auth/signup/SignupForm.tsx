@@ -65,7 +65,11 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
           buttons: [{ text: "확인", onClick: () => close() }],
         });
       } else {
-        router.push("/");
+        if (userType === "CUSTOMER") {
+          router.push(`/${currentLocale}/searchMover`);
+        } else {
+          router.push(`/${currentLocale}/estimate/received`);
+        }
       }
     } catch (error) {
       console.error(error);

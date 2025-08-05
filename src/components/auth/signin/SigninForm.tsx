@@ -8,7 +8,7 @@ import { ISignInFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
   const validationRules = useValidationRules();
   const { open, close } = useModal();
   const t = useTranslations("auth");
+  const currentLocale = useLocale();
 
   const form = useForm<ISignInFormValues>({
     mode: "onChange",
@@ -52,7 +53,11 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
           buttons: [{ text: t("confirm"), onClick: () => close() }],
         });
       } else {
-        router.push("/");
+        if (userType === "CUSTOMER") {
+          router.push(`/${currentLocale}/searchMover`);
+        } else {
+          router.push(`/${currentLocale}/estimate/received`);
+        }
       }
     } catch (error) {
       console.error(error);

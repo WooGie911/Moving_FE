@@ -23,7 +23,7 @@ export function setTokensToCookie(accessToken: string) {
 
     const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-    document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=Strict; Secure`;
+    document.cookie = `accessToken=${accessToken}; path=/; max-age=${accessTokenExpiresIn}; SameSite=None; Secure`;
   } catch (error) {
     logDevError(error, "Failed to decode JWT");
   }
