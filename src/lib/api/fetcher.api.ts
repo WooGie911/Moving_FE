@@ -38,7 +38,9 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
         false,
       );
     }
+  }
 
+  if (res.status === 404) {
     // 🔒 refreshToken도 만료 → 로그아웃 처리
     authApi.logout();
     throw new Error("로그인이 만료되었습니다.");
