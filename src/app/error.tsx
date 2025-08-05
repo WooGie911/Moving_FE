@@ -46,7 +46,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             type="button"
             aria-label="페이지 다시 로드"
           >
-            다시 시도
+            again
           </button>
           <button
             onClick={() => (window.location.href = "/")}
@@ -54,7 +54,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             type="button"
             aria-label="홈페이지로 이동"
           >
-            홈으로 돌아가기
+            home
           </button>
         </nav>
       </section>

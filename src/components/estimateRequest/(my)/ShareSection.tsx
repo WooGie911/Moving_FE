@@ -12,10 +12,75 @@ import {
   showShareSuccess,
   showShareError,
 } from "@/utils/shareUtils";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { getRegionLabel } from "@/lib/utils/regionMapping";
 
-export const ShareSection = () => {
+interface ShareSectionProps {
+  estimate?: {
+    price: number;
+    mover?: {
+      nickname: string;
+      profileImage?: string;
+    };
+  };
+  estimateRequest?: {
+    moveType: string;
+    fromAddress: {
+      region: string;
+      city: string;
+      district: string;
+    };
+    toAddress: {
+      region: string;
+      city: string;
+      district: string;
+    };
+  };
+}
+
+export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) => {
   const t = useTranslations("estimateRequest");
+  const tShared = useTranslations();
+  const locale = useLocale();
+
+  // 견적 정보를 포함한 공유 메시지 생성
+  const generateShareMessage = () => {
+    if (!estimate) {
+      return {
+        title: t("shareEstimate"),
+        description: t("shareEstimate"),
+        imageUrl: "https://gomoving.site/logo-m.png",
+      };
+    }
+
+    const shareTitle = `${estimate.mover?.nickname} 기사님의 견적서 - Moving`;
+
+    // 이사 정보 생성
+    let moveInfo = "";
+    if (estimateRequest) {
+      const fromRegion = getRegionLabel(estimateRequest.fromAddress.region);
+      const toRegion = getRegionLabel(estimateRequest.toAddress.region);
+      const fromCity = estimateRequest.fromAddress.city;
+      const toCity = estimateRequest.toAddress.city;
+      const fromDistrict = estimateRequest.fromAddress.district;
+      const toDistrict = estimateRequest.toAddress.district;
+      const moveType =
+        estimateRequest.moveType === "SMALL"
+          ? "소형이사"
+          : estimateRequest.moveType === "HOME"
+            ? "가정이사"
+            : "사무실이사";
+
+      moveInfo = `${fromRegion} ${fromCity}${fromDistrict}에서 ${toRegion} ${toCity}${toDistrict} ${moveType}`;
+    }
+
+    const shareDescription = `${estimate.mover?.nickname}  기사님의 견적서입니다! ${moveInfo} 견적가 ${estimate.price.toLocaleString()}원으로 안전하고 신뢰할 수 있는 이사 서비스를 제공합니다.`;
+    const shareImageUrl = estimate.mover?.profileImage || "https://gomoving.site/logo-m.png";
+
+    return { title: shareTitle, description: shareDescription, imageUrl: shareImageUrl };
+  };
+
+  const shareInfo = generateShareMessage();
 
   // 클립보드 복사 핸들러
   const handleClipCopy = async () => {
@@ -38,10 +103,7 @@ export const ShareSection = () => {
   const handleKakaoShare = async () => {
     try {
       const currentUrl = getCurrentPageUrl();
-      const title = t("shareEstimate");
-      const description = t("shareEstimate");
-
-      await shareToKakao(currentUrl, title, description);
+      await shareToKakao(currentUrl, shareInfo.title, shareInfo.description, shareInfo.imageUrl);
       showShareSuccess("kakao");
     } catch (error) {
       console.error("ShareSection - 카카오톡 공유 오류:", error);
@@ -53,7 +115,7 @@ export const ShareSection = () => {
   const handleFacebookShare = () => {
     try {
       const currentUrl = getCurrentPageUrl();
-      shareToFacebook(currentUrl, t("shareEstimate"), t("shareEstimate"));
+      shareToFacebook(currentUrl, shareInfo.title, shareInfo.description);
       showShareSuccess("facebook");
     } catch (error) {
       console.error("페이스북 공유 오류:", error);
