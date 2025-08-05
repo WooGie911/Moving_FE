@@ -15,13 +15,13 @@ import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import { shortenRegionName } from "@/utils/regionMapping";
 
-interface ReviewWriteModalProps {
+interface IReviewWriteModalProps {
   card: IWritableCardData;
   onSubmit: (data: IReviewForm) => void;
   isSubmitting: boolean;
 }
 
-const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: ReviewWriteModalProps) => {
+const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalProps) => {
   const t = useTranslations("review");
   const locale = useLocale();
   const methods = useForm<IReviewForm>();

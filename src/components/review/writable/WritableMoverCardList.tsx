@@ -1,12 +1,12 @@
 import { IWritableCardData } from "@/types/review";
 import WritableMoverCard from "./WritableMoverCard";
 
-interface IMoverCardListProps {
+interface IWritableMoverCardListProps {
   cards: IWritableCardData[];
   onClickWrite: (card: IWritableCardData) => void;
 }
 
-const WritableMoverCardList = ({ cards, onClickWrite }: IMoverCardListProps) => (
+const WritableMoverCardList = ({ cards, onClickWrite }: IWritableMoverCardListProps) => (
   <div>
     {cards.map((card) => (
       <WritableMoverCard

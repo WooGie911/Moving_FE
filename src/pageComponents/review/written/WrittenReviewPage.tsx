@@ -68,15 +68,15 @@ const WrittenReviewPage = () => {
                   profileImage={card.mover.profileImage}
                   nickname={card.mover.nickname}
                   shortIntro={card.mover.shortIntro}
-                  experience={card.mover.experience}
-                  averageRating={card.mover.averageRating}
-                  totalReviews={card.mover.totalReviews}
                   fromAddress={card.fromAddress}
                   toAddress={card.toAddress}
                   moveDate={card.moveDate}
                   rating={card.rating}
                   content={card.content}
                   createdAt={card.createdAt}
+                  experience={card.mover.experience}
+                  averageRating={card.mover.averageRating}
+                  totalReviews={card.mover.totalReviews}
                 />
               </button>
             </article>

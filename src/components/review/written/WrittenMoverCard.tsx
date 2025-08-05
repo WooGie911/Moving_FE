@@ -11,9 +11,9 @@ import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import { shortenRegionName } from "@/utils/regionMapping";
 
-import { IWrittenCardData, IAddress } from "@/types/review";
+import { IAddress } from "@/types/review";
 
-type WrittenMoverCardProps = {
+type TWrittenMoverCardProps = {
   id: string;
   profileImage: string | null;
   nickname: string;
@@ -33,16 +33,13 @@ const WrittenMoverCard = ({
   profileImage,
   nickname,
   shortIntro,
-  experience,
-  averageRating,
-  totalReviews,
   fromAddress,
   toAddress,
   moveDate,
   rating,
   content,
   createdAt,
-}: WrittenMoverCardProps) => {
+}: TWrittenMoverCardProps) => {
   const t = useTranslations("review");
   const locale = useLocale();
 

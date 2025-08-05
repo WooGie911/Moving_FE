@@ -16,6 +16,9 @@ export interface IMover {
   profileImage: string | null;
   nickname: string;
   shortIntro: string;
+  experience: number;
+  averageRating: number;
+  totalReviews: number;
 }
 
 // 고객 정보 타입 (실제 사용하는 데이터만)

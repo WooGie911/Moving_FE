@@ -4,12 +4,12 @@ import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.webp";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-type StarRatingProps = {
+type TStarRatingProps = {
   rating: number;
   setRating: (rating: number) => void;
 };
 
-const StarRating = ({ rating, setRating }: StarRatingProps) => {
+const StarRating = ({ rating, setRating }: TStarRatingProps) => {
   const t = useTranslations("review");
 
   const handleStarClick = (starIndex: number) => {
