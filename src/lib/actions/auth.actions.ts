@@ -9,38 +9,6 @@ export async function getServerSideToken(type: string) {
   return tokenCookie ? tokenCookie.value : null;
 }
 
-export async function setServerSideTokens(accessToken: string) {
-  const cookieStore = await cookies();
-
-  // 토큰 디코딩 및 만료 시간 계산
-  const accessTokenData = JSON.parse(Buffer.from(accessToken.split(".")[1], "base64url").toString());
-
-  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
-
-  // 쿠키 설정 - path를 "/"로 통일
-  cookieStore.set("accessToken", accessToken, {
-    path: "/",
-    maxAge: accessTokenExpiresIn,
-    sameSite: "none",
-  });
-}
-
-export async function updateAccessToken(accessToken: string) {
-  const cookieStore = await cookies();
-
-  // 토큰 디코딩 및 만료 시간 계산
-  const accessTokenData = JSON.parse(Buffer.from(accessToken.split(".")[1], "base64url").toString());
-
-  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
-
-  // 액세스 토큰만 갱신 - path를 "/"로 통일
-  cookieStore.set("accessToken", accessToken, {
-    path: "/",
-    maxAge: accessTokenExpiresIn,
-    sameSite: "none",
-  });
-}
-
 export async function clearServerSideTokens() {
   const cookieStore = await cookies();
 
