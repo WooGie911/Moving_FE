@@ -10,7 +10,7 @@ import Pagination from "@/components/common/pagination/Pagination";
 // 사용자 이름 마스킹 함수
 const maskUserName = (name: string): string => {
   if (!name || name.length <= 1) return name;
-  return name.charAt(0) + "*".repeat(name.length - 1);
+  return name.charAt(0) + "***"; 
 };
 
 const PAGE_SIZE = 5;
@@ -130,7 +130,9 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
               <li className="py-5 md:py-6">
                 <div className="mb-4 flex flex-col gap-2 md:mb-6">
                   <div className="flex items-center gap-3 md:gap-[14px]">
-                    <span className="text-md md:text-2lg font-normal">{maskUserName(apiReview?.nickname || "")}</span>
+                    <span className="text-md md:text-2lg font-normal">
+                      {maskUserName(apiReview?.customer?.nickname || "익명")}
+                    </span>
                     <div className="text-[#E6E6E6]">|</div>
                     <span className="text-md md:text-2lg text-[#ABABAB]">{formatDate(apiReview?.createdAt || "")}</span>
                   </div>

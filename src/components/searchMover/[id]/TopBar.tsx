@@ -4,10 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { TopBarProps } from "@/types/mover.types";
-import defaultHeader from "@/assets/img/etc/detailHeader.png";
-import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.png";
-import defaultProfileMd from "@/assets/img/mascot/moverprofile-md.png";
-import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.png";
+import defaultHeader from "@/assets/img/etc/detail-header.webp";
+import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.webp";
+import defaultProfileMd from "@/assets/img/mascot/moverprofile-md.webp";
+import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.webp";
 
 const TopBar = ({ profileImage }: TopBarProps) => {
   const deviceType = useWindowWidth();

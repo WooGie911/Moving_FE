@@ -136,7 +136,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
           <Button
             variant="like"
             width="w-[320px]"
-            height="h-[54px]"
+            height="h-[64px]"
             rounded="rounded-[16px]"
             isLiked={isLiked}
             onClick={toggleLike}

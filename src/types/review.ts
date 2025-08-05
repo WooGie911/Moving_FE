@@ -145,9 +145,15 @@ export interface IApiReview {
   moverId: string;
   profileImage: string | null;
   nickname: string;
+  customer?: {
+    id: string;
+    nickname: string;
+    profileImage: string;
+    detailIntro: string | null;
+  };
   moveType: string;
   isDesigned: boolean;
-  shortIntro: string | null;
+  moverIntroduction: string | null;
   fromAddress: any;
   toAddress: any;
   moveDate: string;
