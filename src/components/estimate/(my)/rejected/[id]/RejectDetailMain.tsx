@@ -41,7 +41,19 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
             {t("estimatePrice")}
           </p>
           <p className="text-primary-400 text-[12px] leading-[32px] font-bold md:text-[14px] md:font-bold">
-            {t("rejectedEstimateNoPrice")}
+            {locale === "en" ? (
+              <>
+                <span
+                  className="md:hidden"
+                  dangerouslySetInnerHTML={{
+                    __html: "Estimate price is not available<br />as the estimate was rejected.",
+                  }}
+                />
+                <span className="hidden md:inline">Estimate price is not available as the estimate was rejected.</span>
+              </>
+            ) : (
+              t("rejectedEstimateNoPrice")
+            )}
           </p>
         </div>
 
@@ -59,22 +71,14 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
           movingType={data.moveType}
           createdAt={data.createdAt}
           movingDate={data.moveDate}
-          departureAddr={
-            (locale === "ko" ? shortenRegionInAddress(data.fromAddress.region) : data.fromAddress.region) +
-            " " +
-            data.fromAddress.city +
-            " " +
-            data.fromAddress.district
-          }
-          arrivalAddr={
-            (locale === "ko" ? shortenRegionInAddress(data.toAddress.region) : data.toAddress.region) +
-            " " +
-            data.toAddress.city +
-            " " +
-            data.toAddress.district
-          }
-          departureDetail={data.fromAddress.detail || ""}
-          arrivalDetail={data.toAddress.detail || ""}
+          departureRegion={locale === "ko" ? shortenRegionInAddress(data.fromAddress.region) : data.fromAddress.region}
+          departureCity={data.fromAddress.city}
+          departureDistrict={data.fromAddress.district}
+          departureDetail={data.fromAddress.detail}
+          arrivalRegion={locale === "ko" ? shortenRegionInAddress(data.toAddress.region) : data.toAddress.region}
+          arrivalCity={data.toAddress.city}
+          arrivalDistrict={data.toAddress.district}
+          arrivalDetail={data.toAddress.detail}
           status={data.status}
           confirmedEstimateId={null} // 또는 적절한 값
           estimateCount={0} // 또는 적절한 값

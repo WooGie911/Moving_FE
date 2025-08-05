@@ -38,9 +38,9 @@
         "saturday": "Sat"
       },
       "dateFormat": {
-        "year": "year",
-        "month": "month",
-        "day": "day"
+        "year": "Y.",
+        "month": "M.",
+        "day": "D."
       },
       "timeFormat": {
         "am": "AM",
@@ -116,9 +116,9 @@
       "pm": "PM"
     },
     "dateFormat": {
-      "year": "",
-      "month": "/",
-      "day": ""
+      "year": "Y.",
+      "month": "M.",
+      "day": "D."
     },
     "profileImage": "Profile Image",
     "estimatePrice": "Estimate Price",
@@ -662,6 +662,7 @@
     "completedMoveMessage": "This is a completed move estimate.",
     "viewEstimateDetail": "View Estimate Details",
     "rejectedRequestMessage": "This is a rejected request.",
+    "rejectedRequestCardMessage": "This estimate was rejected by the customer.",
     "estimateWaiting": "Waiting",
     "rejectedEstimate": "Rejected",
     "confirmedEstimate": "Confirmed",
@@ -683,6 +684,7 @@
     "estimatePricePlaceholder": "Please enter the estimate price.",
     "onlyNumbersMessage": "Please enter numbers only.",
     "enterComment": "Please enter a comment.",
+    "enterRejectionReason": "Please enter the rejection reason.",
     "commentPlaceholder": "Please enter at least 10 characters.",
     "commentMinLengthMessage": "Please enter at least 10 characters.",
     "totalCount": "Total",
@@ -710,16 +712,16 @@
     "estimateNotFound": "The requested estimate could not be found.",
     "rejectedEstimateMessage": "This estimate has been rejected.",
     "customerEstimate": "'s Estimate",
-    "rejectedEstimateNoPrice": "Estimate price is not available as the estimate was rejected.",
+    "rejectedEstimateNoPrice": "Estimate price is not available<br />as the estimate was rejected.",
     "rejectionDate": "Rejection Date",
     "estimatePrice": "Estimate Price",
     "customerSuffix": " Customer",
     "confirmedEstimate": "Confirmed Estimate",
     "profileImage": "Profile Image",
     "dateFormat": {
-      "year": "",
-      "month": "/",
-      "day": ""
+      "year": "Y.",
+      "month": "M.",
+      "day": "D."
     }
   },
   "relativeTime": {
