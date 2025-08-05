@@ -838,6 +838,14 @@
     "switchUserTypeError": "Failed to switch user type."
   },
   "review": {
+    "metadata": {
+      "title": "Review | Moving",
+      "description": "Write and manage your moving reviews",
+      "writableTitle": "Writable Reviews | Moving",
+      "writableDescription": "Check reviews you can write after completing your move",
+      "writtenTitle": "My Written Reviews | Moving",
+      "writtenDescription": "Check and manage your written moving reviews"
+    },
     "title": "Review",
     "writableTab": "Writable Reviews",
     "writtenTab": "My Written Reviews",
@@ -861,7 +869,16 @@
     "reviewRequired": "Please enter a detailed review.",
     "reviewMinLength": "Please enter at least 10 characters",
     "submitting": "Submitting...",
-    "registerReview": "Register Review"
+    "registerReview": "Register Review",
+    "experience": "Experience",
+    "averageRating": "Average Rating",
+    "totalReviews": "Total Reviews",
+    "workHours": "Work Hours",
+    "includesPacking": "Includes Packing",
+    "insuranceAmount": "Insurance Amount",
+    "currency": "KRW",
+    "yes": "Yes",
+    "no": "No"
   },
   "notification": {
     "title": "Notifications",
@@ -891,7 +908,7 @@
   },
   "favoriteMover": {
     "metadata": {
-      "title": "Favorite Movers | 무빙",
+      "title": "Favorite Movers | Moving",
       "description": "Check and manage your favorite movers"
     },
     "title": "Favorite Movers",
