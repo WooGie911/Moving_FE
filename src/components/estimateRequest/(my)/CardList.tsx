@@ -102,7 +102,7 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
         </div>
       ) : (
         <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
-          <div className="flex w-full flex-row items-center justify-start gap-1 md:hidden">
+          <div className="flex flex-row items-center justify-start gap-1 md:hidden">
             {estimate.status === "PROPOSED" ? (
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
             ) : estimate.status === "ACCEPTED" ? (
@@ -114,7 +114,7 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("rejectedEstimate")}</p>
             )}
           </div>
-          <div className="flex w-full flex-row items-center justify-end gap-3 md:justify-end">
+          <div className="flex flex-row items-center justify-end gap-3">
             <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium">
               {t("estimateAmount")}
             </p>

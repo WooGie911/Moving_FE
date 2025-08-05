@@ -8,6 +8,7 @@ import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 
 export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitleSectionProps) => {
   const t = useTranslations("estimateRequest");
+
   return (
     <div className="border-border-light flex w-full flex-col gap-3">
       <div className="flex w-full flex-row items-center justify-between">
@@ -31,7 +32,9 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
         </div>
         {/* 확정견적인지 + 견적상태  모바일만 표시 */}
         {
-          <div className="flex flex-row items-center justify-end md:hidden">
+          <div
+            className={`flex flex-row items-center justify-end ${usedAt === "pending" ? "" : usedAt === "detail" ? "md:hidden" : "hidden"}`}
+          >
             {estimate.status === "PROPOSED" ? (
               <p
                 className={`text-[14px] leading-[26px] font-semibold text-gray-300 ${usedAt === "received" ? "md:hidden" : ""}`}

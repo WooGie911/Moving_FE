@@ -184,7 +184,7 @@ export const EstimateListSection = ({
 
       <div className="flex w-full flex-col items-stretch justify-center">
         {filteredList.map((item) => (
-          <CardList key={item.estimate.id} {...item} hasConfirmedEstimate={hasConfirmedEstimate} />
+          <CardList key={item.estimate.id} {...item} hasConfirmedEstimate={hasConfirmedEstimate} usedAt="received" />
         ))}
       </div>
     </div>
