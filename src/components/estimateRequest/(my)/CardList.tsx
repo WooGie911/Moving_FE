@@ -56,7 +56,6 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
     confirmEstimate(estimate.id);
   };
 
-  console.log("데이터", estimate);
   const openConfirmModal = () => {
     open({
       title: t("confirmEstimate"),
@@ -64,13 +63,14 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
       type: "bottomSheet",
       buttons: [
         {
+          text: tCommon("cancel"),
+          onClick: () => close(),
+          variant: "outlined",
+        },
+        {
           text: isConfirming ? tCommon("loading") : tCommon("confirm"),
           onClick: handleConfirmEstimate,
           disabled: isConfirming,
-        },
-        {
-          text: tCommon("cancel"),
-          onClick: () => close(),
         },
       ],
     });
@@ -78,7 +78,7 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
 
   const cardContent = (
     <div
-      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[367px] border-[0.5px] px-4 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
+      className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[375px] border-[0.5px] px-3 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
     >
       <div className="flex w-full flex-col items-center justify-center gap-1">
         {/* 라벨과 견적상태 영역 */}

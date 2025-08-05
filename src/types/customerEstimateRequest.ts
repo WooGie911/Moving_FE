@@ -209,10 +209,14 @@ export interface IEstimateRequest {
   movingType: "SMALL" | "HOME" | "OFFICE";
   movingDate: Date | string;
   createdAt: Date | string;
-  departureAddr: string;
-  arrivalAddr: string;
-  arrivalDetail: string | null;
+  departureRegion: string | null;
+  departureCity: string | null;
+  departureDistrict: string | null;
   departureDetail: string | null;
+  arrivalRegion: string | null;
+  arrivalCity: string | null;
+  arrivalDistrict: string | null;
+  arrivalDetail: string | null;
   status: string;
   confirmedEstimateId: string | null;
   estimateCount: number;

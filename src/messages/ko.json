@@ -431,7 +431,7 @@
       "small": "소형이사",
       "home": "가정이사",
       "office": "사무실이사",
-      "document": "지정 견적 요청"
+      "document": "지정 견적"
     }
   },
   "regions": {
@@ -625,7 +625,7 @@
     "small": "소형이사",
     "home": "가정이사",
     "office": "사무실이사",
-    "document": "지정 견적 요청"
+    "document": "지정 견적"
   },
 
   "estimate": {
@@ -673,7 +673,7 @@
       "home": "가정이사",
       "office": "사무실이사"
     },
-    "designatedEstimateRequest": "지정 견적 요청",
+    "designatedEstimateRequest": "지정 견적",
     "serviceAvailableArea": "서비스 가능 지역",
     "sortByMoveDate": "이사 빠른순",
     "sortByRequestDate": "요청일 빠른순",
@@ -746,7 +746,7 @@
     "small": "소형이사",
     "home": "가정이사",
     "office": "사무실이사",
-    "document": "지정 견적 요청"
+    "document": "지정 견적"
   },
   "region": {
     "서울": "서울",

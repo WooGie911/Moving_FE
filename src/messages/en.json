@@ -48,16 +48,16 @@
       }
     },
     "movingTypes": {
-      "small": "Small Move",
+      "small": "Small",
       "smallDesc": "Studio, 1-room, under 66㎡",
-      "home": "Home Move",
+      "home": "Home",
       "homeDesc": "3-room, over 66㎡",
-      "office": "Office Move",
+      "office": "Office",
       "officeDesc": "Office, commercial space",
-      "store": "Store Move",
-      "piano": "Piano Move",
-      "art": "Art Move",
-      "storage": "Storage Move"
+      "store": "Store",
+      "piano": "Piano",
+      "art": "Art",
+      "storage": "Storage"
     }
   },
   "estimateRequest": {
@@ -454,10 +454,10 @@
       "serviceAreas": "Service Areas"
     },
     "serviceTypes": {
-      "small": "Small Move",
-      "home": "Home Move",
-      "office": "Office Move",
-      "document": "Designated Quote Request"
+      "small": "Small",
+      "home": "Home",
+      "office": "Office",
+      "document": "Designated"
     }
   },
   "regions": {
@@ -640,7 +640,7 @@
     "small": "Small",
     "home": "Home",
     "office": "Office",
-    "document": "Designated Request"
+    "document": "Designated"
   },
 
   "estimate": {
@@ -692,9 +692,9 @@
     "regionAndEstimate": "Region & Quote",
     "search": "Search",
     "movingTypesFilter": {
-      "small": "Small Moving",
-      "home": "Home Moving",
-      "office": "Office Moving"
+      "small": "Small ",
+      "home": "Home",
+      "office": "Office"
     },
     "designatedEstimateRequest": "Designated Quote Request",
     "serviceAvailableArea": "Service Available Area",
@@ -753,27 +753,27 @@
     }
   },
   "service": {
-    "소형이사": "Small Move",
-    "가정이사": "Home Move",
-    "사무실이사": "Office Move",
-    "Small Movers": "Small Move",
-    "Moving home": "Home Move",
-    "Office Director": "Office Move",
-    "Small Move": "Small Move",
-    "Home Move": "Home Move",
-    "Office Move": "Office Move",
-    "小型搬家": "Small Move",
-    "家庭搬家": "Home Move",
-    "办公室搬家": "Office Move",
-    "小型搬家公司": "Small Move",
-    "家庭搬家公司": "Home Move",
-    "办公室搬家公司": "Office Move",
-    "搬家": "Home Move",
-    "办公室主任": "Office Move",
-    "small": "Small Move",
-    "home": "Home Move",
-    "office": "Office Move",
-    "document": "Designated Quote Request"
+    "소형이사": "Small",
+    "가정이사": "Home",
+    "사무실이사": "Office",
+    "Small Movers": "Small",
+    "Moving home": "Home",
+    "Office Director": "Office",
+    "Small Move": "Small",
+    "Home Move": "Home",
+    "Office Move": "Office",
+    "小型搬家": "Small",
+    "家庭搬家": "Home",
+    "办公室搬家": "Office",
+    "小型搬家公司": "Small",
+    "家庭搬家公司": "Home",
+    "办公室搬家公司": "Office",
+    "搬家": "Home",
+    "办公室主任": "Office",
+    "small": "Small",
+    "home": "Home",
+    "office": "Office",
+    "document": "Designated"
   },
   "region": {
     "서울": "Seoul",
