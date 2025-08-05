@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import reviewApi from "@/lib/api/review.api";
 import WritableMoverCardList from "@/components/review/writable/WritableMoverCardList";
 import noReview from "@/assets/img/mascot/notfound.png";
@@ -20,6 +21,7 @@ const WritableReviewPage = () => {
   const queryClient = useQueryClient();
   const deviceType = useWindowWidth();
   const t = useTranslations("review");
+  const searchParams = useSearchParams();
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -43,11 +45,11 @@ const WritableReviewPage = () => {
     },
   });
 
-  const onSubmit = (reviewId: string, data: IReviewForm) => {
+  const onSubmit = useCallback((reviewId: string, data: IReviewForm) => {
     postReview({ reviewId, ...data });
-  };
+  }, [postReview]);
 
-  const handleWriteModalOpen = (card: IWritableCardData) => {
+  const handleWriteModalOpen = useCallback((card: IWritableCardData) => {
     const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
     open({
       title: t("writeReview"),
@@ -56,7 +58,23 @@ const WritableReviewPage = () => {
         <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
       ) : null,
     });
-  };
+  }, [deviceType, open, t, onSubmit, isPending]);
+
+  // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
+  useEffect(() => {
+    const modal = searchParams.get("modal");
+    const reviewId = searchParams.get("reviewId");
+    
+    if (modal === "write" && reviewId) {
+      // 데이터가 로드된 후에 해당 리뷰 카드를 찾아서 모달 열기
+      if (data?.items && data.items.length > 0) {
+        const targetCard = data.items.find((card: IWritableCardData) => card.reviewId === reviewId);
+        if (targetCard) {
+          handleWriteModalOpen(targetCard);
+        }
+      }
+    }
+  }, [searchParams, data?.items, handleWriteModalOpen]);
 
   const cards = (data?.items ?? []) as unknown as IWritableCardData[];
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || 4)) : 1;
