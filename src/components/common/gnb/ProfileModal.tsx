@@ -45,6 +45,8 @@ function ProfileModal({
 }: IProfileModalProps) {
   const t = useTranslations();
 
+  console.log("userName", userName);
+
   return (
     <div
       ref={profileModalRef}
