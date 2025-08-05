@@ -351,7 +351,9 @@
     "registerMetadata": {
       "title": "프로필 등록 | Moving",
       "description": "프로필 등록 페이지"
-    }
+    },
+    "registerLoadingText": "프로필 등록 페이지 불러오는 중...",
+    "editLoadingText": "프로필 수정 페이지 불러오는 중..."
   },
   "search": {
     "title": "이사업체 검색",
