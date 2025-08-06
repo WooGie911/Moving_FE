@@ -2,7 +2,6 @@
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
 import { CardList } from "@/components/estimate/CardList";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
-import { mockMyRejectedEstimateData } from "@/types/moverEstimate";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
