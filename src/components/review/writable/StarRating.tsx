@@ -1,6 +1,6 @@
 "use client";
-import star_active from "@/assets/icon/star/icon-star-active-sm.webp";
-import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.webp";
+import star_active from "@/assets/icon/star/icon-star-active-sm.svg";
+import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 

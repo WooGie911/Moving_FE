@@ -1,11 +1,11 @@
 "use client";
 
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
-import StarFill from "@/assets/icon/star/icon-star-active-lg.webp";
-import Star from "@/assets/icon/star/icon-star-inactive-lg.webp";
+import StarFill from "@/assets/icon/star/icon-star-active-lg.svg";
+import Star from "@/assets/icon/star/icon-star-inactive-lg.svg";
 import Image from "next/image";
 import React from "react";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.svg";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";

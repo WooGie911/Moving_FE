@@ -4,7 +4,7 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import { Button } from "@/components/common/button/Button";
 import Image from "next/image";
 import React from "react";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.svg";
 import { IAddress } from "@/types/review";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations, useLocale } from "next-intl";
