@@ -7,14 +7,14 @@ import MoverCard from "./MoverCard";
 
 const FavoriteMoverList = () => {
   const t = useTranslations("mover");
-  const { data: movers = [], isLoading, isError } = useFavoriteMovers();
+  const { data: movers = [], isError } = useFavoriteMovers();
   const [topValue, setTopValue] = useState(376);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      // 스크롤 위치에 따라 top 값 동적으로 계산하는 방식으로 변경 
+      // 스크롤 위치에 따라 top 값 동적으로 계산하는 방식으로 변경
       let newTopValue;
 
       if (scrollY < 100) {
@@ -29,19 +29,6 @@ const FavoriteMoverList = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className={`sticky ml-[54px] flex h-fit flex-col`} style={{ top: `${topValue}px` }}>
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">{t("favoriteMoversTitle")}</h2>
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-[200px] w-[327px] animate-pulse rounded-2xl bg-gray-200" />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   if (isError) {
     return (

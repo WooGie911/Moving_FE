@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import { useMoverList } from "@/hooks/useMoverData";
 import MoverCard from "./MoverCard";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const MoverList = () => {
   const { region, serviceTypeId, search, sort } = useSearchMoverStore();
@@ -48,7 +49,7 @@ const MoverList = () => {
     [region, serviceTypeId, search, sort],
   );
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } = useMoverList(queryParams);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError, error } = useMoverList(queryParams);
 
   // 모든 페이지의 데이터를 평탄화
   const allMovers = useMemo(() => {
@@ -62,17 +63,6 @@ const MoverList = () => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12 lg:w-205">
-        <div className="flex flex-col items-center gap-3">
-          <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
-        </div>
-      </div>
-    );
-  }
 
   if (isError) {
     return (

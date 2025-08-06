@@ -1,38 +1,47 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
-import { IMoverInfo } from "@/types/mover.types";
-import findMoverApi from "@/lib/api/findMover.api";
+import { useMoverList, useFavoriteMovers } from "@/hooks/useMoverData";
+import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import MoverList from "@/components/searchMover/MoverList";
 import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
 import SearchBar from "@/components/searchMover/SearchBar";
 import FilterBar from "@/components/searchMover/FilterBar";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
   const { user, isLoggedIn } = useAuth();
   const t = useTranslations("mover");
-  const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { region, serviceTypeId, search, sort } = useSearchMoverStore();
 
-  useEffect(() => {
-    if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
-      setLoading(true);
-      findMoverApi
-        .fetchFavoriteMovers()
-        .then((data) => setFavoriteMovers(data))
-        .catch(() => setFavoriteMovers([]))
-        .finally(() => setLoading(false));
-    } else {
-      setFavoriteMovers([]);
-    }
-  }, [deviceType, isLoggedIn, user]);
+  const shouldShowBookmarked = deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER";
 
-  const shouldShowBookmarked =
-    deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
+  // 기사님 목록 조회
+  const { isLoading: moversLoading } = useMoverList({
+    region,
+    serviceTypeId,
+    search,
+    sort,
+    take: 4,
+  });
+
+  // 찜한 기사님 조회 
+  const { isLoading: favoritesLoading } = useFavoriteMovers();
+
+  // 전체 로딩 상태
+  const isOverallLoading = moversLoading || (shouldShowBookmarked && favoritesLoading);
+
+  if (isOverallLoading) {
+    return (
+      <div className="min-h-screen bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText="기사님을 찾는 중..." />
+      </div>
+    );
+  }
 
   return (
     <div
