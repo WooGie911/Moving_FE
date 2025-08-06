@@ -53,11 +53,6 @@ export const GnbActions = ({
   const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
   const { user } = useAuth();
 
-  // hasUnread 상태 변화 디버깅
-  useEffect(() => {
-    // hasUnread 상태 변화 로깅 제거
-  }, [hasUnread]);
-
   const handleNotificationClick = () => {
     if (isNotificationOpen) {
       closeNotificationModal();
