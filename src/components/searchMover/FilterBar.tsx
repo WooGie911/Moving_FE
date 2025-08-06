@@ -15,6 +15,7 @@ const FilterBar = () => {
   const deviceType = useWindowWidth();
   const t = useTranslations("mover");
   const tRegions = useTranslations("regions");
+  const tService = useTranslations("service");
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isServiceOpen, setIsServiceOpen] = useState(false);
 
@@ -34,9 +35,12 @@ const FilterBar = () => {
   const serviceOptions: Option[] = React.useMemo(
     () => [
       { value: "", label: t("all") },
-      ...serviceTypes.map((service) => ({ value: service.id, label: getServiceTypeTranslation(service.name, t) })),
+      ...serviceTypes.map((service) => ({
+        value: service.id,
+        label: getServiceTypeTranslation(service.name, tService),
+      })),
     ],
-    [serviceTypes, t],
+    [serviceTypes, t, tService],
   );
 
   const isLoading = regionsLoading || serviceTypesLoading;

@@ -7,6 +7,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useRouter } from "next/navigation";
 import { useAddFavorite, useRemoveFavorite } from "./useMoverData";
+import { showErrorToast } from "@/utils/toastUtils";
 
 export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUseLikeToggleProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -66,12 +67,8 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
     } catch (error: any) {
       console.error("찜하기 토글 실패:", error);
 
-      // 실제 에러인 경우에만 모달 표시
-      open({
-        title: t("likeErrorTitle"),
-        children: error.message || t("likeFailedMessage"),
-        buttons: [{ text: t("confirmButton"), onClick: close }],
-      });
+      // 에러 메시지를 토스트로 표시
+      showErrorToast(error.message || t("likeFailedMessage"));
     } finally {
       setIsProcessing(false);
     }

@@ -8,8 +8,8 @@ import star from "@/assets/icon/star/icon-star-active-lg.png";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
-  const total = mover.reviewCount || 0;
-  const avg = mover.avgRating || 0;
+  const total = mover.totalReviewCount || 0;
+  const avg = mover.averageRating || 0;
   const t = useTranslations("mover");
   const tShared = useTranslations("shared");
   const [isExpanded, setIsExpanded] = useState(false);

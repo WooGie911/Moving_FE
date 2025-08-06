@@ -929,6 +929,9 @@
     "deleteSuccess": " drivers have been removed from your favorites.",
     "deleteError": "Failed to delete selected drivers. Please try again.",
     "noFavorites": "No favorite movers yet",
-    "noFavoritesDesc": "Add movers to your favorites to see them here"
+    "noFavoritesDesc": "Add movers to your favorites to see them here",
+    "errorTitle": "An error occurred",
+    "errorMessage": "Failed to load favorite movers list.",
+    "loadingMore": "Loading more drivers..."
   }
 }
