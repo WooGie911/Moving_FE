@@ -1,13 +1,7 @@
 // 서비스 타입 번역 함수
 export const getServiceTypeTranslation = (serviceName: string, t: any): string => {
-  if (serviceName === "소형이사" || serviceName === "SMALL") {
-    return t("serviceTypes.small");
-  } else if (serviceName === "가정이사" || serviceName === "HOME") {
-    return t("serviceTypes.home");
-  } else if (serviceName === "사무실이사" || serviceName === "OFFICE") {
-    return t("serviceTypes.office");
-  }
-  return serviceName;
+  // 기존 service 섹션의 번역 사용
+  return t(serviceName) || serviceName;
 };
 
 // 지역명 번역 함수

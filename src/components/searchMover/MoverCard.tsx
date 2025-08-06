@@ -85,9 +85,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               <div className="flex items-center gap-0.5">
                 <Image src={star} alt="star-img" className="h-5 w-5" />
                 <span className="text-[13px] leading-[22px] font-medium">
-                  {mover.avgRating ? Number(mover.avgRating).toFixed(1) : "0.0"}
+                  {mover.averageRating ? Number(mover.averageRating).toFixed(1) : "0.0"}
                 </span>
-                <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount || 0})</span>
+                <span className="text-[13px] font-medium text-[#ababab]">({mover.totalReviewCount || 0})</span>
               </div>
               <span className="text-[#e6e6e6]">|</span>
               <div className="flex items-center gap-1">
@@ -177,9 +177,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                     <div className="flex items-center gap-0.5">
                       <Image src={star} alt="star-img" className="h-5 w-5" />
                       <span className="text-[13px] leading-[22px] font-medium">
-                        {(mover.avgRating || 0).toFixed(1)}
+                        {(mover.averageRating || 0).toFixed(1)}
                       </span>
-                      <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount})</span>
+                      <span className="text-[13px] font-medium text-[#ababab]">({mover.totalReviewCount})</span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>
                     <div className="flex min-w-0 items-center gap-1">
