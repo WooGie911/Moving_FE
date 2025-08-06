@@ -7,8 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverReceivedPage = () => {
+  const { user, isLoading } = useAuth();
+
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
@@ -32,6 +35,7 @@ export const MoverReceivedPage = () => {
         },
         locale,
       ),
+    enabled: !!user && !isLoading,
   });
 
   // 필터링된 데이터
