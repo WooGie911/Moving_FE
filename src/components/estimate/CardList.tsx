@@ -183,9 +183,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   const moveDate = data?.moveDate ? new Date(data.moveDate) : new Date();
   const isPastDate = moveDate < new Date();
 
-  // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외
+  // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외 + 지정견적 개수 확인
   const estimateCount = data.estimates?.filter((estimate) => estimate?.status !== "REJECTED").length || 0;
-  const isMaxEstimates = estimateCount >= 5;
+  const designatedCount = data.estimates?.filter((estimate) => estimate?.isDesignated === true).length || 0;
+
+  // 지정견적 여부에 따른 최대 견적 개수 결정
+  const maxEstimates = isDesignated ? 3 : 5;
+  const isMaxEstimates = estimateCount >= maxEstimates;
+
+  // 지정견적인 경우: 지정견적 개수가 3개 미만이면 견적 보낼 수 있음
+  // 일반견적인 경우: 전체 견적 개수가 5개 미만이면 견적 보낼 수 있음
+  const canSendEstimate = isDesignated ? designatedCount < 3 || estimateCount < 5 : estimateCount < 5;
 
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
@@ -283,7 +291,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
             <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-                {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
+                {`${data.customer?.nickname || "고객"}${t("customerSuffix")}`}
               </p>
             </div>
             {/* 이사 정보  부분*/}
@@ -364,7 +372,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
           <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
             <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-              {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
+              {`${data.customer?.nickname || "고객"}${t("customerSuffix")}`}
             </p>
           </div>
           {/* 이사 정보  부분*/}
@@ -429,16 +437,16 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               </Button>
               <Button
                 variant="solid"
-                state={isMaxEstimates ? "disabled" : "default"}
+                state={!canSendEstimate ? "disabled" : "default"}
                 width="w-[288px] lg:w-[253px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={isMaxEstimates ? undefined : openSendEstimateModal}
-                disabled={isMaxEstimates}
+                onClick={canSendEstimate ? openSendEstimateModal : undefined}
+                disabled={!canSendEstimate}
               >
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <p>{isMaxEstimates ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
-                  {!isMaxEstimates && <Image src={edit} alt="arrow" width={24} height={24} />}
+                  <p>{!canSendEstimate ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
+                  {canSendEstimate && <Image src={edit} alt="arrow" width={24} height={24} />}
                 </div>
               </Button>
               <Button

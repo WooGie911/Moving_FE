@@ -683,6 +683,7 @@
     "enterRejectionReason": "반려사유를 입력해 주세요.",
     "commentPlaceholder": "최소 10자 이상 입력해 주세요.",
     "commentMinLengthMessage": "10자 이상 입력해 주세요.",
+    "commentMaxLengthMessage": "최대 30글자까지만 가능합니다",
     "totalCount": "전체",
     "countUnit": "건",
     "filter": "필터",

@@ -13,35 +13,33 @@ import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/common/modal/ModalContext";
 
-export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
-  const [mover, setMover] = useState(initialMover);
-  const [isLiked, setIsLiked] = useState(false);
+export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const t = useTranslations("estimateRequest");
   const queryClient = useQueryClient();
   const { open, close } = useModal();
   const locale = useLocale();
 
-  // initialMover가 변경될 때마다 로컬 mover 상태 업데이트
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
-    setMover(initialMover);
-  }, [initialMover]);
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isOpen && !target.closest(".dropdown-container")) {
+        setIsOpen(false);
+      }
+    };
 
-  // mover 상태 업데이트 함수
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // mover 상태 업데이트 함수 - React Query 캐시만 사용
   const handleMoverUpdate = async () => {
-    // 캐시에서 최신 mover 데이터를 가져와서 상태 업데이트
-    queryClient.invalidateQueries({ queryKey: ["mover", mover.id] });
-    // 견적 요청 관련 캐시도 무효화
+    // 견적 요청 관련 캐시 무효화
     queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
     queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
-
-    // 캐시 무효화 후 잠시 기다린 후 최신 데이터를 가져와서 상태 업데이트
-    setTimeout(() => {
-      const updatedMover = queryClient.getQueryData(["mover", mover.id]) as typeof mover | undefined;
-      if (updatedMover) {
-        setMover(updatedMover);
-      }
-    }, 100);
   };
 
   // 견적 반려 API 호출을 위한 mutation
@@ -74,20 +72,24 @@ export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirme
     rejectEstimateMutation.mutate(estimateId);
   };
 
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsLiked(!isLiked);
-    //todo 하트 버튼 클릭 시 찜하기 API 연동
-  };
-
   return (
     <div className={`flex w-full ${usedAt === "received" ? "border-border-light rounded-lg border-2 p-2" : ""}`}>
       <div
-        className={`flex w-full flex-row items-center justify-center gap-1 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
+        className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
       >
         {/* 좌측 프로필 이미지 */}
-        <Image src={mover.moverImage ? mover.moverImage : defaultProfile} alt="profile" width={50} height={50} />
+        {usedAt === "detail" ? (
+          ""
+        ) : (
+          <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[12px]">
+            <Image
+              src={mover.moverImage ? mover.moverImage : defaultProfile}
+              alt="profile"
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
         {/* 프로필 이미지 외 모든 프로필 정보*/}
 
         <div className="border-border-light flex w-full flex-col items-start justify-center gap-1">
@@ -149,8 +151,8 @@ export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirme
               </div>
             </div>
             {usedAt === "pending" && (
-              <div className="relative">
-                <Image src={deleteIcon} alt="delete" width={20} height={20} onClick={() => setIsOpen(!isOpen)} />
+              <div className="dropdown-container relative h-5 w-5 cursor-pointer">
+                <Image src={deleteIcon} alt="delete" fill onClick={() => setIsOpen(!isOpen)} />
                 {/*  드롭다운 메뉴  */}
                 {isOpen && (
                   <div className="absolute top-[140%] right-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">
