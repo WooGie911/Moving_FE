@@ -6,12 +6,14 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { ISignInFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
-import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ValidationErrorToast } from "@/components/common/modal/ValidationErrorToast";
+import { showErrorToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 interface ISigninFormProps {
   userType: TUserType;
@@ -22,7 +24,6 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
   const router = useRouter();
   const { login, isLoading } = useAuth();
   const validationRules = useValidationRules();
-  const { open, close } = useModal();
   const t = useTranslations("auth");
   const currentLocale = useLocale();
 
@@ -47,11 +48,7 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
       if (isLoading) return;
       const response = await login(email, password, userType);
       if (!response.success) {
-        open({
-          title: t("loginFailed"),
-          children: <div>{response.message}</div>,
-          buttons: [{ text: t("confirm"), onClick: () => close() }],
-        });
+        handleAuthErrorToast(t, response.message);
       } else {
         if (userType === "CUSTOMER") {
           router.push(`/${currentLocale}/searchMover`);
