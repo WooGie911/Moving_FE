@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import SectionHeader from "@/components/common/SectionHeader";
 import MoverCard from "@/components/searchMover/MoverCard";
 import findMoverApi from "@/lib/api/findMover.api";
@@ -12,6 +12,7 @@ import { useInView } from "react-intersection-observer";
 
 const FavoriteMoverPage = () => {
   const t = useTranslations("favoriteMover");
+  const locale = useLocale();
   const [deleting, setDeleting] = useState(false);
   const [selectedMovers, setSelectedMovers] = useState<Set<string>>(new Set());
   const [selectAll, setSelectAll] = useState(false);
@@ -40,8 +41,10 @@ const FavoriteMoverPage = () => {
   };
 
   // 무한스크롤 찜한 기사님 조회
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
-    useInfiniteFavoriteMovers(3); // 3개씩 가져오기
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } = useInfiniteFavoriteMovers(
+    3,
+    locale,
+  ); // 3개씩 가져오기, 언어 파라미터 추가
 
   // 모든 찜한 기사님 목록을 평면화
   const allFavoriteMovers = data?.pages.flatMap((page) => page.items) || [];

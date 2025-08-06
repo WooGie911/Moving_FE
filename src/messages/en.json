@@ -706,6 +706,7 @@
     "enterRejectionReason": "Please enter the rejection reason.",
     "commentPlaceholder": "Please enter at least 10 characters.",
     "commentMinLengthMessage": "Please enter at least 10 characters.",
+    "commentMaxLengthMessage": "Maximum 30 characters allowed",
     "totalCount": "Total",
     "countUnit": "items",
     "filter": "Filter",

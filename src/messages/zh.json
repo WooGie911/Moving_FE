@@ -724,6 +724,7 @@
     "enterRejectionReason": "请输入拒绝原因。",
     "commentPlaceholder": "请输入至少10个字符。",
     "commentMinLengthMessage": "请输入至少10个字符。",
+    "commentMaxLengthMessage": "最多只能输入30个字符",
     "totalCount": "全部",
     "countUnit": "件",
     "filter": "筛选",
