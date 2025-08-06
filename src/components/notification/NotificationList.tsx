@@ -10,6 +10,7 @@ import { INotification } from "@/types/notification.types";
 import { useTranslations } from "next-intl";
 import { formatRelativeTimeWithTranslations } from "@/utils/dateUtils";
 import { useLocale } from "next-intl";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function NotificationList({ onClose }: { onClose?: () => void }) {
   const notifications = useNotificationStore((state) => state.notifications);
@@ -22,6 +23,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const router = useRouter();
   const t = useTranslations("notification");
   const locale = useLocale();
+  const { user } = useAuth();
 
   // 시간 번역 가져오기
   const timeTranslations = {
@@ -36,9 +38,9 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const loadMore = useCallback(async () => {
     if (loadingRef.current) return;
     loadingRef.current = true;
-    await fetchNotifications(limit, notifications.length, locale);
+    await fetchNotifications(limit, notifications.length, locale, user?.userType);
     loadingRef.current = false;
-  }, [fetchNotifications, notifications.length, limit, locale]);
+  }, [fetchNotifications, notifications.length, limit, locale, user?.userType]);
 
   useEffect(() => {
     if (inView && hasMore && !loadingRef.current) {
@@ -49,7 +51,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   // 알림 클릭 핸들러 -> 읽음처리 후 이동.
   const handleClick = async (notification: INotification) => {
     try {
-      await markAsRead(notification.id);
+      await markAsRead(notification.id, user?.userType);
       onClose?.();
       closeNotificationModal();
       router.push(notification.path);

@@ -45,8 +45,6 @@ function ProfileModal({
 }: IProfileModalProps) {
   const t = useTranslations();
 
-  console.log("userName", userName);
-
   return (
     <div
       ref={profileModalRef}
@@ -67,7 +65,7 @@ function ProfileModal({
               ))
             : MOVER_USER_ACTION_LIST.map((item, index) => (
                 <Link href={item.href} key={index} onClick={closeProfileModal}>
-                  <li className="text-md w-full px-2 py-3 text-left font-medium transition-colors hover:bg-gray-100">
+                  <li className="text-md w-full p-3 text-left font-medium transition-colors hover:bg-gray-100">
                     {t(item.label)}
                   </li>
                 </Link>

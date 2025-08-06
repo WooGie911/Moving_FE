@@ -14,8 +14,8 @@ interface INotificationState {
   addNotification: (noti: INotification) => void;
   connectSSE: (token: string) => void;
   disconnectSSE: () => void;
-  fetchNotifications: (limit?: number, offset?: number, lang?: string) => Promise<void>;
-  markAsRead: (id: string) => Promise<void>;
+  fetchNotifications: (limit?: number, offset?: number, lang?: string, userType?: string) => Promise<void>;
+  markAsRead: (id: string, userType?: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
   openNotificationModal: () => void;
   closeNotificationModal: () => void;
@@ -144,9 +144,9 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     set({ isSSEConnected: false });
   },
   // --- API 연동 부분 ---
-  fetchNotifications: async (limit = 3, offset = 0, lang: string = "ko") => {
+  fetchNotifications: async (limit = 3, offset = 0, lang: string = "ko", userType?: string) => {
     try {
-      const res = await getNotifications(limit, offset, lang);
+      const res = await getNotifications(limit, offset, lang, userType);
       set((state) => {
         let newNotifications;
         if (offset === 0) {
@@ -168,11 +168,11 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       console.error("알림 가져오기 실패:", error);
     }
   },
-  markAsRead: async (id: string) => {
+  markAsRead: async (id: string, userType?: string) => {
     try {
       await readNotification(id);
       // 읽음 처리 후 최신 상태로 동기화
-      await get().fetchNotifications();
+      await get().fetchNotifications(3, 0, "ko", userType);
     } catch (error) {
       console.error("알림 읽음 처리 실패:", error);
     }

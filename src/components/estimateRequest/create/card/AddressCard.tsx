@@ -1,19 +1,9 @@
-import React from "react";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import { IAddressCardProps } from "@/types/estimateRequest";
 import { useTranslations } from "next-intl";
+import { ESTIMATE_REQUEST_CARD_STYLES } from "@/constant/estimateRequestStyles";
 
-// 공통 스타일 변수
-const ADDRESS_CARD_STYLES = {
-  container:
-    "flex min-w-65 flex-col items-start gap-4 rounded-2xl border px-4 pt-5 pb-6 shadow-[2px_2px_10px_0px_rgba(224,224,224,0.20)] transition-colors",
-  selected: "border-primary-400 bg-primary-100",
-  unselected: "border-border-light bg-white",
-  postalCode: "text-black-250 text-[14px] leading-6 font-semibold md:text-base md:leading-[26px]",
-  addressText: "text-black-250 text-[14px] leading-6 font-normal md:text-base",
-  addressRow: "flex w-full items-center gap-2",
-  labelContainer: "flex-shrink-0 w-16", // 라벨 고정 너비
-} as const;
+const ADDRESS_CARD_STYLES = ESTIMATE_REQUEST_CARD_STYLES.address;
 
 const AddressCard: React.FC<IAddressCardProps> = ({ postalCode, roadAddress, jibunAddress, selected = false }) => {
   const t = useTranslations();
