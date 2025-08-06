@@ -3,7 +3,7 @@ import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateR
 import { CardList } from "@/components/estimateRequest/(my)/CardList";
 import { RequestEstimateRequest } from "@/components/estimateRequest/(my)/pending/RequestEstimateRequest";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import noEstimate from "@/assets/img/etc/noEstimate.webp";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
@@ -21,10 +21,10 @@ export const UserPendingEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
+
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
     queryFn: () => {
-      console.log("🚀 React Query 실행됨 - pendingEstimateRequests API 호출");
       return customerEstimateRequestApi.getPendingEstimateRequest(locale);
     },
     enabled: !!user && !isUserLoading,
