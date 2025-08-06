@@ -65,7 +65,9 @@ export const RequestEstimateRequest = ({
           </div>
 
           <div className="hidden justify-end pb-1 md:flex md:flex-col">
-            <Image src={arrow} alt="arrow" width={16} height={16} />
+            <div className="relative h-[16px] w-[16px]">
+              <Image src={arrow} alt="arrow" fill className="object-cover" />
+            </div>
           </div>
 
           <div className="flex flex-row justify-between md:flex-col">

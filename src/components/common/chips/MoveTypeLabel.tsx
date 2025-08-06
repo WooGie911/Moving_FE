@@ -66,7 +66,7 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
     <div>
       <div className="bg-primary-100 inline-flex h-[26px] items-center justify-start gap-[2px] rounded-sm py-[2px] pr-[7px] pl-[4px] md:h-[32px] md:py-[4px]">
         <div className="relative h-[20px] w-[20px]">
-          <Image src={iconSrc} alt="movetype" fill />
+          <Image src={iconSrc} alt="movetype" fill className="object-contain" />
         </div>
         <p className="text-primary-400 text-center text-[13px] leading-[22px] font-semibold md:text-[14px] md:leading-[24px]">
           {label}

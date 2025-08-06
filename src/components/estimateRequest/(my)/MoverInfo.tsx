@@ -86,7 +86,7 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
               src={mover.moverImage ? mover.moverImage : defaultProfile}
               alt="profile"
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         )}
@@ -97,7 +97,9 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
           <div className="flex w-full flex-row items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-1">
               {mover.isVeteran || mover.workedCount! >= 10 ? (
-                <Image src={veteran} alt="chat" width={20} height={20} />
+                <div className="relative h-[20px] w-[20px]">
+                  <Image src={veteran} alt="chat" fill className="object-contain" />
+                </div>
               ) : (
                 ""
               )}
@@ -131,7 +133,9 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
           <div className="flex w-full flex-row items-center justify-between">
             <div className="flex w-full flex-row items-center justify-start">
               <div className="flex flex-row items-center justify-center">
-                <Image src={star} alt="star" width={20} height={20} />
+                <div className="relative h-[16px] w-[16px]">
+                  <Image src={star} alt="star" fill className="object-contain" />
+                </div>
                 <p className="text-black-300 text-[14px] leading-[24px] font-semibold">
                   {mover.averageRating!.toFixed(1)}
                 </p>
@@ -151,8 +155,14 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
               </div>
             </div>
             {usedAt === "pending" && (
-              <div className="dropdown-container relative h-5 w-5 cursor-pointer">
-                <Image src={deleteIcon} alt="delete" fill onClick={() => setIsOpen(!isOpen)} />
+              <div className="dropdown-container relative h-4 w-4 cursor-pointer">
+                <Image
+                  src={deleteIcon}
+                  alt="delete"
+                  fill
+                  className="object-contain"
+                  onClick={() => setIsOpen(!isOpen)}
+                />
                 {/*  드롭다운 메뉴  */}
                 {isOpen && (
                   <div className="absolute top-[140%] right-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">

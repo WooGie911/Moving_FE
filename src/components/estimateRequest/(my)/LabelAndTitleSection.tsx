@@ -45,7 +45,9 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
               <div
                 className={`flex flex-row items-center justify-end gap-1 ${usedAt === "received" ? "md:hidden" : ""}`}
               >
-                <Image src={confirm} alt="confirm" width={16} height={16} />
+                <div className="relative h-[16px] w-[16px]">
+                  <Image src={confirm} alt="confirm" fill className="object-contain" />
+                </div>
                 <p className="text-primary-400 text-[14px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             ) : (
@@ -61,12 +63,12 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
         }
       </div>
       <div className="flex w-full flex-row items-center justify-center gap-1">
-        <h1
+        <div
           className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAt === "detail" ? "text-[18px] md:text-[24px]" : "truncate text-[16px] md:text-[18px]"}`}
           title={estimate.comment || ""}
         >
           {estimate.comment!.length > 30 ? `${estimate.comment?.substring(0, 30)}...` : estimate.comment || ""}
-        </h1>
+        </div>
         {usedAt === "pending" ? (
           ""
         ) : estimate.status === "PROPOSED" ? (
@@ -78,7 +80,9 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
         ) : estimate.status === "ACCEPTED" ? (
           <div className="hidden min-w-fit flex-shrink-0 md:block">
             <div className="flex flex-row items-center justify-end gap-1">
-              <Image src={confirm} alt="confirm" width={16} height={16} />
+              <div className="relative h-[16px] w-[16px]">
+                <Image src={confirm} alt="confirm" fill className="object-contain" />
+              </div>
               <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
             </div>
           </div>

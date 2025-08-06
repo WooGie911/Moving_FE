@@ -107,7 +107,9 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
               <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
             ) : estimate.status === "ACCEPTED" ? (
               <div className="flex flex-row items-center justify-center gap-1">
-                <Image src={confirm} alt="confirm" width={16} height={16} />
+                <div className="relative h-[16px] w-[16px]">
+                  <Image src={confirm} alt="confirm" fill className="object-contain" />
+                </div>
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             ) : (
