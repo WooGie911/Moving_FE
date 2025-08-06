@@ -50,9 +50,13 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
 
   const getLabel = () => {
     const translatedLabel = t(type);
+
+    // variant가 "favorite"이고 영어일 때만 " Move" 제거
     if (locale === "en" && variant === "favorite") {
-      return translatedLabel.replace(" Move", "");
+      const finalLabel = translatedLabel.replace(" Move", "");
+      return finalLabel;
     }
+
     return translatedLabel;
   };
 

@@ -13,8 +13,9 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
   const res = await fetch(input, {
     ...init,
     headers: {
-      ...(init.headers || {}),
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
+      ...(init.headers || {}),
     },
     credentials: "include", // refreshToken 쿠키 필요 시 포함
   });
@@ -30,8 +31,9 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
         {
           ...init,
           headers: {
-            ...(init.headers || {}),
+            "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
+            ...(init.headers || {}),
           },
         },
         false,

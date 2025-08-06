@@ -46,19 +46,9 @@ interface IMoverProfileUpdateInput {
 
 const userApi = {
   getUser: async () => {
-    const response = await fetch(`${API_URL}/users`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${await getAccessToken()}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetchWithAuth(`${API_URL}/users`);
 
-    const responseData = await response.json();
-
-    console.log("responseData", responseData);
-
-    return responseData;
+    return response;
   },
 
   uploadFilesToS3: async (file: File) => {
