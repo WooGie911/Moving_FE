@@ -30,20 +30,6 @@ export const ESTIMATE_REQUEST_CARD_STYLES = {
   },
 } as const;
 
-// 애니메이션 스타일 (CSS 문자열)
+// 최적화된 애니메이션 스타일
 export const fadeInUpAnimation = `
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .fade-in-up {
-    animation: fadeInUp 0.5s ease-out;
-  }
-`;
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fade-in-up{animation:fadeInUp .5s ease-out}`;

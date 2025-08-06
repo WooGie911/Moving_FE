@@ -22,8 +22,8 @@ const SearchMoverPage = () => {
     if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
       setLoading(true);
       findMoverApi
-        .fetchFavoriteMovers()
-        .then((data) => setFavoriteMovers(data))
+        .fetchFavoriteMovers(3) // 3개만 가져오기
+        .then((data) => setFavoriteMovers(data.items)) // items만 추출
         .catch(() => setFavoriteMovers([]))
         .finally(() => setLoading(false));
     } else {

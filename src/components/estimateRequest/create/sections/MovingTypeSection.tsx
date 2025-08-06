@@ -56,7 +56,7 @@ const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect 
                   alt={t(`shared.movingTypes.${type}`)}
                   fill
                   className={`object-contain transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                  priority
+                  priority={type === "small"}
                   fetchPriority="high"
                   loading="eager"
                   decoding="async"
