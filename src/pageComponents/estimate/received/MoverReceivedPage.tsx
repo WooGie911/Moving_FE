@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 export const MoverReceivedPage = () => {
   const t = useTranslations("estimate");
@@ -22,7 +23,7 @@ export const MoverReceivedPage = () => {
     sortBy: "createdAt",
   });
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
     queryFn: () =>
       moverEstimateApi.getAllEstimateRequests(
@@ -124,10 +125,7 @@ export const MoverReceivedPage = () => {
   }
 
   // 에러 상태
-  if (isError) {
-    console.error(`${t("apiError")}`, error);
-    return <div>{commonT("error")}</div>;
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (

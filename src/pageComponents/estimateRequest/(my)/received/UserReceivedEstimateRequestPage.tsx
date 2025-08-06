@@ -8,12 +8,13 @@ import React from "react";
 import notfound from "@/assets/img/mascot/notfound.png";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 const UserReceivedEstimateRequestPage = () => {
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
   });
@@ -24,10 +25,7 @@ const UserReceivedEstimateRequestPage = () => {
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
     );
-  if (isError) {
-    console.error("API 에러:", isError);
-    return <div>{t("common.error")}</div>;
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
   if (!data) return <div>{t("noDataAvailable")}</div>;
 
   // 완료된 견적 요청이 없는 경우

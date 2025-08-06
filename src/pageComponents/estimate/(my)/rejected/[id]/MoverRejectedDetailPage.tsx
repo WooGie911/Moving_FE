@@ -8,13 +8,14 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 export const RejectedDetailPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRejectedEstimates", locale],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
@@ -26,10 +27,7 @@ export const RejectedDetailPage = () => {
       </div>
     );
   }
-  if (isError) {
-    console.error(`${t("apiError")}`, error);
-    return <div>{t("common.error")}</div>;
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
 
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === id) : null;

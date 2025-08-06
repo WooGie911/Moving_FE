@@ -7,12 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 export const MoverRejectedPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRejectedEstimates", locale],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
   });
@@ -27,10 +28,7 @@ export const MoverRejectedPage = () => {
   }
 
   // 에러 상태
-  if (isError) {
-    console.error(`${t("apiError")}`, error);
-    return <div>{commonT("error")}</div>;
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
 
   // 데이터가 없는 경우
   if (!data || data.length === 0) {

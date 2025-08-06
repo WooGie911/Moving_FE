@@ -8,13 +8,14 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 export const UserReceivedEstimateRequestDetailPage = () => {
   const { id: estimateId } = useParams(); // id는 estimateId
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
   });
@@ -25,14 +26,7 @@ export const UserReceivedEstimateRequestDetailPage = () => {
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
     );
-  if (isError) {
-    console.error("API 에러:", isError);
-    return (
-      <div>
-        {t("common.error")} {t("pleaseRetry")}{" "}
-      </div>
-    );
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
   if (!data) return <div>{t("noDataAvailable")}</div>;
 
   let foundEstimateRequest = null;

@@ -8,13 +8,14 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
 
 const UserPendingEstimateRequestDetailPage = () => {
   const { id } = useParams();
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
   });
@@ -25,7 +26,7 @@ const UserPendingEstimateRequestDetailPage = () => {
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
     ); // 또는 로딩 스피너 컴포넌트
-  if (isError) return <div>{t("common.error")}</div>;
+  if (isError) return <Error error={error} reset={() => refetch()} />;
 
   const estimateRequest = data!.estimateRequest;
   const estimate = data!.estimates.find((estimate) => estimate.id === id);
