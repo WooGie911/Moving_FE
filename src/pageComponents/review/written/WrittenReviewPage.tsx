@@ -44,7 +44,7 @@ const WrittenReviewPage = () => {
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || PAGE_SIZE)) : 1;
 
   return (
-    <main className="flex flex-col items-center justify-center px-6 py-10">
+    <main className="flex min-h-screen flex-col items-center bg-gray-100 px-6 py-10">
       {isLoading ? (
         <section className="py-10 text-center" aria-label="로딩 중">
           <p>{t("loading")}</p>
