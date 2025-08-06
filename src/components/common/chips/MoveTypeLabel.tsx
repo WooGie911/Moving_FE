@@ -50,9 +50,20 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
 
   const getLabel = () => {
     const translatedLabel = t(type);
+
+    // 디버깅용 로그
+    console.log(
+      `MoveTypeLabel Debug - type: ${type}, variant: ${variant}, locale: ${locale}, translatedLabel: ${translatedLabel}`,
+    );
+
+    // variant가 "favorite"이고 영어일 때만 " Move" 제거
     if (locale === "en" && variant === "favorite") {
-      return translatedLabel.replace(" Move", "");
+      const finalLabel = translatedLabel.replace(" Move", "");
+      console.log(`MoveTypeLabel Debug - Final label: ${finalLabel}`);
+      return finalLabel;
     }
+
+    console.log(`MoveTypeLabel Debug - Final label: ${translatedLabel}`);
     return translatedLabel;
   };
 
