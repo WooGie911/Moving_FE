@@ -2,7 +2,7 @@
 
 import DetailInformation from "@/components/searchMover/[id]/DetailInformation";
 import TopBar from "@/components/searchMover/[id]/TopBar";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMoverDetail } from "@/hooks/useMoverData";
@@ -13,6 +13,11 @@ const SearchMoverDetailPage = () => {
   const t = useTranslations("mover");
 
   const { data: mover, isLoading, isError, error } = useMoverDetail(id);
+
+  // 페이지 마운트 시 스크롤을 맨 위로 올림
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (isLoading) {
     return (
