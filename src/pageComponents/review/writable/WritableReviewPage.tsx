@@ -11,15 +11,14 @@ import { IWritableCardData, IReviewForm } from "@/types/review";
 
 import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useWindowWidth } from "@/hooks/useWindowWidth";
 import Pagination from "@/components/common/pagination/Pagination";
 import { useTranslations, useLocale } from "next-intl";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
   const { open: openModal, close: closeModal } = useModal();
   const queryClient = useQueryClient();
-  const deviceType = useWindowWidth();
   const t = useTranslations("review");
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -40,17 +39,42 @@ const WritableReviewPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
       closeModal();
+      showSuccessToast(t("reviewWriteSuccess"));
     },
     onError: () => {
-      alert(t("reviewWriteFailed"));
+      showErrorToast(t("reviewWriteFailed"));
     },
   });
 
   const onSubmit = useCallback(
     (reviewId: string, data: IReviewForm) => {
-      postReview({ reviewId, ...data });
+      // 확인 모달 표시
+      openModal({
+        title: t("confirmReviewWrite"),
+        type: "center",
+        children: (
+          <div className="text-center py-4">
+            <p className="text-gray-700 mb-4">{t("confirmReviewWriteMessage")}</p>
+          </div>
+        ),
+        buttons: [
+          {
+            text: t("cancel"),
+            onClick: closeModal,
+            variant: "outlined",
+          },
+          {
+            text: t("confirm"),
+            onClick: () => {
+              closeModal();
+              postReview({ reviewId, ...data });
+            },
+            disabled: isPending,
+          },
+        ],
+      });
     },
-    [postReview],
+    [openModal, closeModal, postReview, isPending, t],
   );
 
   const handleWriteModalOpen = useCallback(
