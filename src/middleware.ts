@@ -3,6 +3,7 @@ import { decodeAccessToken } from "./utils/decodeAccessToken";
 import { TUserRole } from "./types/user.types";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
+import { logDevError } from "./utils/logDevError";
 
 export async function middleware(request: NextRequest) {
   // next-intl 미들웨어를 먼저 처리
@@ -22,7 +23,7 @@ export async function middleware(request: NextRequest) {
         if (!decodedToken) throw new Error("Invalid token");
         userType = decodedToken?.userType as TUserRole;
       } catch (error) {
-        console.error("❌ 토큰 디코딩 실패:", error);
+        logDevError(error, "토큰 디코딩 실패");
       }
     }
 
