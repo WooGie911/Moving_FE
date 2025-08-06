@@ -1,4 +1,3 @@
-import React from "react";
 import { IChooseAddressBtnProps } from "@/types/estimateRequest";
 
 // 공통 스타일 변수

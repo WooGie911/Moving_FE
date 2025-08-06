@@ -1,4 +1,3 @@
-import React from "react";
 import { ISpeechBubbleProps } from "@/types/estimateRequest";
 import { useTranslations } from "next-intl";
 

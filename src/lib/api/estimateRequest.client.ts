@@ -1,4 +1,5 @@
 import { IFormState, IEstimateRequestPayload } from "@/types/estimateRequest";
+import * as Sentry from "@sentry/nextjs";
 
 export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayload {
   try {
@@ -27,9 +28,18 @@ export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayl
     }
 
     return payload;
-  } catch (e) {
-    console.error("toEstimateRequestPayload 내부 에러", e, form);
-    throw e;
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        api: "estimateRequest",
+        method: "toEstimateRequestPayload",
+      },
+      extra: {
+        form,
+      },
+    });
+    console.error("toEstimateRequestPayload 내부 에러", error, form);
+    throw error;
   }
 }
 
@@ -45,32 +55,58 @@ export const estimateRequestClientApi = {
    * 견적 요청 생성
    */
   create: async (form: IFormState, locale: string) => {
-    const payload = toEstimateRequestPayload(form);
-    const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/create?lang=${locale}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify(payload),
-      credentials: "include",
-    });
-    return res.json();
+    try {
+      const payload = toEstimateRequestPayload(form);
+      const token = getAccessTokenFromCookie();
+      const res = await fetch(`${API_URL}/estimateRequests/create?lang=${locale}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(payload),
+        credentials: "include",
+      });
+      return res.json();
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "create",
+          locale,
+        },
+        extra: {
+          form,
+          payload: toEstimateRequestPayload(form),
+        },
+      });
+      throw error;
+    }
   },
 
   /**
    * 활성 견적 요청 조회
    */
   getActive: async (locale: string) => {
-    const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      credentials: "include",
-    });
-    return res.json();
+    try {
+      const token = getAccessTokenFromCookie();
+      const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: "include",
+      });
+      return res.json();
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "getActive",
+          locale,
+        },
+      });
+      throw error;
+    }
   },
 
   /**
@@ -90,9 +126,20 @@ export const estimateRequestClientApi = {
         credentials: "include",
       });
       return res.json();
-    } catch (e) {
-      console.error("updateActive 내부 에러", e, form);
-      throw e;
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "updateActive",
+          locale,
+        },
+        extra: {
+          form,
+          payload: toEstimateRequestPayload(form),
+        },
+      });
+      console.error("updateActive 내부 에러", error, form);
+      throw error;
     }
   },
 
@@ -100,21 +147,32 @@ export const estimateRequestClientApi = {
    * 활성 견적 요청 취소
    */
   cancelActive: async (locale: string) => {
-    const token = getAccessTokenFromCookie();
-    const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
-      method: "DELETE",
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      credentials: "include",
-    });
+    try {
+      const token = getAccessTokenFromCookie();
+      const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
+        method: "DELETE",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: "include",
+      });
 
-    // 204 상태 코드는 성공이지만 응답 본문이 없음
-    if (res.status === 204) {
-      return { success: true, message: "견적 요청이 성공적으로 취소되었습니다." };
+      // 204 상태 코드는 성공이지만 응답 본문이 없음
+      if (res.status === 204) {
+        return { success: true, message: "견적 요청이 성공적으로 취소되었습니다." };
+      }
+
+      // 다른 상태 코드는 JSON 응답을 파싱
+      return res.json();
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "cancelActive",
+          locale,
+        },
+      });
+      throw error;
     }
-
-    // 다른 상태 코드는 JSON 응답을 파싱
-    return res.json();
   },
 };

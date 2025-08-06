@@ -7,6 +7,7 @@ import { IFormState } from "@/types/estimateRequest";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { logDevError } from "@/utils/logDevError";
+import * as Sentry from "@sentry/nextjs";
 
 // API 응답 타입 정의
 interface ApiResponse<T = any> {
@@ -123,19 +124,18 @@ export const useEstimateRequestApi = () => {
 
   // 공통 에러 처리 함수
   const handleApiError = useCallback(
-    (error: Error | unknown, defaultMessage: string) => {
-      logDevError(error, `견적 요청 API 에러: ${defaultMessage}`);
-
-      if (error instanceof Error) {
-        try {
-          const errorData = JSON.parse(error.message);
-          showErrorModal(errorData.message || defaultMessage);
-        } catch {
-          showErrorModal(error.message || defaultMessage);
-        }
-      } else {
-        showErrorModal(defaultMessage);
-      }
+    (error: unknown, defaultMessage: string) => {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "handleApiError",
+        },
+        extra: {
+          defaultMessage,
+          error,
+        },
+      });
+      showErrorModal(defaultMessage);
     },
     [showErrorModal],
   );
@@ -154,6 +154,16 @@ export const useEstimateRequestApi = () => {
           window.location.reload();
         }, 1500);
       } else {
+        Sentry.captureMessage("견적 생성 실패", {
+          level: "error",
+          tags: {
+            api: "estimateRequest",
+            method: "create",
+          },
+          extra: {
+            result,
+          },
+        });
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
       }
     },
@@ -176,6 +186,16 @@ export const useEstimateRequestApi = () => {
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
+          Sentry.captureMessage("견적 수정 실패", {
+            level: "error",
+            tags: {
+              api: "estimateRequest",
+              method: "update",
+            },
+            extra: {
+              result,
+            },
+          });
           showErrorModal(result.message || "견적 수정에 실패했습니다.");
         }
       }
@@ -204,6 +224,16 @@ export const useEstimateRequestApi = () => {
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
+          Sentry.captureMessage("견적 삭제 실패", {
+            level: "error",
+            tags: {
+              api: "estimateRequest",
+              method: "delete",
+            },
+            extra: {
+              result,
+            },
+          });
           showErrorModal(result.message || "견적 삭제에 실패했습니다.");
         }
       }
@@ -222,6 +252,14 @@ export const useEstimateRequestApi = () => {
     queryFn: () => estimateRequestClientApi.getActive(locale),
     staleTime: 60 * 1000,
     retry: false,
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: {
+          api: "estimateRequest",
+          method: "getActive",
+        },
+      });
+    },
   });
 
   return {

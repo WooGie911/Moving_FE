@@ -1,4 +1,3 @@
-import React from "react";
 import ProgressBar from "@/components/estimateRequest/create/ProgressBar";
 import { fadeInUpAnimation } from "@/constant/estimateRequestStyles";
 import { IEstimateRequestLayoutProps } from "@/types/estimateRequest";
@@ -24,7 +23,9 @@ export const ESTIMATE_REQUEST_STYLES = {
 export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ title, progress, children }) => {
   return (
     <main className={ESTIMATE_REQUEST_STYLES.container} role="main" aria-label="견적 요청 페이지">
-      <style jsx>{fadeInUpAnimation}</style>
+      <style jsx global>
+        {fadeInUpAnimation}
+      </style>
 
       {/* 헤더 영역 */}
       <header className={ESTIMATE_REQUEST_STYLES.header} role="banner">

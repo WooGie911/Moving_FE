@@ -1,5 +1,3 @@
-import React from "react";
-
 interface IProgressBarProps {
   value: number;
   "aria-labelledby"?: string;
