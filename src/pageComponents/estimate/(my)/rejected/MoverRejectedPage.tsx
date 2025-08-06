@@ -7,14 +7,17 @@ import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverRejectedPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRejectedEstimates", locale],
     queryFn: () => moverEstimateApi.getMyRejectedEstimateRequests(locale),
+    enabled: !!user && !isUserLoading,
   });
 
   // 로딩 상태

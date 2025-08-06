@@ -9,8 +9,11 @@ import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
 
 const UserPendingEstimateRequestDetailPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
+
   const { id } = useParams();
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
@@ -18,6 +21,7 @@ const UserPendingEstimateRequestDetailPage = () => {
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
+    enabled: !!user && !isUserLoading,
   });
 
   if (isPending)

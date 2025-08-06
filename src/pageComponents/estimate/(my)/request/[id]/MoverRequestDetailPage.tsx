@@ -10,7 +10,10 @@ import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
+
 export const MoverRequestDetailPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
@@ -18,6 +21,7 @@ export const MoverRequestDetailPage = () => {
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRequestEstimates", locale],
     queryFn: () => moverEstimateApi.getMyEstimates(locale),
+    enabled: !!user && !isUserLoading,
   });
   if (isPending) {
     return (

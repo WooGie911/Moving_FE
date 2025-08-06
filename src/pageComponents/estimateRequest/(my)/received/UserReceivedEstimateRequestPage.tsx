@@ -9,14 +9,17 @@ import notfound from "@/assets/img/mascot/notfound.png";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
 
 const UserReceivedEstimateRequestPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
+    enabled: !!user && !isUserLoading,
   });
 
   if (isPending)

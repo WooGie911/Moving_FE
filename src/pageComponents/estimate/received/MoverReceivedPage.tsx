@@ -8,8 +8,10 @@ import moverEstimateApi from "@/lib/api/moverEstimate.api";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverReceivedPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
@@ -33,6 +35,7 @@ export const MoverReceivedPage = () => {
         },
         locale,
       ),
+    enabled: !!user && !isUserLoading,
   });
 
   // 필터링된 데이터
