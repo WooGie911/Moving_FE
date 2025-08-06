@@ -14,11 +14,16 @@ const FavoriteMoverList = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
+      // 스크롤 위치에 따라 top 값 동적으로 계산하는 방식으로 변경 
+      let newTopValue;
+
       if (scrollY < 100) {
-        setTopValue(376); 
+        newTopValue = 376;
       } else {
-        setTopValue(150); 
+        newTopValue = scrollY + 50;
       }
+
+      setTopValue(newTopValue);
     };
 
     window.addEventListener("scroll", handleScroll);
