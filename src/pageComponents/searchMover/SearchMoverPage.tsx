@@ -1,40 +1,62 @@
 "use client";
 
-import React from "react";
-import { useTranslations } from "next-intl";
+import React, { useEffect, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
-import { useMoverList, useFavoriteMovers } from "@/hooks/useMoverData";
-import { useSearchMoverStore } from "@/stores/searchMoverStore";
+import { IMoverInfo } from "@/types/mover.types";
+import findMoverApi from "@/lib/api/findMover.api";
 import MoverList from "@/components/searchMover/MoverList";
 import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
 import SearchBar from "@/components/searchMover/SearchBar";
 import FilterBar from "@/components/searchMover/FilterBar";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { useMoverList, useFavoriteMovers } from "@/hooks/useMoverData";
+import { useSearchMoverStore } from "@/stores/searchMoverStore";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
   const { user, isLoggedIn } = useAuth();
   const t = useTranslations("mover");
+  const locale = useLocale();
   const { region, serviceTypeId, search, sort } = useSearchMoverStore();
+  const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const shouldShowBookmarked = deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER";
-
-  // 기사님 목록 조회
-  const { isLoading: moversLoading } = useMoverList({
+  // 쿼리 파라미터
+  const queryParams = {
     region,
     serviceTypeId,
     search,
     sort,
     take: 4,
-  });
+  };
 
-  // 찜한 기사님 조회 
+  // 기사님 리스트와 찜한 기사님 데이터 가져오기
+  const { isLoading: moversLoading } = useMoverList(queryParams);
   const { isLoading: favoritesLoading } = useFavoriteMovers();
 
-  // 전체 로딩 상태
-  const isOverallLoading = moversLoading || (shouldShowBookmarked && favoritesLoading);
+  // 전체 로딩 상태 계산
+  const isOverallLoading =
+    moversLoading || (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoritesLoading);
 
+  useEffect(() => {
+    if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
+      setLoading(true);
+      findMoverApi
+        .fetchFavoriteMovers(3, undefined, locale) // 언어 파라미터 추가
+        .then((data) => setFavoriteMovers(data.items)) // items만 추출
+        .catch(() => setFavoriteMovers([]))
+        .finally(() => setLoading(false));
+    } else {
+      setFavoriteMovers([]);
+    }
+  }, [deviceType, isLoggedIn, user, locale]);
+
+  const shouldShowBookmarked =
+    deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
+
+  // 전체 로딩 중일 때 MovingTruckLoader 표시
   if (isOverallLoading) {
     return (
       <div className="min-h-screen bg-gray-200">

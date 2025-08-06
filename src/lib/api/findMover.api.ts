@@ -67,17 +67,32 @@ const findMoverApi = {
   },
 
   /**
-   * 찜한 기사님 조회 API
+   * 찜한 기사님 조회 API (페이지네이션)
    */
-  fetchFavoriteMovers: async (language?: string): Promise<IMoverInfo[]> => {
+  fetchFavoriteMovers: async (
+    limit: number = 3,
+    cursor?: string,
+    language?: string
+  ): Promise<{
+    items: IMoverInfo[];
+    nextCursor: string | null;
+    hasNext: boolean;
+  }> => {
     try {
       const accessToken = await getTokenFromCookie();
       if (!accessToken) {
         throw new Error("로그인이 필요합니다.");
       }
 
-      const queryParams = language ? `?lang=${language}` : "";
-      const res = await fetch(`${API_URL}/movers/favorite${queryParams}`, {
+      const params = new URLSearchParams();
+      if (limit) params.append("limit", limit.toString());
+      if (cursor) params.append("cursor", cursor);
+      if (language) params.append("lang", language);
+
+      const queryString = params.toString();
+      const url = `${API_URL}/favorites/movers${queryString ? `?${queryString}` : ""}`;
+
+      const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -93,8 +108,13 @@ const findMoverApi = {
         }
       }
 
-      const data: ApiResponse<IMoverInfo[]> = await res.json();
-      return data.data || [];
+      const data: ApiResponse<{
+        items: IMoverInfo[];
+        nextCursor: string | null;
+        hasNext: boolean;
+      }> = await res.json();
+      
+      return data.data || { items: [], nextCursor: null, hasNext: false };
     } catch (error) {
       console.error("찜한 기사님 조회 실패:", error);
       throw error;

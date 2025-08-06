@@ -1,13 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
+import { usePathname } from "next/navigation";
 import authApi from "@/lib/api/auth.api";
 import userApi from "@/lib/api/user.api";
 import { ISignUpFormValues } from "@/types/auth";
 import { logDevError } from "@/utils/logDevError";
 
-// 사용자 타입 정의 - API 응답에 맞게 수정
+// 사용자 타입 정의
 type TUser = {
   id: string;
   name: string;
@@ -20,12 +20,7 @@ type TUser = {
 };
 
 export type TSignInResponse = {
-  user: {
-    id: string;
-    name: string;
-    nickname: string | null;
-    userType: "CUSTOMER" | "MOVER";
-  };
+  user: TUser;
   success: boolean;
   status?: number;
   message: string;
@@ -54,41 +49,11 @@ interface IAuthContextType {
   switchUserType: (targetType: "CUSTOMER" | "MOVER") => Promise<ISwitchUserTypeResponse>;
 }
 
-const AuthContext = createContext<IAuthContextType>({
-  user: null,
-  isLoading: true,
-  isLoggedIn: false,
-  login: async () => ({
-    user: { id: "", name: "", nickname: null, userType: "CUSTOMER" },
-    success: false,
-    message: "AuthProvider not found",
-    accessToken: "",
-  }),
-  signUp: async () => ({
-    user: { id: "", name: "", nickname: null, userType: "CUSTOMER" },
-    success: false,
-    message: "AuthProvider not found",
-    accessToken: "",
-  }),
-  googleLogin: async () => {},
-  kakaoLogin: async () => {},
-  naverLogin: async () => {},
-  logout: () => {},
-  getUser: async () => {},
-  switchUserType: async (): Promise<ISwitchUserTypeResponse> => ({
-    success: false,
-    message: "AuthProvider not found",
-    oldUserType: "CUSTOMER",
-    newUserType: "CUSTOMER",
-    accessToken: "",
-  }),
-});
+const AuthContext = createContext<IAuthContextType>(undefined!);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };
 
@@ -96,26 +61,63 @@ interface IAuthProviderProps {
   children: ReactNode;
 }
 
+const publicRoutes = ["/", "/ko", "/en", "/zh", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
+const isPublicRoute = (path: string) => publicRoutes.includes(path);
+
+const getMainPageByUserType = (userType: TUser["userType"]) =>
+  userType === "CUSTOMER" ? "/searchMover" : "/estimate/received";
+
 export default function AuthProvider({ children }: IAuthProviderProps) {
   const [user, setUser] = useState<TUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
 
-  /**
-   * 서버에서 현재 사용자 정보 조회
-   */
+  const redirectToUserMainPage = (userType: TUser["userType"]) => {
+    window.location.href = getMainPageByUserType(userType);
+  };
+
+  const refreshTokenTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const startRefreshTokenTimer = (minutes: number) => {
+    // 혹시 모를 중첩을 대비한 초기화 로직
+    if (refreshTokenTimer.current) {
+      clearInterval(refreshTokenTimer.current);
+    }
+
+    refreshTokenTimer.current = setInterval(
+      async () => {
+        const data = await authApi.refreshToken();
+        // TODO : 테스트용으로 남겨둠
+        console.log("🔄 자동 갱신:", data);
+        if (data?.error) {
+          await logout();
+        }
+      },
+      minutes * 60 * 1000,
+    );
+  };
+
   const getUser = async () => {
     try {
       const response = await userApi.getUser();
 
-      if (response.success && response.data) {
-        setUser(response.data);
-      } else {
-        setUser(null);
+      if (response.status === 404) {
+        await logout();
+        return;
       }
 
-      if (response.status === 404) {
-        logout();
+      if (response.success && response.data) {
+        setUser(response.data);
+
+        // TODO : 테스트용으로 남겨둠
+        startRefreshTokenTimer(1);
+        // startRefreshTokenTimer(14);
+
+        if (isPublicRoute(pathname)) {
+          redirectToUserMainPage(response.data.userType);
+        }
+      } else {
+        setUser(null);
       }
     } catch (e) {
       logDevError(e, "Failed to get user");
@@ -125,21 +127,13 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     }
   };
 
-  /**
-   * 로그인 함수
-   */
-  const login = async (email: string, password: string, userType: "CUSTOMER" | "MOVER") => {
+  const login = async (email: string, password: string, userType: TUser["userType"]) => {
     try {
       setIsLoading(true);
       const response = await authApi.signIn({ email, password, userType });
 
-      if (response?.error) {
-        throw new Error(response.message || "로그인에 실패했습니다.");
-      }
-
-      // 로그인 성공 후 사용자 정보 조회
+      if (response?.error) throw new Error(response.message || "로그인에 실패했습니다.");
       await getUser();
-
       return response;
     } catch (error) {
       logDevError(error, "Failed to login");
@@ -150,21 +144,13 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     }
   };
 
-  /**
-   * 회원가입 함수
-   */
   const signUp = async (signUpData: ISignUpFormValues) => {
     try {
       setIsLoading(true);
       const response = await authApi.signUp(signUpData);
 
-      if (response?.error) {
-        throw new Error(response.message || "회원가입에 실패했습니다.");
-      }
-
-      // 회원가입 성공 후 사용자 정보 조회
+      if (response?.error) throw new Error(response.message || "회원가입에 실패했습니다.");
       await getUser();
-
       return response;
     } catch (error) {
       logDevError(error, "Failed to sign up");
@@ -175,15 +161,11 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     }
   };
 
-  /**
-   * 로그아웃 함수
-   */
   const logout = async () => {
     try {
       setUser(null);
-
       await authApi.logout();
-      window.location.href = "/";
+      window.location.href = `/`;
     } catch (error) {
       logDevError(error, "Failed to logout");
     } finally {
@@ -191,18 +173,11 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     }
   };
 
-  /**
-   *  유저타입 변경 함수
-   */
-
-  const switchUserType = async (targetType: "CUSTOMER" | "MOVER") => {
+  const switchUserType = async (targetType: TUser["userType"]) => {
     try {
       setIsLoading(true);
-      const response = await authApi.switchUserType(targetType); // 새로운 토큰 발급
-
-      // 2. 유저 상태 갱신
+      const response = await authApi.switchUserType(targetType);
       await getUser();
-
       return response;
     } catch (error) {
       logDevError(error, "Failed to switch user type");
@@ -212,73 +187,23 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
     }
   };
 
-  /**
-   * 구글 로그인 함수
-   */
-  const googleLogin = async (userType: "CUSTOMER" | "MOVER") => {
+  const socialLogin = async (type: "google" | "kakao" | "naver", userType: TUser["userType"]): Promise<void> => {
     try {
       setIsLoading(true);
-      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
-      await authApi.googleLogin(userType);
-      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
-    } catch (error: unknown) {
-      logDevError(error, "Failed to google login");
+      await authApi[`${type}Login`](userType);
+    } catch (error) {
+      logDevError(error, `Failed to ${type} login`);
       setIsLoading(false);
       throw error;
     }
   };
 
-  /**
-   * 카카오 로그인 함수
-   */
-  const kakaoLogin = async (userType: "CUSTOMER" | "MOVER") => {
-    try {
-      setIsLoading(true);
-      // 페이지 리디렉션 방식으로 변경 (Promise<void> 반환)
-      await authApi.kakaoLogin(userType);
-      // 리디렉션이 발생하므로 이후 코드는 실행되지 않음
-    } catch (error: unknown) {
-      logDevError(error, "Failed to kakao login");
-      setIsLoading(false);
-      throw error;
-    }
-  };
+  const googleLogin = (userType: TUser["userType"]) => socialLogin("google", userType);
+  const kakaoLogin = (userType: TUser["userType"]) => socialLogin("kakao", userType);
+  const naverLogin = (userType: TUser["userType"]) => socialLogin("naver", userType);
 
-  /**
-   * 네이버 로그인 함수
-   */
-  const naverLogin = async (userType: "CUSTOMER" | "MOVER") => {
-    try {
-      setIsLoading(true);
-      await authApi.naverLogin(userType);
-    } catch (error: unknown) {
-      logDevError(error, "Failed to naver login");
-      setIsLoading(false);
-      throw error;
-    }
-  };
-
-  /**
-   * 새로고침 시 인증 상태 확인
-   */
   useEffect(() => {
-    const initializeAuth = async () => {
-      // 인증이 필요하지 않은 페이지들
-      const publicRoutes = ["/", "/ko", "/en", "/zh", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
-
-      // locale이 포함된 랜딩페이지 체크
-      const isLandingPage = pathname === "/" || pathname === "/ko" || pathname === "/en" || pathname === "/zh";
-
-      if (!pathname || publicRoutes.includes(pathname) || isLandingPage) {
-        setIsLoading(false);
-        return;
-      }
-
-      // 모든 페이지에서 사용자 정보 조회 (기사님 상세 페이지 포함)
-      await getUser();
-    };
-
-    initializeAuth();
+    getUser();
   }, [pathname]);
 
   const contextValue: IAuthContextType = {

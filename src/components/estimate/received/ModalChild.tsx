@@ -34,7 +34,7 @@ export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalP
     if (!comment) return false;
     // 공백 제거 후 길이 확인
     const trimmedComment = comment.trim();
-    return trimmedComment.length >= 10;
+    return trimmedComment.length >= 10 && trimmedComment.length <= 30;
   };
 
   // 숫자를 3자리마다 쉼표로 포맷팅하는 함수
@@ -171,7 +171,9 @@ export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalP
                 wrapperClassName="w-full"
               />
               {comment && !isCommentValid(comment) && (
-                <p className="pb-2 pl-2 text-sm text-red-500">{t("commentMinLengthMessage")}</p>
+                <p className="pb-2 pl-2 text-sm text-red-500">
+                  {comment.trim().length > 30 ? t("commentMaxLengthMessage") : t("commentMinLengthMessage")}
+                </p>
               )}
             </div>
           </FormProvider>

@@ -706,6 +706,7 @@
     "enterRejectionReason": "Please enter the rejection reason.",
     "commentPlaceholder": "Please enter at least 10 characters.",
     "commentMinLengthMessage": "Please enter at least 10 characters.",
+    "commentMaxLengthMessage": "Maximum 30 characters allowed",
     "totalCount": "Total",
     "countUnit": "items",
     "filter": "Filter",
@@ -928,6 +929,9 @@
     "deleteSuccess": " drivers have been removed from your favorites.",
     "deleteError": "Failed to delete selected drivers. Please try again.",
     "noFavorites": "No favorite movers yet",
-    "noFavoritesDesc": "Add movers to your favorites to see them here"
+    "noFavoritesDesc": "Add movers to your favorites to see them here",
+    "errorTitle": "An error occurred",
+    "errorMessage": "Failed to load favorite movers list.",
+    "loadingMore": "Loading more drivers..."
   }
 }

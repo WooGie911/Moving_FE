@@ -9,14 +9,19 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
+
 export const MoverRequestDetailPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
   const { id: estimateId } = useParams();
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRequestEstimates", locale],
     queryFn: () => moverEstimateApi.getMyEstimates(locale),
+    enabled: !!user && !isUserLoading,
   });
   if (isPending) {
     return (
@@ -25,10 +30,7 @@ export const MoverRequestDetailPage = () => {
       </div>
     );
   }
-  if (isError) {
-    console.error(`${t("apiError")}`, error);
-    return <div>{t("common.error")}</div>;
-  }
+  if (isError) return <Error error={error} reset={() => refetch()} />;
 
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === estimateId) : null;

@@ -12,14 +12,19 @@ import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import Error from "@/app/error";
+import { useAuth } from "@/providers/AuthProvider";
 
 export const UserPendingEstimateRequestPage = () => {
+  const { user, isLoading: isUserLoading } = useAuth();
+
   const t = useTranslations("estimateRequest");
   const commonT = useTranslations("common");
   const locale = useLocale();
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
+    enabled: !!user && !isUserLoading,
   });
 
   if (isPending)
@@ -27,8 +32,8 @@ export const UserPendingEstimateRequestPage = () => {
       <div>
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
       </div>
-    ); // 또는 로딩 스피너 컴포넌트
-  if (isError) return <div>{t("common.error")}</div>;
+    );
+  if (isError) return <Error error={error} reset={() => refetch()} />;
 
   if (!data || data.estimateRequest === null) {
     return (

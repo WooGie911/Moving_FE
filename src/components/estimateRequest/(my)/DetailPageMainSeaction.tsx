@@ -27,7 +27,7 @@ export const DetailPageMainSeaction = ({
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
-
+  console.log("estimateRequest", estimateRequest);
   return (
     <div
       className={`flex w-full flex-col items-center justify-center px-5 lg:flex-row lg:gap-[140px] ${type === "pending" ? "lg:items-center" : "lg:items-start"}`}

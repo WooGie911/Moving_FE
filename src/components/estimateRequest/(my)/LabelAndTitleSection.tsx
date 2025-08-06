@@ -65,24 +65,7 @@ export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitle
           className={`text-black-300 flex-1 leading-[26px] font-semibold ${usedAt === "detail" ? "text-[18px] md:text-[24px]" : "truncate text-[16px] md:text-[18px]"}`}
           title={estimate.comment || ""}
         >
-          {usedAt === "detail"
-            ? (() => {
-                const sentences = estimate.comment?.split(".") || [];
-                if (sentences.length >= 2) {
-                  const first = sentences[0].trim();
-                  const second = sentences[1].trim();
-                  return (
-                    <>
-                      {first}. {second}
-                    </>
-                  );
-                } else {
-                  return estimate.comment || "";
-                }
-              })()
-            : estimate.comment!.length > 30
-              ? `${estimate.comment?.substring(0, 30)}...`
-              : estimate.comment || ""}
+          {estimate.comment!.length > 30 ? `${estimate.comment?.substring(0, 30)}...` : estimate.comment || ""}
         </h1>
         {usedAt === "pending" ? (
           ""

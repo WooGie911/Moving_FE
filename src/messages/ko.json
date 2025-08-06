@@ -683,6 +683,7 @@
     "enterRejectionReason": "반려사유를 입력해 주세요.",
     "commentPlaceholder": "최소 10자 이상 입력해 주세요.",
     "commentMinLengthMessage": "10자 이상 입력해 주세요.",
+    "commentMaxLengthMessage": "최대 30글자까지만 가능합니다",
     "totalCount": "전체",
     "countUnit": "건",
     "filter": "필터",
@@ -901,6 +902,9 @@
     "deleteSuccess": "명의 기사님이 찜 목록에서 삭제되었습니다.",
     "deleteError": "선택된 기사님 삭제에 실패했습니다. 다시 시도해주세요.",
     "noFavorites": "찜한 기사님이 없습니다",
-    "noFavoritesDesc": "기사님을 찜하면 여기에 표시됩니다"
+    "noFavoritesDesc": "기사님을 찜하면 여기에 표시됩니다",
+    "errorTitle": "오류가 발생했습니다",
+    "errorMessage": "찜한 기사님 목록을 불러오는데 실패했습니다.",
+    "loadingMore": "더 많은 기사님을 불러오는 중..."
   }
 }
