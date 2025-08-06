@@ -887,7 +887,13 @@
   "notification": {
     "title": "Notifications",
     "noNotifications": "No notifications yet!",
-    "allNotificationsLoaded": "All notifications loaded."
+    "allNotificationsLoaded": "All notifications loaded.",
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": " minutes ago",
+      "hoursAgo": " hours ago",
+      "daysAgo": " days ago"
+    }
   },
   "schedule": {
     "metadata": {

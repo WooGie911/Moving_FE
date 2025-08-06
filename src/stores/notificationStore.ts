@@ -14,7 +14,7 @@ interface INotificationState {
   addNotification: (noti: INotification) => void;
   connectSSE: (token: string) => void;
   disconnectSSE: () => void;
-  fetchNotifications: (limit?: number, offset?: number) => Promise<void>;
+  fetchNotifications: (limit?: number, offset?: number, lang?: string) => Promise<void>;
   markAsRead: (id: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
   openNotificationModal: () => void;
@@ -39,10 +39,11 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   isSSEConnected: false,
   isNotificationOpen: false,
   setNotifications: (notis) => set({ notifications: notis }),
-  addNotification: (noti) => set((state) => ({ 
-    notifications: [noti, ...state.notifications],
-    hasUnread: true // 새 알림이 오면 무조건 unread로 설정
-  })),
+  addNotification: (noti) =>
+    set((state) => ({
+      notifications: [noti, ...state.notifications],
+      hasUnread: true, // 새 알림이 오면 무조건 unread로 설정
+    })),
   connectSSE: (token: string) => {
     // 토큰이 변경된 경우에만 재연결
     if (currentToken === token && eventSource && get().isSSEConnected) {
@@ -77,7 +78,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       get().disconnectSSE();
     }, AUTO_DISCONNECT_TIME);
 
-    // 메시지 수신 
+    // 메시지 수신
     eventSource.addEventListener("notification", (event) => {
       try {
         const messageEvent = event as MessageEvent;
@@ -95,12 +96,12 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     // 에러 발생 시 재연결
     eventSource.onerror = function () {
       set({ isSSEConnected: false });
-      
+
       if (eventSource) {
         eventSource.close();
         eventSource = null;
       }
-      
+
       if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
         reconnectAttempts++;
         reconnectTimeout = setTimeout(() => {
@@ -115,7 +116,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     eventSource.onopen = function () {
       reconnectAttempts = 0;
       set({ isSSEConnected: true });
-      
+
       // 타임아웃 재설정
       if (disconnectTimer) {
         clearTimeout(disconnectTimer);
@@ -143,9 +144,9 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     set({ isSSEConnected: false });
   },
   // --- API 연동 부분 ---
-  fetchNotifications: async (limit = 3, offset = 0) => {
+  fetchNotifications: async (limit = 3, offset = 0, lang: string = "ko") => {
     try {
-      const res = await getNotifications(limit, offset);
+      const res = await getNotifications(limit, offset, lang);
       set((state) => {
         let newNotifications;
         if (offset === 0) {
@@ -159,7 +160,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         return {
           notifications: newNotifications,
           hasMore: newNotifications.length < res.data.total,
-          hasUnread: res.data.hasUnread, 
+          hasUnread: res.data.hasUnread,
           total: res.data.total,
         };
       });

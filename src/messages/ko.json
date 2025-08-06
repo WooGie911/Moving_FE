@@ -860,7 +860,13 @@
   "notification": {
     "title": "알림",
     "noNotifications": "아직 알림이 없어요!",
-    "allNotificationsLoaded": "모든 알림을 불러왔습니다."
+    "allNotificationsLoaded": "모든 알림을 불러왔습니다.",
+    "time": {
+      "justNow": "방금 전",
+      "minutesAgo": "분 전",
+      "hoursAgo": "시간 전",
+      "daysAgo": "일 전"
+    }
   },
   "schedule": {
     "metadata": {
