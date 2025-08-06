@@ -131,14 +131,14 @@ export const MoverReceivedPage = () => {
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (
-      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
-        <div className="flex w-full justify-start">
+      <div className="mx-auto flex h-full w-full flex-col items-center justify-center">
+        <div className="flex w-full max-w-[1200px] justify-start px-6 md:px-18 lg:px-0">
           <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
             {t("receivedRequests")}
           </div>
         </div>
-        <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
-          <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
+        <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]">
+          <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
             <div className="text-center">
               <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage1")}</p>
               <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage2")}</p>
