@@ -55,16 +55,15 @@ const WritableReviewPage = () => {
 
   const handleWriteModalOpen = useCallback(
     (card: IWritableCardData) => {
-      const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
       openModal({
         title: t("writeReview"),
-        type: modalType,
+        type: "center",
         children: card ? (
           <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
         ) : null,
       });
     },
-    [deviceType, openModal, t, onSubmit, isPending],
+    [openModal, t, onSubmit, isPending],
   );
 
   // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
