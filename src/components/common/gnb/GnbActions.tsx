@@ -11,6 +11,7 @@ import { TUserRole } from "@/types/user.types";
 import NotificationList from "@/components/notification/NotificationList";
 import UserActionDropdown from "../dropdown/UserActionDropdown";
 import { useNotificationStore } from "@/stores/notificationStore";
+import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations, useLocale } from "next-intl";
 import ProfileModal from "./ProfileModal";
 
@@ -49,13 +50,14 @@ export const GnbActions = ({
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const openNotificationModal = useNotificationStore((state) => state.openNotificationModal);
   const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
+  const { user } = useAuth();
 
   const handleNotificationClick = () => {
     if (isNotificationOpen) {
       closeNotificationModal();
     } else {
       openNotificationModal();
-      fetchNotifications(4, 0, locale); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
+      fetchNotifications(4, 0, locale, user?.userType); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
     }
   };
 
@@ -113,16 +115,16 @@ export const GnbActions = ({
   useEffect(() => {
     if (userRole !== "GUEST") {
       // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
-      fetchNotifications(1, 0, locale);
+      fetchNotifications(1, 0, locale, user?.userType);
     }
-  }, [userRole, fetchNotifications, locale]);
+  }, [userRole, fetchNotifications, locale, user?.userType]);
 
   // 알림 모달이 열릴 때마다 최신 상태로 동기화
   useEffect(() => {
     if (isNotificationOpen && userRole !== "GUEST") {
-      fetchNotifications(4, 0, locale);
+      fetchNotifications(4, 0, locale, user?.userType);
     }
-  }, [isNotificationOpen, userRole, fetchNotifications, locale]);
+  }, [isNotificationOpen, userRole, fetchNotifications, locale, user?.userType]);
 
   // userRole이나 userName 변경 시 프로필 모달 상태 초기화
   useEffect(() => {

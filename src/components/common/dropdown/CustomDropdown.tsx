@@ -68,7 +68,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`focus:ring-primary-400 text-left focus:border-transparent focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 ${isOpen ? "ring-primary-400 bg-primary-100 border-transparent ring-2" : "border-gray-300 hover:border-gray-400"} border transition-all duration-200 ${buttonClassName}`}
+        className={`focus:ring-primary-400 cursor-pointer text-left focus:border-transparent focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 ${isOpen ? "ring-primary-400 bg-primary-100 border-transparent ring-2" : "border-gray-300 hover:border-gray-400"} border transition-all duration-200 ${buttonClassName}`}
       >
         <div className="flex items-center justify-between">
           <span
@@ -110,7 +110,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                 key={option.value}
                 type="button"
                 onClick={() => handleSelect(option)}
-                className={`w-full text-left leading-[24px] font-medium transition-colors duration-150 hover:bg-gray-50 lg:leading-[26px] ${optionClassName} ${option.value === value ? "bg-primary-50 text-primary-600 font-medium" : "text-gray-700"} ${option.value === "" ? "text-gray-500" : ""} ${twoColumns && idx % 2 === 0 ? "border-r-1 border-gray-200" : ""} `}
+                className={`hover:bg-primary-100 w-full cursor-pointer text-left leading-[24px] font-medium transition-colors duration-150 hover:bg-gray-50 lg:leading-[26px] ${optionClassName} ${option.value === value ? "bg-primary-50 text-primary-600 font-medium" : "text-gray-700"} ${option.value === "" ? "text-gray-500" : ""} ${twoColumns && idx % 2 === 0 ? "border-r-1 border-gray-200" : ""} `}
               >
                 <span className="block truncate">{option.label}</span>
               </button>

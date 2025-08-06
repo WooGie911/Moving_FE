@@ -109,7 +109,7 @@ const MoverList = () => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 left-1/2 z-50 flex h-12 w-12 -translate-x-1/2 bg-white items-center justify-center rounded-full border border-gray-200 text-gray-400 shadow-lg transition-all hover:scale-110 hover:text-white hover:bg-primary-400"
+          className="hover:bg-primary-400 fixed bottom-6 left-1/2 z-50 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 shadow-lg transition-all hover:scale-110 hover:text-white"
           aria-label="맨 위로 올라가기"
         >
           <svg
