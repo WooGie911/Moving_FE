@@ -3,6 +3,7 @@ import star_active from "@/assets/icon/star/icon-star-active-sm.svg";
 import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import * as Sentry from "@sentry/nextjs";
 
 type TStarRatingProps = {
   rating: number;
@@ -13,8 +14,12 @@ const StarRating = ({ rating, setRating }: TStarRatingProps) => {
   const t = useTranslations("review");
 
   const handleStarClick = (starIndex: number) => {
-    const newRating = starIndex + 1;
-    setRating(newRating);
+    try {
+      const newRating = starIndex + 1;
+      setRating(newRating);
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   };
 
   return (

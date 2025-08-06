@@ -15,6 +15,7 @@ import Pagination from "@/components/common/pagination/Pagination";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { useTranslations, useLocale } from "next-intl";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import * as Sentry from "@sentry/nextjs";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
@@ -41,7 +42,17 @@ const WritableReviewPage = () => {
       closeModal();
       showSuccessToast(t("reviewWriteSuccess"));
     },
-    onError: () => {
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: {
+          action: "post_review",
+          page: "writable_review_page",
+        },
+        extra: {
+          userAction: "리뷰 작성",
+          page: "작성 가능한 리뷰 페이지",
+        },
+      });
       showErrorToast(t("reviewWriteFailed"));
     },
   });
