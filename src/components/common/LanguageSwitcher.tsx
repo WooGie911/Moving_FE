@@ -6,6 +6,7 @@ import iconDown from "@/assets/icon/arrow/icon-down.png";
 import iconUp from "@/assets/icon/arrow/icon-up.png";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { setLanguagePreference } from "@/utils/languageUtils";
 
 export function LanguageSwitcher() {
   const locale = useLocale();
@@ -55,6 +56,11 @@ export function LanguageSwitcher() {
 
   const handleLanguageChange = (newLanguage: "ko" | "en" | "zh") => {
     setIsOpen(false);
+
+    // 쿠키에 언어 설정 저장
+    setLanguagePreference(newLanguage);
+
+    // 페이지 이동
     router.push(pathname, { locale: newLanguage });
   };
 

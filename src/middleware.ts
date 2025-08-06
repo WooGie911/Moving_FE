@@ -14,6 +14,13 @@ export async function middleware(request: NextRequest) {
     const refreshToken = request.cookies.get("refreshToken")?.value;
     const isAuthenticated = !!accessToken || !!refreshToken;
 
+    // 사용자의 언어 선호도 확인 (쿠키가 없으면 기본값 사용)
+    const userLanguagePreference = request.cookies.get("user_language_preference")?.value;
+    const preferredLocale =
+      userLanguagePreference && routing.locales.includes(userLanguagePreference as any)
+        ? userLanguagePreference
+        : routing.defaultLocale;
+
     let userType: TUserRole | undefined = undefined;
 
     if (accessToken) {
@@ -27,11 +34,12 @@ export async function middleware(request: NextRequest) {
     }
 
     if (isAuthenticated && userType) {
-      const redirectPath = userType === "CUSTOMER" ? "/ko/searchMover" : "/ko/estimate/received";
+      const redirectPath =
+        userType === "CUSTOMER" ? `/${preferredLocale}/searchMover` : `/${preferredLocale}/estimate/received`;
       return NextResponse.redirect(new URL(redirectPath, request.url));
     }
 
-    return NextResponse.redirect(new URL("/ko", request.url));
+    return NextResponse.redirect(new URL(`/${preferredLocale}`, request.url));
   }
 
   const response = handleI18nRouting(request);
