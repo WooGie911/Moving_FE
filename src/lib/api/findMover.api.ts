@@ -312,15 +312,16 @@ const findMoverApi = {
         body: JSON.stringify({ moverId }),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else {
-          throw new Error("찜하기 추가에 실패했습니다.");
+          throw new Error(result.message || "찜하기 추가에 실패했습니다.");
         }
       }
 
-      const result = await response.json();
       return result.data;
     } catch (error) {
       console.error("찜하기 추가 실패:", error);
@@ -346,15 +347,16 @@ const findMoverApi = {
         },
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
         if (response.status === 401) {
           throw new Error("로그인이 필요합니다.");
         } else {
-          throw new Error("찜하기 제거에 실패했습니다.");
+          throw new Error(result.message || "찜하기 제거에 실패했습니다.");
         }
       }
 
-      const result = await response.json();
       return result.data;
     } catch (error) {
       console.error("찜하기 제거 실패:", error);
