@@ -84,10 +84,17 @@ export const MoverInfo = ({ mover: initialMover, usedAt, estimateId, hasConfirme
   return (
     <div className={`flex w-full ${usedAt === "received" ? "border-border-light rounded-lg border-2 p-2" : ""}`}>
       <div
-        className={`flex w-full flex-row items-center justify-center gap-1 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
+        className={`flex w-full flex-row items-center justify-center gap-2 py-3 ${usedAt === "pending" ? "border-border-light border-b-1" : ""} `}
       >
         {/* 좌측 프로필 이미지 */}
-        <Image src={mover.moverImage ? mover.moverImage : defaultProfile} alt="profile" width={50} height={50} />
+        <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[12px]">
+          <Image
+            src={mover.moverImage ? mover.moverImage : defaultProfile}
+            alt="profile"
+            fill
+            className="object-cover"
+          />
+        </div>
         {/* 프로필 이미지 외 모든 프로필 정보*/}
 
         <div className="border-border-light flex w-full flex-col items-start justify-center gap-1">
