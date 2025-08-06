@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
-import notification from "@/assets/icon/notification/icon-notification-lg.webp";
+import notification from "@/assets/icon/notification/icon-notification-lg.svg";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
