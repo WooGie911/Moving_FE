@@ -62,7 +62,7 @@ export function LanguageSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`focus:ring-primary-400 flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-offset-1 focus:outline-none ${
+        className={`focus:ring-primary-400 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-all duration-200 focus:border-none focus:ring-2 focus:ring-offset-1 focus:outline-none ${
           isOpen
             ? "border-primary-400 bg-primary-50 text-primary-400"
             : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
@@ -79,12 +79,12 @@ export function LanguageSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 z-50 mt-1 min-w-[120px] rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+        <div className="absolute top-full right-0 z-50 mt-3 min-w-[120px] overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg">
           {(["ko", "en", "zh"] as const).map((loc) => (
             <button
               key={loc}
               onClick={() => handleLanguageChange(loc)}
-              className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+              className={`block w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors ${
                 locale === loc ? "bg-primary-100 text-primary-400 font-medium" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
