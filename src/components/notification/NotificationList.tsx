@@ -8,7 +8,8 @@ import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import { INotification } from "@/types/notification.types";
 import { useTranslations } from "next-intl";
-import { formatRelativeTime } from "@/utils/dateUtils";
+import { formatRelativeTimeWithTranslations } from "@/utils/dateUtils";
+import { useLocale } from "next-intl";
 
 export default function NotificationList({ onClose }: { onClose?: () => void }) {
   const notifications = useNotificationStore((state) => state.notifications);
@@ -20,15 +21,24 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const loadingRef = useRef(false);
   const router = useRouter();
   const t = useTranslations("notification");
+  const locale = useLocale();
+
+  // 시간 번역 가져오기
+  const timeTranslations = {
+    justNow: t("time.justNow"),
+    minutesAgo: t("time.minutesAgo"),
+    hoursAgo: t("time.hoursAgo"),
+    daysAgo: t("time.daysAgo"),
+  };
 
   const { ref, inView } = useInView({ threshold: 0.2 });
 
   const loadMore = useCallback(async () => {
     if (loadingRef.current) return;
     loadingRef.current = true;
-    await fetchNotifications(limit, notifications.length);
+    await fetchNotifications(limit, notifications.length, locale);
     loadingRef.current = false;
-  }, [fetchNotifications, notifications.length, limit]);
+  }, [fetchNotifications, notifications.length, limit, locale]);
 
   useEffect(() => {
     if (inView && hasMore && !loadingRef.current) {
@@ -75,13 +85,11 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                     handleClick(notification);
                   }
                 }}
-                aria-label={`${parse(DOMPurify.sanitize(notification.title))} - ${formatRelativeTime(new Date(notification.createdAt))}`}
+                aria-label={`${parse(DOMPurify.sanitize(notification.title))} - ${formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}`}
               >
-                <header className="text-sm break-words">
-                  {parse(DOMPurify.sanitize(notification.title))}
-                </header>
+                <header className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</header>
                 <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
-                  {formatRelativeTime(new Date(notification.createdAt))}
+                  {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                 </time>
               </article>
             ) : (
@@ -90,11 +98,9 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                   idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
                 }`}
               >
-                <header className="text-sm break-words">
-                  {parse(DOMPurify.sanitize(notification.title))}
-                </header>
+                <header className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</header>
                 <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
-                  {formatRelativeTime(new Date(notification.createdAt))}
+                  {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                 </time>
               </article>
             )}

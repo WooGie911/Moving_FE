@@ -900,7 +900,13 @@
   "notification": {
     "title": "通知",
     "noNotifications": "还没有通知！",
-    "allNotificationsLoaded": "已加载所有通知。"
+    "allNotificationsLoaded": "已加载所有通知。",
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": " 分钟前",
+      "hoursAgo": " 小时前",
+      "daysAgo": " 天前"
+    }
   },
   "schedule": {
     "metadata": {

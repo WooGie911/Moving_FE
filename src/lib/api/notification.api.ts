@@ -21,8 +21,8 @@ export interface NotificationApiResponse {
 }
 
 // 알림 목록 조회
-export async function getNotifications(limit = 3, offset = 0): Promise<NotificationApiResponse> {
-  const res = await fetch(`${API_URL}/notifications?limit=${limit}&offset=${offset}`, {
+export async function getNotifications(limit = 3, offset = 0, lang: string = "ko"): Promise<NotificationApiResponse> {
+  const res = await fetch(`${API_URL}/notifications?limit=${limit}&offset=${offset}&lang=${lang}`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
