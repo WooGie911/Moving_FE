@@ -774,9 +774,9 @@
     }
   },
   "service": {
-    "소형이사": "Small",
-    "가정이사": "Home",
-    "사무실이사": "Office",
+    "소형이사": "Small Move",
+    "가정이사": "Home Move",
+    "사무실이사": "Office Move",
     "Small Movers": "Small",
     "Moving home": "Home",
     "Office Director": "Office",
