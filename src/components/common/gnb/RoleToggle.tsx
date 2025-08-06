@@ -27,14 +27,14 @@ export const RoleToggle = ({ disabled = false }: IRoleToggleProps) => {
     <button
       onClick={handleToggle}
       disabled={isPending || disabled}
-      className={`relative flex h-8 w-20 cursor-pointer items-center rounded-full p-2 transition-colors lg:w-30 ${
+      className={`relative flex h-8 w-20 cursor-pointer items-center rounded-full p-2 transition-colors lg:w-25 ${
         typeToShow === "MOVER" ? "bg-gray-600" : "bg-primary-400"
       }`}
     >
       {windowWidth === "desktop" ? (
         <motion.div
           className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm"
-          animate={{ x: typeToShow === "MOVER" ? 80 : 0 }}
+          animate={{ x: typeToShow === "MOVER" ? 60 : 0 }}
           initial={false}
           transition={{
             type: "spring",
