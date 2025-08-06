@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 import { Button } from "@/components/common/button/Button";
@@ -12,6 +12,7 @@ import { formatDateByLanguage } from "@/utils/dateUtils";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IEstimateRequestResponse } from "@/types/estimateRequest";
 import { logDevError } from "@/utils/logDevError";
+import * as Sentry from "@sentry/nextjs";
 
 import { EstimateRequestFlow } from "@/components/estimateRequest/common/EstimateRequestFlow";
 
@@ -89,6 +90,13 @@ const EstimateRequestEditPage = () => {
 
       // 활성 견적이 있으면 edit 페이지에서 계속 진행
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          page: "estimateRequestEdit",
+          method: "checkAndRedirectToCreate",
+          locale,
+        },
+      });
       // 에러 발생 시 create 페이지로 리다이렉트
       router.push("/estimateRequest/create");
     }
@@ -108,6 +116,13 @@ const EstimateRequestEditPage = () => {
         showErrorModal(response.message || t("estimateRequest.failedToLoadEstimateData"));
       }
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          page: "estimateRequestEdit",
+          method: "fetchEstimateRequestData",
+          locale,
+        },
+      });
       logDevError(error, "견적 데이터를 불러오는데 실패했습니다");
 
       // API 응답에서 에러 메시지 추출
@@ -238,7 +253,7 @@ const EstimateRequestEditPage = () => {
       answers.push(
         <div key="movingDate" className="fade-in-up">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
-            {formatDateByLanguage(form.movingDate, locale)}
+            {formatDateByLanguage(form.movingDate, locale as "ko" | "en" | "zh")}
           </SpeechBubble>
         </div>,
       );
@@ -246,11 +261,6 @@ const EstimateRequestEditPage = () => {
 
     return answers;
   }, [step, form, t, locale, handleEditMovingType, handleEditMovingDate]);
-
-  // 로딩 상태 - 전역 로딩이 표시되므로 별도 UI 불필요
-  if (loading) {
-    return null;
-  }
 
   // 데이터 없음 상태
   if (!estimateRequestData) {
@@ -280,7 +290,7 @@ const EstimateRequestEditPage = () => {
   };
 
   // 날짜 변환
-  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, locale);
+  const moveDateLabel = formatDateByLanguage(estimateRequestData.movingDate, locale as "ko" | "en" | "zh");
 
   // 주소 표시 (null 체크 포함)
   const departureDisplay = `${estimateRequestData.departureAddress}${estimateRequestData.departureDetailAddress ? ` ${estimateRequestData.departureDetailAddress}` : ""}`;

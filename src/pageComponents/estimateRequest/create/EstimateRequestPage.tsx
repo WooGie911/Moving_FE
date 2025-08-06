@@ -8,6 +8,7 @@ import EstimateRequestEditPage from "@/pageComponents/estimateRequest/edit/Estim
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { logDevError } from "@/utils/logDevError";
+import * as Sentry from "@sentry/nextjs";
 
 export default function EstimateRequestPage() {
   const locale = useLocale();
@@ -22,6 +23,13 @@ export default function EstimateRequestPage() {
         const response = await estimateRequestClientApi.getActive(locale);
         setHasActiveEstimate(response.success && response.data ? true : false);
       } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            page: "estimateRequest",
+            method: "checkActiveEstimate",
+            locale,
+          },
+        });
         logDevError(error, "활성 견적 확인 실패");
         // 에러 발생 시 기본적으로 생성 페이지로 설정
         setHasActiveEstimate(false);
