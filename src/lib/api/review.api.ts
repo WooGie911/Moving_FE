@@ -1,12 +1,7 @@
 import { IReview, IWritableReviewsResponse, IWrittenReviewsResponse, IReceivedReviewsResponse } from "@/types/review";
-import { getTokenFromCookie } from "@/utils/auth";
+import { apiGet, apiPatch } from "@/utils/apiHelpers";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const getAccessToken = async () => {
-  const accessToken = await getTokenFromCookie();
-  return accessToken;
-};
 
 const reviewApi = {
   /**
@@ -19,19 +14,7 @@ const reviewApi = {
   postReview: async (reviewId: string, rating: number, content: string, language?: string): Promise<IReview | null> => {
     try {
       const queryParams = language ? `?lang=${language}` : "";
-      const res = await fetch(`${API_URL}/reviews/${reviewId}${queryParams}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-        body: JSON.stringify({ rating, content }),
-      });
-      if (!res.ok) {
-        if (res.status === 401) throw new Error("로그인이 필요합니다.");
-        throw new Error("리뷰 작성에 실패했습니다.");
-      }
-      const data = await res.json();
+      const data = await apiPatch(`/reviews/${reviewId}${queryParams}`, { rating, content });
       return data.data || null;
     } catch (error) {
       console.error("리뷰 작성 실패:", error);
@@ -56,14 +39,7 @@ const reviewApi = {
       query.append("pageSize", pageSize.toString());
       if (language) query.append("lang", language);
 
-      const res = await fetch(`${API_URL}/reviews/writable-estimateRequests?${query.toString()}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-      });
-      if (!res.ok) throw new Error("리뷰 작성 가능한 리스트 조회에 실패했습니다.");
-      const data = await res.json();
+      const data = await apiGet(`/reviews/writable-estimateRequests?${query.toString()}`);
       return data.data || { items: [], total: 0, page, pageSize, hasNextPage: false, hasPrevPage: false };
     } catch (error) {
       console.error("리뷰 작성 가능한 리스트 조회 실패:", error);
@@ -90,14 +66,7 @@ const reviewApi = {
       query.append("pageSize", pageSize.toString());
       if (language) query.append("lang", language);
 
-      const res = await fetch(`${API_URL}/reviews/customer/${customerId}?${query.toString()}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-      });
-      if (!res.ok) throw new Error("내가 쓴 리뷰 목록 조회에 실패했습니다.");
-      const data = await res.json();
+      const data = await apiGet(`/reviews/customer/${customerId}?${query.toString()}`);
       return data.data || { items: [], total: 0, page, pageSize, hasNextPage: false, hasPrevPage: false };
     } catch (error) {
       console.error("내가 쓴 리뷰 목록 조회 실패:", error);
@@ -124,14 +93,7 @@ const reviewApi = {
       query.append("pageSize", pageSize.toString());
       if (language) query.append("lang", language);
 
-      const res = await fetch(`${API_URL}/reviews/mover/${moverId}?${query.toString()}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-      });
-      if (!res.ok) throw new Error("내가 받은 리뷰 목록 조회에 실패했습니다.");
-      const data = await res.json();
+      const data = await apiGet(`/reviews/mover/${moverId}?${query.toString()}`);
       return data.data || { items: [], total: 0, page, pageSize, hasNextPage: false, hasPrevPage: false };
     } catch (error) {
       console.error("내가 받은 리뷰 목록 조회 실패:", error);
