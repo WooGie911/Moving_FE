@@ -23,7 +23,17 @@ export const useMoverDetail = (moverId: string) => {
 
   return useQuery({
     queryKey: ["mover", moverId, locale],
-    queryFn: () => findMoverApi.fetchMoverDetail(moverId, locale),
+    queryFn: async () => {
+      console.log(`기사님 상세 정보 조회: moverId=${moverId}, locale=${locale}`);
+      const data = await findMoverApi.fetchMoverDetail(moverId, locale);
+      console.log(`기사님 상세 정보 조회 완료:`, {
+        id: data?.id,
+        name: data?.name,
+        averageRating: data?.averageRating,
+        totalReviewCount: data?.totalReviewCount,
+      });
+      return data;
+    },
     enabled: !!moverId,
     staleTime: 10 * 60 * 1000, // 10분
     gcTime: 30 * 60 * 1000, // 30분
@@ -72,7 +82,13 @@ export const useAddFavorite = () => {
       // 찜한 기사님 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
 
-      // 기사님 리스트 캐시 업데이트
+      // 기사님 리스트 캐시 무효화 (더 강력한 무효화)
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+
+      // 기사님 상세 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["mover", moverId] });
+
+      // 즉시 캐시 업데이트 (백업)
       queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
         if (!oldData?.pages) return oldData;
 
@@ -89,7 +105,6 @@ export const useAddFavorite = () => {
         };
       });
 
-      // 기사님 상세 캐시 업데이트
       queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
         if (!oldData) return oldData;
         return { ...oldData, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited };
@@ -108,7 +123,13 @@ export const useRemoveFavorite = () => {
       // 찜한 기사님 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
 
-      // 기사님 리스트 캐시 업데이트
+      // 기사님 리스트 캐시 무효화 (더 강력한 무효화)
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+
+      // 기사님 상세 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["mover", moverId] });
+
+      // 즉시 캐시 업데이트 (백업)
       queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
         if (!oldData?.pages) return oldData;
 
@@ -125,7 +146,6 @@ export const useRemoveFavorite = () => {
         };
       });
 
-      // 기사님 상세 캐시 업데이트
       queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
         if (!oldData) return oldData;
         return { ...oldData, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited };
