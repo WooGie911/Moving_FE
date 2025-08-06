@@ -1,6 +1,6 @@
 import React from "react";
 import { MoveTypeLabel } from "../../common/chips/MoveTypeLabel";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
 import Image from "next/image";
 import { ILabelAndTitleSectionProps, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations } from "next-intl";

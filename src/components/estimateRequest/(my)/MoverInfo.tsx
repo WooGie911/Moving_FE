@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import defaultProfile from "@/assets/img/mascot/moverprofile-sm.png";
+import defaultProfile from "@/assets/img/mascot/moverprofile-sm.webp";
 import { IMoverInfoProps } from "@/types/customerEstimateRequest";
-import veteran from "@/assets/icon/etc/icon-chat.png";
-import star from "@/assets/icon/star/icon-star-active-sm.png";
+import veteran from "@/assets/icon/etc/icon-chat.svg";
+import star from "@/assets/icon/star/icon-star-active-sm.svg";
 import Favorite from "@/components/common/button/Favorite";
 import { useTranslations, useLocale } from "next-intl";
-import deleteIcon from "@/assets/icon/menu/icon-delete.png";
+import deleteIcon from "@/assets/icon/menu/icon-delete.svg";
 import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

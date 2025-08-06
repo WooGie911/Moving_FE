@@ -1,6 +1,6 @@
 import { IEstimateRequestProps } from "@/types/customerEstimateRequest";
 import React from "react";
-import arrow from "@/assets/icon/arrow/icon-arrow.png";
+import arrow from "@/assets/icon/arrow/icon-arrow.svg";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { shortenRegionInAddress } from "@/utils/regionMapping";

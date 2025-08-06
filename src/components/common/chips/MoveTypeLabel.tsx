@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import small from "../../../assets/icon/box/icon-box.png";
-import home from "../../../assets/icon/home/icon-home.png";
-import office from "../../../assets/icon/etc/icon-office.png";
-import document from "../../../assets/icon/document/icon-document.png";
+import small from "../../../assets/icon/box/icon-box.svg";
+import home from "../../../assets/icon/home/icon-home.svg";
+import office from "../../../assets/icon/etc/icon-office.svg";
+import document from "../../../assets/icon/document/icon-document.svg";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
 interface ExtendedMoveTypeLabelProps extends IMoveTypeLabelProps {

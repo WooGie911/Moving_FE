@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
 import { ICardListProps } from "@/types/customerEstimateRequest";

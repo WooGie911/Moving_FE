@@ -5,7 +5,7 @@ import { RequestEstimateRequest } from "@/components/estimateRequest/(my)/pendin
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Image from "next/image";
-import noEstimate from "@/assets/img/etc/noEstimate.png";
+import noEstimate from "@/assets/img/etc/noEstimate.webp";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { Button } from "@/components/common/button/Button";
 import Link from "next/link";
@@ -23,7 +23,10 @@ export const UserPendingEstimateRequestPage = () => {
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
-    queryFn: () => customerEstimateRequestApi.getPendingEstimateRequest(locale),
+    queryFn: () => {
+      console.log("🚀 React Query 실행됨 - pendingEstimateRequests API 호출");
+      return customerEstimateRequestApi.getPendingEstimateRequest(locale);
+    },
     enabled: !!user && !isUserLoading,
   });
 
@@ -42,7 +45,7 @@ export const UserPendingEstimateRequestPage = () => {
         <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-              <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" />
+              <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" priority />
             </div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("noEstimateInProgress")}</div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("requestNewEstimate")}</div>
@@ -87,7 +90,7 @@ export const UserPendingEstimateRequestPage = () => {
           {estimates.length === 0 ? (
             <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
               <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-                <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" />
+                <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" priority />
               </div>
               <div className="text-[20px] leading-8 font-normal text-gray-400">{t("moversReviewing")}</div>
               <div className="text-[20px] leading-8 font-normal text-gray-400">{t("estimateComingSoon")}</div>
