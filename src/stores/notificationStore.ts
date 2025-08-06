@@ -3,6 +3,7 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { INotification } from "@/types/notification.types";
 import { getNotifications, readAllNotifications, readNotification } from "@/lib/api/notification.api";
 import { getTokenFromCookie } from "@/utils/auth";
+import * as Sentry from "@sentry/nextjs";
 
 interface INotificationState {
   notifications: INotification[];
@@ -139,6 +140,15 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
             }
           }
         } catch (e) {
+          Sentry.captureException(e, {
+            tags: {
+              component: "notificationStore",
+              action: "parseSSEMessage",
+            },
+            extra: {
+              eventData: event,
+            },
+          });
           console.error("SSE 메시지 파싱 에러:", e);
         }
       });
@@ -150,6 +160,18 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       };
 
       eventSource.onerror = async function (event) {
+        Sentry.captureException(new Error("SSE 연결 에러"), {
+          tags: {
+            component: "notificationStore",
+            action: "SSEConnectionError",
+          },
+          extra: {
+            event,
+            reconnectAttempts,
+            currentToken: currentToken ? "있음" : "없음",
+          },
+        });
+        
         set({ isSSEConnected: false });
         isConnecting = false;
         
@@ -168,14 +190,41 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
               get().connectSSE(newToken);
             }, RECONNECT_INTERVAL);
           } else {
+            Sentry.captureMessage("토큰 갱신 실패로 SSE 재연결 중단", {
+              tags: {
+                component: "notificationStore",
+                action: "tokenRefreshFailed",
+              },
+            });
             get().disconnectSSE();
           }
         } else {
+          Sentry.captureMessage("SSE 최대 재연결 시도 횟수 초과 또는 오프라인 상태", {
+            tags: {
+              component: "notificationStore",
+              action: "maxReconnectAttemptsReached",
+            },
+            extra: {
+              reconnectAttempts,
+              maxAttempts: MAX_RECONNECT_ATTEMPTS,
+              isOnline: navigator.onLine,
+            },
+          });
           get().disconnectSSE();
         }
       };
 
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          component: "notificationStore",
+          action: "createSSEConnection",
+        },
+        extra: {
+          sseUrl: `${process.env.NEXT_PUBLIC_API_URL}/sse/notifications`,
+          hasToken: !!token,
+        },
+      });
       console.error("SSE 연결 생성 실패:", error);
       isConnecting = false;
       set({ isSSEConnected: false });
@@ -225,6 +274,19 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         };
       });
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          component: "notificationStore",
+          action: "fetchNotifications",
+        },
+        extra: {
+          limit,
+          offset,
+          lang,
+          userType,
+          force,
+        },
+      });
       console.error("알림 가져오기 실패:", error);
       set({ isLoading: false });
     }
@@ -243,6 +305,16 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         };
       });
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          component: "notificationStore",
+          action: "markAsRead",
+        },
+        extra: {
+          notificationId: id,
+          userType,
+        },
+      });
       console.error("알림 읽음 처리 실패:", error);
     }
   },
@@ -257,6 +329,12 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         };
       });
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          component: "notificationStore",
+          action: "markAllAsRead",
+        },
+      });
       console.error("모든 알림 읽음 처리 실패:", error);
     }
   },
