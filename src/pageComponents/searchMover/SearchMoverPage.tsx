@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useAuth } from "@/providers/AuthProvider";
 import { IMoverInfo } from "@/types/mover.types";
@@ -15,6 +15,7 @@ const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
   const { user, isLoggedIn } = useAuth();
   const t = useTranslations("mover");
+  const locale = useLocale();
   const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -22,14 +23,14 @@ const SearchMoverPage = () => {
     if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
       setLoading(true);
       findMoverApi
-        .fetchFavoriteMovers(3) // 3개만 가져오기
+        .fetchFavoriteMovers(3, undefined, locale) // 언어 파라미터 추가
         .then((data) => setFavoriteMovers(data.items)) // items만 추출
         .catch(() => setFavoriteMovers([]))
         .finally(() => setLoading(false));
     } else {
       setFavoriteMovers([]);
     }
-  }, [deviceType, isLoggedIn, user]);
+  }, [deviceType, isLoggedIn, user, locale]);
 
   const shouldShowBookmarked =
     deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
