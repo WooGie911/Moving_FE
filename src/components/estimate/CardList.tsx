@@ -183,9 +183,17 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   const moveDate = data?.moveDate ? new Date(data.moveDate) : new Date();
   const isPastDate = moveDate < new Date();
 
-  // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외
+  // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외 + 지정견적 개수 확인
   const estimateCount = data.estimates?.filter((estimate) => estimate?.status !== "REJECTED").length || 0;
-  const isMaxEstimates = estimateCount >= 5;
+  const designatedCount = data.estimates?.filter((estimate) => estimate?.isDesignated === true).length || 0;
+
+  // 지정견적 여부에 따른 최대 견적 개수 결정
+  const maxEstimates = isDesignated ? 3 : 5;
+  const isMaxEstimates = estimateCount >= maxEstimates;
+
+  // 지정견적인 경우: 지정견적 개수가 3개 미만이면 견적 보낼 수 있음
+  // 일반견적인 경우: 전체 견적 개수가 5개 미만이면 견적 보낼 수 있음
+  const canSendEstimate = isDesignated ? designatedCount < 3 || estimateCount < 5 : estimateCount < 5;
 
   const openRejectModal = () => {
     setIsFormValid(false); // 모달이 열릴 때 초기화
@@ -429,16 +437,16 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               </Button>
               <Button
                 variant="solid"
-                state={isMaxEstimates ? "disabled" : "default"}
+                state={!canSendEstimate ? "disabled" : "default"}
                 width="w-[288px] lg:w-[253px]"
                 height="h-[54px]"
                 rounded="rounded-[12px]"
-                onClick={isMaxEstimates ? undefined : openSendEstimateModal}
-                disabled={isMaxEstimates}
+                onClick={canSendEstimate ? openSendEstimateModal : undefined}
+                disabled={!canSendEstimate}
               >
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <p>{isMaxEstimates ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
-                  {!isMaxEstimates && <Image src={edit} alt="arrow" width={24} height={24} />}
+                  <p>{!canSendEstimate ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
+                  {canSendEstimate && <Image src={edit} alt="arrow" width={24} height={24} />}
                 </div>
               </Button>
               <Button
