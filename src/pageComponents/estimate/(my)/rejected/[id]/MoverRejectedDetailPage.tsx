@@ -10,7 +10,7 @@ import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
 
-export const RejectedDetailPage = () => {
+export const MoverRejectedDetailPage = () => {
   const t = useTranslations("estimate");
   const commonT = useTranslations("common");
   const locale = useLocale();
@@ -29,6 +29,7 @@ export const RejectedDetailPage = () => {
   }
   if (isError) return <Error error={error} reset={() => refetch()} />;
 
+  console.log("data", data);
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === id) : null;
 
