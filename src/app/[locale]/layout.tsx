@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import Providers from "./providers";
 import { Gnb } from "@/components/common/gnb/Gnb";
 import { ToastContainer } from "react-toastify";
+import { LanguageInitializer } from "@/components/common/LanguageInitializer";
 import "react-toastify/dist/ReactToastify.css";
 
 export function generateStaticParams() {
@@ -31,18 +32,20 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <Providers>
-        <Gnb />
-        {children}
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          hideProgressBar
-          pauseOnHover={false}
-          draggable={false}
-          closeOnClick
-          theme="light"
-          toastClassName="custom-toast"
-        />
+        <LanguageInitializer>
+          <Gnb />
+          {children}
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar
+            pauseOnHover={false}
+            draggable={false}
+            closeOnClick
+            theme="light"
+            toastClassName="custom-toast"
+          />
+        </LanguageInitializer>
       </Providers>
     </NextIntlClientProvider>
   );

@@ -43,18 +43,55 @@ export async function middleware(request: NextRequest) {
   const response = handleI18nRouting(request);
 
   const pathname = request.nextUrl.pathname;
+
+  // ✅ 루트 경로 접근 처리
+  if (pathname === "/") {
+    const accessToken = request.cookies.get("accessToken")?.value;
+    const refreshToken = request.cookies.get("refreshToken")?.value;
+    const isAuthenticated = !!accessToken || !!refreshToken;
+
+    const userLanguagePreference = request.cookies.get("user_language_preference")?.value;
+    const preferredLocale =
+      userLanguagePreference && routing.locales.includes(userLanguagePreference as any)
+        ? userLanguagePreference
+        : routing.defaultLocale;
+
+    let userType: TUserRole | undefined;
+
+    if (accessToken) {
+      try {
+        const decodedToken = await decodeAccessToken(accessToken);
+        if (!decodedToken) throw new Error("Invalid token");
+        userType = decodedToken?.userType as TUserRole;
+      } catch (error) {
+        logDevError(error, "토큰 디코딩 실패");
+      }
+    }
+
+    if (isAuthenticated && userType) {
+      const redirectPath =
+        userType === "CUSTOMER" ? `/${preferredLocale}/searchMover` : `/${preferredLocale}/estimate/received`;
+      return NextResponse.redirect(new URL(redirectPath, request.url));
+    }
+
+    return NextResponse.redirect(new URL(`/${preferredLocale}`, request.url));
+  }
+
+  // ✅ locale 경로가 아닌 경우는 i18n만 처리하고 반환
   const localeMatch = pathname.match(/^\/(ko|en|zh)(\/.*)?$/);
-  const actualPath = localeMatch?.[2] || "/";
-  const locale = localeMatch?.[1] || "ko";
+  if (!localeMatch) return response;
+
+  const actualPath = localeMatch[2] || "/";
+  const locale = localeMatch[1];
 
   const { accessToken, refreshToken, userType, hasProfile, isAuthenticated } =
     await getUserFromAccessOrRefreshToken(request);
 
   const isAuthRoute =
-    actualPath.startsWith(`/userSignin`) ||
-    actualPath.startsWith(`/userSignup`) ||
-    actualPath.startsWith(`/moverSignin`) ||
-    actualPath.startsWith(`/moverSignup`);
+    actualPath.startsWith("/userSignin") ||
+    actualPath.startsWith("/userSignup") ||
+    actualPath.startsWith("/moverSignin") ||
+    actualPath.startsWith("/moverSignup");
 
   const isProtectedRoute =
     actualPath.startsWith("/profile") ||
