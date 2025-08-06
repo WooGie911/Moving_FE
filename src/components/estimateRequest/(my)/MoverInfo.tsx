@@ -20,6 +20,21 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
   const { open, close } = useModal();
   const locale = useLocale();
 
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isOpen && !target.closest(".dropdown-container")) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   // mover 상태 업데이트 함수 - React Query 캐시만 사용
   const handleMoverUpdate = async () => {
     // 견적 요청 관련 캐시 무효화
@@ -136,8 +151,8 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
               </div>
             </div>
             {usedAt === "pending" && (
-              <div className="relative">
-                <Image src={deleteIcon} alt="delete" width={20} height={20} onClick={() => setIsOpen(!isOpen)} />
+              <div className="dropdown-container relative h-5 w-5 cursor-pointer">
+                <Image src={deleteIcon} alt="delete" fill onClick={() => setIsOpen(!isOpen)} />
                 {/*  드롭다운 메뉴  */}
                 {isOpen && (
                   <div className="absolute top-[140%] right-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">
