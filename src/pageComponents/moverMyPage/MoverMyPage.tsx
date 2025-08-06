@@ -342,15 +342,28 @@ const MoverMyPage = () => {
                 {t("myPage.providedServices")}
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {profile.serviceTypes.map((serviceType: any, idx: number) => (
-                  <CircleTextLabel
-                    key={idx}
-                    text={getServiceTypeTranslation(serviceType.service?.name || serviceType, tShared)}
-                    clickAble={false}
-                    hasBorder1={true}
-                    hasBorder2={true}
-                  />
-                ))}
+                {profile.serviceTypes.map((serviceType: any, idx: number) => {
+                  const serviceName = serviceType.service?.name || serviceType;
+                  // 서비스 타입에 따른 번역 처리
+                  let translatedText = serviceName;
+                  if (serviceName === "소형이사") {
+                    translatedText = tShared("service.소형이사");
+                  } else if (serviceName === "가정이사") {
+                    translatedText = tShared("service.가정이사");
+                  } else if (serviceName === "사무실이사") {
+                    translatedText = tShared("service.사무실이사");
+                  }
+
+                  return (
+                    <CircleTextLabel
+                      key={idx}
+                      text={translatedText}
+                      clickAble={false}
+                      hasBorder1={true}
+                      hasBorder2={true}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-col items-start justify-start gap-4">

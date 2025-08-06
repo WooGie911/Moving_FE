@@ -2,21 +2,26 @@
 export const getServiceTypeTranslation = (serviceName: string, t: any): string => {
   // 서비스 타입 매핑
   const serviceTypeMap: Record<string, string> = {
-    소형이사: "service.small",
-    가정이사: "service.home",
-    사무실이사: "service.office",
-    "Small Move": "service.small",
-    "Home Move": "service.home",
-    "Office Move": "service.office",
-    小型: "service.small",
-    家庭: "service.home",
-    办公室: "service.office",
+    소형이사: "small",
+    가정이사: "home",
+    사무실이사: "office",
+    "Small Move": "small",
+    "Home Move": "home",
+    "Office Move": "office",
+    小型: "small",
+    家庭: "home",
+    办公室: "office",
   };
 
-  // 매핑된 키가 있으면 사용, 없으면 원본 반환
+  // 매핑된 키가 있으면 사용
   const translationKey = serviceTypeMap[serviceName];
   if (translationKey) {
-    return t(translationKey) || serviceName;
+    const translated = t(translationKey);
+    // 영어인 경우 "Move" 추가
+    if (translated && (translated === "Small" || translated === "Home" || translated === "Office")) {
+      return translated + " Move";
+    }
+    return translated || serviceName;
   }
 
   // 직접 번역 시도
