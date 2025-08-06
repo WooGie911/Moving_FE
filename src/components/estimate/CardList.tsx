@@ -291,7 +291,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
             {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
             <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
               <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-                {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
+                {`${data.customer?.nickname || "고객"}${t("customerSuffix")}`}
               </p>
             </div>
             {/* 이사 정보  부분*/}
@@ -372,7 +372,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
           {/* 고객 이름 부분  나중에 프로필같은거 추가할수도?*/}
           <div className="border-border-light flex w-full flex-row items-center justify-start border-b-[0.5px] pb-4">
             <p className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-              {`${data.customer?.name || "고객"}${t("customerSuffix")}`}
+              {`${data.customer?.nickname || "고객"}${t("customerSuffix")}`}
             </p>
           </div>
           {/* 이사 정보  부분*/}
