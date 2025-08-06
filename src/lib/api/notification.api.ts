@@ -21,8 +21,16 @@ export interface NotificationApiResponse {
 }
 
 // 알림 목록 조회
-export async function getNotifications(limit = 3, offset = 0, lang: string = "ko"): Promise<NotificationApiResponse> {
-  const res = await fetch(`${API_URL}/notifications?limit=${limit}&offset=${offset}&lang=${lang}`, {
+export async function getNotifications(limit = 3, offset = 0, lang: string = "ko", userType?: string): Promise<NotificationApiResponse> {
+  const queryParams = new URLSearchParams();
+  queryParams.append("limit", limit.toString());
+  queryParams.append("offset", offset.toString());
+  queryParams.append("lang", lang);
+  if (userType) {
+    queryParams.append("userType", userType);
+  }
+
+  const res = await fetch(`${API_URL}/notifications?${queryParams.toString()}`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
