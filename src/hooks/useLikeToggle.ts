@@ -10,6 +10,7 @@ import { useAddFavorite, useRemoveFavorite } from "./useMoverData";
 
 export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUseLikeToggleProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { isLoggedIn } = useAuth();
   const { open, close } = useModal();
   const router = useRouter();
@@ -41,7 +42,12 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
       return;
     }
 
-    if (addFavoriteMutation.isPending || removeFavoriteMutation.isPending) return;
+    // 중복 요청 방지
+    if (isProcessing || addFavoriteMutation.isPending || removeFavoriteMutation.isPending) {
+      return;
+    }
+
+    setIsProcessing(true);
 
     try {
       if (isLiked) {
@@ -59,17 +65,21 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
       }
     } catch (error: any) {
       console.error("찜하기 토글 실패:", error);
+
+      // 실제 에러인 경우에만 모달 표시
       open({
         title: t("likeErrorTitle"),
         children: error.message || t("likeFailedMessage"),
         buttons: [{ text: t("confirmButton"), onClick: close }],
       });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return {
     isLiked,
     toggleLike,
-    isLoading: addFavoriteMutation.isPending || removeFavoriteMutation.isPending,
+    isLoading: isProcessing || addFavoriteMutation.isPending || removeFavoriteMutation.isPending,
   };
 };
