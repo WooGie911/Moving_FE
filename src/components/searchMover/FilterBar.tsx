@@ -92,7 +92,7 @@ const FilterBar = () => {
           <button
             type="button"
             onClick={reset}
-            className="hover:text-primary-400 ml-[25px] text-lg font-medium text-[#ababab] focus:outline-none"
+            className="hover:text-primary-400 ml-[25px] cursor-pointer text-lg font-medium text-[#ababab] focus:outline-none"
           >
             {t("reset")}
           </button>
