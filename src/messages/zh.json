@@ -941,6 +941,9 @@
     "deleteSuccess": "司机已从收藏中删除。",
     "deleteError": "删除选中司机失败。请重试。",
     "noFavorites": "没有收藏的司机",
-    "noFavoritesDesc": "添加司机到收藏以在此处查看"
+    "noFavoritesDesc": "添加司机到收藏以在此处查看",
+    "errorTitle": "发生错误",
+    "errorMessage": "加载收藏司机列表失败。",
+    "loadingMore": "加载更多司机中..."
   }
 }

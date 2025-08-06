@@ -30,15 +30,28 @@ export const useMoverDetail = (moverId: string) => {
   });
 };
 
-// 찜한 기사님 조회
+// 찜한 기사님 조회 (3개만)
 export const useFavoriteMovers = () => {
   const locale = useLocale();
 
   return useQuery({
-    queryKey: ["favoriteMovers", locale],
-    queryFn: () => findMoverApi.fetchFavoriteMovers(locale),
+    queryKey: ["favoriteMovers", "preview", locale],
+    queryFn: () => findMoverApi.fetchFavoriteMovers(3, undefined, locale),
     staleTime: 2 * 60 * 1000, // 2분
     gcTime: 5 * 60 * 1000, // 5분
+    select: (data) => data.items, // items만 반환
+  });
+};
+
+// 무한스크롤 찜한 기사님 조회
+export const useInfiniteFavoriteMovers = (limit: number = 3, language?: string) => {
+  return useInfiniteQuery({
+    queryKey: ["favoriteMovers", limit, language],
+    queryFn: ({ pageParam }) => findMoverApi.fetchFavoriteMovers(limit, pageParam, language),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    staleTime: 5 * 60 * 1000, // 5분
+    gcTime: 10 * 60 * 1000, // 10분
   });
 };
 
@@ -69,7 +82,7 @@ export const useAddFavorite = () => {
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.addFavorite(moverId),
     onSuccess: (data, moverId) => {
-      // 찜한 기사님 목록 캐시 무효화
+      // 찜한 기사님 목록 캐시 무효화 (preview와 infinite 모두)
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
 
       // 기사님 리스트 캐시 업데이트
@@ -105,7 +118,7 @@ export const useRemoveFavorite = () => {
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.removeFavorite(moverId),
     onSuccess: (data, moverId) => {
-      // 찜한 기사님 목록 캐시 무효화
+      // 찜한 기사님 목록 캐시 무효화 (preview와 infinite 모두)
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
 
       // 기사님 리스트 캐시 업데이트
