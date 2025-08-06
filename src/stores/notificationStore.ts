@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { INotification } from "@/types/notification.types";
 import { getNotifications, readAllNotifications, readNotification } from "@/lib/api/notification.api";
+import { getTokenFromCookie } from "@/utils/auth";
 
 interface INotificationState {
   notifications: INotification[];
@@ -10,26 +11,42 @@ interface INotificationState {
   total: number;
   isSSEConnected: boolean;
   isNotificationOpen: boolean;
+  isLoading: boolean;
+  lastFetchTime: number;
   setNotifications: (notis: INotification[]) => void;
   addNotification: (noti: INotification) => void;
   connectSSE: (token: string) => void;
   disconnectSSE: () => void;
-  fetchNotifications: (limit?: number, offset?: number, lang?: string, userType?: string) => Promise<void>;
+  fetchNotifications: (limit?: number, offset?: number, lang?: string, userType?: string, force?: boolean) => Promise<void>;
   markAsRead: (id: string, userType?: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
   openNotificationModal: () => void;
   closeNotificationModal: () => void;
+  setLoading: (loading: boolean) => void;
 }
 
 let eventSource: EventSourcePolyfill | null = null;
-let reconnectAttempts = 0;
 let reconnectTimeout: NodeJS.Timeout | null = null;
-let disconnectTimer: NodeJS.Timeout | null = null;
 let currentToken: string | null = null;
+let reconnectAttempts = 0;
+let isConnecting = false;
 
-const MAX_RECONNECT_ATTEMPTS = 10;
-const RECONNECT_INTERVAL = 5000; // 5초
-const AUTO_DISCONNECT_TIME = 60 * 60 * 1000; // 1시간
+const MAX_RECONNECT_ATTEMPTS = 3;
+const RECONNECT_INTERVAL = 5000; // 5초로 증가
+const CACHE_DURATION = 5 * 60 * 1000; // 5분 캐시
+
+// 토큰 유효성 검사
+const isTokenValid = (token: string): boolean => {
+  if (!token) return false;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp && payload.exp >= currentTime;
+  } catch (error) {
+    return false;
+  }
+};
 
 export const useNotificationStore = create<INotificationState>((set, get) => ({
   notifications: [],
@@ -38,19 +55,54 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   total: 0,
   isSSEConnected: false,
   isNotificationOpen: false,
+  isLoading: false,
+  lastFetchTime: 0,
   setNotifications: (notis) => set({ notifications: notis }),
   addNotification: (noti) =>
-    set((state) => ({
-      notifications: [noti, ...state.notifications],
-      hasUnread: true, // 새 알림이 오면 무조건 unread로 설정
-    })),
-  connectSSE: (token: string) => {
-    // 토큰이 변경된 경우에만 재연결
+    set((state) => {
+      const existingIndex = state.notifications.findIndex(n => n.id === noti.id);
+      if (existingIndex !== -1) {
+        // 기존 알림 업데이트
+        const updatedNotifications = [...state.notifications];
+        updatedNotifications[existingIndex] = noti;
+        return {
+          notifications: updatedNotifications,
+          hasUnread: state.hasUnread || !noti.isRead,
+        };
+      }
+      
+      // 새 알림 추가
+      return {
+        notifications: [noti, ...state.notifications],
+        hasUnread: true, // 새 알림이 추가되면 무조건 true
+        total: state.total + 1,
+      };
+    }),
+  connectSSE: async (token: string) => {
+    // 이미 연결 중이면 무시
+    if (isConnecting) {
+      return;
+    }
+
+    // 토큰 유효성 검사
+    if (!isTokenValid(token)) {
+      const newToken = await getTokenFromCookie();
+      if (newToken && isTokenValid(newToken)) {
+        get().connectSSE(newToken);
+      } else {
+        get().disconnectSSE();
+      }
+      return;
+    }
+
+    // 이미 연결된 경우 무시
     if (currentToken === token && eventSource && get().isSSEConnected) {
       return;
     }
 
-    // 기존 연결 종료 및 타이머 초기화
+    isConnecting = true;
+
+    // 기존 연결 정리
     if (eventSource) {
       eventSource.close();
       eventSource = null;
@@ -59,72 +111,75 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       clearTimeout(reconnectTimeout);
       reconnectTimeout = null;
     }
-    if (disconnectTimer) {
-      clearTimeout(disconnectTimer);
-      disconnectTimer = null;
-    }
 
     currentToken = token;
     set({ isSSEConnected: false });
 
-    // SSE 연결
-    eventSource = new EventSourcePolyfill(`${process.env.NEXT_PUBLIC_API_URL}/sse/notifications`, {
-      headers: { Authorization: `Bearer ${token}` },
-      withCredentials: true,
-    });
+    try {
+      const sseUrl = `${process.env.NEXT_PUBLIC_API_URL}/sse/notifications`;
+      
+      eventSource = new EventSourcePolyfill(sseUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
 
-    // 자동 종료 타이머(1시간)
-    disconnectTimer = setTimeout(() => {
-      get().disconnectSSE();
-    }, AUTO_DISCONNECT_TIME);
-
-    // 메시지 수신
-    eventSource.addEventListener("notification", (event) => {
-      try {
-        const messageEvent = event as MessageEvent;
-        const data = JSON.parse(messageEvent.data);
-        if (data.notification) {
-          get().addNotification(data.notification);
-          // unreadCount는 서버에서 받은 값으로 설정
-          set(() => ({ hasUnread: data.unreadCount > 0 }));
+      eventSource.addEventListener("notification", (event) => {
+        try {
+          const messageEvent = event as MessageEvent;
+          const data = JSON.parse(messageEvent.data);
+          
+          if (data.notification) {
+            // 새 알림 추가 (hasUnread는 addNotification에서 자동으로 true로 설정됨)
+            get().addNotification(data.notification);
+            
+            // 서버에서 받은 unreadCount로도 확인
+            if (data.unreadCount !== undefined) {
+              const hasUnread = data.unreadCount > 0;
+              set({ hasUnread });
+            }
+          }
+        } catch (e) {
+          console.error("SSE 메시지 파싱 에러:", e);
         }
-      } catch (e) {
-        console.error("SSE 메시지 파싱 에러:", e);
-      }
-    });
+      });
 
-    // 에러 발생 시 재연결
-    eventSource.onerror = function () {
+      eventSource.onopen = function () {
+        reconnectAttempts = 0; // 성공 시 재시도 횟수 초기화
+        isConnecting = false;
+        set({ isSSEConnected: true });
+      };
+
+      eventSource.onerror = async function (event) {
+        set({ isSSEConnected: false });
+        isConnecting = false;
+        
+        if (eventSource) {
+          eventSource.close();
+          eventSource = null;
+        }
+
+        // 재연결 시도 제한
+        if (navigator.onLine && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+          reconnectAttempts++;
+          
+          const newToken = await getTokenFromCookie();
+          if (newToken && isTokenValid(newToken)) {
+            reconnectTimeout = setTimeout(() => {
+              get().connectSSE(newToken);
+            }, RECONNECT_INTERVAL);
+          } else {
+            get().disconnectSSE();
+          }
+        } else {
+          get().disconnectSSE();
+        }
+      };
+
+    } catch (error) {
+      console.error("SSE 연결 생성 실패:", error);
+      isConnecting = false;
       set({ isSSEConnected: false });
-
-      if (eventSource) {
-        eventSource.close();
-        eventSource = null;
-      }
-
-      if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-        reconnectAttempts++;
-        reconnectTimeout = setTimeout(() => {
-          get().connectSSE(token);
-        }, RECONNECT_INTERVAL);
-      } else {
-        get().disconnectSSE();
-      }
-    };
-
-    // 연결 성공 시 재시도 횟수 초기화
-    eventSource.onopen = function () {
-      reconnectAttempts = 0;
-      set({ isSSEConnected: true });
-
-      // 타임아웃 재설정
-      if (disconnectTimer) {
-        clearTimeout(disconnectTimer);
-      }
-      disconnectTimer = setTimeout(() => {
-        get().disconnectSSE();
-      }, AUTO_DISCONNECT_TIME);
-    };
+    }
   },
   disconnectSSE: () => {
     if (eventSource) {
@@ -135,24 +190,27 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
       clearTimeout(reconnectTimeout);
       reconnectTimeout = null;
     }
-    if (disconnectTimer) {
-      clearTimeout(disconnectTimer);
-      disconnectTimer = null;
-    }
     reconnectAttempts = 0;
+    isConnecting = false;
     currentToken = null;
     set({ isSSEConnected: false });
   },
-  // --- API 연동 부분 ---
-  fetchNotifications: async (limit = 3, offset = 0, lang: string = "ko", userType?: string) => {
+  fetchNotifications: async (limit = 3, offset = 0, lang: string = "ko", userType?: string, force = false) => {
+    const state = get();
+    const now = Date.now();
+    
+    if (!force && state.lastFetchTime > 0 && (now - state.lastFetchTime) < CACHE_DURATION && offset === 0) {
+      return;
+    }
+
     try {
+      set({ isLoading: true });
       const res = await getNotifications(limit, offset, lang, userType);
       set((state) => {
         let newNotifications;
         if (offset === 0) {
           newNotifications = res.data.items;
         } else {
-          // 중복 제거: 이미 있는 id는 추가하지 않음
           const existingIds = new Set(state.notifications.map((n) => n.id));
           const filtered = res.data.items.filter((n) => !existingIds.has(n.id));
           newNotifications = [...state.notifications, ...filtered];
@@ -162,17 +220,28 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
           hasMore: newNotifications.length < res.data.total,
           hasUnread: res.data.hasUnread,
           total: res.data.total,
+          lastFetchTime: now,
+          isLoading: false,
         };
       });
     } catch (error) {
       console.error("알림 가져오기 실패:", error);
+      set({ isLoading: false });
     }
   },
   markAsRead: async (id: string, userType?: string) => {
     try {
       await readNotification(id);
-      // 읽음 처리 후 최신 상태로 동기화
-      await get().fetchNotifications(3, 0, "ko", userType);
+      set((state) => {
+        const updatedNotifications = state.notifications.map((n) =>
+          n.id === id ? { ...n, isRead: true } : n
+        );
+        const hasUnread = updatedNotifications.some((n) => !n.isRead);
+        return {
+          notifications: updatedNotifications,
+          hasUnread,
+        };
+      });
     } catch (error) {
       console.error("알림 읽음 처리 실패:", error);
     }
@@ -181,7 +250,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
     try {
       await readAllNotifications();
       set((state) => {
-        const updatedNotifications = state.notifications.map((n) => (n.isRead ? n : { ...n, isRead: true }));
+        const updatedNotifications = state.notifications.map((n) => ({ ...n, isRead: true }));
         return {
           notifications: updatedNotifications,
           hasUnread: false,
@@ -193,4 +262,5 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   },
   openNotificationModal: () => set({ isNotificationOpen: true }),
   closeNotificationModal: () => set({ isNotificationOpen: false }),
+  setLoading: (loading: boolean) => set({ isLoading: loading }),
 }));

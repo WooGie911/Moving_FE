@@ -15,6 +15,7 @@ import { useAuth } from "@/providers/AuthProvider";
 export default function NotificationList({ onClose }: { onClose?: () => void }) {
   const notifications = useNotificationStore((state) => state.notifications);
   const hasMore = useNotificationStore((state) => state.hasMore);
+  const isLoading = useNotificationStore((state) => state.isLoading);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const markAsRead = useNotificationStore((state) => state.markAsRead);
   const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
@@ -36,17 +37,17 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const { ref, inView } = useInView({ threshold: 0.2 });
 
   const loadMore = useCallback(async () => {
-    if (loadingRef.current) return;
+    if (loadingRef.current || isLoading) return;
     loadingRef.current = true;
     await fetchNotifications(limit, notifications.length, locale, user?.userType);
     loadingRef.current = false;
-  }, [fetchNotifications, notifications.length, limit, locale, user?.userType]);
+  }, [fetchNotifications, notifications.length, limit, locale, user?.userType, isLoading]);
 
   useEffect(() => {
-    if (inView && hasMore && !loadingRef.current) {
+    if (inView && hasMore && !loadingRef.current && !isLoading) {
       loadMore();
     }
-  }, [inView, hasMore, loadMore]);
+  }, [inView, hasMore, loadMore, isLoading]);
 
   // 알림 클릭 핸들러 -> 읽음처리 후 이동.
   const handleClick = async (notification: INotification) => {
@@ -60,7 +61,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
     }
   };
 
-  if (notifications.length === 0) {
+  if (notifications.length === 0 && !isLoading) {
     return (
       <section className="flex w-full items-center justify-center" aria-label={t("noNotifications")}>
         <p className="p-2 text-center text-gray-400">{t("noNotifications")}</p>
@@ -70,47 +71,51 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
 
   return (
     <section className="text-black-400 max-h-[215px] w-full overflow-y-auto" aria-label="알림 목록">
-      <ul className="list-none">
+      <ul className="divide-y divide-gray-100">
         {notifications.map((notification, idx) => (
-          <li key={`${notification.id}-${idx}`}>
-            {notification.path ? (
-              <article
-                className={`flex cursor-pointer flex-col items-start p-4 hover:bg-gray-50 ${
-                  notification.isRead ? "bg-gray-100" : ""
-                } ${idx !== notifications.length - 1 ? "border-b border-gray-200" : ""}`}
-                onClick={() => handleClick(notification)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleClick(notification);
-                  }
-                }}
-                aria-label={`${parse(DOMPurify.sanitize(notification.title))} - ${formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}`}
-              >
-                <header className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</header>
-                <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
-                  {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
-                </time>
-              </article>
-            ) : (
+          <li key={notification.id}>
+            {notification.isRead ? (
               <article
                 className={`flex flex-col items-start p-4 ${
                   idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
                 }`}
               >
-                <header className="text-sm break-words">{parse(DOMPurify.sanitize(notification.title))}</header>
+                <header className="text-sm break-words text-gray-500">{parse(DOMPurify.sanitize(notification.title))}</header>
                 <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
                   {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                 </time>
               </article>
+            ) : (
+              <button
+                onClick={() => handleClick(notification)}
+                className={`flex flex-col items-start w-full p-4 text-left hover:bg-gray-50 transition-colors ${
+                  idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
+                }`}
+              >
+                <article>
+                  <header className="text-sm break-words font-medium">{parse(DOMPurify.sanitize(notification.title))}</header>
+                  <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
+                    {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
+                  </time>
+                </article>
+              </button>
             )}
           </li>
         ))}
       </ul>
-      {hasMore && <div ref={ref} style={{ height: 40 }} aria-hidden="true" />}
-      {!hasMore && (
+      
+      {/* 로딩 상태 표시 */}
+      {isLoading && (
+        <div className="flex justify-center py-4">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-400"></div>
+        </div>
+      )}
+      
+      {/* 더 로드할 데이터가 있는 경우 */}
+      {hasMore && !isLoading && <div ref={ref} style={{ height: 40 }} aria-hidden="true" />}
+      
+      {/* 모든 알림 로드 완료 */}
+      {!hasMore && notifications.length > 0 && (
         <footer className="py-2 text-center text-xs text-gray-400" aria-label="모든 알림 로드 완료">
           {t("allNotificationsLoaded")}
         </footer>
