@@ -1,76 +1,60 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decodeAccessToken } from "./utils/decodeAccessToken";
+import { decodeAccessToken, decodeRefreshToken } from "./utils/decodeAccessToken";
 import { TUserRole } from "./types/user.types";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { logDevError } from "./utils/logDevError";
 
-export async function middleware(request: NextRequest) {
-  // next-intl 미들웨어를 먼저 처리
-  const handleI18nRouting = createMiddleware(routing);
+function getRedirectPathByUserType(userType: TUserRole, locale: string) {
+  return userType === "CUSTOMER" ? `/${locale}/searchMover` : `/${locale}/estimate/received`;
+}
 
-  // 루트 경로 리디렉션 처리
-  if (request.nextUrl.pathname === "/") {
-    const accessToken = request.cookies.get("accessToken")?.value;
-    const refreshToken = request.cookies.get("refreshToken")?.value;
-    const isAuthenticated = !!accessToken || !!refreshToken;
+function isRootOrAuthRoute(actualPath: string) {
+  return ["/", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"].includes(actualPath);
+}
 
-    let userType: TUserRole | undefined = undefined;
-
-    if (accessToken) {
-      try {
-        const decodedToken = await decodeAccessToken(accessToken);
-        if (!decodedToken) throw new Error("Invalid token");
-        userType = decodedToken?.userType as TUserRole;
-      } catch (error) {
-        logDevError(error, "토큰 디코딩 실패");
-      }
-    }
-
-    if (isAuthenticated && userType) {
-      const redirectPath = userType === "CUSTOMER" ? "/ko/searchMover" : "/ko/estimate/received";
-      return NextResponse.redirect(new URL(redirectPath, request.url));
-    }
-
-    return NextResponse.redirect(new URL("/ko", request.url));
-  }
-
-  const response = handleI18nRouting(request);
-
-  // 인증 및 권한 체크는 locale이 포함된 경로에서만 수행
-  const pathname = request.nextUrl.pathname;
-  const localeMatch = pathname.match(/^\/(ko|en|zh)(\/.*)?$/);
-
-  if (!localeMatch) {
-    return response;
-  }
-
-  const actualPath = localeMatch[2] || "/";
-  const locale = localeMatch[1];
-
+async function getUserFromAccessOrRefreshToken(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
   const isAuthenticated = !!accessToken || !!refreshToken;
 
-  let userType: TUserRole | undefined = undefined;
-  let hasProfile: boolean | undefined = undefined;
+  let userType: TUserRole | undefined;
+  let hasProfile: boolean | undefined;
 
-  if (accessToken) {
-    try {
-      const decodedToken = await decodeAccessToken(accessToken);
-      if (!decodedToken) throw new Error("Invalid token");
-      userType = decodedToken?.userType as TUserRole;
-      hasProfile = decodedToken?.hasProfile as boolean;
-    } catch (error) {
-      console.error("❌ 토큰 디코딩 실패:", error);
+  try {
+    if (accessToken) {
+      const decoded = await decodeAccessToken(accessToken);
+      userType = decoded?.userType;
+      hasProfile = decoded?.hasProfile;
+    } else if (refreshToken) {
+      const decoded = await decodeRefreshToken(refreshToken);
+      userType = decoded?.userType;
+      hasProfile = decoded?.hasProfile;
     }
+  } catch (error) {
+    logDevError(error, "토큰 디코딩 실패");
   }
 
+  return { accessToken, refreshToken, userType, hasProfile, isAuthenticated };
+}
+
+export async function middleware(request: NextRequest) {
+  const handleI18nRouting = createMiddleware(routing);
+  const response = handleI18nRouting(request);
+
+  const pathname = request.nextUrl.pathname;
+  const localeMatch = pathname.match(/^\/(ko|en|zh)(\/.*)?$/);
+  const actualPath = localeMatch?.[2] || "/";
+  const locale = localeMatch?.[1] || "ko";
+
+  const { accessToken, refreshToken, userType, hasProfile, isAuthenticated } =
+    await getUserFromAccessOrRefreshToken(request);
+
   const isAuthRoute =
-    actualPath.startsWith("/userSignin") ||
-    actualPath.startsWith("/userSignup") ||
-    actualPath.startsWith("/moverSignin") ||
-    actualPath.startsWith("/moverSignup");
+    actualPath.startsWith(`/userSignin`) ||
+    actualPath.startsWith(`/userSignup`) ||
+    actualPath.startsWith(`/moverSignin`) ||
+    actualPath.startsWith(`/moverSignup`);
 
   const isProtectedRoute =
     actualPath.startsWith("/profile") ||
@@ -89,12 +73,19 @@ export async function middleware(request: NextRequest) {
     (actualPath.startsWith("/estimate") && !actualPath.startsWith("/estimateRequest")) ||
     actualPath.startsWith("/moverMyPage");
 
-  // 일반 로그인 프로필 등록 강제 이동 (accessToken 있는 경우)
+  // ✅ 루트 or 인증 경로에서 리프레시 토큰이 있다면 자동 리다이렉트
+  if (refreshToken && isRootOrAuthRoute(actualPath)) {
+    if (userType) {
+      return NextResponse.redirect(new URL(getRedirectPathByUserType(userType, locale), request.url));
+    }
+  }
+
+  // ✅ 일반 로그인 → 프로필 미등록 보호 페이지 접근 시
   if (isProtectedRoute && accessToken && !hasProfile && actualPath !== "/profile/register") {
     return NextResponse.redirect(new URL(`/${locale}/profile/register`, request.url));
   }
 
-  // 소셜 로그인 프로필 등록 강제 이동 (accessToken 있는 경우)
+  // ✅ 소셜 로그인 후 최초 진입 시 등록 강제
   if (
     isAuthenticated &&
     accessToken &&
@@ -104,24 +95,24 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/${locale}/profile/register`, request.url));
   }
 
-  // 프로필 등록 페이지 접근 방지 (이미 등록된 경우)
+  // ✅ 등록된 유저가 /profile/register 접근 시 리다이렉트
   if (isProtectedRoute && accessToken && hasProfile && actualPath === "/profile/register") {
-    const redirectPath = userType === "CUSTOMER" ? `/${locale}/searchMover` : `/${locale}/estimate/received`;
+    const redirectPath = getRedirectPathByUserType(userType!, locale);
     return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  // 로그인/회원가입 접근 제한
+  // ✅ 인증된 유저가 로그인/회원가입 페이지 접근 시 차단
   if (isAuthRoute && isAuthenticated && userType) {
-    const redirectPath = userType === "CUSTOMER" ? `/${locale}/searchMover` : `/${locale}/estimate/received`;
+    const redirectPath = getRedirectPathByUserType(userType, locale);
     return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  // 보호 페이지 인증 안 된 유저 차단
+  // ✅ 보호 페이지인데 비로그인 상태일 경우 로그인 페이지로
   if (isProtectedRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL(`/${locale}/userSignin`, request.url));
   }
 
-  // 역할 기반 차단
+  // ✅ 역할 기반 보호
   if (isAuthenticated && userType) {
     if (isMoverOnlyRoute && userType === "CUSTOMER") {
       return NextResponse.redirect(new URL(`/${locale}/searchMover`, request.url));
@@ -136,14 +127,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // next-intl과 호환되는 matcher 설정
-  matcher: [
-    // 모든 경로에 매치되지만 다음은 제외:
-    // - api 루트 (API routes)
-    // - _next/static (static files)
-    // - _next/image (image optimization files)
-    // - favicon.ico (favicon file)
-    // - robots.txt, sitemap.xml 등 루트 레벨 파일들
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)"],
 };
