@@ -100,7 +100,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const [user, setUser] = useState<TUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
-  const router = useRouter();
 
   /**
    * 서버에서 현재 사용자 정보 조회
