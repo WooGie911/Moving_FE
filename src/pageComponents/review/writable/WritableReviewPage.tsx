@@ -37,8 +37,21 @@ const WritableReviewPage = () => {
   const { mutate: postReview, isPending } = useMutation({
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
       reviewApi.postReview(reviewId, rating, content, locale),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      // 작성 가능한 리뷰 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
+
+      // 기사님 상세 정보 캐시 무효화 (모든 기사님)
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "mover",
+      });
+
+      // 기사님 리스트 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+
+      // 찜한 기사님 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
+
       closeModal();
     },
     onError: () => {
