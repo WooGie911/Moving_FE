@@ -78,7 +78,8 @@ export const formatRelativeTimeWithTranslations = (
 
 export function formatDateDot(date: Date | string) {
   const d = new Date(date);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+  // UTC 기준으로 날짜 추출하여 시간대 변환 문제 방지
+  return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, "0")}.${String(d.getUTCDate()).padStart(2, "0")}`;
 }
 
 export function formatDateWithDayAndTime(
@@ -86,7 +87,18 @@ export function formatDateWithDayAndTime(
   weekdays?: string[],
   timeFormat?: { am: string; pm: string },
 ) {
+  // UTC 시간을 그대로 사용하여 시간대 변환 문제 방지
   const d = new Date(date);
+
+  // UTC 기준으로 날짜와 시간 추출
+  const utcYear = d.getUTCFullYear();
+  const utcMonth = d.getUTCMonth();
+  const utcDate = d.getUTCDate();
+  const utcHours = d.getUTCHours();
+  const utcMinutes = d.getUTCMinutes();
+
+  // UTC 기준으로 요일 계산
+  const utcDay = new Date(Date.UTC(utcYear, utcMonth, utcDate)).getUTCDay();
 
   // 기본값 설정 (하위 호환성을 위해)
   const defaultWeekdays = ["일", "월", "화", "수", "목", "금", "토"];
@@ -95,11 +107,11 @@ export function formatDateWithDayAndTime(
   const days = weekdays || defaultWeekdays;
   const timeFormatObj = timeFormat || defaultTimeFormat;
 
-  const day = days[d.getDay()];
-  let hour = d.getHours();
-  const minute = String(d.getMinutes()).padStart(2, "0");
+  const day = days[utcDay];
+  let hour = utcHours;
+  const minute = String(utcMinutes).padStart(2, "0");
   const ampm = hour < 12 ? timeFormatObj.am : timeFormatObj.pm;
   if (hour === 0) hour = 12;
   else if (hour > 12) hour -= 12;
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}(${day}) ${ampm} ${hour}:${minute}`;
+  return `${utcYear}.${String(utcMonth + 1).padStart(2, "0")}.${String(utcDate).padStart(2, "0")}(${day}) ${ampm} ${hour}:${minute}`;
 }
