@@ -12,6 +12,7 @@ import { IWritableCardData, IReviewForm } from "@/types/review";
 import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
 import Pagination from "@/components/common/pagination/Pagination";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { useTranslations, useLocale } from "next-intl";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
@@ -27,13 +28,12 @@ const WritableReviewPage = () => {
     setPage(newPage);
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["writableReviews", page, locale],
     queryFn: () => reviewApi.fetchWritableReviews(page, 4, locale),
-    placeholderData: { items: [], total: 0, page, pageSize: 4, hasNextPage: false, hasPrevPage: false },
   });
 
-  const { mutate: postReview, isPending } = useMutation({
+  const { mutate: postReview, isPending: isSubmitting } = useMutation({
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
       reviewApi.postReview(reviewId, rating, content, locale),
     onSuccess: () => {
@@ -53,8 +53,8 @@ const WritableReviewPage = () => {
         title: t("confirmReviewWrite"),
         type: "center",
         children: (
-          <div className="text-center py-4">
-            <p className="text-gray-700 mb-4">{t("confirmReviewWriteMessage")}</p>
+          <div className="py-4 text-center">
+            <p className="mb-4 text-gray-700">{t("confirmReviewWriteMessage")}</p>
           </div>
         ),
         buttons: [
@@ -69,12 +69,12 @@ const WritableReviewPage = () => {
               closeModal();
               postReview({ reviewId, ...data });
             },
-            disabled: isPending,
+            disabled: isSubmitting,
           },
         ],
       });
     },
-    [openModal, closeModal, postReview, isPending, t],
+    [openModal, closeModal, postReview, isSubmitting, t],
   );
 
   const handleWriteModalOpen = useCallback(
@@ -83,11 +83,11 @@ const WritableReviewPage = () => {
         title: t("writeReview"),
         type: "center",
         children: card ? (
-          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
+          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isSubmitting} />
         ) : null,
       });
     },
-    [openModal, t, onSubmit, isPending],
+    [openModal, t, onSubmit, isSubmitting],
   );
 
   // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
@@ -110,29 +110,33 @@ const WritableReviewPage = () => {
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || 4)) : 1;
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gray-100 px-6 py-10">
-      {isLoading ? (
-        <section className="py-10 text-center" aria-label="로딩 중">
-          <p>{t("loading")}</p>
-        </section>
-      ) : isError ? (
-        <section className="py-10 text-center text-red-500" aria-label="오류 발생">
-          <p>{t("error")}</p>
-        </section>
-      ) : cards.length === 0 ? (
-        <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
-          <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
-          <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
-        </section>
+    <>
+      {isPending ? (
+        <MovingTruckLoader size="lg" loadingText="작성 가능한 리뷰를 불러오는 중입니다..." />
+      ) : isSubmitting ? (
+        <MovingTruckLoader size="lg" loadingText="리뷰를 작성하는 중입니다..." />
       ) : (
-        <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
-          <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
-        </section>
+        <main className="flex min-h-screen flex-col items-center bg-gray-100 px-6 py-10">
+          {isError ? (
+            <section className="py-10 text-center text-red-500" aria-label="오류 발생">
+              <p>{t("error")}</p>
+            </section>
+          ) : cards.length === 0 ? (
+            <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
+              <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
+              <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
+            </section>
+          ) : (
+            <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
+              <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+            </section>
+          )}
+          <footer className="mt-8 flex justify-center">
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
+          </footer>
+        </main>
       )}
-      <footer className="mt-8 flex justify-center">
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
-      </footer>
-    </main>
+    </>
   );
 };
 
