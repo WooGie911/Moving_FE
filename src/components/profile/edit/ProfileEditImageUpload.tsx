@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import userApi from "@/lib/api/user.api";
+import { showWarningToast } from "@/utils/toastUtils";
 
 interface IProfileEditImageUploadProps {
   selectedImage: { name: string; type: string; dataUrl: string };
@@ -28,6 +29,12 @@ export const ProfileEditImageUpload = ({
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    // ✅ 이미지 파일인지 확인
+    if (!file.type.startsWith("image/")) {
+      showWarningToast(t("imageUploadError"));
+      return;
+    }
 
     const fileUrl = await userApi.uploadFilesToS3(file);
     onImageChange({
