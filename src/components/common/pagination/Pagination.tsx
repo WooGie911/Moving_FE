@@ -1,10 +1,10 @@
 import React from "react";
 import type { IPaginationProps } from "@/types/pagination";
 
-import leftActiveIcon from "@/assets/icon/arrow/icon-left-pn-black.png";
-import leftInactiveIcon from "@/assets/icon/arrow/icon-left-pn.png";
-import rightActiveIcon from "@/assets/icon/arrow/icon-right-pn-black.png";
-import rightInactiveIcon from "@/assets/icon/arrow/icon-right-pn.png";
+import leftActiveIcon from "@/assets/icon/arrow/icon-left-pn-black.svg";
+import leftInactiveIcon from "@/assets/icon/arrow/icon-left-pn.svg";
+import rightActiveIcon from "@/assets/icon/arrow/icon-right-pn-black.svg";
+import rightInactiveIcon from "@/assets/icon/arrow/icon-right-pn.svg";
 import Image from "next/image";
 import { usePagination } from "./usePagination";
 import PaginationButton from "./PaginationButton";
