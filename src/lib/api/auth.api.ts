@@ -1,88 +1,39 @@
 import { ISignInFormValues, ISignUpFormValues } from "@/types/auth";
-import { getTokenFromCookie } from "@/utils/auth";
+import { apiPost } from "@/utils/apiHelpers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const getAccessToken = async () => {
-  const accessToken = await getTokenFromCookie();
-  return accessToken;
-};
-
 const authApi = {
   signIn: async (data: ISignInFormValues) => {
-    const response = await fetch(`${API_URL}/auth/sign-in`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
+    const response = await apiPost(`/auth/sign-in`, data);
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response;
   },
 
   signUp: async (data: ISignUpFormValues) => {
-    const response = await fetch(`${API_URL}/auth/sign-up`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
+    const response = await apiPost(`/auth/sign-up`, data);
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response;
   },
 
   logout: async () => {
-    const response = await fetch(`${API_URL}/auth/logout`, {
-      headers: {
-        Authorization: `Bearer ${await getAccessToken()}`,
-      },
-      method: "POST",
-      credentials: "include",
-    });
+    const response = await apiPost(`/auth/logout`, {});
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response;
   },
 
   // 유저 타입 변경
   switchUserType: async (userType: "CUSTOMER" | "MOVER") => {
-    const response = await fetch(`${API_URL}/auth/switch-role`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${await getAccessToken()}`,
-      },
-      body: JSON.stringify({ userType }),
-      credentials: "include",
-    });
+    const response = await apiPost(`/auth/switch-role`, { userType });
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response;
   },
 
   // 리프레쉬 토큰을 사용한 토큰 갱신
   refreshToken: async () => {
-    const response = await fetch(`${API_URL}/auth/refresh-token`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      credentials: "include",
-    });
+    const response = await apiPost(`/auth/refresh-token`, {});
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response;
   },
 
   // 구글 로그인 (페이지 리디렉션 방식)

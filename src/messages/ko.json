@@ -354,7 +354,10 @@
     },
     "registerLoadingText": "프로필 등록 페이지 불러오는 중...",
     "editLoadingText": "프로필 수정 페이지 불러오는 중...",
-    "imageUploadError": "이미지 파일만 업로드할 수 있습니다."
+    "imageUploadError": "이미지 파일만 업로드할 수 있습니다.",
+    "error": {
+      "duplicateNickname": "이미 사용 중인 닉네임입니다."
+    }
   },
   "search": {
     "title": "이사업체 검색",

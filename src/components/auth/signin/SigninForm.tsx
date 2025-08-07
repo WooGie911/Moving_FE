@@ -11,8 +11,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ValidationErrorToast } from "@/components/common/modal/ValidationErrorToast";
-import { showErrorToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 interface ISigninFormProps {
@@ -47,8 +45,7 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
     try {
       if (isLoading) return;
       const response = await login(email, password, userType);
-      if (!response.success) {
-        handleAuthErrorToast(t, response.message);
+      if (response.success) {
       } else {
         if (userType === "CUSTOMER") {
           router.push(`/${currentLocale}/searchMover`);
@@ -56,8 +53,8 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
           router.push(`/${currentLocale}/estimate/received`);
         }
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      handleAuthErrorToast(t, error.message);
     }
   };
 
