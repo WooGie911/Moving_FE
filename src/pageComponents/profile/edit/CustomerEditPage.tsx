@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
 import userApi from "@/lib/api/user.api";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import { useRouter } from "next/navigation";
-import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
 import {
@@ -45,17 +44,32 @@ export default function CustomerEditPage() {
   const methods = useForm({ mode: "onChange" });
   const { watch, reset, handleSubmit, getValues, trigger } = methods;
 
-  const { name = "", nickname = "", email = "", phone = "", currentPassword = "", newPassword = "" } = watch();
+  const [name = "", nickname = "", email = "", phone = "", currentPassword = "", newPassword = ""] = watch([
+    "name",
+    "nickname",
+    "email",
+    "phone",
+    "currentPassword",
+    "newPassword",
+  ]);
 
-  const validName = name.trim() && isValidName(name);
-  const validNickname = nickname.trim() && isValidName(nickname);
-  const validEmail = email.trim() && isValidEmail(email);
-  const validPhone = phone.trim() && isValidPhoneNumber(phone);
-  const validServices = services.length > 0;
-  const validRegions = regions.length > 0;
+  const isValid = useMemo(() => {
+    return {
+      name: name.trim() && isValidName(name),
+      nickname: nickname.trim() && isValidName(nickname),
+      email: email.trim() && isValidEmail(email),
+      phone: phone.trim() && isValidPhoneNumber(phone),
+      services: services.length > 0,
+      regions: regions.length > 0,
+    };
+  }, [name, nickname, email, phone, services, regions]);
 
-  // 필수값 체크
-  const allFilled = validName && validNickname && validEmail && validPhone && validServices && validRegions;
+  const allFilled = Object.values(isValid).every(Boolean);
+
+  const finalCustomerImage = useMemo(
+    () => (customerImage.dataUrl === uploadSkeleton.src ? "" : customerImage.dataUrl),
+    [customerImage.dataUrl],
+  );
 
   // 프로필 수정
   const onSubmit = async () => {
@@ -75,7 +89,7 @@ export default function CustomerEditPage() {
       email,
       phoneNumber: phone,
       password: currentPassword,
-      customerImage: customerImage.dataUrl === uploadSkeleton.src ? "" : customerImage.dataUrl,
+      customerImage: finalCustomerImage,
       preferredServices: services,
       currentArea: regions,
     };
@@ -97,47 +111,40 @@ export default function CustomerEditPage() {
     }
   };
 
-  // 초기값 설정
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await userApi.getProfile();
-        const profile = res.data;
+  const fetchProfile = useCallback(async () => {
+    try {
+      const res = await userApi.getProfile();
+      const profile = res.data;
 
-        reset({
-          name: profile.name ?? "",
-          nickname: profile.nickname ?? "",
-          email: profile.email ?? "",
-          phone: profile.phoneNumber ?? "",
-          currentPassword: "",
-          newPassword: "",
-          newPasswordConfirm: "",
-        });
+      reset({
+        name: profile.name ?? "",
+        nickname: profile.nickname ?? "",
+        email: profile.email ?? "",
+        phone: profile.phoneNumber ?? "",
+        currentPassword: "",
+        newPassword: "",
+        newPasswordConfirm: "",
+      });
 
-        setCustomerImage({
-          name: "",
-          type: "",
-          dataUrl: profile.customerImage || uploadSkeleton.src,
-        });
+      setCustomerImage({
+        name: "",
+        type: "",
+        dataUrl: profile.customerImage || uploadSkeleton.src,
+      });
 
-        setServices(profile.preferredServices ?? []);
-        setRegions(profile.currentArea ?? "");
-      } catch (e) {
-        console.error("프로필 조회 실패", e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchProfile();
+      setServices(profile.preferredServices ?? []);
+      setRegions(profile.currentArea ?? "");
+    } catch (e) {
+      console.error("프로필 조회 실패", e);
+    } finally {
+      setIsLoading(false);
+    }
   }, [reset]);
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <MovingTruckLoader size="md" loadingText="프로필 정보를 불러오는 중..." />
-      </div>
-    );
-  }
+  // 초기값 설정
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   return (
     <FormProvider {...methods}>

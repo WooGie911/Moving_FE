@@ -12,13 +12,21 @@ interface ILogoProps {
 }
 
 export const Logo = ({ size = "mobile", userRole = "GUEST" }: ILogoProps) => {
+  const isFullLogo = !(userRole !== "GUEST" && size === "mobile");
+  const logoSrc = isFullLogo ? fulllogo : logo;
+  const width = isFullLogo ? (size === "desktop" ? 116 : 88) : 32;
+  const height = isFullLogo ? (size === "desktop" ? 44 : 34) : 32;
+
   return (
-    <Link href="/">
-      {userRole !== "GUEST" && size === "mobile" ? (
-        <Image src={logo} alt="logo" width={32} height={32} />
-      ) : (
-        <Image src={fulllogo} alt="logo" width={size === "desktop" ? 116 : 88} height={size === "desktop" ? 44 : 34} />
-      )}
+    <Link href="/" aria-label="홈으로 이동">
+      <Image
+        src={logoSrc}
+        alt="logo"
+        width={width}
+        height={height}
+        priority // ✅ LCP 최적화 핵심
+        loading="eager" // ✅ lazy 제거
+      />
     </Link>
   );
 };
