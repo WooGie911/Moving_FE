@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import { useMoverList } from "@/hooks/useMoverData";
 import MoverCard from "./MoverCard";
-import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const MoverList = () => {
   const { region, serviceTypeId, search, sort } = useSearchMoverStore();

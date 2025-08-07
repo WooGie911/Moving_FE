@@ -72,7 +72,7 @@ const findMoverApi = {
   fetchFavoriteMovers: async (
     limit: number = 3,
     cursor?: string,
-    language?: string
+    language?: string,
   ): Promise<{
     items: IMoverInfo[];
     nextCursor: string | null;
@@ -113,7 +113,7 @@ const findMoverApi = {
         nextCursor: string | null;
         hasNext: boolean;
       }> = await res.json();
-      
+
       return data.data || { items: [], nextCursor: null, hasNext: false };
     } catch (error) {
       console.error("찜한 기사님 조회 실패:", error);
