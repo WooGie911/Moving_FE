@@ -74,7 +74,7 @@ const MoverList = () => {
 
   if (!allMovers.length) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 lg:w-205">
+      <div className="flex min-h-[400px] flex-col items-center justify-center py-12 lg:w-205">
         <div className="mb-2 text-lg text-gray-500">{t("noSearchResult")}</div>
         <div className="text-sm text-gray-400">{t("tryOtherSearch")}</div>
       </div>

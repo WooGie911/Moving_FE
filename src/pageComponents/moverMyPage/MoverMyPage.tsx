@@ -118,12 +118,12 @@ const MoverMyPage = () => {
     fetchProfile();
   }, [locale]);
 
-  // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
+  // 전체 리뷰 데이터 가져오기 (ReviewAvg용) - 완료된 리뷰만
   useEffect(() => {
     if (profile) {
       const fetchAllReviews = async () => {
         try {
-          const response = await findMoverApi.getMoverReviews(profile.id, 1, 1000);
+          const response = await findMoverApi.getMoverReviews(profile.id, 1, 1000, locale, "COMPLETED");
 
           const convertedReviews = response.data.items.map((apiReview: IApiReview) => ({
             id: apiReview.id,
@@ -155,7 +155,7 @@ const MoverMyPage = () => {
 
       fetchAllReviews();
     }
-  }, [profile]);
+  }, [profile, locale]);
 
   if (isLoading) {
     return (
