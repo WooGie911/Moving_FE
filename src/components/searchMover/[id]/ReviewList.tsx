@@ -10,7 +10,7 @@ import Pagination from "@/components/common/pagination/Pagination";
 // 사용자 이름 마스킹 함수
 const maskUserName = (name: string): string => {
   if (!name || name.length <= 1) return name;
-  return name.charAt(0) + "***"; 
+  return name.charAt(0) + "***";
 };
 
 const PAGE_SIZE = 5;
@@ -30,7 +30,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
     const fetchReviews = async () => {
       setLoading(true);
       try {
-        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE, locale);
+        const response = await findMoverApi.getMoverReviews(moverId, currentPage, PAGE_SIZE, locale, "COMPLETED");
 
         const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
           id: apiReview.id,

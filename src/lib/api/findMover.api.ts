@@ -266,6 +266,7 @@ const findMoverApi = {
     page: number = 1,
     pageSize: number = 5,
     language?: string,
+    status?: string,
   ): Promise<{
     success: boolean;
     message: string;
@@ -298,6 +299,7 @@ const findMoverApi = {
       queryParams.append("page", page.toString());
       queryParams.append("pageSize", pageSize.toString());
       if (language) queryParams.append("lang", language);
+      if (status) queryParams.append("status", status);
 
       const response = await fetch(`${API_URL}/reviews/mover/${moverId}?${queryParams.toString()}`);
 
