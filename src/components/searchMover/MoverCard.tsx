@@ -22,11 +22,10 @@ interface MoverCardProps {
 }
 
 const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = false, onSelect }: MoverCardProps) => {
-  const deviceType = useWindowWidth();
   const t = useTranslations("mover");
+  const deviceType = useWindowWidth();
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
-
-  const shouldShowBadge = showBadge && (mover.completedCount || 0) > 30;
+  const shouldShowBadge = showBadge && variant === "list";
 
   const renderMobileCard = () => (
     <div
@@ -162,8 +161,16 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
             />
             <div>
               <div className="mb-5">
-                <div className="text-5 line-clamp-1 leading-8 font-semibold">{mover.description}</div>
-                <div className="text-[14px] leading-6 font-normal text-gray-600">{mover.introduction}</div>
+                {(mover.description || mover.detailIntro) && (
+                  <div className="text-5 line-clamp-1 leading-8 font-semibold">
+                    {mover.description || mover.detailIntro}
+                  </div>
+                )}
+                {(mover.introduction || mover.shortIntro) && (
+                  <div className="text-[14px] leading-6 font-normal text-gray-600">
+                    {mover.introduction || mover.shortIntro}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-1">

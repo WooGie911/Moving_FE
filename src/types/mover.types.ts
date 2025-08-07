@@ -122,6 +122,7 @@ export interface DesignatedQuoteRequestResponse {
 
 export interface DesignatedQuoteRequestCheckResponse {
   hasRequested: boolean;
+  status: string | null;
   requestId: string | null;
   message: string | null;
   expiresAt: string | null;

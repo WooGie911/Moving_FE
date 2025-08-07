@@ -28,17 +28,17 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
   const locale = useLocale();
   const [isRequesting, setIsRequesting] = useState(false);
   const [alreadyRequested, setAlreadyRequested] = useState(false);
+  const [requestStatus, setRequestStatus] = useState<string | null>(null);
   const t = useTranslations("mover");
 
-  // 이사 완료 상태 확인 (이제 제한하지 않음 - 새로운 일반 견적 생성 가능)
-  const isMoveCompleted = false; // 이사 날짜가 지나도 새로운 견적 생성 가능
-
   // 견적 상태 확인 (확정/완료된 견적은 지정 견적 요청 불가)
+  const isEstimateApproved =
+    mover.activeEstimateRequest?.status === "APPROVED" || mover.activeEstimateRequest?.status === "批准";
   const isEstimateCompleted =
-    mover.activeEstimateRequest?.status === "APPROVED" || mover.activeEstimateRequest?.status === "COMPLETED";
+    mover.activeEstimateRequest?.status === "COMPLETED" || mover.activeEstimateRequest?.status === "完成";
 
-  // 지정견적요청 상태 확인 (반려된 경우는 다시 요청 가능)
-  const isDesignatedRequestDisabled = alreadyRequested || isEstimateCompleted;
+  // 지정견적요청 상태 확인 (반려된 경우는 다시 요청 가능하므로 alreadyRequested만 체크)
+  const isDesignatedRequestDisabled = alreadyRequested || isEstimateApproved || isEstimateCompleted;
 
   useEffect(() => {
     const checkDesignatedRequest = async () => {
@@ -52,8 +52,10 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
           String(estimateRequestId),
         );
         setAlreadyRequested(requestCheck.hasRequested);
+        setRequestStatus(requestCheck.status);
       } catch (error) {
         setAlreadyRequested(false);
+        setRequestStatus(null);
       }
     };
     checkDesignatedRequest();
@@ -61,6 +63,11 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
 
   // 지정 견적 요청
   const handleDesignateRequest = async () => {
+    // 견적이 확정되거나 완료된 경우 함수 실행하지 않음
+    if (isEstimateApproved || isEstimateCompleted) {
+      return;
+    }
+
     if (!isLoggedIn) {
       open({
         title: t("loginRequired"),
@@ -79,7 +86,7 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
     }
 
     // 이사일이 지나지 않은 견적이 있는지 확인 (견적이 확정된 상태이고 이사일이 지나지 않은 경우)
-    if (estimateRequestId && isEstimateCompleted) {
+    if (estimateRequestId && isEstimateApproved) {
       try {
         const activeRequestCheck = await findMoverApi.checkActiveEstimateRequest();
         if (activeRequestCheck.hasActiveRequest) {
@@ -108,16 +115,6 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
             },
           },
         ],
-      });
-      return;
-    }
-
-    // 견적이 확정된 경우 모달 표시
-    if (isEstimateCompleted) {
-      open({
-        title: t("estimateConfirmed"),
-        children: <>{t("estimateConfirmedMessage")}</>,
-        buttons: [{ text: t("confirmButton"), onClick: close }],
       });
       return;
     }
@@ -167,11 +164,15 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
             onClick={handleDesignateRequest}
             disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {isEstimateCompleted
+            {isEstimateApproved
               ? t("estimateConfirmed")
-              : alreadyRequested
-                ? t("alreadyRequested")
-                : t("requestDesignatedQuoteButton")}
+              : isEstimateCompleted
+                ? t("estimateCompleted")
+                : alreadyRequested && requestStatus === "REJECTED"
+                  ? t("requestRejected")
+                  : alreadyRequested
+                    ? t("alreadyRequested")
+                    : t("requestDesignatedQuoteButton")}
           </Button>
           <Button
             variant="like"
@@ -203,11 +204,15 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
             onClick={handleDesignateRequest}
             disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {isEstimateCompleted
+            {isEstimateApproved
               ? t("estimateConfirmed")
-              : alreadyRequested
-                ? t("alreadyRequested")
-                : t("requestDesignatedQuoteButton")}
+              : isEstimateCompleted
+                ? t("estimateCompleted")
+                : alreadyRequested && requestStatus === "REJECTED"
+                  ? t("requestRejected")
+                  : alreadyRequested
+                    ? t("alreadyRequested")
+                    : t("requestDesignatedQuoteButton")}
           </Button>
         </div>
       )}

@@ -48,7 +48,7 @@ const FilterBar = () => {
   // 스켈레톤 로딩
   if (isLoading) {
     return (
-      <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-full">
+      <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]">
         <div className="flex w-full items-center">
           <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
           <div className="ml-3 h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
@@ -60,7 +60,7 @@ const FilterBar = () => {
   }
 
   return (
-    <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-full">
+    <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]">
       <div className="flex w-full items-center">
         {/* 지역 필터 */}
         <CustomDropdown
