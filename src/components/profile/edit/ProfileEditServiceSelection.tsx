@@ -24,7 +24,7 @@ export const ProfileEditServiceSelection = ({
   className = "",
 }: IProfileEditServiceSelectionProps) => {
   const t = useTranslations("profile");
-  const serviceT = useTranslations("service");
+  const moverT = useTranslations("mover");
 
   return (
     <fieldset className={`border-border-light flex flex-col gap-6 border-b-1 pb-6 ${className}`}>
@@ -43,7 +43,7 @@ export const ProfileEditServiceSelection = ({
           return (
             <CircleTextLabel
               key={service}
-              text={serviceT(service)}
+              text={moverT(`serviceTypes.${service}`)}
               clickAble={true}
               isSelected={selectedServices.includes(serviceCode)}
               onClick={() => {
