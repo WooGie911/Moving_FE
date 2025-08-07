@@ -70,6 +70,7 @@ const getMainPageByUserType = (userType: TUser["userType"]) =>
 export default function AuthProvider({ children }: IAuthProviderProps) {
   const [user, setUser] = useState<TUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUserFetched, setIsUserFetched] = useState(false);
   const pathname = usePathname();
 
   const redirectToUserMainPage = (userType: TUser["userType"]) => {
@@ -208,8 +209,10 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const naverLogin = (userType: TUser["userType"]) => socialLogin("naver", userType);
 
   useEffect(() => {
-    getUser();
-  }, [pathname]);
+    if (!isUserFetched) {
+      getUser().finally(() => setIsUserFetched(true));
+    }
+  }, []);
 
   const contextValue: IAuthContextType = {
     user,
