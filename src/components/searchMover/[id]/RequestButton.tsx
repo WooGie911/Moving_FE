@@ -3,7 +3,7 @@ import { useLikeToggle } from "@/hooks/useLikeToggle";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { MoverProps } from "@/types/mover.types";
 import React, { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import findMoverApi from "@/lib/api/findMover.api";
@@ -11,11 +11,11 @@ import { useRouter } from "next/navigation";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
 interface RequestButtonProps extends MoverProps {
-  quoteId?: string;
+  estimateRequestId?: string;
   onMoverUpdate?: () => void;
 }
 
-const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) => {
+const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButtonProps) => {
   const { isLiked, toggleLike, isLoading } = useLikeToggle({
     moverId: String(mover.id),
     initialIsLiked: mover.isFavorited || false,
@@ -25,6 +25,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
   const { isLoggedIn } = useAuth();
   const { open, close } = useModal();
   const router = useRouter();
+  const locale = useLocale();
   const [isRequesting, setIsRequesting] = useState(false);
   const [alreadyRequested, setAlreadyRequested] = useState(false);
   const t = useTranslations("mover");
@@ -41,19 +42,22 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
 
   useEffect(() => {
     const checkDesignatedRequest = async () => {
-      if (!isLoggedIn || !quoteId) {
+      if (!isLoggedIn || !estimateRequestId) {
         setAlreadyRequested(false);
         return;
       }
       try {
-        const requestCheck = await findMoverApi.checkDesignatedQuoteRequest(String(mover.id), String(quoteId));
+        const requestCheck = await findMoverApi.checkDesignatedQuoteRequest(
+          String(mover.id),
+          String(estimateRequestId),
+        );
         setAlreadyRequested(requestCheck.hasRequested);
       } catch (error) {
         setAlreadyRequested(false);
       }
     };
     checkDesignatedRequest();
-  }, [mover.id, isLoggedIn, quoteId]);
+  }, [mover.id, isLoggedIn, estimateRequestId]);
 
   // 지정 견적 요청
   const handleDesignateRequest = async () => {
@@ -75,7 +79,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
     }
 
     // 이사일이 지나지 않은 견적이 있는지 확인 (견적이 확정된 상태이고 이사일이 지나지 않은 경우)
-    if (quoteId && isEstimateCompleted) {
+    if (estimateRequestId && isEstimateCompleted) {
       try {
         const activeRequestCheck = await findMoverApi.checkActiveEstimateRequest();
         if (activeRequestCheck.hasActiveRequest) {
@@ -91,7 +95,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       }
     }
 
-    if (!quoteId) {
+    if (!estimateRequestId) {
       open({
         title: t("requestDesignatedQuoteButton"),
         children: <>{t("generalQuoteRequired")}</>,
@@ -124,7 +128,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + 7);
       await findMoverApi.requestDesignatedQuote(String(mover.id), {
-        quoteId: String(quoteId),
+        quoteId: String(estimateRequestId),
         message: "기사님께 지정 견적을 요청합니다.",
         expiresAt: expiresAt.toISOString(),
       });
@@ -132,7 +136,7 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       setAlreadyRequested(true);
 
       // 성공 후 상태 다시 확인
-      const requestCheck = await findMoverApi.checkDesignatedQuoteRequest(String(mover.id), String(quoteId));
+      const requestCheck = await findMoverApi.checkDesignatedQuoteRequest(String(mover.id), String(estimateRequestId));
       setAlreadyRequested(requestCheck.hasRequested);
     } catch (err: any) {
       if (err.message && err.message.includes("이미")) {

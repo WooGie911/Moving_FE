@@ -16,7 +16,7 @@ import type { IReview, IApiReview } from "@/types/review";
 const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
-  const [quoteId, setQuoteId] = useState<string | undefined>(undefined);
+  const [estimateRequestId, setEstimateRequestId] = useState<string | undefined>(undefined);
   const [isLoadingQuote, setIsLoadingQuote] = useState(false);
   const deviceType = useWindowWidth();
   const { isLoggedIn, user } = useAuth();
@@ -98,7 +98,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
     const fetchActiveQuote = async () => {
       // 로그인한 고객 사용자만 활성 견적 조회
       if (!isLoggedIn || user?.userType !== "CUSTOMER") {
-        setQuoteId(undefined);
+        setEstimateRequestId(undefined);
         setIsLoadingQuote(false);
         return;
       }
@@ -108,13 +108,13 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
         const response = await estimateRequestClientApi.getActive(locale);
 
         if (response.success && response.data && response.data.id) {
-          setQuoteId(String(response.data.id));
+          setEstimateRequestId(String(response.data.id));
         } else {
-          setQuoteId(undefined);
+          setEstimateRequestId(undefined);
         }
       } catch (error) {
         console.error("[DetailInformation] 활성 견적 조회 실패:", error);
-        setQuoteId(undefined);
+        setEstimateRequestId(undefined);
       } finally {
         setIsLoadingQuote(false);
       }
@@ -162,7 +162,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
           </div>
         ) : (
-          <RequestButton mover={mover} quoteId={quoteId} onMoverUpdate={onMoverUpdate} />
+          <RequestButton mover={mover} estimateRequestId={estimateRequestId} onMoverUpdate={onMoverUpdate} />
         )}
         {deviceType === "desktop" ? (
           <ShareButtonGroup title={shareInfo.title} description={shareInfo.description} imageUrl={shareInfo.imageUrl} />
