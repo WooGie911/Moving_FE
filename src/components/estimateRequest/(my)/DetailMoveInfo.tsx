@@ -43,40 +43,70 @@ export const DetailMoveInfo = ({
   };
 
   return (
-    <div className="my-2 flex w-full flex-col items-start justify-center gap-7">
-      <p className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
+    <section
+      className="my-2 flex w-full flex-col items-start justify-center gap-7"
+      aria-labelledby="estimate-info-heading"
+    >
+      <h2
+        id="estimate-info-heading"
+        className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold"
+      >
         {t("estimateInfo")}
-      </p>
-      <div className="flex w-full flex-col items-start justify-center gap-3">
+      </h2>
+      <dl className="flex w-full flex-col items-start justify-center gap-3">
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
-          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+          <dt
+            className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start"
+            aria-label={t("requestDateShort")}
+          >
             {t("requestDateShort")}
-          </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+          </dt>
+          <dd
+            className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold"
+            aria-label={`${t("requestDateShort")}: ${formatDateDot(createdAt)}`}
+          >
             {formatDateDot(createdAt)}
-          </p>
+          </dd>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
-          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+          <dt
+            className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start"
+            aria-label={t("service")}
+          >
             {t("service")}
-          </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+          </dt>
+          <dd
+            className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold"
+            aria-label={`${t("service")}: ${getMovingTypeText(movingType)}`}
+          >
             {getMovingTypeText(movingType)}
-          </p>
+          </dd>
         </div>
         <div className="flex w-full flex-row items-center justify-between md:justify-start md:gap-6">
-          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+          <dt
+            className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start"
+            aria-label={t("usageDate")}
+          >
             {t("usageDate")}
-          </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+          </dt>
+          <dd
+            className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold"
+            aria-label={`${t("usageDate")}: ${formatDateWithDayAndTime(movingDate, weekdays, timeFormat)}`}
+          >
             {formatDateWithDayAndTime(movingDate, weekdays, timeFormat)}
-          </p>
+          </dd>
         </div>
         <div className="flex w-full flex-row items-start justify-between md:justify-start md:gap-6">
-          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+          <dt
+            className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start"
+            aria-label={t("departure")}
+          >
             {t("departure")}
-          </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+          </dt>
+          <dd
+            className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold"
+            aria-label={`${t("departure")}: ${departureRegion} ${departureCity} ${departureDistrict} ${departureDetail}`}
+          >
             <span className="md:hidden">
               <span className="block text-right">
                 {departureRegion} {departureCity}
@@ -87,13 +117,19 @@ export const DetailMoveInfo = ({
             <span className="hidden md:inline">
               {departureRegion} {departureCity} {departureDistrict} {departureDetail}
             </span>
-          </p>
+          </dd>
         </div>
         <div className="flex w-full flex-row items-start justify-between md:justify-start md:gap-6">
-          <p className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start">
+          <dt
+            className="text- [16px] leading-[26px] font-normal text-gray-300 md:w-[90px] md:text-start"
+            aria-label={t("arrival")}
+          >
             {t("arrival")}
-          </p>
-          <p className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold">
+          </dt>
+          <dd
+            className="text-black-400 text-[16px] leading-[26px] font-medium md:font-semibold"
+            aria-label={`${t("arrival")}: ${arrivalRegion} ${arrivalCity} ${arrivalDistrict} ${arrivalDetail}`}
+          >
             <span className="md:hidden">
               <span className="block text-right">
                 {arrivalRegion} {arrivalCity}
@@ -104,9 +140,9 @@ export const DetailMoveInfo = ({
             <span className="hidden md:inline">
               {arrivalRegion} {arrivalCity} {arrivalDistrict} {arrivalDetail}
             </span>
-          </p>
+          </dd>
         </div>
-      </div>
-    </div>
+      </dl>
+    </section>
   );
 };

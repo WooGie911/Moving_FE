@@ -20,9 +20,10 @@ export const CircleTextLabel = ({
   const handleClick = () => {
     if (onClick) {
       onClick();
-      setIsClicked(!isClicked);
+      setIsClicked((prev) => !prev);
+      // onClick이 있으면 외부 상태에만 의존하므로 내부 상태 토글하지 않음
     } else {
-      setIsClicked(!isClicked);
+      setIsClicked((prev) => !prev);
     }
   };
 

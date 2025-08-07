@@ -7,6 +7,19 @@ body {
   max-width: 100vw;
 }
 
+/* 스크린 리더 전용 클래스 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 커스텀 둥근 모서리 클래스 */
 .rounded-16 {
   border-radius: 16px;

@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import circleActive from "@/assets/icon/checkbox/roundCheck.svg";
-import circleInactive from "@/assets/icon/checkbox/icon-checkbox-circle-inactive.png";
-import squareActive from "@/assets/icon/checkbox/icon-checkbox-square-active.png";
-import squareInactive from "@/assets/icon/checkbox/icon-checkbox-square-inactive.png";
+import circleActive from "@/assets/icon/checkbox/icon-checkbox-circle-active.svg";
+import circleInactive from "@/assets/icon/checkbox/icon-checkbox-circle-inactive.svg";
+import squareActive from "@/assets/icon/checkbox/icon-checkbox-square-active.svg";
+import squareInactive from "@/assets/icon/checkbox/icon-checkbox-square-inactive.svg";
 
 interface ICheckboxProps {
   label?: string;

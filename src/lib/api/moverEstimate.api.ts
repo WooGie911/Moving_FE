@@ -13,15 +13,7 @@ import {
   IUpdateEstimateStatusResponse,
   IUpdateEstimateResponse,
 } from "@/types/moverEstimate";
-import { getTokenFromCookie } from "@/utils/auth";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-// 토큰 가져오기 함수
-const getAccessToken = async () => {
-  const accessToken = await getTokenFromCookie();
-  return accessToken;
-};
+import { apiPost, apiGet, apiPatch } from "@/utils/apiHelpers";
 
 const moverEstimateApi = {
   /**
@@ -29,32 +21,7 @@ const moverEstimateApi = {
    */
   createEstimate: async (data: ICreateEstimateRequest): Promise<ICreateEstimateResponse> => {
     try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/mover-estimates/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          // 서버에서 보낸 구체적인 에러 메시지 사용
-          const errorData = await response.json();
-          throw new Error(errorData.message || "유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else {
-          throw new Error("견적 생성에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiPost<{ data: ICreateEstimateResponse }>("/mover-estimates/create", data);
       return result.data;
     } catch (error) {
       console.error("견적 생성 실패:", error);
@@ -67,35 +34,10 @@ const moverEstimateApi = {
    */
   rejectEstimate: async (data: IRejectEstimateRequest): Promise<IRejectEstimateResponse> => {
     try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/mover-estimates/reject`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          estimateRequestId: data.estimateRequestId,
-          comment: data.comment,
-        }),
+      const result = await apiPost<{ data: IRejectEstimateResponse }>("/mover-estimates/reject", {
+        estimateRequestId: data.estimateRequestId,
+        comment: data.comment,
       });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          // 서버에서 보낸 구체적인 에러 메시지 사용
-          const errorData = await response.json();
-          throw new Error(errorData.message || "유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else {
-          throw new Error("견적 반려에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
       return result.data;
     } catch (error) {
       console.error("견적 반려 실패:", error);
@@ -111,35 +53,13 @@ const moverEstimateApi = {
     language?: string,
   ): Promise<TEstimateRequestResponse[]> => {
     try {
-      const accessToken = await getAccessToken();
-
       const query = new URLSearchParams();
       if (params.sortBy) query.append("sortBy", params.sortBy);
       if (params.customerName) query.append("customerName", params.customerName);
       if (params.movingType) query.append("movingType", params.movingType);
       if (language) query.append("lang", language);
 
-      const response = await fetch(`${API_URL}/mover-estimates/region?${query.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          return [];
-        } else {
-          throw new Error("서비스 가능 지역 견적 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{ data: TEstimateRequestResponse[] }>(`/mover-estimates/region?${query.toString()}`);
       return result.data;
     } catch (error) {
       console.error("서비스 가능 지역 견적 조회 실패:", error);
@@ -155,8 +75,6 @@ const moverEstimateApi = {
     language?: string,
   ): Promise<TEstimateRequestResponse[]> => {
     try {
-      const accessToken = await getAccessToken();
-
       const query = new URLSearchParams();
       if (params?.moverId) query.append("moverId", params.moverId);
       if (params?.sortBy) query.append("sortBy", params.sortBy);
@@ -164,25 +82,9 @@ const moverEstimateApi = {
       if (params?.movingType) query.append("movingType", params.movingType);
       if (language) query.append("lang", language);
 
-      const response = await fetch(`${API_URL}/mover-estimates/designated?${query.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          return [];
-        } else {
-          throw new Error("지정 견적 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{ data: TEstimateRequestResponse[] }>(
+        `/mover-estimates/designated?${query.toString()}`,
+      );
       return result.data;
     } catch (error) {
       console.error("지정 견적 조회 실패:", error);
@@ -208,8 +110,6 @@ const moverEstimateApi = {
     designatedEstimateRequests?: TEstimateRequestResponse[];
   }> => {
     try {
-      const accessToken = await getAccessToken();
-
       const query = new URLSearchParams();
       if (params.region !== undefined) query.append("region", params.region.toString());
       if (params.designated !== undefined) query.append("designated", params.designated.toString());
@@ -219,29 +119,12 @@ const moverEstimateApi = {
       if (params.movingType) query.append("movingType", params.movingType);
       if (language) query.append("lang", language);
 
-      const response = await fetch(`${API_URL}/mover-estimates/list?${query.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          return { regionEstimateRequests: [], designatedEstimateRequests: [] };
-        } else if (response.status === 500) {
-          throw new Error("서버 오류가 발생했습니다.");
-        } else {
-          throw new Error("견적 통합 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{
+        data: {
+          regionEstimateRequests?: TEstimateRequestResponse[];
+          designatedEstimateRequests?: TEstimateRequestResponse[];
+        };
+      }>(`/mover-estimates/list?${query.toString()}`);
       return result.data;
     } catch (error) {
       console.error("견적 통합 조회 실패:", error);
@@ -254,29 +137,7 @@ const moverEstimateApi = {
    */
   getEstimateRequestById: async (estimateRequestId: string): Promise<TEstimateRequestResponse> => {
     try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/mover-estimates/${estimateRequestId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("유효하지 않은 견적 ID입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          throw new Error("견적 정보를 찾을 수 없습니다.");
-        } else {
-          throw new Error("견적 상세 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{ data: TEstimateRequestResponse }>(`/mover-estimates/${estimateRequestId}`);
       return result.data;
     } catch (error) {
       console.error("견적 상세 조회 실패:", error);
@@ -289,28 +150,8 @@ const moverEstimateApi = {
    */
   getMyEstimates: async (language?: string): Promise<TMyEstimateResponse[]> => {
     try {
-      const accessToken = await getAccessToken();
-
       const queryParams = language ? `?lang=${language}` : "";
-      const response = await fetch(`${API_URL}/mover-estimates/my-estimates${queryParams}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          return [];
-        } else {
-          throw new Error("내가 보낸 견적서 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{ data: TMyEstimateResponse[] }>(`/mover-estimates/my-estimates${queryParams}`);
       return result.data;
     } catch (error) {
       console.error("내가 보낸 견적서 조회 실패:", error);
@@ -323,28 +164,10 @@ const moverEstimateApi = {
    */
   getMyRejectedEstimateRequests: async (language?: string): Promise<TMyRejectedEstimateResponse[]> => {
     try {
-      const accessToken = await getAccessToken();
-
       const queryParams = language ? `?lang=${language}` : "";
-      const response = await fetch(`${API_URL}/mover-estimates/my-rejected${queryParams}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else if (response.status === 404) {
-          return [];
-        } else {
-          throw new Error("내가 반려한 견적 조회에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiGet<{ data: TMyRejectedEstimateResponse[] }>(
+        `/mover-estimates/my-rejected${queryParams}`,
+      );
       return result.data;
     } catch (error) {
       console.error("내가 반려한 견적 조회 실패:", error);
@@ -360,30 +183,10 @@ const moverEstimateApi = {
     data: IUpdateEstimateStatusRequest,
   ): Promise<IUpdateEstimateStatusResponse> => {
     try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/mover-estimates/status?estimateId=${estimateId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else {
-          throw new Error("견적 상태 업데이트에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiPatch<{ data: IUpdateEstimateStatusResponse }>(
+        `/mover-estimates/status?estimateId=${estimateId}`,
+        data,
+      );
       return result.data;
     } catch (error) {
       console.error("견적 상태 업데이트 실패:", error);
@@ -396,30 +199,10 @@ const moverEstimateApi = {
    */
   updateEstimate: async (estimateId: string, data: IUpdateEstimateRequest): Promise<IUpdateEstimateResponse> => {
     try {
-      const accessToken = await getAccessToken();
-
-      const response = await fetch(`${API_URL}/mover-estimates/estimate?estimateId=${estimateId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 400) {
-          throw new Error("유효하지 않은 입력값입니다.");
-        } else if (response.status === 403) {
-          throw new Error("현재 유저타입이 기사가 아닙니다.");
-        } else {
-          throw new Error("견적서 업데이트에 실패했습니다.");
-        }
-      }
-
-      const result = await response.json();
+      const result = await apiPatch<{ data: IUpdateEstimateResponse }>(
+        `/mover-estimates/estimate?estimateId=${estimateId}`,
+        data,
+      );
       return result.data;
     } catch (error) {
       console.error("견적서 업데이트 실패:", error);
