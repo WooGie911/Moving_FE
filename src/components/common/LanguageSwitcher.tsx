@@ -54,14 +54,14 @@ export function LanguageSwitcher() {
     return locale === "ko" ? t("common.korean") : locale === "en" ? t("common.english") : t("common.chinese");
   };
 
-  const handleLanguageChange = (newLanguage: "ko" | "en" | "zh") => {
+  const handleLanguageChange = async (newLanguage: "ko" | "en" | "zh") => {
     setIsOpen(false);
 
-    // 쿠키에 언어 설정 저장
+    // 쿠키와 로컬스토리지에 언어 설정 저장 (동기화)
     setLanguagePreference(newLanguage);
 
     // 페이지 이동
-    router.push(pathname, { locale: newLanguage });
+    await router.push(pathname, { locale: newLanguage });
   };
 
   return (

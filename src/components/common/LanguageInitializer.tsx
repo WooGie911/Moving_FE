@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "@/i18n/navigation";
-import { initializeLanguagePreference } from "@/utils/languageUtils";
+import { useLocale } from "next-intl";
+import { initializeLanguagePreference, syncLanguageSettings } from "@/utils/languageUtils";
 
 interface LanguageInitializerProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ interface LanguageInitializerProps {
 export function LanguageInitializer({ children }: LanguageInitializerProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const locale = useLocale();
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -34,6 +36,13 @@ export function LanguageInitializer({ children }: LanguageInitializerProps) {
 
     hasInitialized.current = true;
   }, []); // 의존성 배열을 비워서 한 번만 실행
+
+  // 현재 locale이 변경될 때마다 언어 설정 동기화
+  useEffect(() => {
+    if (hasInitialized.current) {
+      syncLanguageSettings();
+    }
+  }, [locale]);
 
   return <>{children}</>;
 }

@@ -1,6 +1,42 @@
 // 언어 설정 관련 유틸리티 함수들
 
 const LANGUAGE_PREFERENCE_KEY = "user_language_preference";
+const LANGUAGE_STORAGE_KEY = "language-storage";
+
+/**
+ * 로컬스토리지에서 언어 설정 읽기
+ */
+export const getLanguageFromStorage = (): string | null => {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.state?.language || null;
+    }
+  } catch (error) {
+    console.error("로컬스토리지에서 언어 설정 읽기 실패:", error);
+  }
+  return null;
+};
+
+/**
+ * 로컬스토리지에 언어 설정 저장
+ */
+export const setLanguageToStorage = (language: string): void => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const languageData = {
+      state: { language },
+      version: 0,
+    };
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, JSON.stringify(languageData));
+  } catch (error) {
+    console.error("로컬스토리지에 언어 설정 저장 실패:", error);
+  }
+};
 
 /**
  * 쿠키에 언어 설정 저장
@@ -11,6 +47,9 @@ export const setLanguagePreference = (language: string, days: number = 365): voi
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
   document.cookie = `${LANGUAGE_PREFERENCE_KEY}=${language};expires=${expires.toUTCString()};path=/`;
+
+  // 로컬스토리지도 동기화
+  setLanguageToStorage(language);
 };
 
 /**
@@ -36,6 +75,13 @@ export const clearLanguagePreference = (): void => {
   if (typeof window === "undefined") return;
 
   document.cookie = `${LANGUAGE_PREFERENCE_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+
+  // 로컬스토리지도 삭제
+  try {
+    localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+  } catch (error) {
+    console.error("로컬스토리지에서 언어 설정 삭제 실패:", error);
+  }
 };
 
 /**
@@ -63,26 +109,53 @@ export const detectBrowserLanguage = (): string => {
 };
 
 /**
+ * 언어 설정 동기화 (로컬스토리지와 쿠키 간)
+ */
+export const syncLanguageSettings = (): string => {
+  if (typeof window === "undefined") return "ko";
+
+  const cookieLanguage = getLanguagePreference();
+  const storageLanguage = getLanguageFromStorage();
+
+  // 둘 다 있으면 쿠키 우선
+  if (cookieLanguage && storageLanguage) {
+    if (cookieLanguage !== storageLanguage) {
+      setLanguageToStorage(cookieLanguage);
+    }
+    return cookieLanguage;
+  }
+
+  // 쿠키에만 있으면 로컬스토리지에 동기화
+  if (cookieLanguage && !storageLanguage) {
+    setLanguageToStorage(cookieLanguage);
+    return cookieLanguage;
+  }
+
+  // 로컬스토리지에만 있으면 쿠키에 동기화
+  if (!cookieLanguage && storageLanguage) {
+    setLanguagePreference(storageLanguage);
+    return storageLanguage;
+  }
+
+  // 둘 다 없으면 브라우저 언어 사용
+  const browserLanguage = detectBrowserLanguage();
+  setLanguagePreference(browserLanguage);
+  return browserLanguage;
+};
+
+/**
  * 언어 설정 초기화 (저장된 설정이 없으면 브라우저 언어 사용)
  * 한 번만 실행되도록 안전장치 추가
  */
 let isInitialized = false;
 export const initializeLanguagePreference = (): string => {
   if (isInitialized) {
-    return getLanguagePreference() || "ko";
+    return syncLanguageSettings();
   }
 
-  const savedLanguage = getLanguagePreference();
-
-  if (savedLanguage && isValidLanguage(savedLanguage)) {
-    isInitialized = true;
-    return savedLanguage;
-  }
-
-  const browserLanguage = detectBrowserLanguage();
-  setLanguagePreference(browserLanguage);
+  const language = syncLanguageSettings();
   isInitialized = true;
-  return browserLanguage;
+  return language;
 };
 
 /**

@@ -5,7 +5,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import userApi from "@/lib/api/user.api";
-import { useModal } from "@/components/common/modal/ModalContext";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
@@ -18,12 +17,13 @@ import {
   ProfileFormButton,
 } from "@/components/profile/register";
 import { isValidName } from "@/utils/validators";
+import { showSuccessToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 const CustomerRegisterPage = () => {
   const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
-  const { open, close } = useModal();
   const currentLocale = useLocale();
 
   const methods = useForm({
@@ -48,33 +48,18 @@ const CustomerRegisterPage = () => {
   const allFilled = selectedImage && services.length > 0 && regions && isNicknameValid;
 
   const onSubmit = async (data: { nickname: string }) => {
-    const response = await userApi.postProfile({
-      customerImage: selectedImage.dataUrl === uploadSkeleton.src ? "" : selectedImage.dataUrl,
-      currentArea: regions,
-      nickname: data.nickname,
-      preferredServices: services,
-    });
+    try {
+      await userApi.postProfile({
+        customerImage: selectedImage.dataUrl === uploadSkeleton.src ? "" : selectedImage.dataUrl,
+        currentArea: regions,
+        nickname: data.nickname,
+        preferredServices: services,
+      });
 
-    if (response.success) {
-      open({
-        title: "프로필 등록 완료",
-        children: <div>프로필 등록이 완료되었습니다.</div>,
-        buttons: [
-          {
-            text: "확인",
-            onClick: () => {
-              close();
-              router.push(`/${currentLocale}/searchMover`);
-            },
-          },
-        ],
-      });
-    } else {
-      open({
-        title: "프로필 등록 실패",
-        children: <div>{response.message}</div>,
-        buttons: [{ text: "확인", onClick: () => close() }],
-      });
+      showSuccessToast(t("register.successMessage"));
+      router.push(`/${currentLocale}/searchMover`);
+    } catch (error: any) {
+      handleAuthErrorToast(t, error.message); // ✅ 여기에 도달함
     }
   };
 
