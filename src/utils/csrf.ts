@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
 // CSRF 토큰을 가져오는 함수
 export const getCSRFToken = async (): Promise<string | null> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/csrf/token`, {
+    const response = await fetch(`${API_BASE_URL}/csrf-token`, {
       method: "GET",
       credentials: "include", // 쿠키 포함
     });
