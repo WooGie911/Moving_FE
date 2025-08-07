@@ -1,16 +1,16 @@
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import small from "../../../assets/icon/box/icon-box.png";
-import home from "../../../assets/icon/home/icon-home.png";
-import office from "../../../assets/icon/etc/icon-office.png";
-import document from "../../../assets/icon/document/icon-document.png";
+import small from "../../../assets/icon/box/icon-box.svg";
+import home from "../../../assets/icon/home/icon-home.svg";
+import office from "../../../assets/icon/etc/icon-office.svg";
+import document from "../../../assets/icon/document/icon-document.svg";
 import { IMoveTypeLabelProps } from "@/types/Chip";
 
 interface ExtendedMoveTypeLabelProps extends IMoveTypeLabelProps {
   variant?: "list" | "favorite" | "favorite-responsive";
 }
 
-export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => {
+export const MoveTypeLabel = ({ type, variant, "aria-label": ariaLabel }: ExtendedMoveTypeLabelProps) => {
   const t = useTranslations("service");
 
   const getIconSrc = (serviceName: string) => {
@@ -63,10 +63,10 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
   const label = getLabel();
 
   return (
-    <div>
+    <div aria-label={ariaLabel}>
       <div className="bg-primary-100 inline-flex h-[26px] items-center justify-start gap-[2px] rounded-sm py-[2px] pr-[7px] pl-[4px] md:h-[32px] md:py-[4px]">
         <div className="relative h-[20px] w-[20px]">
-          <Image src={iconSrc} alt="movetype" fill />
+          <Image src={iconSrc} alt="movetype" fill className="object-contain" />
         </div>
         <p className="text-primary-400 text-center text-[13px] leading-[22px] font-semibold md:text-[14px] md:leading-[24px]">
           {label}

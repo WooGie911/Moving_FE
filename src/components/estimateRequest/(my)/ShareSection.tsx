@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import share from "@/assets/icon/clip/icon-clip.png";
-import kakaohare from "@/assets/icon/share/icon-share-kakao-sm.png";
-import facebookshare from "@/assets/icon/share/icon-share-facebook-sm.png";
+import share from "@/assets/icon/clip/icon-clip-md.svg";
+import kakaohare from "@/assets/icon/share/icon-share-kakao-md.svg";
+import facebookshare from "@/assets/icon/share/icon-share-facebook-md.svg";
 import {
   copyToClipboard,
   getCurrentPageUrl,
@@ -49,7 +49,7 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
       return {
         title: t("shareEstimate"),
         description: t("shareEstimate"),
-        imageUrl: "https://gomoving.site/logo-m.png",
+        imageUrl: "https://gomoving.site/logo-m.webp",
       };
     }
 
@@ -75,7 +75,7 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
     }
 
     const shareDescription = `${estimate.mover?.nickname}  기사님의 견적서입니다! ${moveInfo} 견적가 ${estimate.price.toLocaleString()}원으로 안전하고 신뢰할 수 있는 이사 서비스를 제공합니다.`;
-    const shareImageUrl = estimate.mover?.profileImage || "https://gomoving.site/logo-m.png";
+    const shareImageUrl = estimate.mover?.profileImage || "https://gomoving.site/logo-m.webp";
 
     return { title: shareTitle, description: shareDescription, imageUrl: shareImageUrl };
   };
@@ -124,41 +124,73 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
   };
 
   return (
-    <>
-      <div className="flex flex-col items-start justify-center gap-3 py-3 lg:gap-[22px]">
-        <p className="text-black-400 text-[16px] leading-[32px] font-semibold md:text-[20px] lg:hidden">
+    <section
+      className="flex flex-col items-start justify-center gap-3 py-3 lg:gap-[22px]"
+      aria-labelledby="share-section-title"
+      aria-describedby="share-section-description"
+      role="region"
+    >
+      <header>
+        <h2
+          id="share-section-title"
+          className="text-black-400 text-[16px] leading-[32px] font-semibold md:text-[20px] lg:hidden"
+        >
           {t("shareDriverMessage")}
-        </p>
-        <p className="text-black-400 hidden text-[16px] leading-[32px] font-semibold md:text-[20px] lg:block">
+        </h2>
+        <h2
+          id="share-section-title-desktop"
+          className="text-black-400 hidden text-[16px] leading-[32px] font-semibold md:text-[20px] lg:block"
+        >
           {t("shareEstimate")}
-        </p>
+        </h2>
+      </header>
 
-        <div className="flex w-full flex-row items-center justify-start gap-3 md:gap-4">
-          <button
-            className="border-border-light flex h-10 w-10 cursor-pointer flex-row items-center justify-center rounded-[8px] border-1 transition-colors hover:bg-gray-50 lg:h-16 lg:w-16 lg:rounded-[16px]"
-            onClick={handleClipCopy}
-            aria-label={t("copyLinkLabel")}
-          >
-            <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <Image src={share} alt="share" fill />
-            </div>
-          </button>
-          <button
-            className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
-            onClick={handleKakaoShare}
-            aria-label={t("shareKakaoLabel")}
-          >
-            <Image src={kakaohare} alt="kakaohare" fill />
-          </button>
-          <button
-            className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
-            onClick={handleFacebookShare}
-            aria-label={t("shareFacebookLabel")}
-          >
-            <Image src={facebookshare} alt="facebookshare" fill />
-          </button>
-        </div>
+      <div id="share-section-description" className="sr-only" aria-label={t("aria.shareSectionDescription")}>
+        {t("aria.shareSectionDescription")}
       </div>
-    </>
+
+      <div
+        className="flex w-full flex-row items-center justify-start gap-3 md:gap-4"
+        role="group"
+        aria-label={t("aria.shareButtonsContainer")}
+      >
+        <button
+          className="relative flex h-10 w-10 cursor-pointer flex-row items-center justify-center rounded-[8px] transition-colors hover:bg-gray-50 lg:h-16 lg:w-16 lg:rounded-[16px]"
+          onClick={handleClipCopy}
+          aria-label={t("copyLinkLabel")}
+          aria-describedby="clipboard-copy-description"
+          type="button"
+        >
+          <Image src={share} alt={t("copyLinkLabel")} fill className="object-contain" />
+          <span id="clipboard-copy-description" className="sr-only">
+            {t("aria.clipboardCopyButton")}
+          </span>
+        </button>
+        <button
+          className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
+          onClick={handleKakaoShare}
+          aria-label={t("shareKakaoLabel")}
+          aria-describedby="kakao-share-description"
+          type="button"
+        >
+          <Image src={kakaohare} alt={t("shareKakaoLabel")} fill className="object-contain" />
+          <span id="kakao-share-description" className="sr-only">
+            {t("aria.kakaoShareButton")}
+          </span>
+        </button>
+        <button
+          className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
+          onClick={handleFacebookShare}
+          aria-label={t("shareFacebookLabel")}
+          aria-describedby="facebook-share-description"
+          type="button"
+        >
+          <Image src={facebookshare} alt={t("shareFacebookLabel")} fill className="object-contain" />
+          <span id="facebook-share-description" className="sr-only">
+            {t("aria.facebookShareButton")}
+          </span>
+        </button>
+      </div>
+    </section>
   );
 };

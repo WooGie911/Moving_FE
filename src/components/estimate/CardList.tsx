@@ -8,9 +8,9 @@ import { useTranslations, useLocale } from "next-intl";
 import moverEstimateApi from "@/lib/api/moverEstimate.api";
 
 import Image from "next/image";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
-import edit from "@/assets/icon/edit/icon-edit.png";
-import arrow from "@/assets/icon/arrow/icon-arrow.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
+import edit from "@/assets/icon/edit/icon-edit-white.svg";
+import arrow from "@/assets/icon/arrow/icon-arrow.svg";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { ICardListProps } from "@/types/moverEstimate";
 import { LabelArea } from "./LabelArea";
@@ -283,7 +283,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               />
               {estimateStatus === "ACCEPTED" && (
                 <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
-                  <Image src={confirm} alt="confirm" width={16} height={16} />
+                  <Image src={confirm} alt="confirm" width={16} height={16} className="object-contain" />
                   <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
                 </div>
               )}
@@ -314,7 +314,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                   </p>
                 </div>
                 <div className="flex flex-col justify-end pb-1">
-                  <Image src={arrow} alt="arrow" width={16} height={16} />
+                  <Image src={arrow} alt="arrow" width={16} height={16} className="object-cover" />
                 </div>
                 <div className="flex flex-col justify-between">
                   <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
@@ -364,7 +364,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
             />
             {estimateStatus === "ACCEPTED" && (
               <div className="flex w-full max-w-[100px] flex-row items-center justify-end gap-1">
-                <Image src={confirm} alt="confirm" width={16} height={16} />
+                <Image src={confirm} alt="confirm" width={16} height={16} className="object-contain" />
                 <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
               </div>
             )}
@@ -394,8 +394,10 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
                   )}
                 </p>
               </div>
-              <div className="flex flex-col justify-end pb-1">
-                <Image src={arrow} alt="arrow" width={16} height={16} />
+              <div className="flex flex-col justify-end">
+                <div className="iten-end h-[40px] w-[16px]">
+                  <Image src={arrow} alt="arrow" width={16} height={16} className="object-cover" />
+                </div>
               </div>
               <div className="flex flex-col justify-between">
                 <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
@@ -446,7 +448,11 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
               >
                 <div className="flex flex-row items-center justify-center gap-2">
                   <p>{!canSendEstimate ? t("alreadyMaxEstimates") : t("sendEstimateTitle")}</p>
-                  {canSendEstimate && <Image src={edit} alt="arrow" width={24} height={24} />}
+                  {canSendEstimate && (
+                    <div className="relative h-[24px] w-[24px]">
+                      <Image src={edit} alt="arrow" width={24} height={24} className="object-contain" />
+                    </div>
+                  )}
                 </div>
               </Button>
               <Button

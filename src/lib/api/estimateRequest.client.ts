@@ -1,5 +1,6 @@
 import { IFormState, IEstimateRequestPayload } from "@/types/estimateRequest";
 import * as Sentry from "@sentry/nextjs";
+import { getCSRFTokenFromCookie } from "@/utils/csrf";
 
 export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayload {
   try {
@@ -48,6 +49,12 @@ function getAccessTokenFromCookie(): string | undefined {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
+// CSRF 토큰을 헤더에 추가하는 함수
+function getCSRFHeaders(): Record<string, string> {
+  const csrfToken = getCSRFTokenFromCookie();
+  return csrfToken ? { "X-CSRF-Token": csrfToken } : {};
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const estimateRequestClientApi = {
@@ -58,11 +65,14 @@ export const estimateRequestClientApi = {
     try {
       const payload = toEstimateRequestPayload(form);
       const token = getAccessTokenFromCookie();
+      const csrfHeaders = getCSRFHeaders();
+
       const res = await fetch(`${API_URL}/estimateRequests/create?lang=${locale}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...csrfHeaders,
         },
         body: JSON.stringify(payload),
         credentials: "include",
@@ -116,11 +126,14 @@ export const estimateRequestClientApi = {
     try {
       const payload = toEstimateRequestPayload(form);
       const token = getAccessTokenFromCookie();
+      const csrfHeaders = getCSRFHeaders();
+
       const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...csrfHeaders,
         },
         body: JSON.stringify(payload),
         credentials: "include",
@@ -149,10 +162,13 @@ export const estimateRequestClientApi = {
   cancelActive: async (locale: string) => {
     try {
       const token = getAccessTokenFromCookie();
+      const csrfHeaders = getCSRFHeaders();
+
       const res = await fetch(`${API_URL}/estimateRequests/active?lang=${locale}`, {
         method: "DELETE",
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...csrfHeaders,
         },
         credentials: "include",
       });
