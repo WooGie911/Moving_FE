@@ -28,10 +28,14 @@ const Chip = ({ mover }: MoverProps) => {
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
         <p className="text-lg font-semibold md:text-xl">{t("serviceAreas")}</p>
-        <div className="flex gap-2 md:gap-3">
+        <div className="flex flex-wrap gap-2 md:gap-3">
           {(mover.serviceRegions || []).map((region, idx) => {
             const regionCode = region.region;
-            return <CircleTextLabel key={idx} text={getRegionTranslation(regionCode, tRegions)} hasBorder1={true} />;
+            return (
+              <div key={idx}>
+                <CircleTextLabel text={getRegionTranslation(regionCode, tRegions)} hasBorder1={true} />
+              </div>
+            );
           })}
         </div>
       </div>

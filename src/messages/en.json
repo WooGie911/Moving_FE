@@ -474,9 +474,9 @@
       "serviceAreas": "Service Areas"
     },
     "serviceTypes": {
-      "small": "Small",
-      "home": "Home",
-      "office": "Office",
+      "small": "Small Move",
+      "home": "Home Move",
+      "office": "Office Move",
       "document": "Designated"
     }
   },

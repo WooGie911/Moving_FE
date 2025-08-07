@@ -16,7 +16,7 @@ import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
-const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
+const SERVICE_OPTIONS = ["small", "home", "office"];
 const REGION_OPTIONS = [
   "서울",
   "경기",
@@ -39,9 +39,9 @@ const REGION_OPTIONS = [
 
 // 서비스 타입 매핑
 const serviceTypeMapping: { [key: string]: string } = {
-  소형이사: "SMALL",
-  가정이사: "HOME",
-  사무실이사: "OFFICE",
+  small: "SMALL",
+  home: "HOME",
+  office: "OFFICE",
 };
 
 // 지역 매핑
@@ -79,7 +79,6 @@ export default function MoverEditPage() {
   const t = useTranslations("profile");
   const moverT = useTranslations("mover");
   const tRegions = useTranslations("regions");
-  const tShared = useTranslations();
 
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
@@ -308,8 +307,8 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={30}
                   />
-                  <div className="flex justify-end mt-2">
-                    <div className={`text-sm ${intro.length >= 30 ? 'text-red-500' : 'text-gray-500'}`}>
+                  <div className="mt-2 flex justify-end">
+                    <div className={`text-sm ${intro.length >= 30 ? "text-red-500" : "text-gray-500"}`}>
                       {intro.length}/30
                     </div>
                   </div>
@@ -338,8 +337,8 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={300}
                   />
-                  <div className="flex justify-end mt-2">
-                    <div className={`text-sm ${desc.length >= 300 ? 'text-red-500' : 'text-gray-500'}`}>
+                  <div className="mt-2 flex justify-end">
+                    <div className={`text-sm ${desc.length >= 300 ? "text-red-500" : "text-gray-500"}`}>
                       {desc.length}/300
                     </div>
                   </div>
@@ -356,31 +355,21 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
-                  {SERVICE_OPTIONS.map((service) => {
-                    // 마이페이지와 동일한 번역 로직 적용
-                    let translatedText = service;
-                    if (service === "소형이사") {
-                      translatedText = tShared("service.소형이사");
-                    } else if (service === "가정이사") {
-                      translatedText = tShared("service.가정이사");
-                    } else if (service === "사무실이사") {
-                      translatedText = tShared("service.사무실이사");
-                    }
-
-                    return (
-                      <CircleTextLabel
-                        key={service}
-                        text={translatedText}
-                        clickAble={true}
-                        isSelected={services.includes(service)}
-                        onClick={() =>
-                          setServices((prev) =>
-                            prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
-                          )
-                        }
-                      />
-                    );
-                  })}
+                  {SERVICE_OPTIONS.map((service) => (
+                    <CircleTextLabel
+                      key={service}
+                      text={moverT(`serviceTypes.${service}`)}
+                      clickAble={true}
+                      isSelected={services.includes(serviceTypeMapping[service])}
+                      onClick={() =>
+                        setServices((prev) =>
+                          prev.includes(serviceTypeMapping[service])
+                            ? prev.filter((s) => s !== serviceTypeMapping[service])
+                            : [...prev, serviceTypeMapping[service]],
+                        )
+                      }
+                    />
+                  ))}
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />

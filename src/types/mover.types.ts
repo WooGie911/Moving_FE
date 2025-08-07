@@ -49,6 +49,11 @@ export interface IMover {
   avgRating?: number;
   isFavorited?: boolean;
   profileImage?: string;
+  activeEstimateRequest?: {
+    id: string;
+    status: string;
+    moveDate: string;
+  } | null;
 }
 
 // 기사님 정보 타입 (API 응답용)

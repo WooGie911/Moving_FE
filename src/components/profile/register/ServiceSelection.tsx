@@ -21,7 +21,7 @@ export const ServiceSelection = ({
   className = "",
 }: IServiceSelectionProps) => {
   const t = useTranslations("profile");
-  const serviceT = useTranslations("service");
+  const moverT = useTranslations("mover");
 
   const handleServiceToggle = (serviceCode: string) => {
     onServicesChange(
@@ -55,7 +55,7 @@ export const ServiceSelection = ({
           return (
             <CircleTextLabel
               key={service}
-              text={serviceT(service)}
+              text={moverT(`serviceTypes.${service}`)}
               clickAble={true}
               isSelected={selectedServices.includes(serviceCode)}
               onClick={() => handleServiceToggle(serviceCode)}

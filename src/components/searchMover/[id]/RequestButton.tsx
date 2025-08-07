@@ -28,6 +28,14 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
   const [alreadyRequested, setAlreadyRequested] = useState(false);
   const t = useTranslations("mover");
 
+  // 이사 완료 상태 확인
+  const isMoveCompleted = mover.activeEstimateRequest
+    ? new Date(mover.activeEstimateRequest.moveDate) < new Date(new Date().setHours(0, 0, 0, 0))
+    : false;
+
+  // 지정견적요청 상태 확인 (반려되어도 비활성화)
+  const isDesignatedRequestDisabled = alreadyRequested || isMoveCompleted;
+
   useEffect(() => {
     const checkDesignatedRequest = async () => {
       if (!isLoggedIn || !quoteId) {
@@ -129,9 +137,13 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             rounded="rounded-[16px]"
             fontSize="text-2lg"
             onClick={handleDesignateRequest}
-            disabled={isRequesting || alreadyRequested}
+            disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {t("requestDesignatedQuoteButton")}
+            {isMoveCompleted
+              ? t("moveCompleted")
+              : alreadyRequested
+                ? t("alreadyRequested")
+                : t("requestDesignatedQuoteButton")}
           </Button>
           <Button
             variant="like"
@@ -161,9 +173,13 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             rounded="rounded-[12px]"
             fontSize="text-lg"
             onClick={handleDesignateRequest}
-            disabled={isRequesting || alreadyRequested}
+            disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {alreadyRequested ? t("alreadyRequested") : t("requestDesignatedQuoteButton")}
+            {isMoveCompleted
+              ? t("moveCompleted")
+              : alreadyRequested
+                ? t("alreadyRequested")
+                : t("requestDesignatedQuoteButton")}
           </Button>
         </div>
       )}
