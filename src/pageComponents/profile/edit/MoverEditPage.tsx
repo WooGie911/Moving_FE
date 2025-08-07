@@ -15,6 +15,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 const SERVICE_OPTIONS = ["small", "home", "office"];
 const REGION_OPTIONS = [
@@ -39,9 +40,9 @@ const REGION_OPTIONS = [
 
 // 서비스 타입 매핑
 const serviceTypeMapping: { [key: string]: string } = {
-  small: "SMALL",
-  home: "HOME",
-  office: "OFFICE",
+  "소형이사": "SMALL",
+  "가정이사": "HOME",
+  "사무실이사": "OFFICE",
 };
 
 // 지역 매핑
@@ -195,8 +196,9 @@ export default function MoverEditPage() {
       } else {
         showErrorToast(result.message || t("edit.errorMessage"));
       }
-    } catch (e) {
-      showErrorToast(t("edit.generalError"));
+    } catch (error: any) {
+      console.log("error", error.message);
+      handleAuthErrorToast(t, error.message);
     }
   };
 
@@ -212,7 +214,7 @@ export default function MoverEditPage() {
               {t("edit.title")}
             </div>
           </div>
-          <div className="mx-auto h-0 w-[327px] self-stretch outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+          <div className="mx-auto h-0 w-[327px] self-stretch outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
           <div className="flex w-full flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex w-full flex-col gap-8 lg:w-[500px]">
               <div className="flex flex-col gap-4">
@@ -245,7 +247,7 @@ export default function MoverEditPage() {
                   </label>
                 </div>
               </div>
-              <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+              <div className="mx-auto h-0 w-[327px] outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
@@ -265,7 +267,7 @@ export default function MoverEditPage() {
                   />
                 </div>
               </div>
-              <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+              <div className="mx-auto h-0 w-[327px] outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
@@ -285,7 +287,7 @@ export default function MoverEditPage() {
                   />
                 </div>
               </div>
-              <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+              <div className="mx-auto h-0 w-[327px] outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
@@ -344,7 +346,7 @@ export default function MoverEditPage() {
                   </div>
                 </div>
               </div>
-              <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+              <div className="mx-auto h-0 w-[327px] outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
@@ -355,24 +357,33 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
-                  {SERVICE_OPTIONS.map((service) => (
-                    <CircleTextLabel
-                      key={service}
-                      text={moverT(`serviceTypes.${service}`)}
-                      clickAble={true}
-                      isSelected={services.includes(serviceTypeMapping[service])}
-                      onClick={() =>
-                        setServices((prev) =>
-                          prev.includes(serviceTypeMapping[service])
-                            ? prev.filter((s) => s !== serviceTypeMapping[service])
-                            : [...prev, serviceTypeMapping[service]],
-                        )
-                      }
-                    />
-                  ))}
+                  {SERVICE_OPTIONS.map((service) => {
+                    const serviceNameMap: { [key: string]: string } = {
+                      small: "소형이사",
+                      home: "가정이사", 
+                      office: "사무실이사",
+                    };
+                    const serviceName = serviceNameMap[service];
+                    
+                    return (
+                      <CircleTextLabel
+                        key={service}
+                        text={moverT(`serviceTypes.${service}`)}
+                        clickAble={true}
+                        isSelected={services.includes(serviceName)}
+                        onClick={() =>
+                          setServices((prev) =>
+                            prev.includes(serviceName)
+                              ? prev.filter((s) => s !== serviceName)
+                              : [...prev, serviceName],
+                          )
+                        }
+                      />
+                    );
+                  })}
                 </div>
               </div>
-              <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
+              <div className="mx-auto h-0 w-[327px] outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
               <div className="flex flex-col gap-4">
                 <div className="inline-flex items-center gap-1">
                   <div className="text-base leading-relaxed font-semibold text-zinc-800 lg:text-xl lg:leading-loose">
@@ -418,7 +429,7 @@ export default function MoverEditPage() {
                   state="default"
                   width="w-full"
                   height="h-[54px] lg:h-14"
-                  className="!hover:bg-white !focus:bg-white !active:bg-white order-2 items-center justify-center rounded-2xl border border-[1px] !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline outline-1 outline-offset-[-1px] lg:order-1"
+                  className="!hover:bg-white !focus:bg-white !active:bg-white order-2 items-center justify-center rounded-2xl border border-[1px] !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline-1 outline-offset-[-1px] lg:order-1"
                   onClick={() => window.history.back()}
                 >
                   <div className="justify-center text-center">{t("edit.cancel")}</div>
