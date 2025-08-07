@@ -8,6 +8,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useModal } from "@/components/common/modal/ModalContext";
 import findMoverApi from "@/lib/api/findMover.api";
 import { useRouter } from "next/navigation";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
 interface RequestButtonProps extends MoverProps {
   quoteId?: string;
@@ -28,13 +29,15 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
   const [alreadyRequested, setAlreadyRequested] = useState(false);
   const t = useTranslations("mover");
 
-  // 이사 완료 상태 확인
-  const isMoveCompleted = mover.activeEstimateRequest
-    ? new Date(mover.activeEstimateRequest.moveDate) < new Date(new Date().setHours(0, 0, 0, 0))
-    : false;
+  // 이사 완료 상태 확인 (이제 제한하지 않음 - 새로운 일반 견적 생성 가능)
+  const isMoveCompleted = false; // 이사 날짜가 지나도 새로운 견적 생성 가능
 
-  // 지정견적요청 상태 확인 (반려되어도 비활성화)
-  const isDesignatedRequestDisabled = alreadyRequested || isMoveCompleted;
+  // 견적 상태 확인 (확정/완료된 견적은 지정 견적 요청 불가)
+  const isEstimateCompleted =
+    mover.activeEstimateRequest?.status === "APPROVED" || mover.activeEstimateRequest?.status === "COMPLETED";
+
+  // 지정견적요청 상태 확인 (반려된 경우는 다시 요청 가능)
+  const isDesignatedRequestDisabled = alreadyRequested || isEstimateCompleted;
 
   useEffect(() => {
     const checkDesignatedRequest = async () => {
@@ -70,6 +73,24 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       });
       return;
     }
+
+    // 이사일이 지나지 않은 견적이 있는지 확인 (견적이 확정된 상태이고 이사일이 지나지 않은 경우)
+    if (quoteId && isEstimateCompleted) {
+      try {
+        const activeRequestCheck = await findMoverApi.checkActiveEstimateRequest();
+        if (activeRequestCheck.hasActiveRequest) {
+          open({
+            title: t("estimateRequestLimit"),
+            children: <>{t("activeEstimateExists")}</>,
+            buttons: [{ text: t("confirmButton"), onClick: close }],
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("이사일이 지나지 않은 견적 확인 실패:", error);
+      }
+    }
+
     if (!quoteId) {
       open({
         title: t("requestDesignatedQuoteButton"),
@@ -86,6 +107,17 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
       });
       return;
     }
+
+    // 견적이 확정된 경우 모달 표시
+    if (isEstimateCompleted) {
+      open({
+        title: t("estimateConfirmed"),
+        children: <>{t("estimateConfirmedMessage")}</>,
+        buttons: [{ text: t("confirmButton"), onClick: close }],
+      });
+      return;
+    }
+
     setIsRequesting(true);
     try {
       // 만료일 설정 (7일 후)
@@ -96,26 +128,18 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
         message: "기사님께 지정 견적을 요청합니다.",
         expiresAt: expiresAt.toISOString(),
       });
-      open({
-        title: t("requestDesignatedQuoteButton"),
-        children: <>{t("requestSuccessMessage")}</>,
-        buttons: [{ text: t("confirmButton"), onClick: close }],
-      });
+      showSuccessToast(t("requestSuccessMessage"));
       setAlreadyRequested(true);
+
+      // 성공 후 상태 다시 확인
+      const requestCheck = await findMoverApi.checkDesignatedQuoteRequest(String(mover.id), String(quoteId));
+      setAlreadyRequested(requestCheck.hasRequested);
     } catch (err: any) {
       if (err.message && err.message.includes("이미")) {
         setAlreadyRequested(true);
-        open({
-          title: t("alreadyRequested"),
-          children: <>{t("alreadyRequestedMessage")}</>,
-          buttons: [{ text: t("confirmButton"), onClick: close }],
-        });
+        showErrorToast(t("alreadyRequestedMessage"));
       } else {
-        open({
-          title: t("errorTitle"),
-          children: <>{err.message || t("requestFailedMessage")}</>,
-          buttons: [{ text: t("confirmButton"), onClick: close }],
-        });
+        showErrorToast(err.message || t("requestFailedMessage"));
       }
     } finally {
       setIsRequesting(false);
@@ -139,8 +163,8 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             onClick={handleDesignateRequest}
             disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {isMoveCompleted
-              ? t("moveCompleted")
+            {isEstimateCompleted
+              ? t("estimateConfirmed")
               : alreadyRequested
                 ? t("alreadyRequested")
                 : t("requestDesignatedQuoteButton")}
@@ -175,8 +199,8 @@ const RequestButton = ({ mover, quoteId, onMoverUpdate }: RequestButtonProps) =>
             onClick={handleDesignateRequest}
             disabled={isRequesting || isDesignatedRequestDisabled}
           >
-            {isMoveCompleted
-              ? t("moveCompleted")
+            {isEstimateCompleted
+              ? t("estimateConfirmed")
               : alreadyRequested
                 ? t("alreadyRequested")
                 : t("requestDesignatedQuoteButton")}

@@ -15,6 +15,7 @@ const SortDropdown: React.FC<BaseDropdownProps> = ({
   onOpenChange,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
   const selectedOption = options.find((option) => option.value === value);
 
   const handleSelect = (option: Option) => {
@@ -26,12 +27,29 @@ const SortDropdown: React.FC<BaseDropdownProps> = ({
     if (!disabled) setIsOpen((prev) => !prev);
   };
 
+  // 외부 클릭 감지
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   React.useEffect(() => {
     onOpenChange?.(isOpen);
   }, [isOpen, onOpenChange]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         type="button"
         onClick={handleToggle}
