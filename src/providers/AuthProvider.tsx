@@ -68,6 +68,15 @@ const getMainPageByUserType = (userType: TUser["userType"]) =>
   userType === "CUSTOMER" ? "/searchMover" : "/estimate/received";
 
 export default function AuthProvider({ children }: IAuthProviderProps) {
+  // 마운트 시작 시간 (기준점) - useRef로 고정
+  const mountStartTimeRef = useRef<number>(Date.now());
+  const mountStartTime = mountStartTimeRef.current;
+
+  // 시간 측정용 타이머
+  setTimeout(() => {
+    console.log("⏱️ AuthProvider 마운트 완료 시간:", Date.now() - mountStartTime, "ms");
+  }, 0);
+
   const [user, setUser] = useState<TUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
@@ -99,7 +108,14 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
   const getUser = async () => {
     try {
+      const getUserStartTime = Date.now();
+      console.log("⏱️ getUser 시작 시간 (마운트 기준):", getUserStartTime - mountStartTime, "ms");
+
       const response = await userApi.getUser();
+
+      const getUserEndTime = Date.now();
+      console.log("⏱️ getUser 완료 시간 (마운트 기준):", getUserEndTime - mountStartTime, "ms");
+      console.log("⏱️ getUser 총 소요 시간:", getUserEndTime - getUserStartTime, "ms");
 
       if (response.status === 404) {
         await logout();
@@ -203,7 +219,16 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const naverLogin = (userType: TUser["userType"]) => socialLogin("naver", userType);
 
   useEffect(() => {
+    const useEffectStartTime = Date.now();
+    console.log("⏱️ useEffect 시작 시간 (마운트 기준):", useEffectStartTime - mountStartTime, "ms");
+
     getUser();
+
+    setTimeout(() => {
+      const useEffectEndTime = Date.now();
+      console.log("⏱️ useEffect 완료 시간 (마운트 기준):", useEffectEndTime - mountStartTime, "ms");
+      console.log("⏱️ useEffect 총 소요 시간:", useEffectEndTime - useEffectStartTime, "ms");
+    }, 0);
   }, [pathname]);
 
   const contextValue: IAuthContextType = {

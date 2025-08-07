@@ -47,7 +47,6 @@ interface IMoverProfileUpdateInput {
 const userApi = {
   getUser: async () => {
     const response = await fetchWithAuth(`${API_URL}/users`);
-
     return response;
   },
 
