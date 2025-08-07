@@ -1,4 +1,4 @@
-export const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
+export const SERVICE_OPTIONS = ["small", "home", "office"];
 export const REGION_OPTIONS = [
   "서울",
   "경기",
@@ -21,9 +21,9 @@ export const REGION_OPTIONS = [
 
 // 서비스 옵션 매핑 - 새로운 API 스펙에 맞게 문자열로 변경
 export const SERVICE_MAPPING = {
-  소형이사: "SMALL",
-  가정이사: "HOME",
-  사무실이사: "OFFICE",
+  small: "SMALL",
+  home: "HOME",
+  office: "OFFICE",
 } as const;
 
 // 지역 영어 매핑

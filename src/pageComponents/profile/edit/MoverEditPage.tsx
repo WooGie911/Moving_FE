@@ -16,7 +16,7 @@ import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { useModal } from "@/components/common/modal/ModalContext";
 
-const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
+const SERVICE_OPTIONS = ["small", "home", "office"];
 const REGION_OPTIONS = [
   "서울",
   "경기",
@@ -39,9 +39,9 @@ const REGION_OPTIONS = [
 
 // 서비스 타입 매핑
 const serviceTypeMapping: { [key: string]: string } = {
-  소형이사: "SMALL",
-  가정이사: "HOME",
-  사무실이사: "OFFICE",
+  small: "SMALL",
+  home: "HOME",
+  office: "OFFICE",
 };
 
 // 지역 매핑
@@ -326,8 +326,8 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={30}
                   />
-                  <div className="flex justify-end mt-2">
-                    <div className={`text-sm ${intro.length >= 30 ? 'text-red-500' : 'text-gray-500'}`}>
+                  <div className="mt-2 flex justify-end">
+                    <div className={`text-sm ${intro.length >= 30 ? "text-red-500" : "text-gray-500"}`}>
                       {intro.length}/30
                     </div>
                   </div>
@@ -356,8 +356,8 @@ export default function MoverEditPage() {
                     wrapperClassName="w-[327px] lg:w-[500px]"
                     maxLength={300}
                   />
-                  <div className="flex justify-end mt-2">
-                    <div className={`text-sm ${desc.length >= 300 ? 'text-red-500' : 'text-gray-500'}`}>
+                  <div className="mt-2 flex justify-end">
+                    <div className={`text-sm ${desc.length >= 300 ? "text-red-500" : "text-gray-500"}`}>
                       {desc.length}/300
                     </div>
                   </div>
@@ -377,12 +377,14 @@ export default function MoverEditPage() {
                   {SERVICE_OPTIONS.map((service) => (
                     <CircleTextLabel
                       key={service}
-                      text={getServiceTypeTranslation(service, moverT)}
+                      text={moverT(`serviceTypes.${service}`)}
                       clickAble={true}
-                      isSelected={services.includes(service)}
+                      isSelected={services.includes(serviceTypeMapping[service])}
                       onClick={() =>
                         setServices((prev) =>
-                          prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
+                          prev.includes(serviceTypeMapping[service])
+                            ? prev.filter((s) => s !== serviceTypeMapping[service])
+                            : [...prev, serviceTypeMapping[service]],
                         )
                       }
                     />
