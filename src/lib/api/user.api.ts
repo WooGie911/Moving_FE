@@ -1,11 +1,10 @@
 import { getTokenFromCookie } from "@/utils/auth";
-import { apiGet, apiPatch, apiPost, apiPut } from "@/utils/apiHelpers";
+import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getAccessToken = async () => {
-  const accessToken = await getTokenFromCookie();
-  return accessToken;
+  return await getTokenFromCookie();
 };
 
 interface ICustomerProfileInput {
@@ -44,63 +43,57 @@ interface IMoverProfileUpdateInput {
   isVeteran?: boolean;
 }
 
+interface IMoverBasicInfoUpdate {
+  name?: string;
+  phoneNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 const userApi = {
+  // 사용자 정보 조회
   getUser: async () => {
-
-    const response = await apiGet(`/users`);
-
-
-    return response;
-  },
-
-  uploadFilesToS3: async (file: File) => {
-    // 1) Presigned URL 발급 요청
-    const res = await apiPost(`/users/profile/presignedUrl`, {
-      filename: file.name,
-      contentType: file.type,
-    });
-
-    // 2) Presigned URL로 S3에 직접 PUT 업로드
-    await fetch(res.uploadUrl, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type,
-      },
-    });
-
-    // 3) 업로드 완료된 S3 접근 URL 반환
-    return res.fileUrl;
+    return fetchWithAuth(`${API_URL}/users`);
   },
 
   // 프로필 조회
   getProfile: async (language?: string) => {
-    const queryParams = language ? `?lang=${language}` : "";
-    const response = await apiGet(`/users/profile${queryParams}`);
-    return response;
+    const query = language ? `?lang=${language}` : "";
+    return fetchWithAuth(`${API_URL}/users/profile${query}`);
   },
 
   // 프로필 등록
   postProfile: async (profile: ICustomerProfileInput | IMoverProfileInput) => {
-    const response = await apiPost(`/users/profile`, profile);
-
-    return response;
+    const response = await fetch(`${API_URL}/users/profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify(profile),
+      credentials: "include",
+    });
+    return response.json();
   },
 
   // 일반 유저 프로필 수정
   updateCustomerBasicInfo: async (data: ICustomerUpdateInput) => {
-    const response = await apiPatch(`/users/profile/customer`, data);
-    return response;
+    const response = await fetch(`${API_URL}/users/profile/customer`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    return response.json();
   },
 
-  updateMoverBasicInfo: async (data: {
-    name?: string;
-    phoneNumber?: string;
-    currentPassword?: string;
-    newPassword?: string;
-  }) => {
-    // CSRF 토큰을 항상 새로 요청 (안정성을 위해)
-    let csrfToken;
+  // 기사님 기본 정보 수정
+  updateMoverBasicInfo: async (data: IMoverBasicInfoUpdate) => {
+    let csrfToken: string | undefined;
+
     try {
       const csrfResponse = await fetch(`${API_URL}/csrf-token`, {
         method: "GET",
@@ -115,7 +108,7 @@ const userApi = {
         csrfToken = csrfData.data?.token;
       }
     } catch (error) {
-      console.error("CSRF 토큰 요청 실패:", error);
+      console.error("❌ CSRF 토큰 요청 실패:", error);
     }
 
     const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
@@ -128,10 +121,10 @@ const userApi = {
       body: JSON.stringify(data),
       credentials: "include",
     });
-
     return response.json();
   },
 
+  // 기사님 프로필 정보 수정
   updateMoverProfile: async (data: IMoverProfileUpdateInput) => {
     const response = await fetch(`${API_URL}/users/profile/mover`, {
       method: "PATCH",
@@ -143,6 +136,34 @@ const userApi = {
       credentials: "include",
     });
     return response.json();
+  },
+
+  // S3 이미지 업로드
+  uploadFilesToS3: async (file: File) => {
+    // 1. Presigned URL 요청
+    const presignedResponse = await fetch(`${API_URL}/users/profile/presignedUrl`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify({
+        filename: file.name,
+        contentType: file.type,
+      }),
+    });
+
+    const presigned = await presignedResponse.json();
+
+    // 2. Presigned URL로 S3에 직접 업로드
+    await fetch(presigned.uploadUrl, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+
+    // 3. 업로드 완료된 S3 접근 URL 반환
+    return presigned.fileUrl;
   },
 };
 

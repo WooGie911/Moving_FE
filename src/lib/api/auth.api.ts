@@ -1,39 +1,88 @@
 import { ISignInFormValues, ISignUpFormValues } from "@/types/auth";
-import { apiPost } from "@/utils/apiHelpers";
+import { getTokenFromCookie } from "@/utils/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const getAccessToken = async () => {
+  const accessToken = await getTokenFromCookie();
+  return accessToken;
+};
+
 const authApi = {
   signIn: async (data: ISignInFormValues) => {
-    const response = await apiPost(`/auth/sign-in`, data);
+    const response = await fetch(`${API_URL}/auth/sign-in`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   },
 
   signUp: async (data: ISignUpFormValues) => {
-    const response = await apiPost(`/auth/sign-up`, data);
+    const response = await fetch(`${API_URL}/auth/sign-up`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   },
 
   logout: async () => {
-    const response = await apiPost(`/auth/logout`, {});
+    const response = await fetch(`${API_URL}/auth/logout`, {
+      headers: {
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      method: "POST",
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   },
 
   // 유저 타입 변경
   switchUserType: async (userType: "CUSTOMER" | "MOVER") => {
-    const response = await apiPost(`/auth/switch-role`, { userType });
+    const response = await fetch(`${API_URL}/auth/switch-role`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: JSON.stringify({ userType }),
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   },
 
   // 리프레쉬 토큰을 사용한 토큰 갱신
   refreshToken: async () => {
-    const response = await apiPost(`/auth/refresh-token`, {});
+    const response = await fetch(`${API_URL}/auth/refresh-token`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      credentials: "include",
+    });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   },
 
   // 구글 로그인 (페이지 리디렉션 방식)
@@ -41,18 +90,15 @@ const authApi = {
     // 전체 페이지를 구글 OAuth로 리디렉션
     window.location.href = `${API_URL}/auth/google?userType=${userType}`;
   },
-
   // 카카오 로그인 (페이지 리디렉션 방식)
   kakaoLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
     // 전체 페이지를 카카오 OAuth로 리디렉션
     window.location.href = `${API_URL}/auth/kakao?userType=${userType}`;
   },
-
   // 네이버 로그인 (페이지 리디렉션 방식)
   naverLogin: async (userType: "CUSTOMER" | "MOVER"): Promise<void> => {
     // 전체 페이지를 네이버 OAuth로 리디렉션
     window.location.href = `${API_URL}/auth/naver?userType=${userType}`;
   },
 };
-
 export default authApi;
