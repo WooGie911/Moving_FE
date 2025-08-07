@@ -3,7 +3,7 @@ import React from "react";
 import { DetailMoveInfo } from "../../../../estimateRequest/(my)/DetailMoveInfo";
 import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { TEstimateRequestResponse } from "@/types/moverEstimate";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
 import { formatDateDot } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { useTranslations, useLocale } from "next-intl";

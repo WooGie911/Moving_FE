@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import sort_active from "@/assets/icon/filter/icon-filter-active.png";
-import sort_inactive from "@/assets/icon/filter/icon-filter-inactive.png";
+import sort_active from "@/assets/icon/filter/icon-filter-active.svg";
+import sort_inactive from "@/assets/icon/filter/icon-filter-inactive.svg";
 import { useModal, useModalStore } from "@/components/common/modal/ModalContext";
 import { SelectCheckBox } from "./SelectCheckBox";
 import { SelectMovingType } from "./SelectMovingType";
