@@ -11,15 +11,16 @@ import { IWritableCardData, IReviewForm } from "@/types/review";
 
 import ReviewWriteModal from "@/components/review/writable/ReviewWriteModal";
 import { useModal } from "@/components/common/modal/ModalContext";
-import { useWindowWidth } from "@/hooks/useWindowWidth";
 import Pagination from "@/components/common/pagination/Pagination";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { useTranslations, useLocale } from "next-intl";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import * as Sentry from "@sentry/nextjs";
 
 const WritableReviewPage = () => {
   const [page, setPage] = useState(1);
   const { open: openModal, close: closeModal } = useModal();
   const queryClient = useQueryClient();
-  const deviceType = useWindowWidth();
   const t = useTranslations("review");
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -28,43 +29,89 @@ const WritableReviewPage = () => {
     setPage(newPage);
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["writableReviews", page, locale],
     queryFn: () => reviewApi.fetchWritableReviews(page, 4, locale),
-    placeholderData: { items: [], total: 0, page, pageSize: 4, hasNextPage: false, hasPrevPage: false },
   });
 
-  const { mutate: postReview, isPending } = useMutation({
+  const { mutate: postReview, isPending: isSubmitting } = useMutation({
     mutationFn: ({ reviewId, rating, content }: { reviewId: string; rating: number; content: string }) =>
       reviewApi.postReview(reviewId, rating, content, locale),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      // 작성 가능한 리뷰 목록 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["writableReviews", page, locale] });
+
+      // 기사님 상세 정보 캐시 무효화 (모든 기사님)
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "mover",
+      });
+
+      // 기사님 리스트 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+
+      // 찜한 기사님 목록 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
+
       closeModal();
+      showSuccessToast(t("reviewWriteSuccess"));
     },
-    onError: () => {
-      alert(t("reviewWriteFailed"));
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: {
+          action: "post_review",
+          page: "writable_review_page",
+        },
+        extra: {
+          userAction: "리뷰 작성",
+          page: "작성 가능한 리뷰 페이지",
+        },
+      });
+      showErrorToast(t("reviewWriteFailed"));
     },
   });
 
   const onSubmit = useCallback(
     (reviewId: string, data: IReviewForm) => {
-      postReview({ reviewId, ...data });
+      // 확인 모달 표시
+      openModal({
+        title: t("confirmReviewWrite"),
+        type: "center",
+        children: (
+          <div className="py-4 text-center">
+            <p className="mb-4 text-gray-700">{t("confirmReviewWriteMessage")}</p>
+          </div>
+        ),
+        buttons: [
+          {
+            text: t("cancel"),
+            onClick: closeModal,
+            variant: "outlined",
+          },
+          {
+            text: t("confirm"),
+            onClick: () => {
+              closeModal();
+              postReview({ reviewId, ...data });
+            },
+            disabled: isSubmitting,
+          },
+        ],
+      });
     },
-    [postReview],
+    [openModal, closeModal, postReview, isSubmitting, t],
   );
 
   const handleWriteModalOpen = useCallback(
     (card: IWritableCardData) => {
-      const modalType = deviceType === "mobile" ? "bottomSheet" : "center";
       openModal({
         title: t("writeReview"),
-        type: modalType,
+        type: "center",
         children: card ? (
-          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isPending} />
+          <ReviewWriteModal card={card} onSubmit={(data) => onSubmit(card.reviewId, data)} isSubmitting={isSubmitting} />
         ) : null,
       });
     },
-    [deviceType, openModal, t, onSubmit, isPending],
+    [openModal, t, onSubmit, isSubmitting],
   );
 
   // URL 쿼리 파라미터 처리 - 리뷰 작성 모달 자동 열기
@@ -87,29 +134,33 @@ const WritableReviewPage = () => {
   const totalPages = data ? Math.ceil(data.total / (data.pageSize || 4)) : 1;
 
   return (
-    <main className="flex flex-col items-center justify-center px-6 py-10">
-      {isLoading ? (
-        <section className="py-10 text-center" aria-label="로딩 중">
-          <p>{t("loading")}</p>
-        </section>
-      ) : isError ? (
-        <section className="py-10 text-center text-red-500" aria-label="오류 발생">
-          <p>{t("error")}</p>
-        </section>
-      ) : cards.length === 0 ? (
-        <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
-          <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
-          <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
-        </section>
+    <>
+      {isPending ? (
+        <MovingTruckLoader size="lg" loadingText="작성 가능한 리뷰를 불러오는 중입니다..." />
+      ) : isSubmitting ? (
+        <MovingTruckLoader size="lg" loadingText="리뷰를 작성하는 중입니다..." />
       ) : (
-        <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
-          <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
-        </section>
+        <main className="flex min-h-screen flex-col items-center bg-gray-100 px-6 py-10">
+          {isError ? (
+            <section className="py-10 text-center text-red-500" aria-label="오류 발생">
+              <p>{t("error")}</p>
+            </section>
+          ) : cards.length === 0 ? (
+            <section className="flex flex-col items-center justify-center py-20" aria-label="작성 가능한 리뷰 없음">
+              <Image src={noReview} alt={t("noWritableReviews")} className="mb-6 h-50 w-60" />
+              <p className="text-lg font-semibold text-gray-400">{t("noWritableReviews")}</p>
+            </section>
+          ) : (
+            <section className="flex w-full justify-center" aria-label="작성 가능한 리뷰 목록">
+              <WritableMoverCardList cards={cards} onClickWrite={handleWriteModalOpen} />
+            </section>
+          )}
+          <footer className="mt-8 flex justify-center">
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
+          </footer>
+        </main>
       )}
-      <footer className="mt-8 flex justify-center">
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} size="sm" />
-      </footer>
-    </main>
+    </>
   );
 };
 

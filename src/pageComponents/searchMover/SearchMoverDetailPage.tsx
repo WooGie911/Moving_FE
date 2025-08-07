@@ -2,10 +2,11 @@
 
 import DetailInformation from "@/components/searchMover/[id]/DetailInformation";
 import TopBar from "@/components/searchMover/[id]/TopBar";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMoverDetail } from "@/hooks/useMoverData";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const SearchMoverDetailPage = () => {
   const { id } = useParams() as { id: string };
@@ -13,13 +14,15 @@ const SearchMoverDetailPage = () => {
 
   const { data: mover, isLoading, isError, error } = useMoverDetail(id);
 
+  // 페이지 마운트 시 스크롤을 맨 위로 올림
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
-        </div>
+      <div className="min-h-screen bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText="기사님 정보를 불러오는 중..." />
       </div>
     );
   }

@@ -19,7 +19,7 @@ export const getAuthHeaders = async (
   return {
     "Content-Type": "application/json",
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-    ...(csrfToken && { "X-XSRF-TOKEN": csrfToken }),
+    ...(csrfToken && { "X-CSRF-Token": csrfToken }),
     ...additionalHeaders,
   };
 };

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
 import defaultHeader from "@/assets/img/etc/detailHeader.png";
-import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.png";
+import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
 import editIcon from "@/assets/icon/edit/icon-edit.png";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
@@ -125,15 +125,21 @@ const MoverMyPage = () => {
         try {
           const response = await findMoverApi.getMoverReviews(profile.id, 1, 1000);
 
-          const convertedReviews: IReview[] = response.data.items.map((apiReview: IApiReview) => ({
+          const convertedReviews = response.data.items.map((apiReview: IApiReview) => ({
             id: apiReview.id,
             rating: apiReview.rating,
             content: apiReview.content,
             createdAt: apiReview.createdAt,
+            updatedAt: apiReview.createdAt,
+            deletedAt: null,
             userId: apiReview.customerId,
+            customerId: apiReview.customerId,
             moverId: apiReview.moverId,
             quoteId: apiReview.estimateRequestId,
+            estimateRequestId: apiReview.estimateRequestId,
             estimateId: apiReview.estimate?.id || "",
+            estimateRequest: null,
+            estimate: apiReview.estimate || null,
             status: "COMPLETED" as const,
             isPublic: true,
             user: {
@@ -141,7 +147,7 @@ const MoverMyPage = () => {
               name: apiReview.nickname,
             },
           }));
-          setAllReviews(convertedReviews);
+          setAllReviews(convertedReviews as unknown as IReview[]);
         } catch (error) {
           setAllReviews([]);
         }
@@ -261,7 +267,7 @@ const MoverMyPage = () => {
                 </button>
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -277,7 +283,7 @@ const MoverMyPage = () => {
               <div className="hidden w-full flex-row gap-4 md:flex lg:hidden">
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -303,28 +309,28 @@ const MoverMyPage = () => {
                 </div>
                 <div className="bg-bg-secondary rounded-24 inline-flex h-28 items-center justify-between self-stretch border border-gray-200 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40">
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start self-stretch text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start self-stretch text-center text-sm leading-relaxed font-normal whitespace-nowrap text-gray-800 sm:text-base">
                       {t("myPage.inProgress")}
                     </div>
-                    <div className="text-primary-400 justify-center self-stretch text-center text-lg sm:text-xl leading-loose font-bold">
+                    <div className="text-primary-400 justify-center self-stretch text-center text-lg leading-loose font-bold sm:text-xl">
                       {profile.completedCount} {tShared("shared.units.cases")}
                     </div>
                   </div>
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start text-center text-sm leading-relaxed font-normal whitespace-nowrap text-gray-800 sm:text-base">
                       {t("myPage.reviews")}
                     </div>
                     <div className="inline-flex items-center justify-start gap-1.5">
-                      <div className="text-primary-400 justify-center text-lg sm:text-xl leading-loose font-bold">
-                        {profile.avgRating.toFixed(1)}
+                      <div className="text-primary-400 justify-center text-lg leading-loose font-bold sm:text-xl">
+                        {(profile.averageRating || 0).toFixed(1)}
                       </div>
                     </div>
                   </div>
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
-                    <div className="justify-start self-stretch text-center text-sm sm:text-base leading-relaxed font-normal whitespace-nowrap text-gray-800">
+                    <div className="justify-start self-stretch text-center text-sm leading-relaxed font-normal whitespace-nowrap text-gray-800 sm:text-base">
                       {t("myPage.totalExperience")}
                     </div>
-                    <div className="text-primary-400 justify-center self-stretch text-center text-lg sm:text-xl leading-loose font-bold">
+                    <div className="text-primary-400 justify-center self-stretch text-center text-lg leading-loose font-bold sm:text-xl">
                       {profile.experience} {tShared("shared.units.years")}
                     </div>
                   </div>
@@ -336,15 +342,28 @@ const MoverMyPage = () => {
                 {t("myPage.providedServices")}
               </div>
               <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {profile.serviceTypes.map((serviceType: any, idx: number) => (
-                  <CircleTextLabel
-                    key={idx}
-                    text={getServiceTypeTranslation(serviceType.service?.name || serviceType, t)}
-                    clickAble={false}
-                    hasBorder1={true}
-                    hasBorder2={true}
-                  />
-                ))}
+                {profile.serviceTypes.map((serviceType: any, idx: number) => {
+                  const serviceName = serviceType.service?.name || serviceType;
+                  // 서비스 타입에 따른 번역 처리
+                  let translatedText = serviceName;
+                  if (serviceName === "소형이사") {
+                    translatedText = tShared("service.소형이사");
+                  } else if (serviceName === "가정이사") {
+                    translatedText = tShared("service.가정이사");
+                  } else if (serviceName === "사무실이사") {
+                    translatedText = tShared("service.사무실이사");
+                  }
+
+                  return (
+                    <CircleTextLabel
+                      key={idx}
+                      text={translatedText}
+                      clickAble={false}
+                      hasBorder1={true}
+                      hasBorder2={true}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div className="flex flex-col items-start justify-start gap-4">
@@ -365,7 +384,7 @@ const MoverMyPage = () => {
                 )}
               </div>
             </div>
-            <div className="h-0 w-full outline outline-1 outline-offset-[-0.50px] outline-gray-200" />
+            <div className="h-0 w-full outline-1 outline-offset-[-0.50px] outline-gray-200" />
             <div className="flex flex-col items-start justify-start gap-10 self-stretch">
               <div className="rounded-24 w-full bg-white p-6">
                 <ReviewAvg mover={profile} reviews={allReviews} />
@@ -387,7 +406,7 @@ const MoverMyPage = () => {
             </button>
             <button
               onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
+              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
             >
               <div className="flex items-center justify-start gap-1.5">
                 <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">

@@ -10,14 +10,35 @@ import MoverList from "@/components/searchMover/MoverList";
 import FavoriteMoverList from "@/components/searchMover/FavoriteMoverList";
 import SearchBar from "@/components/searchMover/SearchBar";
 import FilterBar from "@/components/searchMover/FilterBar";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { useMoverList, useFavoriteMovers } from "@/hooks/useMoverData";
+import { useSearchMoverStore } from "@/stores/searchMoverStore";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
   const { user, isLoggedIn } = useAuth();
   const t = useTranslations("mover");
   const locale = useLocale();
+  const { region, serviceTypeId, search, sort } = useSearchMoverStore();
   const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // 쿼리 파라미터
+  const queryParams = {
+    region,
+    serviceTypeId,
+    search,
+    sort,
+    take: 4,
+  };
+
+  // 기사님 리스트와 찜한 기사님 데이터 가져오기
+  const { isLoading: moversLoading } = useMoverList(queryParams);
+  const { isLoading: favoritesLoading } = useFavoriteMovers();
+
+  // 전체 로딩 상태 계산
+  const isOverallLoading =
+    moversLoading || (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoritesLoading);
 
   useEffect(() => {
     if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
@@ -34,6 +55,15 @@ const SearchMoverPage = () => {
 
   const shouldShowBookmarked =
     deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
+
+  // 전체 로딩 중일 때 MovingTruckLoader 표시
+  if (isOverallLoading) {
+    return (
+      <div className="min-h-screen bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText="기사님을 찾는 중..." />
+      </div>
+    );
+  }
 
   return (
     <div

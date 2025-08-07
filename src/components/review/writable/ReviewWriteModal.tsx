@@ -7,8 +7,8 @@ import { IWritableCardData, IReviewForm } from "@/types/review";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
-import arrowIcon from "@/assets/icon/arrow/icon-arrow.webp";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.svg";
+import arrowIcon from "@/assets/icon/arrow/icon-arrow.svg";
 import { Button } from "@/components/common/button/Button";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations, useLocale } from "next-intl";
@@ -29,7 +29,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full justify-center md:min-w-[375px] lg:w-[600px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex flex-col gap-y-5">
           <div className="flex flex-col gap-y-5">
             <div className="flex">
@@ -40,8 +40,8 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
             <div className="flex flex-row items-start justify-between">
               {/* 텍스트 영역 */}
               <div>
-                <div className="flex flex-col">
-                  <Image src={estimateIcon} alt={t("verifiedDriver")} className="h-6 w-5" />
+                <div className="flex flex-col gap-y-1">
+                  <Image src={estimateIcon} alt={t("verifiedDriver")} className="h-5 w-4" />
                   <div className="text-xl text-[16px] font-semibold lg:text-[18px]">
                     {card.mover.nickname} {t("driverSuffix")}
                   </div>
@@ -64,7 +64,8 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
                   <div>
                     <div className="text-gray-500">{t("departure")}</div>
                     <div className="text-black-500">
-                      {locale === "ko" ? shortenRegionName(card.fromAddress.region) : card.fromAddress.region} {card.fromAddress.city}
+                      {locale === "ko" ? shortenRegionName(card.fromAddress.region) : card.fromAddress.region}{" "}
+                      {card.fromAddress.city}
                     </div>
                   </div>
                   <div>
@@ -74,7 +75,8 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
                   <div>
                     <div className="text-gray-500">{t("arrival")}</div>
                     <div className="text-black-500">
-                      {locale === "ko" ? shortenRegionName(card.toAddress.region) : card.toAddress.region} {card.toAddress.city}
+                      {locale === "ko" ? shortenRegionName(card.toAddress.region) : card.toAddress.region}{" "}
+                      {card.toAddress.city}
                     </div>
                   </div>
                 </div>

@@ -74,6 +74,8 @@ function ModalLayout({ title, children, buttons, onClose, type = "center" }: IMo
     function handleResize() {
       if (type === "bottomSheet") {
         setResponsiveType(window.innerWidth < 768 ? "bottomSheet" : "center");
+      } else if (type === "center") {
+        setResponsiveType(window.innerWidth < 768 ? "bottomSheet" : "center");
       } else {
         setResponsiveType(type);
       }
