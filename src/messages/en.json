@@ -558,6 +558,11 @@
   },
   "mover": {
     "title": "Find Movers",
+    "metadata": {
+      "title": "Find Movers | Moving",
+      "description": "Find reliable movers"
+    },
+    "loadingMoverInfo": "Loading mover information...",
     "loading": "Loading...",
     "customer": "Customer",
     "notification": "Notification",
