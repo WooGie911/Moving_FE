@@ -44,6 +44,13 @@ interface IMoverProfileUpdateInput {
   isVeteran?: boolean;
 }
 
+interface IMoverBasicInfoUpdateInput {
+  name?: string;
+  phoneNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 const userApi = {
   getUser: async () => {
     const response = await apiGet(`/users`);
@@ -91,56 +98,14 @@ const userApi = {
     return response;
   },
 
-  updateMoverBasicInfo: async (data: {
-    name?: string;
-    phoneNumber?: string;
-    currentPassword?: string;
-    newPassword?: string;
-  }) => {
-    // CSRF 토큰을 항상 새로 요청 (안정성을 위해)
-    let csrfToken;
-    try {
-      const csrfResponse = await fetch(`${API_URL}/csrf-token`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-        credentials: "include",
-      });
-
-      if (csrfResponse.ok) {
-        const csrfData = await csrfResponse.json();
-        csrfToken = csrfData.data?.token;
-      }
-    } catch (error) {
-      console.error("CSRF 토큰 요청 실패:", error);
-    }
-
-    const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${await getAccessToken()}`,
-        ...(csrfToken && { "X-CSRF-Token": csrfToken }),
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-
-    return response.json();
+  // 기사님 기본정보 수정
+  updateMoverBasicInfo: async (data: IMoverBasicInfoUpdateInput) => {
+    return apiPatch(`/users/profile/mover/basic`, data);
   },
 
+  // 기사님 프로필 수정
   updateMoverProfile: async (data: IMoverProfileUpdateInput) => {
-    const response = await fetch(`${API_URL}/users/profile/mover`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${await getAccessToken()}`,
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
-    return response.json();
+    return apiPatch(`/users/profile/mover`, data);
   },
 };
 

@@ -15,6 +15,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 const SERVICE_OPTIONS = ["small", "home", "office"];
 const REGION_OPTIONS = [
@@ -195,8 +196,9 @@ export default function MoverEditPage() {
       } else {
         showErrorToast(result.message || t("edit.errorMessage"));
       }
-    } catch (e) {
-      showErrorToast(t("edit.generalError"));
+    } catch (error: any) {
+      console.log("error", error.message);
+      handleAuthErrorToast(t, error.message);
     }
   };
 
@@ -355,21 +357,30 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
-                  {SERVICE_OPTIONS.map((service) => (
-                    <CircleTextLabel
-                      key={service}
-                      text={moverT(`serviceTypes.${service}`)}
-                      clickAble={true}
-                      isSelected={services.includes(serviceTypeMapping[service])}
-                      onClick={() =>
-                        setServices((prev) =>
-                          prev.includes(serviceTypeMapping[service])
-                            ? prev.filter((s) => s !== serviceTypeMapping[service])
-                            : [...prev, serviceTypeMapping[service]],
-                        )
-                      }
-                    />
-                  ))}
+                  {SERVICE_OPTIONS.map((service) => {
+                    const serviceNameMap: { [key: string]: string } = {
+                      small: "소형이사",
+                      home: "가정이사", 
+                      office: "사무실이사",
+                    };
+                    const serviceName = serviceNameMap[service];
+                    
+                    return (
+                      <CircleTextLabel
+                        key={service}
+                        text={moverT(`serviceTypes.${service}`)}
+                        clickAble={true}
+                        isSelected={services.includes(serviceName)}
+                        onClick={() =>
+                          setServices((prev) =>
+                            prev.includes(serviceName)
+                              ? prev.filter((s) => s !== serviceName)
+                              : [...prev, serviceName],
+                          )
+                        }
+                      />
+                    );
+                  })}
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
