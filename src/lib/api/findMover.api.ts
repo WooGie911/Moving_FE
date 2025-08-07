@@ -92,6 +92,7 @@ const findMoverApi = {
       const endpoint = `/movers/${moverId}${queryParams}`;
 
       const data: ApiResponse<IMoverInfo> = await apiGet(endpoint);
+
       return data.success ? data.data : null;
     } catch (error) {
       console.error("기사님 상세 조회 실패:", error);
@@ -125,35 +126,16 @@ const findMoverApi = {
 
       // 인증 토큰과 CSRF 토큰 가져오기
       const { getTokenFromCookie } = await import("@/utils/auth");
-      const { getCSRFTokenFromCookie, getCSRFToken } = await import("@/utils/csrf");
+      const { getCSRFTokenFromCookie } = await import("@/utils/csrf");
 
       const accessToken = await getTokenFromCookie();
-
-      // CSRF 토큰을 항상 새로 요청 (캐시된 토큰 문제 해결)
-      let csrfToken = null;
-      try {
-        console.log("🔄 CSRF 토큰 새로 요청 중...");
-        csrfToken = await getCSRFToken();
-        console.log("✅ 새 CSRF 토큰:", csrfToken);
-      } catch (error) {
-        console.warn("❌ CSRF 토큰 가져오기 실패:", error);
-        // 실패 시 쿠키에서 가져오기 시도
-        csrfToken = getCSRFTokenFromCookie();
-      }
-
-      console.log("🔍 CSRF 디버깅:", {
-        hasAccessToken: !!accessToken,
-        hasCSRFToken: !!csrfToken,
-        csrfToken: csrfToken,
-      });
+      const csrfToken = getCSRFTokenFromCookie();
 
       const headers = {
         "Content-Type": "application/json",
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         ...(csrfToken && { "X-CSRF-Token": csrfToken }),
       };
-
-      console.log("📤 요청 헤더:", headers);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
         method: "POST",
@@ -165,8 +147,6 @@ const findMoverApi = {
           expiresAt: data.expiresAt,
         }),
       });
-
-      console.log("📥 응답 상태:", response.status, response.statusText);
 
       const result: ApiResponse<DesignatedQuoteRequestResponse> = await response.json();
 
@@ -192,14 +172,8 @@ const findMoverApi = {
     quoteId: string,
   ): Promise<DesignatedQuoteRequestCheckResponse> => {
     try {
-      console.log("[checkDesignatedQuoteRequest] moverId:", moverId);
-      console.log("[checkDesignatedQuoteRequest] quoteId:", quoteId);
-
       const endpoint = `/movers/${moverId}/quote-request/check?quoteId=${quoteId}`;
-      console.log("[checkDesignatedQuoteRequest] endpoint:", endpoint);
-
       const result: ApiResponse<DesignatedQuoteRequestCheckResponse> = await apiGet(endpoint);
-      console.log("[checkDesignatedQuoteRequest] success result:", result);
       return result.data;
     } catch (error) {
       console.error("지정 견적 요청 여부 조회 에러:", error);
@@ -284,6 +258,19 @@ const findMoverApi = {
       return result.data;
     } catch (error) {
       console.error("찜하기 제거 실패:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * 이사일이 지나지 않은 견적 확인
+   */
+  checkActiveEstimateRequest: async (): Promise<{ hasActiveRequest: boolean }> => {
+    try {
+      const result: ApiResponse<{ hasActiveRequest: boolean }> = await apiGet("/movers/active-estimate-request/check");
+      return result.data;
+    } catch (error) {
+      console.error("이사일이 지나지 않은 견적 확인 에러:", error);
       throw error;
     }
   },
