@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import defaultProfileImg from "@/assets/img/mascot/moverprofile-xl.png";
-import info from "@/assets/icon/info/icon-info.png";
+import defaultProfileImg from "@/assets/img/mascot/moverprofile-xl.webp";
+import info from "@/assets/icon/info/icon-info.svg";
 import { IDetailPageMainSeactionProps, TEstimateResponse, TMoverInfo } from "@/types/customerEstimateRequest";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -89,7 +89,7 @@ export const DetailPageMainSeaction = ({
           estimateCount={0}
           designatedEstimateCount={0}
         />
-        {estimate.status === "REJECTED" || estimate.status === "EXPIRED" ? (
+        {estimate.status === "REJECTED" || estimate.status === "EXPIRED" || estimate.status === "CANCELLED" ? (
           <div className="my-2 flex w-full flex-col items-start justify-center gap-10">
             <Button
               variant="solid"
@@ -100,7 +100,9 @@ export const DetailPageMainSeaction = ({
               state="disabled"
             >
               <div className="flex flex-row items-center justify-center gap-3">
-                <Image src={info} alt="like" width={24} height={24} />
+                <div className="relative h-[24px] w-[24px]">
+                  <Image src={info} alt="like" fill className="object-contain" />
+                </div>
                 <p className="text-black-100 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
                   {t("notConfirmedEstimate")}
                 </p>
@@ -122,6 +124,7 @@ export const DetailPageMainSeaction = ({
               estimateId={estimate.id}
               estimateStatus={estimate.status}
               hasConfirmedEstimate={estimates?.some((e) => e.status === "ACCEPTED") || false}
+              mover={estimate.mover}
             />
           ) : (
             ""
@@ -136,6 +139,7 @@ export const DetailPageMainSeaction = ({
               estimateStatus={estimate.status}
               hasConfirmedEstimate={estimates?.some((e) => e.status === "ACCEPTED") || false}
               estimatePrice={formatNumber(estimate.price)}
+              mover={estimate.mover}
             />
           ) : (
             ""

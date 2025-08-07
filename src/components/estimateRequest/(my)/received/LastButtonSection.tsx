@@ -1,20 +1,28 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import like from "@/assets/icon/like/icon-like-black.png";
+import like from "@/assets/icon/like/icon-like-button-md.svg";
 import { Button } from "@/components/common/button/Button";
 import { useTranslations, useLocale } from "next-intl";
 import { useModal } from "@/components/common/modal/ModalContext";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TMoverInfo } from "@/types/customerEstimateRequest";
+import { FavoriteService } from "@/services/favoriteService";
 
-interface LastButtonSectionProps {
+interface ILastButtonSectionProps {
   estimateId: string;
   estimateStatus: string;
   hasConfirmedEstimate: boolean;
+  mover: TMoverInfo;
 }
 
-export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEstimate }: LastButtonSectionProps) => {
+export const LastButtonSection = ({
+  estimateId,
+  estimateStatus,
+  hasConfirmedEstimate,
+  mover,
+}: ILastButtonSectionProps) => {
   const t = useTranslations("estimateRequest");
   const tCommon = useTranslations("common");
   const { open, close } = useModal();
@@ -41,6 +49,27 @@ export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEsti
     },
   });
 
+  // 찜하기 추가/제거 mutation
+  const favoriteMutation = useMutation({
+    mutationFn: async (moverId: string) => {
+      if (mover.isFavorite) {
+        return await FavoriteService.removeFavorite(moverId);
+      } else {
+        return await FavoriteService.addFavorite(moverId);
+      }
+    },
+    onSuccess: () => {
+      // 캐시 무효화하여 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      queryClient.invalidateQueries({ queryKey: ["favoriteMovers", locale] });
+    },
+    onError: (error) => {
+      console.error("찜하기 처리 실패:", error);
+      // TODO: 에러 메시지 표시
+    },
+  });
+
   // 견적 확정 핸들러
   const handleConfirmEstimate = () => {
     if (!estimateId) {
@@ -49,6 +78,16 @@ export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEsti
     }
 
     confirmEstimateMutation.mutate(estimateId);
+  };
+
+  // 찜하기 핸들러
+  const handleFavorite = () => {
+    if (!mover.id) {
+      console.error("기사님 ID가 없습니다.");
+      return;
+    }
+
+    favoriteMutation.mutate(mover.id);
   };
 
   // 버튼 상태 결정
@@ -84,10 +123,12 @@ export const LastButtonSection = ({ estimateId, estimateStatus, hasConfirmedEsti
 
   return (
     <div className="flex w-full flex-row items-center justify-center gap-2 py-7">
-      <button className="border-border-light flex h-[54px] w-[54px] flex-row items-center justify-center rounded-[16px] border-1 lg:hidden">
-        <div className="relative h-6 w-6">
-          <Image src={like} alt="like" fill />
-        </div>
+      <button
+        className={`relative flex h-[54px] w-[54px] cursor-pointer flex-row items-center justify-center hover:cursor-pointer lg:hidden`}
+        onClick={handleFavorite}
+        disabled={favoriteMutation.isPending}
+      >
+        <Image src={like} alt="like" fill className="object-contain" />
       </button>
       <Button
         variant="solid"

@@ -2,10 +2,10 @@
 import { ICardListProps } from "@/types/customerEstimateRequest";
 import React, { useState } from "react";
 import { CardList } from "../CardList";
-import down from "@/assets/icon/arrow/icon-down-sm.png";
-import downLg from "@/assets/icon/arrow/icon-down-lg.png";
-import up from "@/assets/icon/arrow/icon-up-sm.png";
-import upLg from "@/assets/icon/arrow/icon-up-lg.png";
+import down from "@/assets/icon/arrow/icon-down-md.svg";
+import downLg from "@/assets/icon/arrow/icon-down-lg.svg";
+import up from "@/assets/icon/arrow/icon-up-md.svg";
+import upLg from "@/assets/icon/arrow/icon-up-lg.svg";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/common/button/Button";
@@ -118,11 +118,11 @@ export const EstimateListSection = ({
           </p>
 
           <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
-            <Image src={isOpen ? up : down} alt="dropdown" fill />
+            <Image src={isOpen ? up : down} alt="dropdown" fill className="object-contain" />
           </div>
 
           <div className="relative hidden lg:block lg:h-[36px] lg:w-[36px] lg:flex-row lg:items-center lg:justify-center">
-            <Image src={isOpen ? upLg : downLg} alt="dropdown" fill />
+            <Image src={isOpen ? upLg : downLg} alt="dropdown" fill className="object-contain" />
           </div>
         </button>
 

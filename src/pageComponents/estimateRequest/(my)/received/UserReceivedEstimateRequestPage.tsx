@@ -5,7 +5,7 @@ import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
-import notfound from "@/assets/img/mascot/notfound.png";
+import notfound from "@/assets/img/mascot/notfound.webp";
 import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";

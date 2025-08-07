@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import share from "@/assets/icon/clip/icon-clip.png";
-import kakaohare from "@/assets/icon/share/icon-share-kakao-sm.png";
-import facebookshare from "@/assets/icon/share/icon-share-facebook-sm.png";
+import share from "@/assets/icon/clip/icon-clip-md.svg";
+import kakaohare from "@/assets/icon/share/icon-share-kakao-md.svg";
+import facebookshare from "@/assets/icon/share/icon-share-facebook-md.svg";
 import {
   copyToClipboard,
   getCurrentPageUrl,
@@ -49,7 +49,7 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
       return {
         title: t("shareEstimate"),
         description: t("shareEstimate"),
-        imageUrl: "https://gomoving.site/logo-m.png",
+        imageUrl: "https://gomoving.site/logo-m.webp",
       };
     }
 
@@ -75,7 +75,7 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
     }
 
     const shareDescription = `${estimate.mover?.nickname}  기사님의 견적서입니다! ${moveInfo} 견적가 ${estimate.price.toLocaleString()}원으로 안전하고 신뢰할 수 있는 이사 서비스를 제공합니다.`;
-    const shareImageUrl = estimate.mover?.profileImage || "https://gomoving.site/logo-m.png";
+    const shareImageUrl = estimate.mover?.profileImage || "https://gomoving.site/logo-m.webp";
 
     return { title: shareTitle, description: shareDescription, imageUrl: shareImageUrl };
   };
@@ -135,27 +135,25 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
 
         <div className="flex w-full flex-row items-center justify-start gap-3 md:gap-4">
           <button
-            className="border-border-light flex h-10 w-10 cursor-pointer flex-row items-center justify-center rounded-[8px] border-1 transition-colors hover:bg-gray-50 lg:h-16 lg:w-16 lg:rounded-[16px]"
+            className="relative flex h-10 w-10 cursor-pointer flex-row items-center justify-center rounded-[8px] transition-colors hover:bg-gray-50 lg:h-16 lg:w-16 lg:rounded-[16px]"
             onClick={handleClipCopy}
             aria-label={t("copyLinkLabel")}
           >
-            <div className="relative h-6 w-6 lg:h-9 lg:w-9">
-              <Image src={share} alt="share" fill />
-            </div>
+            <Image src={share} alt="share" fill className="object-contain" />
           </button>
           <button
             className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
             onClick={handleKakaoShare}
             aria-label={t("shareKakaoLabel")}
           >
-            <Image src={kakaohare} alt="kakaohare" fill />
+            <Image src={kakaohare} alt="kakaohare" fill className="object-contain" />
           </button>
           <button
             className="relative h-10 w-10 cursor-pointer transition-transform hover:scale-105 lg:h-16 lg:w-16"
             onClick={handleFacebookShare}
             aria-label={t("shareFacebookLabel")}
           >
-            <Image src={facebookshare} alt="facebookshare" fill />
+            <Image src={facebookshare} alt="facebookshare" fill className="object-contain" />
           </button>
         </div>
       </div>
