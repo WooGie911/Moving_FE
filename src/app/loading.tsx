@@ -38,7 +38,7 @@ export default function Loading() {
       {/* 로딩 텍스트 */}
       <article className="mt-6">
         <p className="animate-pulse text-base font-medium text-gray-600" role="status" aria-label="현재 페이지 로딩 중">
-          페이지를 불러오는 중...
+          page is loading...
         </p>
       </article>
     </main>
