@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import sort_active from "@/assets/icon/filter/icon-filter-active.png";
-import sort_inactive from "@/assets/icon/filter/icon-filter-inactive.png";
+import sort_active from "@/assets/icon/filter/icon-filter-active.svg";
+import sort_inactive from "@/assets/icon/filter/icon-filter-inactive.svg";
 import { useModal, useModalStore } from "@/components/common/modal/ModalContext";
 import { SelectCheckBox } from "./SelectCheckBox";
 import { SelectMovingType } from "./SelectMovingType";
@@ -35,9 +35,9 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
     }
   }, [deviceType, modal, close]);
 
-  // 모달이 열릴 때마다 현재 부모의 필터 상태로 초기화
+  // 모달이 열릴 때마다 현재 부모의 필터 상태로 초기화 (처음 열릴 때만)
   useEffect(() => {
-    if (modal) {
+    if (modal && isModalOpening.current) {
       const newModalFilters = {
         movingTypes: [...filters.movingTypes],
         isDesignatedOnly: filters.isDesignatedOnly,
@@ -47,28 +47,29 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
       };
       setModalFilters(newModalFilters);
       currentModalFilters.current = newModalFilters;
+      isModalOpening.current = false; // 초기화 완료 후 플래그 리셋
     }
   }, [modal, filters]);
 
   // 이사 유형 변경 핸들러 (모달 내부용)
   const handleModalTypeChange = (type: string) => {
-    const newTypes = modalFilters.movingTypes.includes(type)
-      ? modalFilters.movingTypes.filter((t) => t !== type)
-      : [...modalFilters.movingTypes, type];
-    const updatedFilters = { ...modalFilters, movingTypes: newTypes };
+    const newTypes = currentModalFilters.current.movingTypes.includes(type)
+      ? currentModalFilters.current.movingTypes.filter((t) => t !== type)
+      : [...currentModalFilters.current.movingTypes, type];
+    const updatedFilters = { ...currentModalFilters.current, movingTypes: newTypes };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
   };
 
   // 체크박스 변경 핸들러 (모달 내부용)
   const handleModalDesignatedChange = (checked: boolean) => {
-    const updatedFilters = { ...modalFilters, isDesignatedOnly: checked };
+    const updatedFilters = { ...currentModalFilters.current, isDesignatedOnly: checked };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
   };
 
   const handleModalServiceAreaChange = (checked: boolean) => {
-    const updatedFilters = { ...modalFilters, isServiceAreaOnly: checked };
+    const updatedFilters = { ...currentModalFilters.current, isServiceAreaOnly: checked };
     setModalFilters(updatedFilters);
     currentModalFilters.current = updatedFilters;
   };
@@ -93,6 +94,11 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
 
   const handleServiceAreaChange = (checked: boolean) => {
     onFiltersChange({ isServiceAreaOnly: checked });
+  };
+
+  // 필터가 활성화되어 있는지 확인하는 함수
+  const isFilterActive = () => {
+    return filters.movingTypes.length > 0 || filters.isDesignatedOnly || filters.isServiceAreaOnly;
   };
 
   return (
@@ -140,7 +146,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
             });
           }}
         >
-          <Image src={modal ? sort_active : sort_inactive} alt="sortModal" fill className="object-contain" />
+          <Image src={isFilterActive() ? sort_active : sort_inactive} alt="sortModal" fill className="object-contain" />
         </button>
       </div>
     </div>

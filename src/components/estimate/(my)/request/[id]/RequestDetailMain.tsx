@@ -4,7 +4,7 @@ import { DetailMoveInfo } from "../../../../estimateRequest/(my)/DetailMoveInfo"
 import { ShareSection } from "../../../../estimateRequest/(my)/ShareSection";
 import { TMyEstimateResponse } from "@/types/moverEstimate";
 import { LabelArea } from "../../../LabelArea";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
 import { formatDateDot } from "@/utils/dateUtils";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { useTranslations, useLocale } from "next-intl";
@@ -46,7 +46,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
                 <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateT("estimateWaiting")}</p>
               ) : data.status === "ACCEPTED" ? (
                 <div className="flex flex-row items-center justify-center gap-1">
-                  <Image src={confirm} alt="confirm" width={16} height={16} />
+                  <Image src={confirm} alt="confirm" width={16} height={16} className="object-contain" />
                   <p className="text-primary-400 text-[16px] leading-[26px] font-bold">
                     {estimateT("confirmedEstimate")}
                   </p>

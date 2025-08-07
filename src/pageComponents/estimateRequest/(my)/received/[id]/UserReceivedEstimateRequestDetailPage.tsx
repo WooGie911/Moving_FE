@@ -25,12 +25,12 @@ export const UserReceivedEstimateRequestDetailPage = () => {
 
   if (isPending)
     return (
-      <div>
+      <main aria-label={t("aria.detailPageLoadingSection")}>
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      </main>
     );
   if (isError) return <Error error={error} reset={() => refetch()} />;
-  if (!data) return <div>{t("noDataAvailable")}</div>;
+  if (!data) return <main aria-label={t("aria.detailPageNoDataSection")}>{t("noDataAvailable")}</main>;
 
   let foundEstimateRequest = null;
   let foundEstimate = null;
@@ -45,13 +45,17 @@ export const UserReceivedEstimateRequestDetailPage = () => {
   }
 
   return (
-    <>
-      <EstimateRequestAndEstimateTab userType="Detail" />
-      <div className="flex flex-col gap-[46px] md:gap-[82px]">
-        <DetailPageImgSection />
+    <main aria-label={t("aria.detailPageContent")}>
+      <nav aria-label={t("aria.detailPageTabSection")}>
+        <EstimateRequestAndEstimateTab userType="Detail" />
+      </nav>
+      <section className="flex flex-col gap-[46px] md:gap-[82px]" aria-label={t("aria.detailPageMainSection")}>
+        <section aria-label={t("aria.detailPageImageSection")}>
+          <DetailPageImgSection />
+        </section>
         <DetailPageMainSeaction estimateRequest={foundEstimateRequest!} estimate={foundEstimate!} type="received" />
-      </div>
-    </>
+      </section>
+    </main>
   );
 };
 export default UserReceivedEstimateRequestDetailPage;

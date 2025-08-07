@@ -53,7 +53,9 @@ interface IMoverBasicInfoUpdateInput {
 
 const userApi = {
   getUser: async () => {
+
     const response = await apiGet(`/users`);
+
 
     return response;
   },

@@ -52,7 +52,7 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   useEffect(() => {
     const fetchAllReviews = async () => {
       try {
-        const response = await findMoverApi.getMoverReviews(mover.id, 1, 1000);
+        const response = await findMoverApi.getMoverReviews(mover.id, 1, 1000, undefined, "COMPLETED");
 
         const convertedReviews: IReview[] = response.data.items.map((apiReview: any) => ({
           id: apiReview.id,

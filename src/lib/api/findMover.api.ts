@@ -7,9 +7,7 @@ import {
 } from "@/types/mover.types";
 import { ApiResponse } from "@/types/api.types";
 import { REGION_LIST, SERVICE_TYPE_LIST } from "@/lib/utils/moverStaticData";
-import { getTokenFromCookie } from "@/utils/auth";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { apiGet, apiPost, apiDelete } from "@/utils/apiHelpers";
 
 const findMoverApi = {
   /**
@@ -33,23 +31,8 @@ const findMoverApi = {
       if (params.take) query.append("take", params.take.toString());
       if (language) query.append("lang", language);
 
-      const res = await fetch(`${API_URL}/movers?${query.toString()}`);
-
-      if (res.status === 404) {
-        return { items: [], nextCursor: null, hasNext: false };
-      }
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          throw new Error("인증이 필요합니다.");
-        } else if (res.status === 403) {
-          throw new Error("접근 권한이 없습니다.");
-        } else {
-          return { items: [], nextCursor: null, hasNext: false };
-        }
-      }
-
-      const data: ApiResponse<MoverListResponse> = await res.json();
+      const endpoint = `/movers?${query.toString()}`;
+      const data: ApiResponse<MoverListResponse> = await apiGet(endpoint);
 
       if (!data.success) {
         return { items: [], nextCursor: null, hasNext: false };
@@ -79,40 +62,19 @@ const findMoverApi = {
     hasNext: boolean;
   }> => {
     try {
-      const accessToken = await getTokenFromCookie();
-      if (!accessToken) {
-        throw new Error("로그인이 필요합니다.");
-      }
-
       const params = new URLSearchParams();
       if (limit) params.append("limit", limit.toString());
       if (cursor) params.append("cursor", cursor);
       if (language) params.append("lang", language);
 
       const queryString = params.toString();
-      const url = `${API_URL}/favorites/movers${queryString ? `?${queryString}` : ""}`;
-
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (res.status >= 500) {
-          throw new Error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-        } else {
-          throw new Error("찜한 기사님 조회에 실패했습니다.");
-        }
-      }
+      const endpoint = `/favorites/movers${queryString ? `?${queryString}` : ""}`;
 
       const data: ApiResponse<{
         items: IMoverInfo[];
         nextCursor: string | null;
         hasNext: boolean;
-      }> = await res.json();
+      }> = await apiGet(endpoint);
 
       return data.data || { items: [], nextCursor: null, hasNext: false };
     } catch (error) {
@@ -126,24 +88,11 @@ const findMoverApi = {
    */
   fetchMoverDetail: async (moverId: string, language?: string): Promise<IMoverInfo | null> => {
     try {
-      const accessToken = await getTokenFromCookie();
-
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-      };
-
-      if (accessToken) {
-        headers.Authorization = `Bearer ${accessToken}`;
-      }
-
       const queryParams = language ? `?lang=${language}` : "";
-      const res = await fetch(`${API_URL}/movers/${moverId}${queryParams}`, {
-        headers,
-      });
+      const endpoint = `/movers/${moverId}${queryParams}`;
 
-      if (!res.ok) return null;
+      const data: ApiResponse<IMoverInfo> = await apiGet(endpoint);
 
-      const data: ApiResponse<IMoverInfo> = await res.json();
       return data.success ? data.data : null;
     } catch (error) {
       console.error("기사님 상세 조회 실패:", error);
@@ -173,17 +122,25 @@ const findMoverApi = {
     data: { quoteId: string; message?: string; expiresAt: string },
   ): Promise<DesignatedQuoteRequestResponse> => {
     try {
-      const accessToken = await getTokenFromCookie();
-      if (!accessToken) {
-        throw new Error("로그인이 필요합니다.");
-      }
+      const endpoint = `/movers/${moverId}/quote-request`;
 
-      const response = await fetch(`${API_URL}/movers/${moverId}/quote-request`, {
+      // 인증 토큰과 CSRF 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const { getCSRFTokenFromCookie } = await import("@/utils/csrf");
+
+      const accessToken = await getTokenFromCookie();
+      const csrfToken = getCSRFTokenFromCookie();
+
+      const headers = {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        ...(csrfToken && { "X-CSRF-Token": csrfToken }),
+      };
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers,
+        credentials: "include",
         body: JSON.stringify({
           quoteId: data.quoteId,
           message: data.message,
@@ -193,7 +150,7 @@ const findMoverApi = {
 
       const result: ApiResponse<DesignatedQuoteRequestResponse> = await response.json();
 
-      if (!response.ok) {
+      if (!result.success) {
         if (result.message && result.message.includes("이미")) {
           throw new Error("이미 해당 기사님에게 지정 견적을 요청하셨습니다.");
         }
@@ -215,42 +172,8 @@ const findMoverApi = {
     quoteId: string,
   ): Promise<DesignatedQuoteRequestCheckResponse> => {
     try {
-      const accessToken = await getTokenFromCookie();
-      console.log("[checkDesignatedQuoteRequest] accessToken:", accessToken ? "있음" : "없음");
-      console.log("[checkDesignatedQuoteRequest] moverId:", moverId);
-      console.log("[checkDesignatedQuoteRequest] quoteId:", quoteId);
-
-      if (!accessToken) {
-        throw new Error("로그인이 필요합니다.");
-      }
-
-      const requestUrl = `${API_URL}/movers/${moverId}/quote-request/check?quoteId=${quoteId}`;
-      console.log("[checkDesignatedQuoteRequest] requestUrl:", requestUrl);
-
-      const response = await fetch(requestUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      console.log("[checkDesignatedQuoteRequest] response.status:", response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log("[checkDesignatedQuoteRequest] error response:", errorText);
-        console.log("[checkDesignatedQuoteRequest] error status:", response.status);
-
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else if (response.status === 404) {
-          throw new Error("지정 견적 요청 정보를 찾을 수 없습니다.");
-        } else {
-          throw new Error("지정 견적 요청 여부 조회에 실패했습니다.");
-        }
-      }
-
-      const result: ApiResponse<DesignatedQuoteRequestCheckResponse> = await response.json();
-      console.log("[checkDesignatedQuoteRequest] success result:", result);
+      const endpoint = `/movers/${moverId}/quote-request/check?quoteId=${quoteId}`;
+      const result: ApiResponse<DesignatedQuoteRequestCheckResponse> = await apiGet(endpoint);
       return result.data;
     } catch (error) {
       console.error("지정 견적 요청 여부 조회 에러:", error);
@@ -266,6 +189,7 @@ const findMoverApi = {
     page: number = 1,
     pageSize: number = 5,
     language?: string,
+    status?: string,
   ): Promise<{
     success: boolean;
     message: string;
@@ -298,14 +222,10 @@ const findMoverApi = {
       queryParams.append("page", page.toString());
       queryParams.append("pageSize", pageSize.toString());
       if (language) queryParams.append("lang", language);
+      if (status) queryParams.append("status", status);
 
-      const response = await fetch(`${API_URL}/reviews/mover/${moverId}?${queryParams.toString()}`);
-
-      if (!response.ok) {
-        throw new Error("리뷰 조회에 실패했습니다.");
-      }
-
-      return await response.json();
+      const endpoint = `/reviews/mover/${moverId}?${queryParams.toString()}`;
+      return await apiGet(endpoint);
     } catch (error) {
       console.error("리뷰 조회 실패:", error);
       throw error;
@@ -317,31 +237,9 @@ const findMoverApi = {
    */
   addFavorite: async (moverId: string): Promise<{ isFavorited: boolean; favoriteCount: number }> => {
     try {
-      const accessToken = await getTokenFromCookie();
-
-      if (!accessToken) {
-        throw new Error("로그인이 필요합니다.");
-      }
-
-      const response = await fetch(`${API_URL}/favorites`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ moverId }),
+      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await apiPost("/favorites", {
+        moverId,
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else {
-          throw new Error(result.message || "찜하기 추가에 실패했습니다.");
-        }
-      }
-
       return result.data;
     } catch (error) {
       console.error("찜하기 추가 실패:", error);
@@ -354,32 +252,25 @@ const findMoverApi = {
    */
   removeFavorite: async (moverId: string): Promise<{ isFavorited: boolean; favoriteCount: number }> => {
     try {
-      const accessToken = await getTokenFromCookie();
-
-      if (!accessToken) {
-        throw new Error("로그인이 필요합니다.");
-      }
-
-      const response = await fetch(`${API_URL}/favorites/${moverId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("로그인이 필요합니다.");
-        } else {
-          throw new Error(result.message || "찜하기 제거에 실패했습니다.");
-        }
-      }
-
+      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await apiDelete(
+        `/favorites/${moverId}`,
+      );
       return result.data;
     } catch (error) {
       console.error("찜하기 제거 실패:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * 이사일이 지나지 않은 견적 확인
+   */
+  checkActiveEstimateRequest: async (): Promise<{ hasActiveRequest: boolean }> => {
+    try {
+      const result: ApiResponse<{ hasActiveRequest: boolean }> = await apiGet("/movers/active-estimate-request/check");
+      return result.data;
+    } catch (error) {
+      console.error("이사일이 지나지 않은 견적 확인 에러:", error);
       throw error;
     }
   },

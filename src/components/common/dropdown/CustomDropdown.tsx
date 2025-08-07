@@ -35,11 +35,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isOpen]);
 
   // 드롭다운 상태 변경 시 콜백 호출
   useEffect(() => {
