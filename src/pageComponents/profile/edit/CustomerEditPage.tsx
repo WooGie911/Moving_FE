@@ -8,7 +8,7 @@ import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "use-intl";
 import {
   ProfileEditHeader,
   ProfileEditImageUpload,
@@ -20,13 +20,15 @@ import {
 import { useAuth } from "@/providers/AuthProvider";
 import { isValidEmail, isValidName, isValidPhoneNumber } from "@/utils/validators";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { showSuccessToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 export default function CustomerEditPage() {
   const { user } = useAuth();
   const provider = user?.provider;
 
   const router = useRouter();
-  const { open, close } = useModal();
+  const locale = useLocale();
   const validationRules = useValidationRules();
 
   const t = useTranslations("profile");
@@ -82,27 +84,16 @@ export default function CustomerEditPage() {
     if (newPassword && newPassword.trim()) {
       data.newPassword = newPassword;
     }
-    const res = await userApi.updateCustomerBasicInfo(data);
-    if (res.success) {
-      open({
-        title: "프로필 수정 완료",
-        children: <div>프로필 수정이 완료되었습니다.</div>,
-        buttons: [
-          {
-            text: "확인",
-            onClick: () => {
-              close();
-              router.push("/searchMover");
-            },
-          },
-        ],
-      });
-    } else {
-      open({
-        title: "프로필 수정 실패",
-        children: <div>{res.message}</div>,
-        buttons: [{ text: "확인", onClick: () => close() }],
-      });
+
+    try {
+      const res = await userApi.updateCustomerBasicInfo(data);
+      if (res.success) {
+        showSuccessToast(t("edit.successMessage"));
+        router.push(`/${locale}/searchMover`);
+      }
+    } catch (error: any) {
+      console.log("error", error.message);
+      handleAuthErrorToast(t, error.message);
     }
   };
 

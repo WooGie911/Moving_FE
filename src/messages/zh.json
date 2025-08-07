@@ -547,7 +547,10 @@
     },
     "registerLoadingText": "正在加载个人资料注册页面...",
     "editLoadingText": "正在加载个人资料编辑页面...",
-    "imageUploadError": "只能上传图片文件。"
+    "imageUploadError": "只能上传图片文件。",
+    "error": {
+      "duplicateNickname": "该昵称已被使用。"
+    }
   },
   "search": {
     "title": "搜索搬家公司",
