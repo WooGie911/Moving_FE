@@ -11,12 +11,12 @@ import { useRouter } from "next/navigation";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useModal } from "@/components/common/modal/ModalContext";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
 const EditPage = () => {
   const router = useRouter();
   const { getUser } = useAuth();
-  const { open, close } = useModal();
+
   const [formError, setFormError] = useState<string | null>(null);
   const [userProvider, setUserProvider] = useState<string>("LOCAL");
   const t = useTranslations("edit");
@@ -94,36 +94,17 @@ const EditPage = () => {
       const result = await userApi.updateMoverBasicInfo(req);
       if (result.success) {
         await getUser();
-        open({
-          title: authT("successTitle"),
-          children: <div>{t("successMessage")}</div>,
-          buttons: [
-            {
-              text: authT("confirm"),
-              onClick: () => {
-                close();
-                router.push(`/${locale}/moverMyPage`);
-              },
-            },
-          ],
-        });
+        showSuccessToast(t("successMessage"));
+        router.push(`/${locale}/moverMyPage`);
       } else {
         if (result.message?.includes("비밀번호")) {
           form.setError("currentPassword", { message: result.message });
         } else {
-          open({
-            title: authT("errorTitle"),
-            children: <div>{result.message || t("errorMessage")}</div>,
-            buttons: [{ text: authT("confirm"), onClick: () => close() }],
-          });
+          showErrorToast(result.message || t("errorMessage"));
         }
       }
     } catch (e) {
-      open({
-        title: authT("generalErrorTitle"),
-        children: <div>{t("generalError")}</div>,
-        buttons: [{ text: authT("confirm"), onClick: () => close() }],
-      });
+      showErrorToast(t("generalError"));
     }
   };
 

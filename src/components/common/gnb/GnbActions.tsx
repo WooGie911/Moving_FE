@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
-import notification from "@/assets/icon/notification/icon-notification-lg.webp";
+import notification from "@/assets/icon/notification/icon-notification-lg.svg";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
@@ -47,6 +47,7 @@ export const GnbActions = ({
   const notificationButtonRef = useRef<HTMLButtonElement>(null);
   const hasUnread = useNotificationStore((state) => state.hasUnread);
   const isNotificationOpen = useNotificationStore((state) => state.isNotificationOpen);
+  const isSSEConnected = useNotificationStore((state) => state.isSSEConnected);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const openNotificationModal = useNotificationStore((state) => state.openNotificationModal);
   const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
@@ -57,7 +58,8 @@ export const GnbActions = ({
       closeNotificationModal();
     } else {
       openNotificationModal();
-      fetchNotifications(4, 0, locale, user?.userType); // 모달이 열릴 때만 전체 알림(첫 페이지) 받아오기
+      // 모달이 열릴 때만 강제로 최신 데이터 가져오기
+      fetchNotifications(4, 0, locale, user?.userType, true);
     }
   };
 
@@ -111,20 +113,15 @@ export const GnbActions = ({
     };
   }, [isProfileOpen]);
 
-  // 로그인한 사용자만 알림 데이터 패칭
+  // 로그인한 사용자만 초기 알림 상태 확인 (한 번만)
   useEffect(() => {
-    if (userRole !== "GUEST") {
-      // 헤더가 보일 때(마운트 시) 최신 알림 1개만 받아와서 hasUnread만 갱신
-      fetchNotifications(1, 0, locale, user?.userType);
+    if (userRole !== "GUEST" && user?.id) {
+      // SSE가 연결되지 않은 경우에만 초기 데이터 로드
+      if (!isSSEConnected) {
+        fetchNotifications(1, 0, locale, user?.userType);
+      }
     }
-  }, [userRole, fetchNotifications, locale, user?.userType]);
-
-  // 알림 모달이 열릴 때마다 최신 상태로 동기화
-  useEffect(() => {
-    if (isNotificationOpen && userRole !== "GUEST") {
-      fetchNotifications(4, 0, locale, user?.userType);
-    }
-  }, [isNotificationOpen, userRole, fetchNotifications, locale, user?.userType]);
+  }, [userRole, user?.id]); // 의존성 배열 최소화
 
   // userRole이나 userName 변경 시 프로필 모달 상태 초기화
   useEffect(() => {

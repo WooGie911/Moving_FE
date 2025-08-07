@@ -6,11 +6,13 @@ import { BaseInput } from "@/components/common/input/BaseInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
 import { ISignUpFormValues } from "@/types/auth";
 import { useAuth } from "@/providers/AuthProvider";
-import { useModal } from "@/components/common/modal/ModalContext";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import { useRouter } from "next/navigation";
+import { ValidationErrorToast } from "@/components/common/modal/ValidationErrorToast";
+import { showErrorToast } from "@/utils/toastUtils";
+import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 interface ISignupFormProps {
   userType: TUserType;
@@ -21,7 +23,6 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
   const router = useRouter();
   const { signUp, isLoading } = useAuth();
   const validationRules = useValidationRules();
-  const { open, close } = useModal();
   const t = useTranslations("auth");
   const currentLocale = useLocale();
 
@@ -58,12 +59,9 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
     try {
       if (isLoading) return;
       const response = await signUp(signUpData);
+
       if (!response.success) {
-        open({
-          title: "회원가입 실패",
-          children: <div>{response.message}</div>,
-          buttons: [{ text: "확인", onClick: () => close() }],
-        });
+        handleAuthErrorToast(t, response.message);
       } else {
         if (userType === "CUSTOMER") {
           router.push(`/${currentLocale}/searchMover`);

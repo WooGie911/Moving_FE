@@ -386,7 +386,8 @@
       "description": "资料注册页面"
     },
     "registerLoadingText": "正在加载个人资料注册页面...",
-    "editLoadingText": "正在加载个人资料编辑页面..."
+    "editLoadingText": "正在加载个人资料编辑页面...",
+    "imageUploadError": "只能上传图片文件。"
   },
   "search": {
     "title": "搜索搬家公司",
@@ -661,6 +662,22 @@
     "moverSignupMetadata": {
       "title": "搬家师傅注册 | Moving",
       "description": "这是搬家师傅的注册页面。"
+    },
+    "error": {
+      "userNotFound": "用户不存在。",
+      "socialLoginOnly": "这是一个社交登录账户。请使用对应平台登录。",
+      "invalidPassword": "密码不正确。",
+      "duplicateEmail": "该邮箱已被使用。",
+      "invalidEmailFormat": "无效的邮箱格式。",
+      "nameTooShort": "姓名至少需要2个字符。",
+      "passwordTooShort": "密码至少需要8个字符。",
+      "passwordWeak": "密码必须包含字母、数字和特殊字符。",
+      "invalidPhoneNumber": "电话号码只能包含数字。",
+      "phoneTooShort": "电话号码至少需要10位数字。",
+      "tokenGeneration": "登录失败，请稍后再试。",
+      "userCreationFailed": "注册失败，请稍后再试。",
+      "tokenInvalid": "令牌认证失败，请重新登录。",
+      "unknown": "发生未知错误，请重试。"
     }
   },
   "landing": {
@@ -870,8 +887,13 @@
     "writeReview": "写评价",
     "noWritableReviews": "没有可写的评价！",
     "reviewWriteFailed": "写评价失败。请重试。",
+    "reviewWriteSuccess": "评价已成功注册！",
     "noWrittenReviews": "没有写的评价！",
     "noWrittenReviewsAlt": "没有写的评价",
+    "confirmReviewWrite": "确认评价注册",
+    "confirmReviewWriteMessage": "您确定要注册这个评价吗？",
+    "cancel": "取消",
+    "confirm": "确认",
     "driverSuffix": "司机",
     "verifiedDriver": "认证司机",
     "departure": "出发地",

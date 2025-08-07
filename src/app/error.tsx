@@ -3,11 +3,16 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import NotFoundImage from "@/assets/img/etc/notfound.webp";
+import { logDevError } from "@/utils/logDevError";
+import * as Sentry from "@sentry/nextjs";
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     // 에러를 에러 리포팅 서비스에 로그
-    console.error(error);
+    logDevError(error, "Error");
+
+    // ✅ Sentry로 전송
+    Sentry.captureException(error);
   }, [error]);
 
   return (
