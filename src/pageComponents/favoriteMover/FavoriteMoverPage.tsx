@@ -154,7 +154,7 @@ const FavoriteMoverPage = () => {
 
         {isLoading ? (
           <div className="min-h-screen bg-gray-200">
-            <MovingTruckLoader size="lg" loadingText={t("estimateRequest.loadingText")} />
+            <MovingTruckLoader size="lg" loadingText={t("loadingText")} />
           </div>
         ) : allFavoriteMovers.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500">

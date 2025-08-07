@@ -1097,6 +1097,7 @@
     "noFavoritesDesc": "기사님을 찜하면 여기에 표시됩니다",
     "errorTitle": "오류가 발생했습니다",
     "errorMessage": "찜한 기사님 목록을 불러오는데 실패했습니다.",
+    "loadingText": "찜한 기사님 목록을 불러오는 중...",
     "loadingMore": "더 많은 기사님을 불러오는 중..."
   }
 }

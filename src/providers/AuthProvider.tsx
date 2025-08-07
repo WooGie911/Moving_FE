@@ -89,7 +89,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       async () => {
         const data = await authApi.refreshToken();
         // TODO : 테스트용으로 남겨둠
-        console.log("🔄 자동 갱신:", data);
+        // console.log("🔄 자동 갱신:", data);
         if (data?.error) {
           await logout();
         }
@@ -111,8 +111,8 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
         setUser(response.data);
 
         // TODO : 테스트용으로 남겨둠
-        startRefreshTokenTimer(1);
-        // startRefreshTokenTimer(14);
+        // startRefreshTokenTimer(1);
+        startRefreshTokenTimer(14);
 
         if (isPublicRoute(pathname)) {
           redirectToUserMainPage(response.data.userType);

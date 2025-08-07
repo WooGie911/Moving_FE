@@ -1124,6 +1124,7 @@
     "noFavoritesDesc": "Add movers to your favorites to see them here",
     "errorTitle": "An error occurred",
     "errorMessage": "Failed to load favorite movers list.",
+    "loadingText": "Loading favorite movers...",
     "loadingMore": "Loading more drivers..."
   }
 }

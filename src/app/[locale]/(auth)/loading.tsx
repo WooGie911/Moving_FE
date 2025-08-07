@@ -1,8 +1,11 @@
 import React from "react";
 import Image from "next/image";
 import CarLg from "@/assets/img/etc/car-lg.webp";
+import { useTranslations } from "next-intl";
 
 export default function Loading() {
+  const t = useTranslations("loading");
+
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center"
@@ -38,7 +41,7 @@ export default function Loading() {
       {/* 로딩 텍스트 */}
       <article className="mt-6">
         <p className="animate-pulse text-base font-medium text-gray-600" role="status" aria-label="현재 페이지 로딩 중">
-          페이지를 불러오는 중...
+          {t("loadingText")}
         </p>
       </article>
     </main>
