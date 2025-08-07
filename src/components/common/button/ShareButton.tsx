@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IShareButtonProps } from "@/types/button";
-import iconClip from "@/assets/icon/clip/icon-clip-md.png";
-import iconShareKakao from "@/assets/icon/share/icon-share-kakao-lg.png";
-import iconShareFacebook from "@/assets/icon/share/icon-share-facebook-lg.png";
+import iconClip from "@/assets/icon/clip/icon-clip-md.svg";
+import iconShareKakao from "@/assets/icon/share/icon-share-kakao-lg.svg";
+import iconShareFacebook from "@/assets/icon/share/icon-share-facebook-lg.svg";
 import {
   copyToClipboard,
   getCurrentPageUrl,

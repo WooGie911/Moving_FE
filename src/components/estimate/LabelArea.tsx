@@ -2,7 +2,7 @@ import React from "react";
 import { formatRelativeTimeWithTranslations } from "@/utils/dateUtils";
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import { useTranslations, useLocale } from "next-intl";
-import confirm from "@/assets/icon/etc/icon-confirm.png";
+import confirm from "@/assets/icon/etc/icon-confirm.svg";
 import Image from "next/image";
 
 interface ILabelAreaProps {
@@ -44,7 +44,7 @@ export const LabelArea = ({ movingType, isDesignated, createdAt, usedAt, estimat
             <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateT("estimateWaiting")}</p>
           ) : estimateStatus === "ACCEPTED" ? (
             <div className="flex flex-row items-center justify-center gap-1">
-              <Image src={confirm} alt="confirm" width={16} height={16} />
+              <Image src={confirm} alt="confirm" width={16} height={16} className="object-contain" />
               <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{estimateT("confirmedEstimate")}</p>
             </div>
           ) : (

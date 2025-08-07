@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import down from "@/assets/icon/arrow/icon-down-sm.png";
-import downLg from "@/assets/icon/arrow/icon-down-lg.png";
-import up from "@/assets/icon/arrow/icon-up-sm.png";
-import upLg from "@/assets/icon/arrow/icon-up-lg.png";
+import down from "@/assets/icon/arrow/icon-down-sm.svg";
+import downLg from "@/assets/icon/arrow/icon-down-lg.svg";
+import up from "@/assets/icon/arrow/icon-up-sm.svg";
+import upLg from "@/assets/icon/arrow/icon-up-lg.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 

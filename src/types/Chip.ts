@@ -8,4 +8,5 @@ export interface ICircleTextLabelProps {
 }
 export interface IMoveTypeLabelProps {
   type: "small" | "home" | "office" | "document" | string;
+  "aria-label"?: string;
 }

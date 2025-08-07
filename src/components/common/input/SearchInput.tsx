@@ -2,7 +2,7 @@
 
 import { BaseInput } from "./BaseInput";
 import { useFormContext, get, RegisterOptions, useWatch } from "react-hook-form";
-import search from "@/assets/icon/etc/icon-search.png";
+import search from "@/assets/icon/etc/icon-search.svg";
 import Image from "next/image";
 
 interface ISearchInputProps {

@@ -3,7 +3,7 @@ import { LabelArea } from "../LabelArea";
 import { TEstimateRequestResponse } from "@/types/moverEstimate";
 import { shortenRegionInAddress } from "@/utils/regionMapping";
 import Image from "next/image";
-import arrow from "@/assets/icon/arrow/icon-arrow.png";
+import arrow from "@/assets/icon/arrow/icon-arrow.svg";
 import { TextInput } from "@/components/common/input/TextInput";
 import { TextAreaInput } from "@/components/common/input/TextAreaInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
@@ -100,7 +100,7 @@ export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalP
               </p>
             </div>
             <div className="flex flex-col justify-end pb-1">
-              <Image src={arrow} alt="arrow" width={16} height={16} />
+              <Image src={arrow} alt="arrow" width={16} height={16} className="object-cover" />
             </div>
             <div className="flex flex-col justify-between">
               <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
