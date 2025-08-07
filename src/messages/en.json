@@ -379,7 +379,10 @@
     },
     "registerLoadingText": "Loading profile registration page...",
     "editLoadingText": "Loading profile edit page...",
-    "imageUploadError": "Only image files can be uploaded."
+    "imageUploadError": "Only image files can be uploaded.",
+    "error": {
+      "duplicateNickname": "This nickname is already in use."
+    }
   },
   "search": {
     "title": "Search Moving Companies",
