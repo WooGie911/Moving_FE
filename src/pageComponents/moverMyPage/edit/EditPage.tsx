@@ -12,7 +12,7 @@ import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
-import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+
 
 const EditPage = () => {
   const router = useRouter();
@@ -104,10 +104,9 @@ const EditPage = () => {
           showErrorToast(result.message || t("errorMessage"));
         }
       }
-    } catch (error: any) {
-      console.log("error", error.message);
-      handleAuthErrorToast(t, error.message);
-    }
+          } catch (e) {
+        showErrorToast(t("generalError"));
+      }
   };
 
   return (

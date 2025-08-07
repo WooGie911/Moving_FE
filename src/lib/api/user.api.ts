@@ -92,31 +92,11 @@ const userApi = {
 
   // 기사님 기본 정보 수정
   updateMoverBasicInfo: async (data: IMoverBasicInfoUpdate) => {
-    let csrfToken: string | undefined;
-
-    try {
-      const csrfResponse = await fetch(`${API_URL}/csrf-token`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-        credentials: "include",
-      });
-
-      if (csrfResponse.ok) {
-        const csrfData = await csrfResponse.json();
-        csrfToken = csrfData.data?.token;
-      }
-    } catch (error) {
-      console.error("❌ CSRF 토큰 요청 실패:", error);
-    }
-
     const response = await fetch(`${API_URL}/users/profile/mover/basic`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${await getAccessToken()}`,
-        ...(csrfToken && { "X-CSRF-Token": csrfToken }),
       },
       body: JSON.stringify(data),
       credentials: "include",

@@ -15,7 +15,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
-import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+
 
 const SERVICE_OPTIONS = ["small", "home", "office"];
 const REGION_OPTIONS = [
@@ -196,10 +196,9 @@ export default function MoverEditPage() {
       } else {
         showErrorToast(result.message || t("edit.errorMessage"));
       }
-    } catch (error: any) {
-      console.log("error", error.message);
-      handleAuthErrorToast(t, error.message);
-    }
+          } catch (e) {
+        showErrorToast(t("edit.generalError"));
+      }
   };
 
   return (
