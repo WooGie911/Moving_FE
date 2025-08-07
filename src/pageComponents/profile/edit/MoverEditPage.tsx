@@ -79,7 +79,6 @@ export default function MoverEditPage() {
   const t = useTranslations("profile");
   const moverT = useTranslations("mover");
   const tRegions = useTranslations("regions");
-  const tShared = useTranslations();
 
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
@@ -356,30 +355,21 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
-                  {SERVICE_OPTIONS.map((service) => {
-                    let translatedText = service;
-                    if (service === "소형이사") {
-                      translatedText = tShared("service.소형이사");
-                    } else if (service === "가정이사") {
-                      translatedText = tShared("service.가정이사");
-                    } else if (service === "사무실이사") {
-                      translatedText = tShared("service.사무실이사");
-                    }
-
-                    return (
-                      <CircleTextLabel
-                        key={service}
-                        text={translatedText}
-                        clickAble={true}
-                        isSelected={services.includes(service)}
-                        onClick={() =>
-                          setServices((prev) =>
-                            prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
-                          )
-                        }
-                      />
-                    );
-                  })}
+                  {SERVICE_OPTIONS.map((service) => (
+                    <CircleTextLabel
+                      key={service}
+                      text={moverT(`serviceTypes.${service}`)}
+                      clickAble={true}
+                      isSelected={services.includes(serviceTypeMapping[service])}
+                      onClick={() =>
+                        setServices((prev) =>
+                          prev.includes(serviceTypeMapping[service])
+                            ? prev.filter((s) => s !== serviceTypeMapping[service])
+                            : [...prev, serviceTypeMapping[service]],
+                        )
+                      }
+                    />
+                  ))}
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />
