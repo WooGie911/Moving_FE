@@ -164,8 +164,13 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const logout = async () => {
     try {
       setUser(null);
-      await authApi.logout();
-      window.location.href = `/`;
+      const response = await authApi.logout();
+
+      if (response?.success) {
+        window.location.href = `/`;
+      }
+
+      return response;
     } catch (error) {
       logDevError(error, "Failed to logout");
     } finally {

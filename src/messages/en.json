@@ -378,7 +378,8 @@
       "description": "Profile registration page"
     },
     "registerLoadingText": "Loading profile registration page...",
-    "editLoadingText": "Loading profile edit page..."
+    "editLoadingText": "Loading profile edit page...",
+    "imageUploadError": "Only image files can be uploaded."
   },
   "search": {
     "title": "Search Moving Companies",
@@ -636,6 +637,22 @@
     "moverSignupMetadata": {
       "title": "Mover Signup | Moving",
       "description": "This is the signup page for movers."
+    },
+    "error": {
+      "userNotFound": "User does not exist.",
+      "socialLoginOnly": "This is a social login account. Please sign in using the corresponding platform.",
+      "invalidPassword": "Incorrect password.",
+      "duplicateEmail": "This email is already in use.",
+      "invalidEmailFormat": "Invalid email format.",
+      "nameTooShort": "Name must be at least 2 characters.",
+      "passwordTooShort": "Password must be at least 8 characters.",
+      "passwordWeak": "Password must include letters, numbers, and special characters.",
+      "invalidPhoneNumber": "Phone number must contain only digits.",
+      "phoneTooShort": "Phone number must be at least 10 digits.",
+      "tokenGeneration": "Login failed. Please try again later.",
+      "userCreationFailed": "Signup failed. Please try again later.",
+      "tokenInvalid": "Token authentication failed. Please log in again.",
+      "unknown": "An unknown error occurred. Please try again."
     }
   },
   "landing": {
