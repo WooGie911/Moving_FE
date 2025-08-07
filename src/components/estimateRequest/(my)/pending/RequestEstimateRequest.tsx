@@ -46,44 +46,85 @@ export const RequestEstimateRequest = ({
   };
 
   return (
-    <>
-      <div className="flex w-full max-w-300 flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:flex-row lg:justify-between lg:px-0">
-        <div className="flex w-full flex-row items-center justify-between">
-          <div className="flex w-full flex-col items-start justify-center">
-            <h1 className="leading-2xl text-black-500 text-[20px] font-bold md:text-[24px]">
-              {getMovingTypeTranslated(moveType)}
-            </h1>
-            <p className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]">{`${t("requestDate")} ${formatDateWithDayTranslated(createdAt)}`}</p>
-          </div>
+    <article
+      className="flex w-full max-w-[1200px] flex-col items-center justify-center gap-5 p-6 md:px-18 md:py-8 lg:mx-auto lg:flex-row"
+      aria-label={t("aria.estimateRequestCard")}
+    >
+      <header
+        className="flex w-full flex-row items-center justify-between"
+        aria-label={t("aria.estimateRequestHeader")}
+      >
+        <div className="flex w-full flex-col items-start justify-center">
+          <h1
+            className="leading-2xl text-black-500 text-[20px] font-bold md:text-[24px]"
+            aria-label={t("aria.estimateRequestTitle")}
+          >
+            {getMovingTypeTranslated(moveType)}
+          </h1>
+          <p
+            className="md:leading-[24 px] text-[12px] leading-[18px] font-normal text-gray-500 md:text-[14px]"
+            aria-label={`${t("aria.estimateRequestDate")} ${formatDateWithDayTranslated(createdAt)}`}
+          >
+            {`${t("requestDate")} ${formatDateWithDayTranslated(createdAt)}`}
+          </p>
         </div>
-        <div className="flex w-full flex-col gap-1 md:flex-row md:justify-start md:gap-3">
-          <div className="flex flex-row justify-between md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {locale === "ko" ? shortenRegionInAddress(fromAddress.region) : fromAddress.region} {fromAddress.city}
-            </p>
-          </div>
+      </header>
 
-          <div className="hidden justify-end pb-1 md:flex md:flex-col">
-            <div className="relative h-[16px] w-[16px]">
-              <Image src={arrow} alt="arrow" fill className="object-cover" />
-            </div>
-          </div>
-
-          <div className="flex flex-row justify-between md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {locale === "ko" ? shortenRegionInAddress(toAddress.region) : toAddress.region} {toAddress.city}
-            </p>
-          </div>
-          <div className="flex flex-row justify-between md:ml-7 md:flex-col">
-            <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
-            <p className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]">
-              {formatDateWithDayTranslated(moveDate)}
-            </p>
-          </div>
+      <section
+        className="flex w-full flex-col gap-1 md:flex-row md:justify-start md:gap-3"
+        aria-label={t("aria.estimateRequestRoute")}
+      >
+        <div
+          className="flex flex-row justify-between md:flex-col"
+          role="region"
+          aria-label={t("aria.estimateRequestDeparture")}
+        >
+          <p className="text-[14px] leading-6 font-normal text-gray-500">{t("departure")}</p>
+          <p
+            className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]"
+            aria-label={`${t("departure")}: ${locale === "ko" ? shortenRegionInAddress(fromAddress.region) : fromAddress.region} ${fromAddress.city}`}
+          >
+            {locale === "ko" ? shortenRegionInAddress(fromAddress.region) : fromAddress.region} {fromAddress.city}
+          </p>
         </div>
-      </div>
-    </>
+
+        <div
+          className="hidden md:flex md:items-end md:justify-end"
+          role="presentation"
+          aria-hidden="true"
+          aria-label={t("aria.estimateRequestArrow")}
+        >
+          <Image src={arrow} alt="" width={16} height={16} className="object-cover" aria-hidden="true" />
+        </div>
+
+        <div
+          className="flex flex-row justify-between md:flex-col"
+          role="region"
+          aria-label={t("aria.estimateRequestArrival")}
+        >
+          <p className="text-[14px] leading-6 font-normal text-gray-500">{t("arrival")}</p>
+          <p
+            className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]"
+            aria-label={`${t("arrival")}: ${locale === "ko" ? shortenRegionInAddress(toAddress.region) : toAddress.region} ${toAddress.city}`}
+          >
+            {locale === "ko" ? shortenRegionInAddress(toAddress.region) : toAddress.region} {toAddress.city}
+          </p>
+        </div>
+
+        <div
+          className="flex flex-row justify-between md:ml-7 md:flex-col"
+          role="region"
+          aria-label={t("aria.estimateRequestMovingDate")}
+        >
+          <p className="text-[14px] leading-6 font-normal text-gray-500">{t("movingDate")}</p>
+          <p
+            className="text-black-500 text-[14px] leading-6 font-semibold md:text-[18px] md:leading-[26px]"
+            aria-label={`${t("movingDate")}: ${formatDateWithDayTranslated(moveDate)}`}
+          >
+            {formatDateWithDayTranslated(moveDate)}
+          </p>
+        </div>
+      </section>
+    </article>
   );
 };

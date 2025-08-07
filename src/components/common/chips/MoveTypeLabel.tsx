@@ -10,7 +10,7 @@ interface ExtendedMoveTypeLabelProps extends IMoveTypeLabelProps {
   variant?: "list" | "favorite" | "favorite-responsive";
 }
 
-export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => {
+export const MoveTypeLabel = ({ type, variant, "aria-label": ariaLabel }: ExtendedMoveTypeLabelProps) => {
   const t = useTranslations("service");
 
   const getIconSrc = (serviceName: string) => {
@@ -63,7 +63,7 @@ export const MoveTypeLabel = ({ type, variant }: ExtendedMoveTypeLabelProps) => 
   const label = getLabel();
 
   return (
-    <div>
+    <div aria-label={ariaLabel}>
       <div className="bg-primary-100 inline-flex h-[26px] items-center justify-start gap-[2px] rounded-sm py-[2px] pr-[7px] pl-[4px] md:h-[32px] md:py-[4px]">
         <div className="relative h-[20px] w-[20px]">
           <Image src={iconSrc} alt="movetype" fill className="object-contain" />

@@ -77,10 +77,15 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
   };
 
   const cardContent = (
-    <div
+    <article
       className={`flex w-full flex-col items-center justify-center gap-4 rounded-[20px] bg-[#ffffff] py-6 ${usedAt === "received" ? "" : "border-border-light max-w-[375px] border-[0.5px] px-3 md:max-w-[600px] md:px-5 lg:max-w-[558px]"}`}
+      aria-label={t("aria.estimateCard")}
+      role="article"
     >
-      <div className="flex w-full flex-col items-center justify-center gap-1">
+      <header
+        className="flex w-full flex-col items-center justify-center gap-1"
+        aria-label={t("aria.estimateCardHeader")}
+      >
         {/* 라벨과 견적상태 영역 */}
         <LabelAndTitleSection mover={estimate.mover} estimate={estimate} usedAt={usedAt} />
         {/* 기사님 프로필 영역 */}
@@ -90,43 +95,101 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
           estimateId={estimate.id}
           hasConfirmedEstimate={hasConfirmedEstimate}
         />
-      </div>
+      </header>
 
-      {/* 견적서 금액 영역 */}
-      {usedAt === "pending" ? (
-        <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
-          <p className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium">
-            {t("estimateAmount")}
-          </p>
-          <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${t("currency")}`}</p>
-        </div>
-      ) : (
-        <div className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3">
-          <div className="flex flex-row items-center justify-start gap-1 md:hidden">
-            {estimate.status === "PROPOSED" ? (
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("estimateWaiting")}</p>
-            ) : estimate.status === "ACCEPTED" ? (
-              <div className="flex flex-row items-center justify-center gap-1">
-                <div className="relative h-[16px] w-[16px]">
-                  <Image src={confirm} alt="confirm" fill className="object-contain" />
-                </div>
-                <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
-              </div>
-            ) : (
-              <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{t("rejectedEstimate")}</p>
-            )}
-          </div>
-          <div className="flex flex-row items-center justify-end gap-3">
-            <p className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium">
+      <main className="flex w-full flex-col" aria-label={t("aria.estimateCardBody")}>
+        {/* 견적서 금액 영역 */}
+        {usedAt === "pending" ? (
+          <section
+            className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3"
+            aria-label={t("aria.estimateAmountSection")}
+          >
+            <p
+              className="text-[14px] leading-[24px] font-normal text-gray-300 md:text-[16px] md:leading-[26px] md:font-medium"
+              aria-label={t("aria.estimateAmountLabel")}
+            >
               {t("estimateAmount")}
             </p>
-            <p className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold">{`${formatNumber(estimate.price)}${t("currency")}`}</p>
-          </div>
-        </div>
-      )}
+            <p
+              className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold"
+              aria-label={t("aria.estimateAmountValue")}
+            >
+              {`${formatNumber(estimate.price)}${t("currency")}`}
+            </p>
+          </section>
+        ) : (
+          <section
+            className="flex w-full flex-row items-center justify-between pb-2 md:pt-1 md:pb-5 lg:pt-3"
+            aria-label={t("aria.estimateStatusSection")}
+          >
+            <div
+              className="flex flex-row items-center justify-start gap-1 md:hidden"
+              aria-label={t("aria.estimateStatusSection")}
+            >
+              {estimate.status === "PROPOSED" ? (
+                <p
+                  className="text-[16px] leading-[26px] font-semibold text-gray-300"
+                  aria-label={t("aria.estimateStatusValue")}
+                >
+                  {t("estimateWaiting")}
+                </p>
+              ) : estimate.status === "ACCEPTED" ? (
+                <div
+                  className="flex flex-row items-center justify-center gap-1"
+                  aria-label={t("aria.estimateStatusSection")}
+                >
+                  <div className="relative h-[16px] w-[16px]">
+                    <Image
+                      src={confirm}
+                      alt={t("aria.confirmIcon")}
+                      fill
+                      className="object-contain"
+                      aria-label={t("aria.estimateStatusIcon")}
+                    />
+                  </div>
+                  <p
+                    className="text-primary-400 text-[16px] leading-[26px] font-bold"
+                    aria-label={t("aria.estimateStatusValue")}
+                  >
+                    {t("confirmedEstimate")}
+                  </p>
+                </div>
+              ) : (
+                <p
+                  className="text-[16px] leading-[26px] font-semibold text-gray-300"
+                  aria-label={t("aria.estimateStatusValue")}
+                >
+                  {t("rejectedEstimate")}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-row items-center justify-end gap-3" aria-label={t("aria.estimateAmountSection")}>
+              <p
+                className="text-[14px] leading-[24px] font-normal text-gray-500 md:text-[16px] md:leading-[26px] md:font-medium"
+                aria-label={t("aria.estimateAmountLabel")}
+              >
+                {t("estimateAmount")}
+              </p>
+              <p
+                className="text-black-300 text-[20px] leading-[32px] font-semibold md:text-[24px] md:font-bold"
+                aria-label={t("aria.estimateAmountValue")}
+              >
+                {`${formatNumber(estimate.price)}${t("currency")}`}
+              </p>
+            </div>
+          </section>
+        )}
+      </main>
+
       {usedAt === "pending" ? (
-        <div className="flex w-full flex-col items-center justify-center">
-          <div className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden">
+        <footer
+          className="flex w-full flex-col items-center justify-center"
+          aria-label={t("aria.estimateActionSection")}
+        >
+          <div
+            className="flex w-full flex-col items-center justify-center gap-[11px] px-5 md:hidden"
+            aria-label={t("aria.estimateCardButtonGroupMobile")}
+          >
             <Button
               variant="solid"
               state={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? "default" : "disabled"}
@@ -135,6 +198,8 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
               rounded="rounded-[12px]"
               onClick={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? openConfirmModal : undefined}
               disabled={estimate.status !== "PROPOSED" || shouldDisableConfirmButton}
+              aria-label={t("aria.confirmButton")}
+              aria-describedby={`estimate-status-${estimate.id}`}
             >
               {estimate.status === "PROPOSED"
                 ? t("confirmEstimateButton")
@@ -142,22 +207,30 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
                   ? t("alreadyConfirmed")
                   : t("otherEstimateConfirmed")}
             </Button>
-            <Link href={`/estimateRequest/pending/${estimate.id}`}>
-              <Button variant="outlined" state="default" width="w-[287px]" height="h-[54px]" rounded="rounded-[12px]">
+            <Link href={`/estimateRequest/pending/${estimate.id}`} aria-label={t("aria.estimateCardLink")}>
+              <Button
+                variant="outlined"
+                state="default"
+                width="w-[287px]"
+                height="h-[54px]"
+                rounded="rounded-[12px]"
+                aria-label={t("aria.viewDetailsButton")}
+              >
                 {t("viewDetails")}
               </Button>
             </Link>
           </div>
 
-          <div className="hidden w-full md:block">
+          <div className="hidden w-full md:block" aria-label={t("aria.estimateCardButtonGroupDesktop")}>
             <div className="flex w-full flex-row items-center justify-between gap-[11px]">
-              <Link href={`/estimateRequest/pending/${estimate.id}`}>
+              <Link href={`/estimateRequest/pending/${estimate.id}`} aria-label={t("aria.estimateCardLink")}>
                 <Button
                   variant="outlined"
                   state="default"
                   width="w-[254px] lg:w-[233px]"
                   height="h-[54px]"
                   rounded="rounded-[12px]"
+                  aria-label={t("aria.viewDetailsButton")}
                 >
                   {t("viewDetails")}
                 </Button>
@@ -170,6 +243,8 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
                 rounded="rounded-[12px]"
                 onClick={estimate.status === "PROPOSED" && !shouldDisableConfirmButton ? openConfirmModal : undefined}
                 disabled={estimate.status !== "PROPOSED" || shouldDisableConfirmButton}
+                aria-label={t("aria.confirmButton")}
+                aria-describedby={`estimate-status-${estimate.id}`}
               >
                 {estimate.status === "PROPOSED"
                   ? t("confirmEstimateButton")
@@ -179,13 +254,24 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
               </Button>
             </div>
           </div>
-        </div>
+        </footer>
       ) : null}
-    </div>
+
+      {/* 스크린 리더를 위한 숨겨진 상태 설명 */}
+      <div id={`estimate-status-${estimate.id}`} className="sr-only">
+        {estimate.status === "PROPOSED"
+          ? t("estimateWaiting")
+          : estimate.status === "ACCEPTED"
+            ? t("confirmedEstimate")
+            : t("rejectedEstimate")}
+      </div>
+    </article>
   );
 
   return usedAt === "received" ? (
-    <Link href={`/estimateRequest/received/${estimate.id}`}>{cardContent}</Link>
+    <Link href={`/estimateRequest/received/${estimate.id}`} aria-label={t("aria.estimateCardLink")}>
+      {cardContent}
+    </Link>
   ) : (
     cardContent
   );

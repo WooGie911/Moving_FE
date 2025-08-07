@@ -24,41 +24,69 @@ const UserReceivedEstimateRequestPage = () => {
 
   if (isPending)
     return (
-      <div>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      <main aria-label={t("ariaLabels.loadingSection")}>
+        <section aria-live="polite" aria-busy="true">
+          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        </section>
+      </main>
     );
-  if (isError) return <Error error={error} reset={() => refetch()} />;
-  if (!data) return <div>{t("noDataAvailable")}</div>;
+
+  if (isError)
+    return (
+      <main aria-label={t("ariaLabels.errorSection")}>
+        <Error error={error} reset={() => refetch()} />
+      </main>
+    );
+
+  if (!data)
+    return (
+      <main>
+        <section aria-live="polite">
+          <p>{t("noDataAvailable")}</p>
+        </section>
+      </main>
+    );
 
   // 완료된 견적 요청이 없는 경우
   if (data.length === 0) {
     return (
-      <>
-        <div className="flex flex-col items-center justify-center">
-          <EstimateRequestAndEstimateTab userType="User" />
-          <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
-            <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
-              <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-                <Image src={notfound} alt="empty-estimateRequest" fill className="object-contain" />
-              </div>
-              <div className="text-[20px] leading-8 font-normal text-gray-400">{t("noPastEstimates")}</div>
-              <div className="text-[20px] leading-8 font-normal text-gray-400">{t("completeMoveToSeeHistory")}</div>
+      <main>
+        <EstimateRequestAndEstimateTab userType="User" />
+        <section
+          className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+          aria-label={t("ariaLabels.estimateRequestList")}
+        >
+          <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
+            <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
+              <Image src={notfound} alt={t("ariaLabels.emptyStateImage")} fill className="object-contain" />
             </div>
+            <div className="text-[20px] leading-8 font-normal text-gray-400">{t("noPastEstimates")}</div>
+            <div className="text-[20px] leading-8 font-normal text-gray-400">{t("completeMoveToSeeHistory")}</div>
           </div>
-        </div>
-      </>
+        </section>
+      </main>
     );
   }
+
   return (
-    <>
+    <main>
       <EstimateRequestAndEstimateTab userType="User" />
-      <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa] px-6 pt-8 pb-6 md:gap-10 md:px-7 md:pb-8 lg:gap-14 lg:px-10 lg:pt-11 lg:pb-9">
-        {data.map((item) => (
-          <EstimateRequestAndEstimates key={item.estimateRequest.id} {...item} />
+      <section
+        className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa] px-6 pt-8 pb-6 md:gap-10 md:px-7 md:pb-8 lg:gap-14 lg:px-10 lg:pt-11 lg:pb-9"
+        aria-label={t("ariaLabels.estimateRequestList")}
+        role="list"
+      >
+        {data.map((item, index) => (
+          <article
+            key={item.estimateRequest.id}
+            role="listitem"
+            aria-label={`${t("ariaLabels.estimateRequestItem")} ${index + 1}`}
+          >
+            <EstimateRequestAndEstimates {...item} />
+          </article>
         ))}
-      </div>
-    </>
+      </section>
+    </main>
   );
 };
 

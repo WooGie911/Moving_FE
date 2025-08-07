@@ -100,24 +100,33 @@ export const LgButtonSection = ({
         text: t("alreadyConfirmed"),
         disabled: true,
         state: "disabled" as const,
+        ariaLabel: t("aria.confirmEstimateButtonAlreadyConfirmed"),
       };
     } else if (estimateStatus === "AUTO_REJECTED") {
       return {
         text: t("otherEstimateConfirmed"),
         disabled: true,
         state: "disabled" as const,
+        ariaLabel: t("aria.confirmEstimateButtonRejected"),
       };
     } else if (estimateStatus === "REJECTED" || estimateStatus === "EXPIRED") {
       return {
         text: t("notConfirmedEstimate"),
         disabled: true,
         state: "disabled" as const,
+        ariaLabel:
+          estimateStatus === "REJECTED"
+            ? t("aria.confirmEstimateButtonRejected")
+            : t("aria.confirmEstimateButtonExpired"),
       };
     } else {
       return {
         text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
         disabled: confirmEstimateMutation.isPending,
         state: confirmEstimateMutation.isPending ? ("disabled" as const) : ("default" as const),
+        ariaLabel: confirmEstimateMutation.isPending
+          ? t("aria.confirmEstimateButtonLoading")
+          : t("aria.confirmEstimateButtonActive"),
       };
     }
   };
@@ -125,56 +134,81 @@ export const LgButtonSection = ({
   const buttonState = getButtonState();
 
   return (
-    <div className="hidden lg:block">
+    <section className="hidden lg:block" aria-label={t("aria.largeButtonSection")}>
       <div className="flex flex-col items-start justify-center gap-7">
-        <div>
+        <div aria-label={t("aria.estimatePriceDisplay")} role="region">
           <p className="text-[18px] leading-[26px] font-semibold text-gray-300">{t("estimatePrice")}</p>
-          <p className="text-black-300 text-[24px] leading-[32px] font-bold">{`${estimatePrice}${tShared("shared.units.currency")}`}</p>
+          <p className="text-black-300 text-[24px] leading-[32px] font-bold" aria-label={t("aria.estimatePriceAmount")}>
+            {`${estimatePrice}${tShared("shared.units.currency")}`}
+          </p>
         </div>
-        <div className="flex w-full flex-row items-center justify-center gap-2">
+        <div
+          className="flex w-full flex-row items-center justify-center gap-2"
+          aria-label={t("aria.favoriteButtonSection")}
+          role="group"
+        >
           <button
             className={`relative flex h-[64px] w-[64px] cursor-pointer flex-row items-center justify-center rounded-[16px] hover:cursor-pointer`}
             onClick={handleFavorite}
             disabled={favoriteMutation.isPending}
+            aria-label={mover.isFavorite ? t("aria.favoriteButtonActive") : t("aria.favoriteButtonInactive")}
+            aria-pressed={mover.isFavorite}
+            aria-describedby="favorite-button-description"
           >
-            <Image src={like} alt="like" fill className="object-contain" />
+            <Image
+              src={like}
+              alt={mover.isFavorite ? t("aria.favoriteButtonActive") : t("aria.favoriteButtonInactive")}
+              fill
+              className="object-contain"
+            />
           </button>
-          <Button
-            variant="solid"
-            width="w-[320px]"
-            height="h-[64px]"
-            rounded="rounded-[16px]"
-            state={buttonState.state}
-            disabled={buttonState.disabled}
-            onClick={() => {
-              if (!buttonState.disabled) {
-                open({
-                  title: t("confirmEstimate"),
-                  children: (
-                    <div className="flex flex-col items-center justify-center">
-                      <p>{t("confirmEstimateQuestion")}</p>
-                    </div>
-                  ),
-                  type: "bottomSheet",
-                  buttons: [
-                    {
-                      text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
-                      onClick: handleConfirmEstimate,
-                      disabled: confirmEstimateMutation.isPending,
-                    },
-                    {
-                      text: tCommon("cancel"),
-                      onClick: () => close(),
-                    },
-                  ],
-                });
-              }
-            }}
-          >
-            {buttonState.text}
-          </Button>
+          <div aria-label={t("aria.confirmEstimateButtonSection")} role="group">
+            <Button
+              variant="solid"
+              width="w-[320px]"
+              height="h-[64px]"
+              rounded="rounded-[16px]"
+              state={buttonState.state}
+              disabled={buttonState.disabled}
+              aria-label={buttonState.ariaLabel}
+              aria-describedby="confirm-button-description"
+              onClick={() => {
+                if (!buttonState.disabled) {
+                  open({
+                    title: t("confirmEstimate"),
+                    children: (
+                      <div className="flex flex-col items-center justify-center">
+                        <p>{t("confirmEstimateQuestion")}</p>
+                      </div>
+                    ),
+                    type: "bottomSheet",
+                    buttons: [
+                      {
+                        text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
+                        onClick: handleConfirmEstimate,
+                        disabled: confirmEstimateMutation.isPending,
+                      },
+                      {
+                        text: tCommon("cancel"),
+                        onClick: () => close(),
+                      },
+                    ],
+                  });
+                }
+              }}
+            >
+              {buttonState.text}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+      {/* 스크린 리더를 위한 숨겨진 설명 텍스트 */}
+      <div className="sr-only">
+        <div id="favorite-button-description">
+          {mover.isFavorite ? t("removeFromFavoritesDescription") : t("addToFavoritesDescription")}
+        </div>
+        <div id="confirm-button-description">{t("confirmEstimateButtonDescription")}</div>
+      </div>
+    </section>
   );
 };

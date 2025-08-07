@@ -94,37 +94,98 @@ export const EstimateListSection = ({
         : estimateList; // 옵션이 더 있다면 else if 추가
 
   return (
-    <div className="lg:border-border-light flex w-full flex-col items-center justify-center gap-4 lg:border-l lg:pl-15">
+    <section
+      className="lg:border-border-light flex w-full flex-col items-center justify-center gap-4 lg:border-l lg:pl-15"
+      aria-labelledby="estimate-list-title"
+    >
       {/* 목록 과 견적서 개수 */}
-      <div className="flex w-full flex-row items-center justify-start gap-2">
-        <h1 className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
+      <header className="flex w-full flex-row items-center justify-start gap-2">
+        <h1
+          id="estimate-list-title"
+          className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]"
+        >
           {t("estimateList")}
         </h1>
-        <p className="text-primary-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
+        <p
+          className="text-primary-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]"
+          aria-label={`${t("estimateList")} ${filteredList.length}${t("count")}`}
+        >
           {filteredList.length}
         </p>
-      </div>
+      </header>
 
       {/* 정렬 버튼과 이사확정 버튼 */}
       <div className="relative flex w-full flex-row items-center justify-between gap-4">
-        <button
-          className={`flex h-[36px] cursor-pointer flex-row items-center justify-between gap-[6px] rounded-[8px] border-1 py-2 pr-1 pl-3 lg:h-[50px] lg:pr-3 lg:pl-5 ${option === "" ? "border-border-light" : "border-primary-400 bg-primary-100"}`}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <p
-            className={`text-black-400 text-[14px] leading-[24px] font-medium lg:text-[16px] lg:leading-[26px] ${option === "" ? "text-black-400" : "text-primary-400"}`}
+        <div className="relative">
+          <button
+            className={`flex h-[36px] cursor-pointer flex-row items-center justify-between gap-[6px] rounded-[8px] border-1 py-2 pr-1 pl-3 lg:h-[50px] lg:pr-3 lg:pl-5 ${option === "" ? "border-border-light" : "border-primary-400 bg-primary-100"}`}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            aria-labelledby="filter-button-label"
+            aria-describedby="filter-button-description"
           >
-            {option === "" ? t("all") : option}
-          </p>
+            <span id="filter-button-label" className="sr-only">
+              {t("filterEstimates")}
+            </span>
+            <p
+              className={`text-black-400 text-[14px] leading-[24px] font-medium lg:text-[16px] lg:leading-[26px] ${option === "" ? "text-black-400" : "text-primary-400"}`}
+              id="filter-button-description"
+            >
+              {option === "" ? t("all") : option}
+            </p>
 
-          <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
-            <Image src={isOpen ? up : down} alt="dropdown" fill className="object-contain" />
-          </div>
+            <div className="relative flex h-[20px] w-[20px] flex-row items-center justify-center lg:hidden">
+              <Image
+                src={isOpen ? up : down}
+                alt={isOpen ? t("closeDropdown") : t("openDropdown")}
+                fill
+                className="object-contain"
+              />
+            </div>
 
-          <div className="relative hidden lg:block lg:h-[36px] lg:w-[36px] lg:flex-row lg:items-center lg:justify-center">
-            <Image src={isOpen ? upLg : downLg} alt="dropdown" fill className="object-contain" />
-          </div>
-        </button>
+            <div className="relative hidden lg:block lg:h-[36px] lg:w-[36px] lg:flex-row lg:items-center lg:justify-center">
+              <Image
+                src={isOpen ? upLg : downLg}
+                alt={isOpen ? t("closeDropdown") : t("openDropdown")}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </button>
+
+          {/*  드롭다운 메뉴  */}
+          {isOpen && (
+            <div
+              className="absolute top-[110%] left-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg"
+              role="listbox"
+              aria-labelledby="filter-button-label"
+            >
+              <div
+                className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
+                role="option"
+                aria-selected={option === t("all")}
+                onClick={() => {
+                  setOption(t("all"));
+                  setIsOpen(false);
+                }}
+              >
+                {t("all")}
+              </div>
+              <div
+                className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
+                role="option"
+                aria-selected={option === t("confirmedEstimate")}
+                onClick={() => {
+                  setOption(t("confirmedEstimate"));
+                  setIsOpen(false);
+                }}
+              >
+                {t("confirmedEstimate")}
+              </div>
+            </div>
+          )}
+        </div>
 
         <Button
           variant="solid"
@@ -134,6 +195,7 @@ export const EstimateListSection = ({
           rounded="rounded-[8px]"
           disabled={buttonState.disabled}
           style={{ cursor: buttonState.disabled ? "not-allowed" : "pointer" }}
+          aria-label={buttonState.text}
           onClick={() =>
             open({
               title: t("confirmMoveTitle"),
@@ -156,37 +218,19 @@ export const EstimateListSection = ({
         >
           {buttonState.text}
         </Button>
-
-        {/*  드롭다운 메뉴  */}
-        {isOpen && (
-          <div className="absolute top-[110%] left-0 z-10 rounded-[12px] border border-gray-100 bg-white shadow-lg">
-            <div
-              className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
-              onClick={() => {
-                setOption(t("all"));
-                setIsOpen(false);
-              }}
-            >
-              {t("all")}
-            </div>
-            <div
-              className="flex h-10 w-27 cursor-pointer flex-row items-center justify-start px-[14px] py-2 hover:bg-gray-100 lg:h-15 lg:w-40"
-              onClick={() => {
-                setOption(t("confirmedEstimate"));
-                setIsOpen(false);
-              }}
-            >
-              {t("confirmedEstimate")}
-            </div>
-          </div>
-        )}
       </div>
 
-      <div className="flex w-full flex-col items-stretch justify-center">
-        {filteredList.map((item) => (
-          <CardList key={item.estimate.id} {...item} hasConfirmedEstimate={hasConfirmedEstimate} usedAt="received" />
+      <div
+        className="flex w-full flex-col items-stretch justify-center"
+        role="list"
+        aria-label={`${t("estimateList")} ${filteredList.length}${t("count")}`}
+      >
+        {filteredList.map((item, index) => (
+          <div key={item.estimate.id} role="listitem">
+            <CardList {...item} hasConfirmedEstimate={hasConfirmedEstimate} usedAt="received" />
+          </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };

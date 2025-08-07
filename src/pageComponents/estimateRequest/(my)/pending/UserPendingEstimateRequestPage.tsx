@@ -54,9 +54,9 @@ export const UserPendingEstimateRequestPage = () => {
 
   if (isPending)
     return (
-      <div>
+      <main aria-label={t("aria.loadingSection")}>
         <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      </main>
     );
 
   const dataLogtime = Date.now();
@@ -93,16 +93,26 @@ export const UserPendingEstimateRequestPage = () => {
     }, 0);
   }
 
-  if (isError) return <Error error={error} reset={() => refetch()} />;
+  if (isError)
+    return (
+      <main aria-label={t("aria.errorSection")}>
+        <Error error={error} reset={() => refetch()} />
+      </main>
+    );
 
   if (!data || data.estimateRequest === null) {
     return (
-      <div className="flex flex-col items-center justify-center">
-        <EstimateRequestAndEstimateTab userType="User" />
-        <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
+      <main aria-label={t("aria.mainContent")}>
+        <nav aria-label={t("aria.tabNavigation")}>
+          <EstimateRequestAndEstimateTab userType="User" />
+        </nav>
+        <section
+          aria-label={t("aria.emptyStateSection")}
+          className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+        >
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-              <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" priority />
+              <Image src={noEstimate} alt={t("aria.noEstimateImage")} fill className="object-contain" priority />
             </div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("noEstimateInProgress")}</div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("requestNewEstimate")}</div>
@@ -114,13 +124,14 @@ export const UserPendingEstimateRequestPage = () => {
                 height="h-[54px]"
                 rounded="rounded-[12px]"
                 className="mt-4"
+                aria-label={t("aria.createEstimateButton")}
               >
                 {t("goToCreateEstimate")}
               </Button>
             </Link>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
@@ -131,10 +142,12 @@ export const UserPendingEstimateRequestPage = () => {
   const hasConfirmedEstimate = estimates.some((estimate) => estimate.status === "ACCEPTED");
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center">
+    <main aria-label={t("aria.mainContent")}>
+      <nav aria-label={t("aria.tabNavigation")}>
         <EstimateRequestAndEstimateTab userType="User" />
-        {estimateRequest && (
+      </nav>
+      {estimateRequest && (
+        <section aria-label={t("aria.estimateRequestSection")}>
           <RequestEstimateRequest
             moveType={mapServiceTypeToMoveType(estimateRequest.moveType)}
             createdAt={estimateRequest.createdAt}
@@ -142,32 +155,36 @@ export const UserPendingEstimateRequestPage = () => {
             fromAddress={estimateRequest.fromAddress}
             toAddress={estimateRequest.toAddress}
           />
-        )}
-        <div className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]">
-          {estimates.length === 0 ? (
-            <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
-              <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-                <Image src={noEstimate} alt="empty-estimateRequest" fill className="object-contain" priority />
-              </div>
-              <div className="text-[20px] leading-8 font-normal text-gray-400">{t("moversReviewing")}</div>
-              <div className="text-[20px] leading-8 font-normal text-gray-400">{t("estimateComingSoon")}</div>
+        </section>
+      )}
+      <section
+        aria-label={t("aria.estimateListSection")}
+        className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+      >
+        {estimates.length === 0 ? (
+          <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
+            <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
+              <Image src={noEstimate} alt={t("aria.noEstimateImage")} fill className="object-contain" priority />
             </div>
-          ) : (
-            <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
-              {estimates.map((item) => (
+            <div className="text-[20px] leading-8 font-normal text-gray-400">{t("moversReviewing")}</div>
+            <div className="text-[20px] leading-8 font-normal text-gray-400">{t("estimateComingSoon")}</div>
+          </div>
+        ) : (
+          <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
+            {estimates.map((item) => (
+              <article key={item.id} aria-label={t("aria.estimateCard")}>
                 <CardList
-                  key={item.id}
                   estimateRequest={estimateRequest}
                   estimate={item}
                   usedAt="pending"
                   hasConfirmedEstimate={hasConfirmedEstimate}
                 />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
   );
 };
 export default UserPendingEstimateRequestPage;

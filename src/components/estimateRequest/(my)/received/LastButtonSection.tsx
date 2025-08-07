@@ -122,13 +122,29 @@ export const LastButtonSection = ({
   const buttonState = getButtonState();
 
   return (
-    <div className="flex w-full flex-row items-center justify-center gap-2 py-7">
+    <section
+      className="flex w-full flex-row items-center justify-center gap-2 py-7"
+      aria-label={t("estimateActionSection")}
+      role="region"
+    >
       <button
         className={`relative flex h-[54px] w-[54px] cursor-pointer flex-row items-center justify-center hover:cursor-pointer lg:hidden`}
         onClick={handleFavorite}
         disabled={favoriteMutation.isPending}
+        aria-label={mover.isFavorite ? t("removeFromFavorites") : t("addToFavorites")}
+        aria-pressed={mover.isFavorite}
+        aria-describedby="favorite-button-description"
+        type="button"
       >
-        <Image src={like} alt="like" fill className="object-contain" />
+        <Image
+          src={like}
+          alt={mover.isFavorite ? t("favoriteIconActive") : t("favoriteIconInactive")}
+          fill
+          className="object-contain"
+        />
+        <span id="favorite-button-description" className="sr-only">
+          {mover.isFavorite ? t("removeFromFavoritesDescription") : t("addToFavoritesDescription")}
+        </span>
       </button>
       <Button
         variant="solid"
@@ -137,6 +153,8 @@ export const LastButtonSection = ({
         rounded="rounded-[8px]"
         state={buttonState.state}
         disabled={buttonState.disabled}
+        aria-label={t("confirmEstimateButton")}
+        aria-describedby="confirm-button-description"
         onClick={() => {
           if (!buttonState.disabled) {
             open({
@@ -163,7 +181,10 @@ export const LastButtonSection = ({
         }}
       >
         {buttonState.text}
+        <span id="confirm-button-description" className="sr-only">
+          {t("confirmEstimateButtonDescription")}
+        </span>
       </Button>
-    </div>
+    </section>
   );
 };
