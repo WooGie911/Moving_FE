@@ -4,7 +4,7 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import { Button } from "@/components/common/button/Button";
 import Image from "next/image";
 import React from "react";
-import estimateIcon from "@/assets/icon/etc/icon-estimate.webp";
+import estimateIcon from "@/assets/icon/etc/icon-estimate.svg";
 import { IAddress } from "@/types/review";
 import defaultProfile from "@/assets/img/mascot/moverprofile-lg.webp";
 import { useTranslations, useLocale } from "next-intl";
@@ -93,9 +93,9 @@ const WritableMoverCard = ({
             </div>
           </div>
 
-          <div className="mt-4 flex min-w-[150px] items-center justify-between border-t-2 border-gray-200 pt-5 md:-mt-4 md:flex-col md:items-end md:border-none lg:hidden">
+          <div className="mt-4 flex min-w-[150px] items-center justify-between border-t-2 border-gray-200 pt-7 md:-mt-4 md:flex-col md:items-end md:border-none lg:hidden">
             <div className="font-medium text-gray-500">{t("estimateAmount")}</div>
-            <div className="text-right text-2xl font-bold">
+            <div className="text-2lg text-right font-bold lg:text-2xl">
               {price.toLocaleString()} {shared("units.currency")}
             </div>
           </div>
@@ -105,7 +105,7 @@ const WritableMoverCard = ({
       <div className="flex flex-col justify-end">
         <div className="hidden lg:flex lg:flex-col lg:items-end">
           <div className="font-medium text-gray-500">{t("estimateAmount")}</div>
-          <div className="text-right text-2xl font-bold">
+          <div className="text-2lg text-right font-bold lg:text-2xl">
             {price.toLocaleString()} {shared("units.currency")}
           </div>
         </div>
