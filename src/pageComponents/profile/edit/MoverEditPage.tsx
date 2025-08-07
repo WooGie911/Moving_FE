@@ -7,14 +7,14 @@ import { Button } from "@/components/common/button/Button";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Image from "next/image";
 import { TextInput } from "@/components/common/input/TextInput";
-import moverprofileMd from "@/assets/img/mascot/moverprofile-md.png";
+import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
 import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
-import { useModal } from "@/components/common/modal/ModalContext";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
 const SERVICE_OPTIONS = ["소형이사", "가정이사", "사무실이사"];
 const REGION_OPTIONS = [
@@ -79,7 +79,8 @@ export default function MoverEditPage() {
   const t = useTranslations("profile");
   const moverT = useTranslations("mover");
   const tRegions = useTranslations("regions");
-  const { open, close } = useModal();
+  const tShared = useTranslations();
+
   const [services, setServices] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<{ file: File | null; dataUrl: string }>({
@@ -190,32 +191,13 @@ export default function MoverEditPage() {
       const result = await userApi.updateMoverProfile(req);
       if (result.success) {
         await getUser();
-        open({
-          title: t("edit.successTitle"),
-          children: <div>{t("edit.successMessage")}</div>,
-          buttons: [
-            {
-              text: t("edit.confirm"),
-              onClick: () => {
-                close();
-                router.push(`/${locale}/moverMyPage`);
-              },
-            },
-          ],
-        });
+        showSuccessToast(t("edit.successMessage"));
+        router.push(`/${locale}/moverMyPage`);
       } else {
-        open({
-          title: t("edit.errorTitle"),
-          children: <div>{result.message || t("edit.errorMessage")}</div>,
-          buttons: [{ text: t("edit.confirm"), onClick: () => close() }],
-        });
+        showErrorToast(result.message || t("edit.errorMessage"));
       }
     } catch (e) {
-      open({
-        title: t("edit.errorTitle"),
-        children: <div>{t("edit.generalError")}</div>,
-        buttons: [{ text: t("edit.confirm"), onClick: () => close() }],
-      });
+      showErrorToast(t("edit.generalError"));
     }
   };
 
@@ -254,7 +236,7 @@ export default function MoverEditPage() {
                       <img src={selectedImage.dataUrl} alt="프로필 이미지" className="h-full w-full object-cover" />
                     ) : (
                       <Image
-                        src={moverprofileMd}
+                        src={defaultProfileImage}
                         alt="프로필 이미지"
                         width={160}
                         height={160}
@@ -374,19 +356,31 @@ export default function MoverEditPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
-                  {SERVICE_OPTIONS.map((service) => (
-                    <CircleTextLabel
-                      key={service}
-                      text={getServiceTypeTranslation(service, moverT)}
-                      clickAble={true}
-                      isSelected={services.includes(service)}
-                      onClick={() =>
-                        setServices((prev) =>
-                          prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
-                        )
-                      }
-                    />
-                  ))}
+                  {SERVICE_OPTIONS.map((service) => {
+                    // 마이페이지와 동일한 번역 로직 적용
+                    let translatedText = service;
+                    if (service === "소형이사") {
+                      translatedText = tShared("service.소형이사");
+                    } else if (service === "가정이사") {
+                      translatedText = tShared("service.가정이사");
+                    } else if (service === "사무실이사") {
+                      translatedText = tShared("service.사무실이사");
+                    }
+
+                    return (
+                      <CircleTextLabel
+                        key={service}
+                        text={translatedText}
+                        clickAble={true}
+                        isSelected={services.includes(service)}
+                        onClick={() =>
+                          setServices((prev) =>
+                            prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service],
+                          )
+                        }
+                      />
+                    );
+                  })}
                 </div>
               </div>
               <div className="mx-auto h-0 w-[327px] outline outline-1 outline-offset-[-0.5px] outline-zinc-100 lg:w-full" />

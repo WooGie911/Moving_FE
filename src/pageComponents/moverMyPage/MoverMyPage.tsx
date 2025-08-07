@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
 import defaultHeader from "@/assets/img/etc/detailHeader.png";
-import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.png";
+import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
 import editIcon from "@/assets/icon/edit/icon-edit.png";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
@@ -267,7 +267,7 @@ const MoverMyPage = () => {
                 </button>
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -283,7 +283,7 @@ const MoverMyPage = () => {
               <div className="hidden w-full flex-row gap-4 md:flex lg:hidden">
                 <button
                   onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
                 >
                   <div className="flex items-center justify-start gap-1.5">
                     <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
@@ -384,7 +384,7 @@ const MoverMyPage = () => {
                 )}
               </div>
             </div>
-            <div className="h-0 w-full outline outline-1 outline-offset-[-0.50px] outline-gray-200" />
+            <div className="h-0 w-full outline-1 outline-offset-[-0.50px] outline-gray-200" />
             <div className="flex flex-col items-start justify-start gap-10 self-stretch">
               <div className="rounded-24 w-full bg-white p-6">
                 <ReviewAvg mover={profile} reviews={allReviews} />
@@ -406,7 +406,7 @@ const MoverMyPage = () => {
             </button>
             <button
               onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
+              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
             >
               <div className="flex items-center justify-start gap-1.5">
                 <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
