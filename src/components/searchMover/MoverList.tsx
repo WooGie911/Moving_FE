@@ -91,7 +91,7 @@ const MoverList = () => {
         {/* 무한스크롤 감지용 div */}
         <div ref={ref} style={{ height: 1 }} />
 
-        {isFetchingNextPage && <div className="py-4 text-center text-gray-500">{t("loadingMessage")}</div>}
+        {isFetchingNextPage && <div className="py-4 text-center text-gray-500">{t("loadingMoverInfo")}</div>}
       </div>
 
       {/* 맨 위로 올라가는 버튼 */}

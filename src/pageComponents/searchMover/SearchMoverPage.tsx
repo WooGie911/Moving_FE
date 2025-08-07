@@ -60,7 +60,7 @@ const SearchMoverPage = () => {
   if (isOverallLoading) {
     return (
       <div className="min-h-screen bg-gray-200">
-        <MovingTruckLoader size="lg" loadingText={t("loadingMessage")} />
+        <MovingTruckLoader size="lg" loadingText={t("loadingMoverInfo")} />
       </div>
     );
   }
