@@ -54,10 +54,10 @@ const CustomerRegisterPage = () => {
         preferredServices: services,
       });
 
-      showSuccessToast(t("register.successMessage"));
       window.location.href = `/${currentLocale}/searchMover`;
+      showSuccessToast(t("registerSuccessMessage"));
     } catch (error: any) {
-      handleAuthErrorToast(t, error.message); // ✅ 여기에 도달함
+      handleAuthErrorToast(t, error.message);
     }
   };
 
