@@ -18,12 +18,11 @@ import {
 } from "@/components/profile/edit";
 import { useAuth } from "@/providers/AuthProvider";
 import { isValidEmail, isValidName, isValidPhoneNumber } from "@/utils/validators";
-import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 export default function CustomerEditPage() {
-  const { user } = useAuth();
+  const { user, getUser } = useAuth();
   const provider = user?.provider;
 
   const router = useRouter();
@@ -103,7 +102,8 @@ export default function CustomerEditPage() {
       const res = await userApi.updateCustomerBasicInfo(data);
       if (res.success) {
         showSuccessToast(t("edit.successMessage"));
-        window.location.href = `/${locale}/searchMover`;
+        await getUser();
+        router.push(`/${locale}/searchMover`);
       }
     } catch (error: any) {
       console.log("error", error.message);
