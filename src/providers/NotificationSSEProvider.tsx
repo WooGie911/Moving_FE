@@ -45,7 +45,6 @@ export default function NotificationSSEProvider({ children }: { children: React.
 
       if (user?.id && !isSSEConnected) {
         connectSSE(token);
-        fetchNotifications(3, 0, "ko", user?.userType);
       } else if (!user?.id && isSSEConnected) {
         disconnectSSE();
       }
