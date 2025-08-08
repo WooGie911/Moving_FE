@@ -103,7 +103,7 @@ export default function CustomerEditPage() {
       const res = await userApi.updateCustomerBasicInfo(data);
       if (res.success) {
         showSuccessToast(t("edit.successMessage"));
-        router.push(`/${locale}/searchMover`);
+        window.location.href = `/${locale}/searchMover`;
       }
     } catch (error: any) {
       console.log("error", error.message);
