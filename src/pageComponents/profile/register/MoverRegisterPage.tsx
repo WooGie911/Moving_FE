@@ -5,7 +5,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import userApi from "@/lib/api/user.api";
-import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -21,7 +20,6 @@ import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 const MoverRegisterPage = () => {
-  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const currentLocale = useLocale();
@@ -67,7 +65,7 @@ const MoverRegisterPage = () => {
       await userApi.postProfile(profileData);
 
       showSuccessToast(t("register.successMessage"));
-      router.push(`/${currentLocale}/estimate/received`);
+      window.location.href = `/${currentLocale}/estimate/received`;
     } catch (error: any) {
       handleAuthErrorToast(t, error.message);
     }

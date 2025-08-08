@@ -5,7 +5,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
 
 import userApi from "@/lib/api/user.api";
-import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
 import {
@@ -21,7 +20,6 @@ import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 const CustomerRegisterPage = () => {
-  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const currentLocale = useLocale();
@@ -57,7 +55,7 @@ const CustomerRegisterPage = () => {
       });
 
       showSuccessToast(t("register.successMessage"));
-      router.push(`/${currentLocale}/searchMover`);
+      window.location.href = `/${currentLocale}/searchMover`;
     } catch (error: any) {
       handleAuthErrorToast(t, error.message); // ✅ 여기에 도달함
     }
