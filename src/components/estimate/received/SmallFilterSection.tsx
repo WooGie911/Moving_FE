@@ -100,7 +100,6 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   const isFilterActive = () => {
     return filters.movingTypes.length > 0 || filters.isDesignatedOnly || filters.isServiceAreaOnly;
   };
-
   return (
     <div className="flex w-full flex-row justify-between">
       <p>{`${t("totalCount")} ${totalCount}${t("countUnit")}`}</p>
@@ -109,7 +108,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
         <Dropdown value={filters.sortBy} onChange={(sortBy) => onFiltersChange({ sortBy })} />
 
         <button
-          className="relative h-[32px] w-[32px]"
+          className="flex h-[32px] w-[32px] items-center justify-center"
           onClick={() => {
             isModalOpening.current = true;
             open({
@@ -146,7 +145,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
             });
           }}
         >
-          <Image src={isFilterActive() ? sort_active : sort_inactive} alt="sortModal" fill className="object-contain" />
+          <Image src={isFilterActive() ? sort_active : sort_inactive} alt="sortModal" width={32} height={32} />
         </button>
       </div>
     </div>

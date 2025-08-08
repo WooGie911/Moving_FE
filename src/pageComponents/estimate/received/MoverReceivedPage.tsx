@@ -82,8 +82,9 @@ export const MoverReceivedPage = () => {
       filtered = filtered.filter(
         (item) =>
           item.customer.name.includes(filters.searchKeyword) ||
-          item.fromAddress.region.includes(filters.searchKeyword) ||
-          item.toAddress.region.includes(filters.searchKeyword),
+          item.customer.nickname?.includes(filters.searchKeyword) ||
+          item.toAddress.region.includes(filters.searchKeyword) ||
+          item.moveType.includes(filters.searchKeyword),
       );
     }
 
