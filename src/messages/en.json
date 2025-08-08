@@ -538,6 +538,7 @@
       "description": "Profile registration page"
     },
     "registerLoadingText": "Loading profile registration page...",
+    "registerSuccessMessage": "Profile registration is complete.",
     "editLoadingText": "Loading profile edit page...",
     "imageUploadError": "Only image files can be uploaded.",
     "error": {

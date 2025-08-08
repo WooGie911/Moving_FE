@@ -109,12 +109,10 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
 
       if (response.success && response.data) {
         setUser(response.data);
-
-        // TODO : 테스트용으로 남겨둠
-        // startRefreshTokenTimer(1);
         startRefreshTokenTimer(14);
 
-        if (isPublicRoute(pathname)) {
+        // ✅ 리다이렉트는 최초 진입 + 퍼블릭 페이지일 때만
+        if (!isUserFetched && isPublicRoute(pathname)) {
           redirectToUserMainPage(response.data.userType);
         }
       } else {
@@ -208,11 +206,18 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const kakaoLogin = (userType: TUser["userType"]) => socialLogin("kakao", userType);
   const naverLogin = (userType: TUser["userType"]) => socialLogin("naver", userType);
 
+  const fetchedPaths = useRef<Set<string>>(new Set());
+
   useEffect(() => {
-    if (!isUserFetched) {
-      getUser().finally(() => setIsUserFetched(true));
+    const isPrivateRoute = ["/searchMover", "/estimate/received"].includes(pathname);
+    const shouldFetch = !fetchedPaths.current.has(pathname) || isPrivateRoute;
+
+    if (shouldFetch) {
+      getUser().finally(() => {
+        fetchedPaths.current.add(pathname);
+      });
     }
-  }, []);
+  }, [pathname]);
 
   const contextValue: IAuthContextType = {
     user,

@@ -546,6 +546,7 @@
       "description": "资料注册页面"
     },
     "registerLoadingText": "正在加载个人资料注册页面...",
+    "registerSuccessMessage": "个人资料注册已完成。",
     "editLoadingText": "正在加载个人资料编辑页面...",
     "imageUploadError": "只能上传图片文件。",
     "error": {
