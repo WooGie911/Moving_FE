@@ -10,7 +10,6 @@ import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 
 interface ISigninFormProps {
@@ -19,7 +18,6 @@ interface ISigninFormProps {
 }
 
 const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
-  const router = useRouter();
   const { login, isLoading } = useAuth();
   const validationRules = useValidationRules();
   const t = useTranslations("auth");
@@ -45,12 +43,12 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
     try {
       if (isLoading) return;
       const response = await login(email, password, userType);
+
       if (response.success) {
-      } else {
         if (userType === "CUSTOMER") {
-          router.push(`/${currentLocale}/searchMover`);
+          window.location.href = `/${currentLocale}/searchMover`;
         } else {
-          router.push(`/${currentLocale}/estimate/received`);
+          window.location.href = `/${currentLocale}/estimate/received`;
         }
       }
     } catch (error: any) {
