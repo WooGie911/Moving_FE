@@ -16,9 +16,10 @@ export const Logo = ({ size = "mobile", userRole = "GUEST" }: ILogoProps) => {
   const logoSrc = isFullLogo ? fulllogo : logo;
   const width = isFullLogo ? (size === "desktop" ? 116 : 88) : 32;
   const height = isFullLogo ? (size === "desktop" ? 44 : 34) : 32;
+  const linkUrl = userRole === "GUEST" ? "/" : userRole === "CUSTOMER" ? "/searchMover" : "/estimate/received";
 
   return (
-    <Link href="/" aria-label="홈으로 이동">
+    <Link href={linkUrl} aria-label="홈으로 이동">
       <Image
         src={logoSrc}
         alt="logo"
