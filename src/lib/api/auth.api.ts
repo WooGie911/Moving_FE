@@ -21,6 +21,10 @@ const authApi = {
 
     const responseData = await response.json();
 
+    if (!responseData.success) {
+      throw new Error(responseData.message);
+    }
+
     return responseData;
   },
 
@@ -35,6 +39,10 @@ const authApi = {
     });
 
     const responseData = await response.json();
+
+    if (!responseData.success) {
+      throw new Error(responseData.message);
+    }
 
     return responseData;
   },

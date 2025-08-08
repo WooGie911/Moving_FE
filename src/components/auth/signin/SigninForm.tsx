@@ -12,6 +12,7 @@ import { TUserType } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+import { showErrorToast } from "@/utils/toastUtils";
 
 interface ISigninFormProps {
   userType: TUserType;
@@ -45,8 +46,8 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
     try {
       if (isLoading) return;
       const response = await login(email, password, userType);
+
       if (response.success) {
-      } else {
         if (userType === "CUSTOMER") {
           router.push(`/${currentLocale}/searchMover`);
         } else {
