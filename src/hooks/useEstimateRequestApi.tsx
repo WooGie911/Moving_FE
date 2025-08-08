@@ -4,10 +4,8 @@ import { useModal } from "@/components/common/modal/ModalContext";
 import { useTranslations, useLocale } from "next-intl";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import { IFormState } from "@/types/estimateRequest";
-import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import { showSuccessToast } from "@/utils/toastUtils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { logDevError } from "@/utils/logDevError";
-import * as Sentry from "@sentry/nextjs";
 
 // API 응답 타입 정의
 interface ApiResponse<T = any> {
@@ -16,6 +14,18 @@ interface ApiResponse<T = any> {
   data?: T;
   hasActive?: boolean;
 }
+
+// 활성 견적 요청 조회를 위한 별도 훅
+export const useActiveEstimateRequest = () => {
+  const locale = useLocale();
+
+  return useQuery<ApiResponse>({
+    queryKey: ["estimateRequest", "active", locale],
+    queryFn: () => estimateRequestClientApi.getActive(locale),
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    retry: false,
+  });
+};
 
 export const useEstimateRequestApi = () => {
   const { open, close } = useModal();
@@ -111,8 +121,8 @@ export const useEstimateRequestApi = () => {
 
   // 기사님 견적 확인 및 pending 리다이렉트 함수
   const checkEstimatesAndRedirect = useCallback(
-    (result: ApiResponse | Error) => {
-      const message = result instanceof Error ? result.message : result.message;
+    (result: ApiResponse | Error | unknown) => {
+      const message = result instanceof Error ? result.message : (result as ApiResponse)?.message;
       if (message && message.includes("견적이")) {
         router.push("/estimateRequest/pending");
         return true;
@@ -125,16 +135,6 @@ export const useEstimateRequestApi = () => {
   // 공통 에러 처리 함수
   const handleApiError = useCallback(
     (error: unknown, defaultMessage: string) => {
-      Sentry.captureException(error, {
-        tags: {
-          api: "estimateRequest",
-          method: "handleApiError",
-        },
-        extra: {
-          defaultMessage,
-          error,
-        },
-      });
       showErrorModal(defaultMessage);
     },
     [showErrorModal],
@@ -145,8 +145,6 @@ export const useEstimateRequestApi = () => {
     mutationFn: (form: IFormState) => estimateRequestClientApi.create(form, locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 세션 데이터 삭제
-        localStorage.removeItem("estimateRequest_draft");
         // 견적 생성 성공 토스트 표시
         showSuccessToast(t("estimateRequest.createSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
@@ -154,16 +152,6 @@ export const useEstimateRequestApi = () => {
           window.location.reload();
         }, 1500);
       } else {
-        Sentry.captureMessage("견적 생성 실패", {
-          level: "error",
-          tags: {
-            api: "estimateRequest",
-            method: "create",
-          },
-          extra: {
-            result,
-          },
-        });
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
       }
     },
@@ -175,8 +163,6 @@ export const useEstimateRequestApi = () => {
     mutationFn: (form: IFormState) => estimateRequestClientApi.updateActive(form, locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 세션 데이터 삭제
-        localStorage.removeItem("estimateRequest_draft");
         // 견적 수정 성공 토스트 표시
         showSuccessToast(t("estimateRequest.editSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
@@ -186,16 +172,6 @@ export const useEstimateRequestApi = () => {
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
-          Sentry.captureMessage("견적 수정 실패", {
-            level: "error",
-            tags: {
-              api: "estimateRequest",
-              method: "update",
-            },
-            extra: {
-              result,
-            },
-          });
           showErrorModal(result.message || "견적 수정에 실패했습니다.");
         }
       }
@@ -213,8 +189,6 @@ export const useEstimateRequestApi = () => {
     mutationFn: () => estimateRequestClientApi.cancelActive(locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 세션 데이터 삭제
-        localStorage.removeItem("estimateRequest_draft");
         // 삭제 성공 토스트 표시
         showSuccessToast(t("estimateRequest.deleteSuccess"));
         // 토스트를 잠시 보여준 후 페이지 새로고침 (한 번만)
@@ -224,16 +198,6 @@ export const useEstimateRequestApi = () => {
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
-          Sentry.captureMessage("견적 삭제 실패", {
-            level: "error",
-            tags: {
-              api: "estimateRequest",
-              method: "delete",
-            },
-            extra: {
-              result,
-            },
-          });
           showErrorModal(result.message || "견적 삭제에 실패했습니다.");
         }
       }
@@ -243,22 +207,6 @@ export const useEstimateRequestApi = () => {
       if (!checkEstimatesAndRedirect(error)) {
         handleApiError(error, "견적 삭제에 실패했습니다.");
       }
-    },
-  });
-
-  // 활성 견적 요청 조회
-  const activeQuery = useQuery<ApiResponse>({
-    queryKey: ["estimateRequest", "active", locale],
-    queryFn: () => estimateRequestClientApi.getActive(locale),
-    staleTime: 60 * 1000,
-    retry: false,
-    onError: (error) => {
-      Sentry.captureException(error, {
-        tags: {
-          api: "estimateRequest",
-          method: "getActive",
-        },
-      });
     },
   });
 
@@ -272,7 +220,6 @@ export const useEstimateRequestApi = () => {
     createMutation,
     updateMutation,
     deleteMutation,
-    activeQuery,
     open,
     close,
   };

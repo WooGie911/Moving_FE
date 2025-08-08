@@ -367,18 +367,18 @@ body {
   font-weight: bold;
 }
 
-/* 성공 토스트 아이콘은 브랜드 오렌지 색상 */
+/* 성공 토스트 아이콘은 초록색 */
 .custom-toast.Toastify__toast--success .Toastify__toast-icon {
-  color: var(--primary-400);
+  color: #28a745;
 }
 
 /* react-toastify 기본 성공 아이콘 오버라이드 */
 .custom-toast.Toastify__toast--success .Toastify__toast-icon svg {
-  fill: var(--primary-400);
+  fill: #28a745;
 }
 
 .custom-toast.Toastify__toast--success .Toastify__toast-icon path {
-  fill: var(--primary-400);
+  fill: #28a745;
 }
 
 /* 에러 토스트 아이콘은 빨간색 */
@@ -391,11 +391,11 @@ body {
   color: #ffc107;
 }
 
-/* 성공 토스트 - 브랜드 오렌지 색상 */
+/* 성공 토스트 - 초록색 */
 .custom-toast.Toastify__toast--success {
-  background: var(--primary-200);
-  color: var(--primary-400);
-  border-left: 4px solid var(--primary-400);
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
 }
 
 /* 에러 토스트 - 빨간색으로 구분 */

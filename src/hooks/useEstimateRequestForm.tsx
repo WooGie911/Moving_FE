@@ -4,9 +4,6 @@ import { IFormState, TAddressType, IDaumAddress } from "@/types/estimateRequest"
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 
-// 세션 스토리지 키
-const ESTIMATE_REQUEST_SESSION_KEY = "estimateRequest_draft";
-
 // 초기 폼 상태
 const initialForm: IFormState = {
   movingType: "",
@@ -16,48 +13,11 @@ const initialForm: IFormState = {
   arrival: { roadAddress: "", detailAddress: "", zoneCode: "", jibunAddress: "", extraAddress: "" },
 };
 
-// 세션에서 데이터 로드
-const loadFromSession = (): Partial<IFormState> => {
-  if (typeof window === "undefined") return {};
-
-  try {
-    const saved = localStorage.getItem(ESTIMATE_REQUEST_SESSION_KEY);
-    return saved ? JSON.parse(saved) : {};
-  } catch (error) {
-    console.error("세션 데이터 로드 실패:", error);
-    return {};
-  }
-};
-
-// 세션에 데이터 저장
-const saveToSession = (data: IFormState) => {
-  if (typeof window === "undefined") return;
-
-  try {
-    localStorage.setItem(ESTIMATE_REQUEST_SESSION_KEY, JSON.stringify(data));
-  } catch (error) {
-    console.error("세션 데이터 저장 실패:", error);
-  }
-};
-
-// 세션 데이터 삭제
-const clearSession = () => {
-  if (typeof window === "undefined") return;
-
-  try {
-    localStorage.removeItem(ESTIMATE_REQUEST_SESSION_KEY);
-  } catch (error) {
-    console.error("세션 데이터 삭제 실패:", error);
-  }
-};
-
 export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   const [form, setForm] = useState<IFormState>(() => {
-    // 세션에서 복원하거나 초기 데이터 사용
-    const sessionData = loadFromSession();
+    // 초기 데이터만 사용
     return {
       ...initialForm,
-      ...sessionData,
       ...initialData,
     };
   });
@@ -68,11 +28,6 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
   const locale = useLocale();
 
   const progress = step === 4 ? 100 : step * 33;
-
-  // 폼 데이터가 변경될 때마다 세션에 저장
-  useEffect(() => {
-    saveToSession(form);
-  }, [form]);
 
   // 폼 유효성 검사
   const isFormValid = useCallback(() => {
@@ -122,9 +77,8 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
     [setForm],
   );
 
-  // 세션 데이터 초기화
-  const clearSessionData = useCallback(() => {
-    clearSession();
+  // 폼 데이터 초기화
+  const clearFormData = useCallback(() => {
     setForm(initialForm);
     setStep(1);
     setShowNextQuestion(true);
@@ -158,7 +112,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
     const answerText = getAnswerText(step, pendingAnswer);
 
     return (
-      <div className="fade-in-up">
+      <div>
         <SpeechBubble type="answer" isLatest={true}>
           {answerText}
         </SpeechBubble>
@@ -172,7 +126,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
     if (step > 1 && form.movingType) {
       answers.push(
-        <div key="movingType" className="fade-in-up">
+        <div key="movingType">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingType}>
             {form.movingType
               ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
@@ -184,7 +138,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
     if (step > 2 && form.movingDate) {
       answers.push(
-        <div key="movingDate" className="fade-in-up">
+        <div key="movingDate">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
             {formatDateByLanguage(form.movingDate, locale as "ko" | "en" | "zh")}
           </SpeechBubble>
@@ -211,7 +165,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
     handleDateComplete,
     handleEditStep,
     handleAddressUpdate,
-    clearSessionData,
+    clearFormData,
     getAnswerText,
     handleEditMovingType,
     handleEditMovingDate,
