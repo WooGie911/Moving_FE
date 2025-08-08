@@ -565,12 +565,16 @@
     "favoriteMover": "收藏的司机"
   },
   "mover": {
-    "title": "找司机",
+    "title": "寻找司机",
+    "metadata": {
+      "title": "寻找司机 | Moving",
+      "description": "寻找可靠的司机"
+    },
+    "loadingMoverInfo": "正在加载司机信息...",
     "loading": "加载中...",
     "customer": "客户",
     "notification": "通知",
     "user": "用户",
-    "loadingMessage": "正在加载司机信息...",
     "errorTitle": "发生错误",
     "errorMessage": "加载司机信息失败。",
     "notFoundMessage": "找不到司机信息。",
@@ -624,6 +628,9 @@
     "activeEstimateExists": "您有一个搬家日期未过的活跃报价请求。请先完成或取消现有报价请求后再申请新的报价。",
     "estimateConfirmed": "报价已确认",
     "estimateConfirmedMessage": "您无法为已确认的报价申请指定报价。",
+    "estimateCompleted": "搬家完成",
+    "estimateCompletedMessage": "此报价已完成。请申请新的普通报价。",
+    "requestRejected": "已拒绝",
     "likeLoginRequiredMessage": "请先登录后使用收藏功能。",
     "likeErrorTitle": "错误",
     "likeFailedMessage": "收藏处理失败。",

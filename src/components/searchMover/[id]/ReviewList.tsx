@@ -105,7 +105,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
       <div className="flex items-center justify-center py-8">
         <div className="flex flex-col items-center gap-3">
           <div className="border-primary-400 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <div className="text-lg text-gray-500">{t("loadingMessage")}</div>
+          <div className="text-lg text-gray-500">{t("loadingMoverInfo")}</div>
         </div>
       </div>
     );

@@ -7,7 +7,6 @@ import {
 } from "@/types/mover.types";
 import { ApiResponse } from "@/types/api.types";
 import { REGION_LIST, SERVICE_TYPE_LIST } from "@/lib/utils/moverStaticData";
-import { apiGet, apiPost, apiDelete } from "@/utils/apiHelpers";
 
 const findMoverApi = {
   /**
@@ -32,7 +31,21 @@ const findMoverApi = {
       if (language) query.append("lang", language);
 
       const endpoint = `/movers?${query.toString()}`;
-      const data: ApiResponse<MoverListResponse> = await apiGet(endpoint);
+
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+      });
+
+      const data: ApiResponse<MoverListResponse> = await response.json();
 
       if (!data.success) {
         return { items: [], nextCursor: null, hasNext: false };
@@ -70,11 +83,24 @@ const findMoverApi = {
       const queryString = params.toString();
       const endpoint = `/favorites/movers${queryString ? `?${queryString}` : ""}`;
 
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+      });
+
       const data: ApiResponse<{
         items: IMoverInfo[];
         nextCursor: string | null;
         hasNext: boolean;
-      }> = await apiGet(endpoint);
+      }> = await response.json();
 
       return data.data || { items: [], nextCursor: null, hasNext: false };
     } catch (error) {
@@ -91,7 +117,20 @@ const findMoverApi = {
       const queryParams = language ? `?lang=${language}` : "";
       const endpoint = `/movers/${moverId}${queryParams}`;
 
-      const data: ApiResponse<IMoverInfo> = await apiGet(endpoint);
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+      });
+
+      const data: ApiResponse<IMoverInfo> = await response.json();
 
       return data.success ? data.data : null;
     } catch (error) {
@@ -124,17 +163,14 @@ const findMoverApi = {
     try {
       const endpoint = `/movers/${moverId}/quote-request`;
 
-      // 인증 토큰과 CSRF 토큰 가져오기
+      // 인증 토큰 가져오기
       const { getTokenFromCookie } = await import("@/utils/auth");
-      const { getCSRFTokenFromCookie } = await import("@/utils/csrf");
 
       const accessToken = await getTokenFromCookie();
-      const csrfToken = getCSRFTokenFromCookie();
 
       const headers = {
         "Content-Type": "application/json",
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-        ...(csrfToken && { "X-CSRF-Token": csrfToken }),
       };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
@@ -173,7 +209,21 @@ const findMoverApi = {
   ): Promise<DesignatedQuoteRequestCheckResponse> => {
     try {
       const endpoint = `/movers/${moverId}/quote-request/check?quoteId=${quoteId}`;
-      const result: ApiResponse<DesignatedQuoteRequestCheckResponse> = await apiGet(endpoint);
+
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+      });
+
+      const result: ApiResponse<DesignatedQuoteRequestCheckResponse> = await response.json();
       return result.data;
     } catch (error) {
       console.error("지정 견적 요청 여부 조회 에러:", error);
@@ -225,7 +275,21 @@ const findMoverApi = {
       if (status) queryParams.append("status", status);
 
       const endpoint = `/reviews/mover/${moverId}?${queryParams.toString()}`;
-      return await apiGet(endpoint);
+
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+      });
+
+      return await response.json();
     } catch (error) {
       console.error("리뷰 조회 실패:", error);
       throw error;
@@ -237,9 +301,23 @@ const findMoverApi = {
    */
   addFavorite: async (moverId: string): Promise<{ isFavorited: boolean; favoriteCount: number }> => {
     try {
-      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await apiPost("/favorites", {
-        moverId,
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          moverId,
+        }),
       });
+
+      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await response.json();
       return result.data;
     } catch (error) {
       console.error("찜하기 추가 실패:", error);
@@ -252,9 +330,23 @@ const findMoverApi = {
    */
   removeFavorite: async (moverId: string): Promise<{ isFavorited: boolean; favoriteCount: number }> => {
     try {
-      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await apiDelete(
-        `/favorites/${moverId}`,
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/favorites/${moverId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+          },
+          credentials: "include",
+        },
       );
+
+      const result: ApiResponse<{ isFavorited: boolean; favoriteCount: number }> = await response.json();
       return result.data;
     } catch (error) {
       console.error("찜하기 제거 실패:", error);
@@ -267,7 +359,23 @@ const findMoverApi = {
    */
   checkActiveEstimateRequest: async (): Promise<{ hasActiveRequest: boolean }> => {
     try {
-      const result: ApiResponse<{ hasActiveRequest: boolean }> = await apiGet("/movers/active-estimate-request/check");
+      // 인증 토큰 가져오기
+      const { getTokenFromCookie } = await import("@/utils/auth");
+      const accessToken = await getTokenFromCookie();
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/movers/active-estimate-request/check`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+          },
+          credentials: "include",
+        },
+      );
+
+      const result: ApiResponse<{ hasActiveRequest: boolean }> = await response.json();
       return result.data;
     } catch (error) {
       console.error("이사일이 지나지 않은 견적 확인 에러:", error);

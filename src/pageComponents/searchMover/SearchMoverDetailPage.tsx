@@ -22,7 +22,7 @@ const SearchMoverDetailPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-200">
-        <MovingTruckLoader size="lg" loadingText="기사님 정보를 불러오는 중..." />
+        <MovingTruckLoader size="lg" loadingText={t("loadingMoverInfo")} />
       </div>
     );
   }
