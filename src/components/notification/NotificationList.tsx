@@ -80,7 +80,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                   idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
                 }`}
               >
-                <header className="text-sm break-words text-gray-500">{parse(DOMPurify.sanitize(notification.title))}</header>
+                <header className="text-sm break-words text-gray-500">{parse(DOMPurify.sanitize(notification.message))}</header>
                 <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
                   {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                 </time>
@@ -93,7 +93,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                 }`}
               >
                 <article>
-                  <header className="text-sm break-words font-medium">{parse(DOMPurify.sanitize(notification.title))}</header>
+                  <header className="text-sm break-words font-medium">{parse(DOMPurify.sanitize(notification.message))}</header>
                   <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
                     {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                   </time>
