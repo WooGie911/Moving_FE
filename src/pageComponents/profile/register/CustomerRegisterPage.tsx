@@ -56,7 +56,7 @@ const CustomerRegisterPage = () => {
         preferredServices: services,
       });
 
-      showSuccessToast(t("register.successMessage"));
+      showSuccessToast(t("registerSuccessMessage"));
       router.push(`/${currentLocale}/searchMover`);
     } catch (error: any) {
       handleAuthErrorToast(t, error.message); // ✅ 여기에 도달함

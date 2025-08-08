@@ -66,7 +66,7 @@ const MoverRegisterPage = () => {
 
       await userApi.postProfile(profileData);
 
-      showSuccessToast(t("register.successMessage"));
+      showSuccessToast(t("registerSuccessMessage"));
       router.push(`/${currentLocale}/estimate/received`);
     } catch (error: any) {
       handleAuthErrorToast(t, error.message);
