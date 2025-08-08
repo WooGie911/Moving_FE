@@ -14,6 +14,7 @@ interface INotificationState {
   isNotificationOpen: boolean;
   isLoading: boolean;
   lastFetchTime: number;
+  isPulsing: boolean;
   setNotifications: (notis: INotification[]) => void;
   addNotification: (noti: INotification) => void;
   connectSSE: (token: string) => void;
@@ -24,6 +25,8 @@ interface INotificationState {
   openNotificationModal: () => void;
   closeNotificationModal: () => void;
   setLoading: (loading: boolean) => void;
+  startPulse: () => void;
+  stopPulse: () => void;
 }
 
 let eventSource: EventSourcePolyfill | null = null;
@@ -58,6 +61,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   isNotificationOpen: false,
   isLoading: false,
   lastFetchTime: 0,
+  isPulsing: false,
   setNotifications: (notis) => set({ notifications: notis }),
   addNotification: (noti) =>
     set((state) => {
@@ -77,6 +81,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         notifications: [noti, ...state.notifications],
         hasUnread: true, // 새 알림이 추가되면 무조건 true
         total: state.total + 1,
+        isPulsing: true, // 새 알림이 오면 펄스 효과 시작
       };
     }),
   connectSSE: async (token: string) => {
@@ -341,4 +346,6 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
   openNotificationModal: () => set({ isNotificationOpen: true }),
   closeNotificationModal: () => set({ isNotificationOpen: false }),
   setLoading: (loading: boolean) => set({ isLoading: loading }),
+  startPulse: () => set({ isPulsing: true }),
+  stopPulse: () => set({ isPulsing: false }),
 }));
