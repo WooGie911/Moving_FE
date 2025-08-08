@@ -271,7 +271,7 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
         }
         return {
           notifications: newNotifications,
-          hasMore: newNotifications.length < res.data.total,
+          hasMore: newNotifications.length < res.data.total && res.data.items.length > 0,
           hasUnread: res.data.hasUnread,
           total: res.data.total,
           lastFetchTime: now,
