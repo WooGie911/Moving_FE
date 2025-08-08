@@ -78,6 +78,7 @@ const UserReceivedEstimateRequestPage = () => {
       >
         {data.map((item, index) => (
           <article
+            className="flex w-full flex-col items-center justify-center"
             key={item.estimateRequest.id}
             role="listitem"
             aria-label={`${t("ariaLabels.estimateRequestItem")} ${index + 1}`}
