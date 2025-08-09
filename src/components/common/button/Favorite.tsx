@@ -1,9 +1,6 @@
 import React from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useLikeToggle } from "@/hooks/useLikeToggle";
-import { useAuth } from "@/providers/AuthProvider";
-import { useModal } from "@/components/common/modal/ModalContext";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 interface IFavoriteProps {
@@ -31,6 +28,7 @@ const Favorite = ({
   onClick,
   disabled = false, // 기본값은 false
 }: IFavoriteProps) => {
+  const t = useTranslations("mover");
   const { isLiked, toggleLike, isLoading } = useLikeToggle({
     moverId: String(moverId),
     initialIsLiked: initialIsFavorited,
@@ -60,6 +58,8 @@ const Favorite = ({
       className={`flex items-center justify-center gap-[2px] ${isLoading ? "opacity-50" : ""} ${disabled ? "cursor-default" : "cursor-pointer"}`}
       onClick={handleFavoriteClick}
       disabled={isLoading || disabled}
+      aria-pressed={isLiked}
+      aria-label={isLiked ? "unfavorite" : "favorite"}
     >
       {heartPosition === "left" ? (
         <>
