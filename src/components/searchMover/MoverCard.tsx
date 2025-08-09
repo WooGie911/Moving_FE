@@ -39,7 +39,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
       }}
       aria-labelledby={`mover-name-${mover.id}`}
       aria-describedby={`mover-info-${mover.id}`}
-      aria-selected={isSelected}
+      aria-pressed={onSelect ? isSelected : undefined}
       role="article"
       tabIndex={onSelect ? 0 : -1}
       onClick={onSelect ? () => onSelect(mover.id) : undefined}
@@ -62,7 +62,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
       </div>
 
       <div className={`flex flex-col ${variant === "favorite" ? "gap-4" : "gap-3"}`}>
-        <div>
+        <div id={`mover-info-${mover.id}`}>
           <div className="text-4 line-clamp-1 leading-[26px] font-semibold">{mover.description}</div>
           {variant === "list" && (
             <div className="line-clamp-1 text-[13px] leading-[22px] font-medium text-gray-600">
@@ -85,7 +85,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 {shouldShowBadge && <Image src={badge} alt="badge" className="h-[23px] w-5" />}
-                <span className="text-[14px] leading-6 font-semibold">
+                <span id={`mover-name-${mover.id}`} className="text-[14px] leading-6 font-semibold">
                   {mover.nickname} {t("driverSuffix")}
                 </span>
               </div>
@@ -148,7 +148,25 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   );
 
   const renderDesktopCard = () => (
-    <section className="gap-5" aria-label={`${mover.nickname || mover.name}`} aria-selected={isSelected} tabIndex={-1}>
+    <article
+      className="gap-5"
+      aria-labelledby={`mover-name-desktop-${mover.id}`}
+      aria-describedby={`mover-info-desktop-${mover.id}`}
+      aria-pressed={onSelect ? isSelected : undefined}
+      role="article"
+      tabIndex={onSelect ? 0 : -1}
+      onClick={onSelect ? () => onSelect(mover.id) : undefined}
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect(mover.id);
+              }
+            }
+          : undefined
+      }
+    >
       <div
         className={`w-full rounded-2xl border-[0.5px] bg-white p-5 md:h-[230px] md:max-w-[600px] md:px-6 md:py-7 lg:h-[230px] lg:max-w-[820px] lg:rounded-[20px] ${
           isSelected ? "border-primary-400 bg-primary-50" : "border-[#f2f2f2]"
@@ -176,7 +194,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               className="h-[134px] min-h-[134px] w-[134px] min-w-[134px] flex-shrink-0 rounded-[12px] object-cover"
             />
             <div>
-              <div className="mb-5">
+              <div className="mb-5" id={`mover-info-desktop-${mover.id}`}>
                 {(mover.description || mover.detailIntro) && (
                   <div className="text-5 line-clamp-1 leading-8 font-semibold">
                     {mover.description || mover.detailIntro}
@@ -191,7 +209,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-1">
                   {shouldShowBadge && <Image src={badge} alt="badge" className="h-[23px] w-5" />}
-                  <div className="text-4 leading-[26px] font-semibold">
+                  <div id={`mover-name-desktop-${mover.id}`} className="text-4 leading-[26px] font-semibold">
                     {mover.nickname} {t("driverSuffix")}
                   </div>
                 </div>
@@ -235,7 +253,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           </div>
         </div>
       </div>
-    </section>
+    </article>
   );
 
   const handleCardClick = () => {
