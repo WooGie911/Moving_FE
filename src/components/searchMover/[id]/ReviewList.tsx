@@ -3,8 +3,8 @@ import { useTranslations, useLocale } from "next-intl";
 import type { IReview, IApiReview, IReviewListProps } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
 import Image from "next/image";
-import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
-import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
+import activeStar from "@/assets/icon/star/icon-star-active-lg.svg";
+import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.svg";
 import Pagination from "@/components/common/pagination/Pagination";
 
 // 사용자 이름 마스킹 함수

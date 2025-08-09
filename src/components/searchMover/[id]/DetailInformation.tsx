@@ -11,7 +11,7 @@ import { ShareButtonGroup } from "@/components/common/button/ShareButtonGroup";
 import type { DetailInformationProps } from "@/types/mover.types";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
 import findMoverApi from "@/lib/api/findMover.api";
-import type { IReview, IApiReview } from "@/types/review";
+import type { IReview } from "@/types/review";
 
 const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => {
   const [reviews, setReviews] = useState<IReview[]>([]);
@@ -27,28 +27,24 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   const generateShareMessage = () => {
     const shareTitle = `${mover.nickname} 기사님을 추천드려요! - Moving`;
 
-    // 서비스 타입을 안전하게 처리
     const serviceTypeNames =
       mover.serviceTypes
         ?.map((serviceType) => (typeof serviceType === "string" ? serviceType : serviceType.service?.name))
         .filter(Boolean)
         .join(", ") || "이사 서비스";
 
-    // 경력을 안전하게 처리 (career 필드 사용)
     const careerYears = mover.career || 0;
 
-    // 평점을 안전하게 처리 (averageRating 필드 사용)
     const rating = mover.averageRating || 0;
 
     const shareDescription = `${mover.nickname} 기사님을 소개합니다! ${careerYears}년 경력의 전문 기사님으로, ${serviceTypeNames} 서비스를 제공합니다. 평점 ${rating.toFixed(1)}점의 신뢰할 수 있는 기사님입니다.`;
-    const shareImageUrl = mover.profileImage || "https://gomoving.site/logo-m.png"; // 기사님 프로필 이미지 또는 기본 로고
+    const shareImageUrl = mover.profileImage || "https://gomoving.site/logo-m.png"; 
 
     return { title: shareTitle, description: shareDescription, imageUrl: shareImageUrl };
   };
 
   const shareInfo = generateShareMessage();
 
-  // 전체 리뷰 데이터 가져오기 (ReviewAvg용)
   useEffect(() => {
     const fetchAllReviews = async () => {
       try {
@@ -96,7 +92,6 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
 
   useEffect(() => {
     const fetchActiveQuote = async () => {
-      // 로그인한 고객 사용자만 활성 견적 조회
       if (!isLoggedIn || user?.userType !== "CUSTOMER") {
         setEstimateRequestId(undefined);
         setIsLoadingQuote(false);

@@ -9,9 +9,9 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { IMoverInfo } from "@/types/mover.types";
 import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.webp";
 import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.webp";
-import badge from "@/assets/icon/etc/icon-chat.png";
-import star from "@/assets/icon/star/icon-star-active-lg.png";
-import like from "@/assets/icon/like/icon-like-red.png";
+import badge from "@/assets/icon/etc/icon-chat.svg";
+import star from "@/assets/icon/star/icon-star-active-lg.svg";
+import like from "@/assets/icon/like/icon-like-black.svg";
 
 interface MoverCardProps {
   mover: IMoverInfo;

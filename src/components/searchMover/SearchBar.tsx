@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
 import Image from "next/image";
-import searchIcon from "@/assets/icon/etc/icon-search-lg.png";
+import searchIcon from "@/assets/icon/etc/icon-search-lg.svg";
 
 const SearchBar = () => {
   const { search, setSearch } = useSearchMoverStore();

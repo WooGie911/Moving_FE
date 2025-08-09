@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useTranslations } from "next-intl";
-import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.png";
-import activeStar from "@/assets/icon/star/icon-star-active-lg.png";
+import inactiveStar from "@/assets/icon/star/icon-star-inactive-lg.svg";
+import activeStar from "@/assets/icon/star/icon-star-active-lg.svg";
 import Image from "next/image";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 

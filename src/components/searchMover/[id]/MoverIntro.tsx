@@ -2,9 +2,9 @@ import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import badge from "@/assets/icon/etc/icon-chat.png";
-import like from "@/assets/icon/like/icon-like-black-lg.png";
-import star from "@/assets/icon/star/icon-star-active-lg.png";
+import badge from "@/assets/icon/etc/icon-chat.svg";
+import like from "@/assets/icon/like/icon-like-black.svg";
+import star from "@/assets/icon/star/icon-star-active-lg.svg";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
@@ -94,7 +94,7 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
         </div>
         <div className="flex items-center gap-1" role="group" aria-label="찜한 고객 수">
           <span className="text-md md:text-2lg font-medium text-[#808080]">{mover.favoriteCount || 0}</span>
-          <Image src={like} alt="" className="h-6 w-6" role="presentation" aria-hidden="true" />
+          <Image src={like} alt="" className="h-3 w-[14px]" role="presentation" aria-hidden="true" />
           <span className="sr-only">명의 고객이 찜했습니다</span>
         </div>
       </header>
