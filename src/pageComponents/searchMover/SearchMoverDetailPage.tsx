@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useMoverDetail } from "@/hooks/useMoverData";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import * as Sentry from "@sentry/nextjs";
 
 const SearchMoverDetailPage = () => {
   const { id } = useParams() as { id: string };
@@ -14,10 +15,29 @@ const SearchMoverDetailPage = () => {
 
   const { data: mover, isLoading, isError, error } = useMoverDetail(id);
 
-  // 페이지 마운트 시 스크롤을 맨 위로 올림
+  React.useEffect(() => {
+    Sentry.setContext("SearchMoverDetailPage", {
+      moverId: id,
+    });
+  }, [id]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (isError && error) {
+      Sentry.captureException(error, {
+        tags: {
+          component: "SearchMoverDetailPage",
+          action: "useMoverDetail",
+        },
+        extra: {
+          moverId: id,
+        },
+      });
+    }
+  }, [isError, error, id]);
 
   if (isLoading) {
     return (

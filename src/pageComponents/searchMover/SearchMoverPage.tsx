@@ -13,6 +13,7 @@ import FilterBar from "@/components/searchMover/FilterBar";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { useMoverList, useFavoriteMovers } from "@/hooks/useMoverData";
 import { useSearchMoverStore } from "@/stores/searchMoverStore";
+import * as Sentry from "@sentry/nextjs";
 
 const SearchMoverPage = () => {
   const deviceType = useWindowWidth();
@@ -23,7 +24,14 @@ const SearchMoverPage = () => {
   const [favoriteMovers, setFavoriteMovers] = useState<IMoverInfo[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 쿼리 파라미터
+  React.useEffect(() => {
+    Sentry.setContext("SearchMoverPage", {
+      deviceType,
+      userType: user?.userType || "anonymous",
+      isLoggedIn,
+    });
+  }, [deviceType, user?.userType, isLoggedIn]);
+
   const queryParams = {
     region,
     serviceTypeId,
@@ -32,11 +40,9 @@ const SearchMoverPage = () => {
     take: 4,
   };
 
-  // 기사님 리스트와 찜한 기사님 데이터 가져오기
   const { isLoading: moversLoading } = useMoverList(queryParams);
   const { isLoading: favoritesLoading } = useFavoriteMovers();
 
-  // 전체 로딩 상태 계산
   const isOverallLoading =
     moversLoading || (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoritesLoading);
 
@@ -44,9 +50,22 @@ const SearchMoverPage = () => {
     if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
       setLoading(true);
       findMoverApi
-        .fetchFavoriteMovers(3, undefined, locale) // 언어 파라미터 추가
-        .then((data) => setFavoriteMovers(data.items)) // items만 추출
-        .catch(() => setFavoriteMovers([]))
+        .fetchFavoriteMovers(3, undefined, locale) 
+        .then((data) => setFavoriteMovers(data.items)) 
+        .catch((error) => {
+          Sentry.captureException(error, {
+            tags: {
+              component: "SearchMoverPage",
+              action: "fetchFavoriteMovers",
+            },
+            extra: {
+              userId: user?.id,
+              locale,
+              deviceType,
+            },
+          });
+          setFavoriteMovers([]);
+        })
         .finally(() => setLoading(false));
     } else {
       setFavoriteMovers([]);
@@ -56,7 +75,6 @@ const SearchMoverPage = () => {
   const shouldShowBookmarked =
     deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER" && favoriteMovers.length > 0;
 
-  // 전체 로딩 중일 때 MovingTruckLoader 표시
   if (isOverallLoading) {
     return (
       <div className="min-h-screen bg-gray-200">
