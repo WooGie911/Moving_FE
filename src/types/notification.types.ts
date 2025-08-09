@@ -3,7 +3,7 @@ export interface INotification {
   actionId: string;
   userId: string;
   type: string;
-  title: string;
+  message: string;
   content: string;
   path: string;
   isRead: boolean;

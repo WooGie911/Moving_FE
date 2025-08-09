@@ -48,9 +48,11 @@ export const GnbActions = ({
   const hasUnread = useNotificationStore((state) => state.hasUnread);
   const isNotificationOpen = useNotificationStore((state) => state.isNotificationOpen);
   const isSSEConnected = useNotificationStore((state) => state.isSSEConnected);
+  const isPulsing = useNotificationStore((state) => state.isPulsing);
   const fetchNotifications = useNotificationStore((state) => state.fetchNotifications);
   const openNotificationModal = useNotificationStore((state) => state.openNotificationModal);
   const closeNotificationModal = useNotificationStore((state) => state.closeNotificationModal);
+  const stopPulse = useNotificationStore((state) => state.stopPulse);
   const { user } = useAuth();
 
   const handleNotificationClick = () => {
@@ -61,6 +63,8 @@ export const GnbActions = ({
       // 모달이 열릴 때만 강제로 최신 데이터 가져오기
       fetchNotifications(4, 0, locale, user?.userType, true);
     }
+    // 알림 모달을 클릭하면 펄스 효과 중지
+    stopPulse();
   };
 
   // 프로필 버튼 클릭 시 프로필 모달창 열기
@@ -128,6 +132,17 @@ export const GnbActions = ({
     setIsProfileOpen(false);
   }, [userRole, userName]);
 
+  // 펄스 효과 자동 중지 (3초 후)
+  useEffect(() => {
+    if (isPulsing) {
+      const timer = setTimeout(() => {
+        stopPulse();
+      }, 3000); // 3초 후 펄스 효과 중지
+
+      return () => clearTimeout(timer);
+    }
+  }, [isPulsing, stopPulse]);
+
   return (
     <div className="flex items-center gap-4">
       {/* 언어 변경 버튼 */}
@@ -157,7 +172,9 @@ export const GnbActions = ({
               <Image src={notification} alt="" width={24} height={24} />
               {hasUnread && (
                 <span
-                  className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"
+                  className={`absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 ${
+                    isPulsing ? "animate-notification-pulse-strong" : ""
+                  }`}
                   aria-label="읽지 않은 알림이 있습니다"
                 />
               )}
@@ -225,8 +242,8 @@ export const GnbActions = ({
               ></div>
             </div>
           </button>
-        </>
-      )}
-    </div>
-  );
-};
+                 </>
+       )}
+     </div>
+   );
+ };
