@@ -50,8 +50,8 @@ const SearchMoverPage = () => {
     if (deviceType === "desktop" && isLoggedIn && user?.userType === "CUSTOMER") {
       setLoading(true);
       findMoverApi
-        .fetchFavoriteMovers(3, undefined, locale) 
-        .then((data) => setFavoriteMovers(data.items)) 
+        .fetchFavoriteMovers(3, undefined, locale)
+        .then((data) => setFavoriteMovers(data.items))
         .catch((error) => {
           Sentry.captureException(error, {
             tags: {
@@ -77,38 +77,101 @@ const SearchMoverPage = () => {
 
   if (isOverallLoading) {
     return (
-      <div className="min-h-screen bg-gray-200">
+      <main className="min-h-screen bg-gray-200" role="main" aria-live="polite" aria-label="기사님 정보 로딩중">
         <MovingTruckLoader size="lg" loadingText={t("loadingMoverInfo")} />
-      </div>
+      </main>
     );
   }
 
   return (
-    <div
+    <main
       className={`mx-auto flex max-w-[327px] justify-center md:max-w-[600px] lg:${shouldShowBookmarked ? "max-w-[1200px]" : "max-w-[820px]"}`}
+      role="main"
     >
-      <div className="flex min-h-screen flex-1 flex-col items-center">
-        {/* 제목 */}
+      {/* 스킵 링크 - 웹 접근성을 위한 키보드 네비게이션 */}
+      <nav className="sr-only focus-within:not-sr-only" aria-label="빠른 이동 메뉴">
+        <a
+          href="#search-section"
+          className="bg-primary-500 hover:bg-primary-400 absolute top-0 left-0 z-50 p-2 text-sm font-medium text-white transition-colors focus:relative focus:z-auto focus:block"
+          tabIndex={0}
+        >
+          검색으로 바로가기
+        </a>
+        <a
+          href="#mover-list-section"
+          className="bg-primary-500 hover:bg-primary-400 absolute top-0 left-0 z-50 ml-2 p-2 text-sm font-medium text-white transition-colors focus:relative focus:z-auto focus:block"
+          tabIndex={0}
+        >
+          기사님 목록으로 바로가기
+        </a>
+      </nav>
+
+      <section className="flex min-h-screen flex-1 flex-col items-center" aria-labelledby="page-title">
+        {/* 페이지 제목 */}
         {deviceType === "desktop" ? (
-          <div className="w-full py-8">
-            <h1 className="text-black-500 text-left font-bold lg:text-2xl">{t("title")}</h1>
-          </div>
+          <header className="w-full py-8">
+            <h1
+              id="page-title"
+              className="text-black-500 text-left font-bold lg:text-2xl"
+              role="heading"
+              aria-level={1}
+            >
+              {t("title")}
+            </h1>
+          </header>
         ) : (
-          <div className="py-[6px] md:py-[5px] lg:py-0"></div>
+          <div className="py-[6px] md:py-[5px] lg:py-0" aria-hidden="true"></div>
         )}
 
-        {/* 검색바 */}
-        <SearchBar />
+        {/* 검색 및 필터 섹션 */}
+        <section id="search-section" aria-labelledby="search-title" role="search">
+          <h2 id="search-title" className="sr-only">
+            기사님 검색 및 필터
+          </h2>
 
-        {/* 필터바 */}
-        <FilterBar />
+          {/* 검색바 */}
+          <div role="group" aria-labelledby="search-input-label">
+            <span id="search-input-label" className="sr-only">
+              기사님 검색
+            </span>
+            <SearchBar />
+          </div>
 
-        {/* 기사님 리스트 */}
-        <MoverList />
-      </div>
+          {/* 필터바 */}
+          <div role="group" aria-labelledby="filter-label">
+            <span id="filter-label" className="sr-only">
+              검색 필터 옵션
+            </span>
+            <FilterBar />
+          </div>
+        </section>
+
+        {/* 기사님 목록 섹션 */}
+        <section id="mover-list-section" aria-labelledby="mover-list-title" role="region">
+          <h2 id="mover-list-title" className="sr-only">
+            검색된 기사님 목록
+          </h2>
+          <MoverList />
+        </section>
+      </section>
+
       {/* PC 화면에서만 찜한 기사님 표시 */}
-      {shouldShowBookmarked && <FavoriteMoverList />}
-    </div>
+      {shouldShowBookmarked && (
+        <aside
+          role="complementary"
+          aria-labelledby="favorite-movers-title"
+          aria-describedby="favorite-movers-description"
+        >
+          <h2 id="favorite-movers-title" className="sr-only">
+            찜한 기사님 목록
+          </h2>
+          <span id="favorite-movers-description" className="sr-only">
+            회원님이 찜하신 기사님들의 목록입니다.
+          </span>
+          <FavoriteMoverList />
+        </aside>
+      )}
+    </main>
   );
 };
 

@@ -37,9 +37,22 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           ? "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33, 0 0 0 0.5px #F97316"
           : "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
       }}
-      aria-label={`${mover.nickname || mover.name}`}
+      aria-labelledby={`mover-name-${mover.id}`}
+      aria-describedby={`mover-info-${mover.id}`}
       aria-selected={isSelected}
-      tabIndex={-1}
+      role="article"
+      tabIndex={onSelect ? 0 : -1}
+      onClick={onSelect ? () => onSelect(mover.id) : undefined}
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect(mover.id);
+              }
+            }
+          : undefined
+      }
     >
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
         {mover.serviceTypes.map((serviceType, index) => {
