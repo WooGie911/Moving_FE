@@ -24,48 +24,82 @@ const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
   const maxCount = Math.max(...Object.values(reviewCounts));
 
   return (
-    <div>
+    <section role="group" aria-labelledby="review-summary-title">
       <div className="flex flex-col gap-4">
-        <p className="text-xl font-semibold">{t("reviewsTitle")}</p>
+        <h3 id="review-summary-title" className="text-xl font-semibold" role="heading" aria-level={3}>
+          {t("reviewsTitle")}
+        </h3>
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          <div className="flex items-center gap-[18px]">
-            <p className="text-[40px] font-medium">{avg.toFixed(1)}</p>
+          {/* 평균 평점 */}
+          <div className="flex items-center gap-[18px]" role="group" aria-labelledby="avg-rating-title">
+            <span id="avg-rating-title" className="sr-only">
+              평균 평점
+            </span>
+            <span className="text-[40px] font-medium" aria-label={`5점 만점에 ${avg.toFixed(1)}점`}>
+              {avg.toFixed(1)}
+            </span>
             <div className="flex flex-col">
-              <div className="flex">
+              {/* 별점 표시 */}
+              <div className="flex" role="img" aria-label={`${Math.round(avg)}개의 별점`}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Image
                     key={i}
                     src={i <= Math.round(avg) ? activeStar : inactiveStar}
-                    alt={i <= Math.round(avg) ? "activeStar-image" : "inactiveStar-image"}
+                    alt=""
                     className="h-5 w-5"
+                    role="presentation"
+                    aria-hidden="true"
                   />
                 ))}
               </div>
-              <p className="text-md text-[#808080]">
+              <span className="text-md text-[#808080]" aria-label={`총 ${total}개의 리뷰`}>
                 {total}
                 {t("reviewCount")}
-              </p>
+              </span>
             </div>
           </div>
-          <div className="flex w-[284px] flex-col gap-3">
+
+          {/* 점수별 리뷰 분포 */}
+          <div className="flex w-[284px] flex-col gap-3" role="group" aria-labelledby="rating-distribution-title">
+            <h4 id="rating-distribution-title" className="sr-only">
+              점수별 리뷰 분포
+            </h4>
             {[5, 4, 3, 2, 1].map((score) => {
               const count = reviewCounts[score as keyof typeof reviewCounts];
               const percent = total > 0 ? (count / total) * 100 : 0;
               const isMax = count === maxCount && count > 0;
               return (
-                <div key={score} className="flex items-center gap-4">
-                  <p className={`text-md ${isMax ? "font-bold" : "font-medium"}`}>
+                <div
+                  key={score}
+                  className="flex items-center gap-4"
+                  role="group"
+                  aria-label={`${score}점: ${count}개 (${percent.toFixed(1)}%)`}
+                >
+                  <span className={`text-md ${isMax ? "font-bold" : "font-medium"}`}>
                     {score}
                     {t("point")}
-                  </p>
-                  <div className="relative h-3 flex-1 rounded-[15px] bg-[#EFEFEF]">
+                  </span>
+                  <div
+                    className="relative h-3 flex-1 rounded-[15px] bg-[#EFEFEF]"
+                    role="progressbar"
+                    aria-valuenow={percent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${score}점 리뷰 비율 ${percent.toFixed(1)}%`}
+                  >
                     <div
                       className="absolute top-0 left-0 h-3 rounded-[15px] bg-[#FFC149]"
                       style={{ width: `${percent}%` }}
+                      aria-hidden="true"
                     ></div>
                   </div>
                   <div className="w-9">
-                    <p className={`text-md text-[#ababab] ${isMax ? "font-bold" : "font-medium"}`}>{count}</p>
+                    <span
+                      className={`text-md text-[#ababab] ${isMax ? "font-bold" : "font-medium"}`}
+                      aria-label={`${count}개`}
+                    >
+                      {count}
+                    </span>
                   </div>
                 </div>
               );
@@ -73,7 +107,7 @@ const ReviewAvg = ({ mover, reviews }: MoverWithReviewsProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

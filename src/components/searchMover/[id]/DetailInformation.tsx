@@ -126,50 +126,101 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
   return (
     <div
       className={`mt-[35px] ${deviceType === "desktop" ? "flex justify-center gap-[116px]" : "flex flex-col items-center"} w-full px-5 md:mt-[46px] md:px-18 lg:mt-[62px] lg:px-[100px]`}
+      role="main"
     >
-      <div className="w-full md:w-[600px] lg:w-[742px]">
-        <div>
+      <article className="w-full md:w-[600px] lg:w-[742px]" aria-labelledby="mover-intro-title">
+        <section aria-labelledby="mover-intro-title">
+          <h2 id="mover-intro-title" className="sr-only">
+            기사님 소개
+          </h2>
           <MoverIntro mover={mover} reviews={allReviews} />
-        </div>
-        <div className="mt-8 lg:mt-10">
+        </section>
+
+        <section className="mt-8 lg:mt-10" aria-labelledby="service-info-title">
+          <h2 id="service-info-title" className="sr-only">
+            제공 서비스 정보
+          </h2>
           <Chip mover={mover} />
-        </div>
-        <div className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10"></div>
-        {/* 공유 컴포넌트 */}
-        {deviceType === "desktop" ? (
-          ""
-        ) : (
+        </section>
+
+        <hr className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10" aria-hidden="true" />
+
+        {deviceType === "desktop" ? null : (
           <>
-            <div className="flex flex-col gap-3">
-              <p className="text-lg font-semibold">{t("shareMessage")}</p>
+            <section className="flex flex-col gap-3" aria-labelledby="share-title">
+              <h2 id="share-title" className="text-lg font-semibold" role="heading" aria-level={2}>
+                {t("shareMessage")}
+              </h2>
               <ShareButtonGroup
                 title={shareInfo.title}
                 description={shareInfo.description}
                 imageUrl={shareInfo.imageUrl}
               />
-            </div>
-            <div className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10"></div>
+            </section>
+            <hr className="mt-8 mb-8 h-[1px] w-full border border-[#F2F2F2] lg:mt-10 lg:mb-10" aria-hidden="true" />
           </>
         )}
 
-        <ReviewAvg mover={mover} reviews={allReviews} />
+        <section aria-labelledby="review-avg-title">
+          <h2 id="review-avg-title" className="sr-only">
+            리뷰 평점 요약
+          </h2>
+          <ReviewAvg mover={mover} reviews={allReviews} />
+        </section>
 
-        <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
-      </div>
-      <div className="flex w-full flex-col lg:w-80 lg:gap-[22px]">
-        {isLoadingQuote ? (
-          <div className="flex items-center justify-center py-4">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
-          </div>
-        ) : (
-          <RequestButton mover={mover} estimateRequestId={estimateRequestId} onMoverUpdate={onMoverUpdate} />
+        <section aria-labelledby="review-list-title">
+          <h2 id="review-list-title" className="sr-only">
+            고객 리뷰 목록
+          </h2>
+          <ReviewList moverId={mover.id} onReviewsFetched={setReviews} />
+        </section>
+      </article>
+
+      <aside
+        className="flex w-full flex-col lg:w-80 lg:gap-[22px]"
+        role="complementary"
+        aria-labelledby="sidebar-title"
+      >
+        <h2 id="sidebar-title" className="sr-only">
+          견적 요청 및 공유
+        </h2>
+
+        <section aria-labelledby="request-title">
+          <h3 id="request-title" className="sr-only">
+            견적 요청
+          </h3>
+          {isLoadingQuote ? (
+            <div
+              className="flex items-center justify-center py-4"
+              role="status"
+              aria-live="polite"
+              aria-label="견적 정보 로딩 중"
+            >
+              <div
+                className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"
+                aria-hidden="true"
+              ></div>
+              <span className="sr-only">견적 정보를 불러오는 중입니다.</span>
+            </div>
+          ) : (
+            <RequestButton mover={mover} estimateRequestId={estimateRequestId} onMoverUpdate={onMoverUpdate} />
+          )}
+        </section>
+
+        {/* 공유 섹션 (데스크톱) */}
+        {deviceType === "desktop" && (
+          <section aria-labelledby="desktop-share-title">
+            <h3 id="desktop-share-title" className="sr-only">
+              기사님 정보 공유
+            </h3>
+            <ShareButtonGroup
+              title={shareInfo.title}
+              description={shareInfo.description}
+              imageUrl={shareInfo.imageUrl}
+            />
+          </section>
         )}
-        {deviceType === "desktop" ? (
-          <ShareButtonGroup title={shareInfo.title} description={shareInfo.description} imageUrl={shareInfo.imageUrl} />
-        ) : (
-          ""
-        )}
-      </div>
+      </aside>
     </div>
   );
 };
