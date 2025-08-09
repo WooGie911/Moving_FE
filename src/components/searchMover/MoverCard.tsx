@@ -28,7 +28,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   const shouldShowBadge = showBadge && variant === "list";
 
   const renderMobileCard = () => (
-    <div
+    <article
       className={`${variant === "favorite" ? "max-h-[542px]" : "max-h-[250px]"} w-full max-w-[327px] rounded-2xl border-[0.5px] bg-white p-5 ${
         isSelected ? "border-primary-400 bg-primary-50" : "border-[#f2f2f2]"
       }`}
@@ -37,6 +37,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           ? "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33, 0 0 0 0.5px #F97316"
           : "2px 2px 10px 0px #DCDCDC33, -2px -2px 10px 0px #DCDCDC33",
       }}
+      aria-label={`${mover.nickname || mover.name}`}
+      aria-selected={isSelected}
+      tabIndex={-1}
     >
       <div className="mb-3 flex flex-wrap gap-2 md:mb-3">
         {mover.serviceTypes.map((serviceType, index) => {
@@ -60,7 +63,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
         <div className="flex gap-2">
           <Image
             src={mover.profileImage || defaultProfileSm}
-            alt="profile-img"
+            alt={`${mover.nickname || mover.name} profile image`}
             width={50}
             height={50}
             className="h-[50px] min-h-[50px] w-[50px] min-w-[50px] flex-shrink-0 rounded-[12px] object-cover"
@@ -68,13 +71,13 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           <div className={`flex flex-col gap-1 ${variant === "favorite" ? "w-[229px]" : ""}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
-                {shouldShowBadge && <Image src={badge} alt="icon-chat" className="h-[23px] w-5" />}
+                {shouldShowBadge && <Image src={badge} alt="badge" className="h-[23px] w-5" />}
                 <span className="text-[14px] leading-6 font-semibold">
                   {mover.nickname} {t("driverSuffix")}
                 </span>
               </div>
               <div className="flex items-center gap-[7px]">
-                <Image src={like} alt="like-img" className="h-3 w-[14px]" />
+                <Image src={like} alt="favorites" className="h-3 w-[14px]" />
                 <span className="text-[14px] font-normal text-gray-600">{mover.favoriteCount}</span>
               </div>
             </div>
@@ -82,7 +85,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               className={`flex items-center ${variant === "favorite" && (mover.experience || 0) >= 10 ? "gap-1.5" : "gap-2"}`}
             >
               <div className="flex items-center gap-0.5">
-                <Image src={star} alt="star-img" className="h-5 w-5" />
+                <Image src={star} alt="rating" className="h-5 w-5" />
                 <span className="text-[13px] leading-[22px] font-medium">
                   {mover.averageRating ? Number(mover.averageRating).toFixed(1) : "0.0"}
                 </span>
@@ -128,11 +131,11 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 
   const renderDesktopCard = () => (
-    <div className="gap-5">
+    <section className="gap-5" aria-label={`${mover.nickname || mover.name}`} aria-selected={isSelected} tabIndex={-1}>
       <div
         className={`w-full rounded-2xl border-[0.5px] bg-white p-5 md:h-[230px] md:max-w-[600px] md:px-6 md:py-7 lg:h-[230px] lg:max-w-[820px] lg:rounded-[20px] ${
           isSelected ? "border-primary-400 bg-primary-50" : "border-[#f2f2f2]"
@@ -154,7 +157,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           <div className="flex gap-2 md:gap-5">
             <Image
               src={mover.profileImage || defaultProfile}
-              alt="profile-image"
+              alt={`${mover.nickname || mover.name} profile image`}
               width={134}
               height={134}
               className="h-[134px] min-h-[134px] w-[134px] min-w-[134px] flex-shrink-0 rounded-[12px] object-cover"
@@ -174,7 +177,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-1">
-                  {shouldShowBadge && <Image src={badge} alt="icon-chat" className="h-[23px] w-5" />}
+                  {shouldShowBadge && <Image src={badge} alt="badge" className="h-[23px] w-5" />}
                   <div className="text-4 leading-[26px] font-semibold">
                     {mover.nickname} {t("driverSuffix")}
                   </div>
@@ -182,7 +185,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                 <div className="flex items-center justify-between md:w-[390px] lg:w-[610px]">
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-0.5">
-                      <Image src={star} alt="star-img" className="h-5 w-5" />
+                      <Image src={star} alt="rating" className="h-5 w-5" />
                       <span className="text-[13px] leading-[22px] font-medium">
                         {(mover.averageRating || 0).toFixed(1)}
                       </span>
@@ -209,8 +212,8 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-0.5">
-                    <Image src={like} alt="like-img" className="h-3 w-[14px]" />
+                  <div className="flex items-center gap-0.5" aria-label="favorites">
+                    <Image src={like} alt="favorites" className="h-3 w-[14px]" />
                     <span className="text-[14px] font-normal text-gray-600">{mover.favoriteCount}</span>
                   </div>
                 </div>
@@ -219,7 +222,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 
   const handleCardClick = () => {
@@ -245,14 +248,30 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   // favorite-responsive variant일 때는 클릭으로 선택, 그 외에는 링크로 이동
   if (variant === "favorite-responsive") {
     return (
-      <div className="block cursor-pointer" onClick={handleCardClick}>
+      <div
+        className="block cursor-pointer"
+        onClick={handleCardClick}
+        role="button"
+        tabIndex={0}
+        aria-pressed={isSelected}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleCardClick();
+          }
+        }}
+      >
         {cardContent}
       </div>
     );
   }
 
   return (
-    <Link href={`/searchMover/${mover.id}`} className="block">
+    <Link
+      href={`/searchMover/${mover.id}`}
+      className="block focus:outline-none focus-visible:outline-none"
+      aria-label={`View profile of ${mover.nickname || mover.name}`}
+    >
       {cardContent}
     </Link>
   );
