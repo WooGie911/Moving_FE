@@ -30,12 +30,17 @@ export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ t
               {title}
             </h1>
           </div>
-          <ProgressBar value={progress} aria-labelledby="estimate-request-title" />
+          <ProgressBar value={progress} aria-labelledby="estimate-request-title" aria-label={`진행률 ${progress}%`} />
         </div>
       </header>
 
       {/* 메인 콘텐츠 영역 */}
-      <section className={ESTIMATE_REQUEST_STYLES.content} role="region" aria-labelledby="estimate-request-title">
+      <section
+        className={ESTIMATE_REQUEST_STYLES.content}
+        role="region"
+        aria-labelledby="estimate-request-title"
+        aria-label="견적 요청 콘텐츠"
+      >
         {children}
       </section>
     </main>

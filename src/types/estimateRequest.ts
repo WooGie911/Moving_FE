@@ -149,10 +149,15 @@ export interface IDaumAddressData {
 
 export interface IDaumPostcodeOptions {
   oncomplete: (data: IDaumAddressData) => void;
+  onresize?: (size: { width: number; height: number }) => void;
+  width?: string | number;
+  height?: string | number;
+  maxSuggestItems?: number;
 }
 
 export interface IDaumPostcodeInstance {
   open: () => void;
+  embed: (element: HTMLElement) => void;
 }
 
 export interface IDaumPostcodeConstructor {
