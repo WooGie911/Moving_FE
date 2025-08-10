@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import Link from "next/link";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+import { useRouter } from "next/navigation";
 
 interface ISigninFormProps {
   userType: TUserType;
@@ -18,7 +19,8 @@ interface ISigninFormProps {
 }
 
 const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, getUser } = useAuth();
+  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("auth");
   const currentLocale = useLocale();
@@ -45,10 +47,12 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
       const response = await login(email, password, userType);
 
       if (response.success) {
+        await getUser();
+
         if (userType === "CUSTOMER") {
-          window.location.href = `/${currentLocale}/searchMover`;
+          router.push(`/${currentLocale}/searchMover`);
         } else {
-          window.location.href = `/${currentLocale}/estimate/received`;
+          router.push(`/${currentLocale}/estimate/received`);
         }
       }
     } catch (error: any) {

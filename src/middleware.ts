@@ -47,12 +47,11 @@ export async function middleware(request: NextRequest) {
   // ✅ 루트 경로 접근 처리
   if (pathname === "/") {
     const accessToken = request.cookies.get("accessToken")?.value;
-    const refreshToken = request.cookies.get("refreshToken")?.value;
-    const isAuthenticated = !!accessToken || !!refreshToken;
+    // const refreshToken = request.cookies.get("refreshToken")?.value; // kept for potential future use
 
     const userLanguagePreference = request.cookies.get("user_language_preference")?.value;
     const preferredLocale =
-      userLanguagePreference && routing.locales.includes(userLanguagePreference as any)
+      userLanguagePreference && routing.locales.includes(userLanguagePreference as (typeof routing.locales)[number])
         ? userLanguagePreference
         : routing.defaultLocale;
 
@@ -68,7 +67,8 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    if (isAuthenticated && userType) {
+    // 루트에서의 자동 분기는 accessToken 기준으로만 수행
+    if (accessToken && userType) {
       const redirectPath =
         userType === "CUSTOMER" ? `/${preferredLocale}/searchMover` : `/${preferredLocale}/estimate/received`;
       return NextResponse.redirect(new URL(redirectPath, request.url));
@@ -84,8 +84,7 @@ export async function middleware(request: NextRequest) {
   const actualPath = localeMatch[2] || "/";
   const locale = localeMatch[1];
 
-  const { accessToken, refreshToken, userType, hasProfile, isAuthenticated } =
-    await getUserFromAccessOrRefreshToken(request);
+  const { accessToken, userType, hasProfile } = await getUserFromAccessOrRefreshToken(request);
 
   const isAuthRoute =
     actualPath.startsWith("/userSignin") ||
@@ -110,11 +109,9 @@ export async function middleware(request: NextRequest) {
     (actualPath.startsWith("/estimate") && !actualPath.startsWith("/estimateRequest")) ||
     actualPath.startsWith("/moverMyPage");
 
-  // ✅ 루트 or 인증 경로에서 리프레시 토큰이 있다면 자동 리다이렉트
-  if (refreshToken && isRootOrAuthRoute(actualPath)) {
-    if (userType) {
-      return NextResponse.redirect(new URL(getRedirectPathByUserType(userType, locale), request.url));
-    }
+  // ✅ 루트 or 인증 경로 자동 리다이렉트는 accessToken 기준으로만 처리
+  if (accessToken && isRootOrAuthRoute(actualPath) && userType) {
+    return NextResponse.redirect(new URL(getRedirectPathByUserType(userType, locale), request.url));
   }
 
   // ✅ 일반 로그인 → 프로필 미등록 보호 페이지 접근 시
@@ -123,12 +120,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // ✅ 소셜 로그인 후 최초 진입 시 등록 강제
-  if (
-    isAuthenticated &&
-    accessToken &&
-    !hasProfile &&
-    (actualPath === "/searchMover" || actualPath === "/estimate/received")
-  ) {
+  if (accessToken && !hasProfile && (actualPath === "/searchMover" || actualPath === "/estimate/received")) {
     return NextResponse.redirect(new URL(`/${locale}/profile/register`, request.url));
   }
 
@@ -139,18 +131,18 @@ export async function middleware(request: NextRequest) {
   }
 
   // ✅ 인증된 유저가 로그인/회원가입 페이지 접근 시 차단
-  if (isAuthRoute && isAuthenticated && userType) {
+  if (isAuthRoute && accessToken && userType) {
     const redirectPath = getRedirectPathByUserType(userType, locale);
     return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  // ✅ 보호 페이지인데 비로그인 상태일 경우 로그인 페이지로
-  if (isProtectedRoute && !isAuthenticated) {
+  // ✅ 보호 페이지 접근은 accessToken 존재가 필수 (refreshToken만으로는 허용하지 않음)
+  if (isProtectedRoute && !accessToken) {
     return NextResponse.redirect(new URL(`/${locale}/userSignin`, request.url));
   }
 
   // ✅ 역할 기반 보호
-  if (isAuthenticated && userType) {
+  if (accessToken && userType) {
     if (isMoverOnlyRoute && userType === "CUSTOMER") {
       return NextResponse.redirect(new URL(`/${locale}/searchMover`, request.url));
     }

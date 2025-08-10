@@ -1,13 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { createContext, useContext, ReactNode, useCallback, useEffect, useRef } from "react";
+import { ISignUpFormValues } from "@/types/auth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import authApi from "@/lib/api/auth.api";
 import userApi from "@/lib/api/user.api";
-import { ISignUpFormValues } from "@/types/auth";
 import { logDevError } from "@/utils/logDevError";
 
-// 사용자 타입 정의
 type TUser = {
   id: string;
   name: string;
@@ -17,6 +16,8 @@ type TUser = {
   moverImage?: string;
   provider: "GOOGLE" | "KAKAO" | "NAVER" | "LOCAL";
   hasBothProfiles: boolean;
+  // SSR에서만 세팅됨. CSR 갱신 시 없을 수 있음
+  tokenExpiresAt?: number;
 };
 
 export type TSignInResponse = {
@@ -61,143 +62,152 @@ interface IAuthProviderProps {
   children: ReactNode;
 }
 
-const publicRoutes = ["/", "/ko", "/en", "/zh", "/userSignin", "/userSignup", "/moverSignin", "/moverSignup"];
-const isPublicRoute = (path: string) => publicRoutes.includes(path);
-
-const getMainPageByUserType = (userType: TUser["userType"]) =>
-  userType === "CUSTOMER" ? "/searchMover" : "/estimate/received";
-
 export default function AuthProvider({ children }: IAuthProviderProps) {
-  const [user, setUser] = useState<TUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUserFetched, setIsUserFetched] = useState(false);
-  const pathname = usePathname();
+  const queryClient = useQueryClient();
+  const refreshInFlightRef = useRef<Promise<void> | null>(null);
+  const refreshTimerRef = useRef<number | null>(null);
 
-  const redirectToUserMainPage = (userType: TUser["userType"]) => {
-    window.location.href = getMainPageByUserType(userType);
-  };
-
-  const refreshTokenTimer = useRef<NodeJS.Timeout | null>(null);
-
-  const startRefreshTokenTimer = (minutes: number) => {
-    // 혹시 모를 중첩을 대비한 초기화 로직
-    if (refreshTokenTimer.current) {
-      clearInterval(refreshTokenTimer.current);
-    }
-
-    refreshTokenTimer.current = setInterval(
-      async () => {
-        const data = await authApi.refreshToken();
-        // TODO : 테스트용으로 남겨둠
-        // console.log("🔄 자동 갱신:", data);
-        if (data?.error) {
-          await logout();
+  const {
+    data: userData,
+    isLoading: isUserQueryLoading,
+    refetch: refetchUser,
+  } = useQuery<TUser | null>({
+    queryKey: ["user"],
+    queryFn: async () => {
+      try {
+        const response = await userApi.getUser();
+        if (response?.success && response?.data) {
+          return response.data as TUser;
         }
-      },
-      minutes * 60 * 1000,
-    );
-  };
+        return null;
+      } catch (e) {
+        logDevError(e, "Failed to get user");
 
-  const getUser = async () => {
-    try {
-      const response = await userApi.getUser();
-
-      if (response.status === 404) {
-        await logout();
-        return;
+        return null;
       }
+    },
+    // 1) on-mount 자동 실행 비활성화: SSR로만 시드, 필요 시 명시적 refetch 사용
+    enabled: false,
+    // 2) staleTime, gcTime 유지
+    staleTime: 60 * 1000,
+    gcTime: 60 * 1000 * 10,
+    refetchOnWindowFocus: false,
+    retry: 1,
+    // 3) 주기적 CSR 리패치 완전히 비활성화
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+  });
 
-      if (response.success && response.data) {
-        setUser(response.data);
-        startRefreshTokenTimer(14);
+  const getUser = useCallback(async () => {
+    await refetchUser();
+  }, [refetchUser]);
 
-        // ✅ 리다이렉트는 최초 진입 + 퍼블릭 페이지일 때만
-        if (!isUserFetched && isPublicRoute(pathname)) {
-          redirectToUserMainPage(response.data.userType);
-        }
-      } else {
-        setUser(null);
+  // 중복 갱신 방지(single-flight)
+  const refreshOnce = useCallback(async () => {
+    if (refreshInFlightRef.current) return refreshInFlightRef.current;
+    const p = (async () => {
+      try {
+        await authApi.refreshToken();
+        await getUser();
+      } finally {
+        refreshInFlightRef.current = null;
       }
-    } catch (e) {
-      logDevError(e, "Failed to get user");
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    })();
+    refreshInFlightRef.current = p;
+    return p;
+  }, [getUser]);
+
+  // 고정 주기 선제 갱신 타이머 설정 (예: 14분마다 갱신)
+  // 만료 exp를 매 라운드마다 갱신하기 어렵다면, 고정 주기 리프레시로 세션을 슬라이딩 유지합니다.
+  useEffect(() => {
+    const FIXED_REFRESH_MS = 14 * 60 * 1000; // 서버 액세스토큰 15분 가정 시 14분에 선제 갱신
+    const isLoggedIn = Boolean(userData);
+    if (!isLoggedIn) return; // 로그인 상태에서만 작동
+
+    if (refreshTimerRef.current) window.clearTimeout(refreshTimerRef.current);
+    const schedule = () => {
+      refreshTimerRef.current = window.setTimeout(async () => {
+        await refreshOnce();
+        schedule(); // 호출 후 다음 라운드 재스케줄
+      }, FIXED_REFRESH_MS) as unknown as number;
+    };
+    schedule();
+
+    return () => {
+      if (refreshTimerRef.current) window.clearTimeout(refreshTimerRef.current);
+    };
+  }, [userData, refreshOnce]);
+
+  // 포커스/가시성 변화 시 임박하면 즉시 갱신 (tokenExpiresAt가 없을 수 있어도 유지 가능)
+  useEffect(() => {
+    const onFocus = () => {
+      // 고정 주기 방식에서도 포커스 복귀 시점에 선제적으로 한 번 갱신해 UX를 안정화
+      void refreshOnce();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, [refreshOnce]);
 
   const login = async (email: string, password: string, userType: TUser["userType"]) => {
     try {
-      setIsLoading(true);
       const response = await authApi.signIn({ email, password, userType });
-
       if (response?.error) throw new Error(response.message || "로그인에 실패했습니다.");
-      await getUser();
-      return response;
+      // SSR로 통일: 로그인 성공 후 루트로 이동 → 레이아웃에서 SSR 프리패치로 유저 시드
+      window.location.href = "/";
+      return response; // 실제로는 리다이렉트로 인해 이후 코드가 실행되지 않음
     } catch (error) {
       logDevError(error, "Failed to login");
-      setUser(null);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const signUp = async (signUpData: ISignUpFormValues) => {
     try {
-      setIsLoading(true);
       const response = await authApi.signUp(signUpData);
-
       if (response?.error) throw new Error(response.message || "회원가입에 실패했습니다.");
-      await getUser();
-      return response;
+      // SSR로 통일: 회원가입 성공 후 루트로 이동 → 레이아웃에서 SSR 프리패치로 유저 시드
+      window.location.href = "/";
+      return response; // 실제로는 리다이렉트로 인해 이후 코드가 실행되지 않음
     } catch (error) {
       logDevError(error, "Failed to sign up");
-      setUser(null);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      setUser(null);
       const response = await authApi.logout();
-
       if (response?.success) {
+        await queryClient.removeQueries({ queryKey: ["user"], exact: true });
         window.location.href = `/`;
       }
-
       return response;
     } catch (error) {
       logDevError(error, "Failed to logout");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const switchUserType = async (targetType: TUser["userType"]) => {
     try {
-      setIsLoading(true);
       const response = await authApi.switchUserType(targetType);
       await getUser();
       return response;
     } catch (error) {
       logDevError(error, "Failed to switch user type");
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const socialLogin = async (type: "google" | "kakao" | "naver", userType: TUser["userType"]): Promise<void> => {
+  const socialLogin = async (type: "google" | "kakao" | "naver", userType: TUser["userType"]) => {
     try {
-      setIsLoading(true);
+      // 호출 공통 로직
       await authApi[`${type}Login`](userType);
     } catch (error) {
       logDevError(error, `Failed to ${type} login`);
-      setIsLoading(false);
       throw error;
     }
   };
@@ -206,23 +216,10 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   const kakaoLogin = (userType: TUser["userType"]) => socialLogin("kakao", userType);
   const naverLogin = (userType: TUser["userType"]) => socialLogin("naver", userType);
 
-  const fetchedPaths = useRef<Set<string>>(new Set());
-
-  useEffect(() => {
-    const isPrivateRoute = ["/searchMover", "/estimate/received"].includes(pathname);
-    const shouldFetch = !fetchedPaths.current.has(pathname) || isPrivateRoute;
-
-    if (shouldFetch) {
-      getUser().finally(() => {
-        fetchedPaths.current.add(pathname);
-      });
-    }
-  }, [pathname]);
-
   const contextValue: IAuthContextType = {
-    user,
-    isLoading,
-    isLoggedIn: !!user,
+    user: userData ?? null,
+    isLoading: isUserQueryLoading,
+    isLoggedIn: !!userData,
     login,
     signUp,
     googleLogin,

@@ -7,14 +7,18 @@ import authApi from "./auth.api";
 // 토큰 만료 시 재발급 로직 구현
 // 요청 api 토큰 인가 실패 -> 리프레쉬 토큰으로 재발급 로직 실행 -> 성공시 이전 요청 재시도
 // 만약 리프레쉬 토큰 만료시 로그아웃 처리
-export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestInit = {}, retry = true): Promise<T> => {
+export const fetchWithAuth = async <T = unknown>(
+  input: RequestInfo,
+  init: RequestInit = {},
+  retry = true,
+): Promise<T> => {
   const accessToken = await getTokenFromCookie();
 
   const res = await fetch(input, {
     ...init,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(init.headers || {}),
     },
     credentials: "include", // refreshToken 쿠키 필요 시 포함
@@ -32,7 +36,7 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
           ...init,
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
             ...(init.headers || {}),
           },
         },
@@ -41,7 +45,7 @@ export const fetchWithAuth = async <T = any>(input: RequestInfo, init: RequestIn
     }
   }
 
-  if (res.status === 404) {
+  if (res.status === 401) {
     // 🔒 refreshToken도 만료 → 로그아웃 처리
     authApi.logout();
     throw new Error("로그인이 만료되었습니다.");
