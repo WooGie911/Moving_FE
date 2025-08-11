@@ -101,9 +101,9 @@ export default function CustomerEditPage() {
     try {
       const res = await userApi.updateCustomerBasicInfo(data);
       if (res.success) {
-        showSuccessToast(t("edit.successMessage"));
         await getUser();
         router.push(`/${locale}/searchMover`);
+        showSuccessToast(t("edit.successMessage"));
       }
     } catch (error: any) {
       console.log("error", error.message);

@@ -2,6 +2,11 @@ import { getTokenFromCookie } from "@/utils/auth";
 import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+type ApiResponse<T = unknown> = {
+  success: boolean;
+  data?: T;
+  message?: string;
+};
 
 const getAccessToken = async () => {
   return await getTokenFromCookie();
@@ -52,8 +57,8 @@ interface IMoverBasicInfoUpdate {
 
 const userApi = {
   // 사용자 정보 조회
-  getUser: async () => {
-    return fetchWithAuth(`${API_URL}/users`);
+  getUser: async (): Promise<ApiResponse<unknown>> => {
+    return fetchWithAuth<ApiResponse<unknown>>(`${API_URL}/users`);
   },
 
   // 프로필 조회
