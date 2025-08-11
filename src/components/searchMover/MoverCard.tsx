@@ -10,8 +10,8 @@ import { IMoverInfo } from "@/types/mover.types";
 import defaultProfileLg from "@/assets/img/mascot/moverprofile-lg.webp";
 import defaultProfileSm from "@/assets/img/mascot/moverprofile-sm.webp";
 import badge from "@/assets/icon/etc/icon-chat.svg";
-import star from "@/assets/icon/star/icon-star-active-lg.svg";
-import like from "@/assets/icon/like/icon-like-black.svg";
+import star from "@/assets/icon/star/icon-star-active.svg";
+import like from "@/assets/icon/like/icon-like-red.svg";
 
 interface MoverCardProps {
   mover: IMoverInfo;
@@ -218,9 +218,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                     <div className="flex items-center gap-0.5">
                       <Image src={star} alt="rating" className="h-5 w-5" />
                       <span className="text-[13px] leading-[22px] font-medium">
-                        {(mover.averageRating || 0).toFixed(1)}
+                        {(mover.avgRating || 0).toFixed(1)}
                       </span>
-                      <span className="text-[13px] font-medium text-[#ababab]">({mover.totalReviewCount})</span>
+                      <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount || 0})</span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>
                     <div className="flex min-w-0 items-center gap-1">

@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
-import userApi from "@/lib/api/user.api";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
+import userApi, { TUserProfile, TApiResponse } from "@/lib/api/user.api";
+// Vercel CDN 최적화를 위해 public 경로 사용
+const uploadSkeleton: { src: string } = { src: "/img/etc/profile-upload-skeleton.webp" };
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
@@ -20,6 +21,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { isValidEmail, isValidName, isValidPhoneNumber } from "@/utils/validators";
 import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+import { logDevError } from "@/utils/logDevError";
 
 export default function CustomerEditPage() {
   const { user, getUser } = useAuth();
@@ -31,7 +33,6 @@ export default function CustomerEditPage() {
 
   const t = useTranslations("profile");
 
-  const [isLoading, setIsLoading] = useState(true);
   const [customerImage, setCustomerImage] = useState({
     name: "",
     type: "",
@@ -105,16 +106,17 @@ export default function CustomerEditPage() {
         router.push(`/${locale}/searchMover`);
         showSuccessToast(t("edit.successMessage"));
       }
-    } catch (error: any) {
-      console.log("error", error.message);
-      handleAuthErrorToast(t, error.message);
+    } catch (error: unknown) {
+      logDevError(error, "CustomerEditPage onSubmit");
+      const message = error instanceof Error ? error.message : "Unknown error";
+      handleAuthErrorToast(t, message);
     }
   };
 
   const fetchProfile = useCallback(async () => {
     try {
-      const res = await userApi.getProfile();
-      const profile = res.data;
+      const res: TApiResponse<TUserProfile> = await userApi.getProfile();
+      const profile: TUserProfile = res.data ?? {};
 
       reset({
         name: profile.name ?? "",
@@ -136,8 +138,6 @@ export default function CustomerEditPage() {
       setRegions(profile.currentArea ?? "");
     } catch (e) {
       console.error("프로필 조회 실패", e);
-    } finally {
-      setIsLoading(false);
     }
   }, [reset]);
 

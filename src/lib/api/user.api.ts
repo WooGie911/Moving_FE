@@ -2,10 +2,30 @@ import { getTokenFromCookie } from "@/utils/auth";
 import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-type ApiResponse<T = unknown> = {
+
+export type TApiResponse<T = unknown> = {
   success: boolean;
   data?: T;
   message?: string;
+};
+
+// 프로필 조회 응답 타입(고객/기사 공통 초과 타입)
+export type TUserProfile = {
+  // 공통/고객 필드
+  name?: string;
+  nickname?: string;
+  email?: string;
+  phoneNumber?: string;
+  preferredServices?: string[];
+  currentArea?: string;
+  customerImage?: string;
+  // 기사 필드
+  moverImage?: string;
+  career?: number;
+  shortIntro?: string;
+  detailIntro?: string;
+  currentAreas?: string[];
+  serviceTypes?: string[];
 };
 
 const getAccessToken = async () => {
@@ -57,14 +77,14 @@ interface IMoverBasicInfoUpdate {
 
 const userApi = {
   // 사용자 정보 조회
-  getUser: async (): Promise<ApiResponse<unknown>> => {
-    return fetchWithAuth<ApiResponse<unknown>>(`${API_URL}/users`);
+  getUser: async (): Promise<TApiResponse<unknown>> => {
+    return fetchWithAuth<TApiResponse<unknown>>(`${API_URL}/users`);
   },
 
   // 프로필 조회
-  getProfile: async (language?: string) => {
+  getProfile: async (language?: string): Promise<TApiResponse<TUserProfile>> => {
     const query = language ? `?lang=${language}` : "";
-    return fetchWithAuth(`${API_URL}/users/profile${query}`);
+    return fetchWithAuth<TApiResponse<TUserProfile>>(`${API_URL}/users/profile${query}`);
   },
 
   // 프로필 등록
@@ -141,14 +161,28 @@ const userApi = {
     const presigned = await presignedResponse.json();
 
     // 2. Presigned URL로 S3에 직접 업로드
-    await fetch(presigned.uploadUrl, {
+    const uploadResponse = await fetch(presigned.uploadUrl, {
       method: "PUT",
       headers: { "Content-Type": file.type },
       body: file,
     });
 
-    // 3. 업로드 완료된 S3 접근 URL 반환
-    return presigned.fileUrl;
+    if (!uploadResponse.ok) {
+      throw new Error("S3 업로드 실패");
+    }
+
+    // 3. fileUrl에서 objectKey 바로 추출 및 클라우드프론트 URL 생성
+    const objectKey = new URL(presigned.fileUrl).pathname.slice(1);
+
+    const CLOUDFRONT_URL = process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_URL;
+
+    if (!CLOUDFRONT_URL) {
+      throw new Error("AWS_CLOUDFRONT_URL is not set");
+    }
+    const fileUrl = `https://${CLOUDFRONT_URL}/${objectKey}`;
+
+    // 4. fileUrl 반환 (서버 저장용)
+    return fileUrl;
   },
 };
 

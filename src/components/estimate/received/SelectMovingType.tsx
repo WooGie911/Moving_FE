@@ -17,16 +17,31 @@ export const SelectMovingType = ({ selectedTypes, onTypeChange }: SelectMovingTy
   ];
 
   return (
-    <div className="flex flex-row items-center justify-center gap-3">
+    <fieldset
+      className="flex flex-row items-center justify-center gap-3"
+      aria-label={t("ariaLabels.movingTypeSection")}
+    >
+      <legend className="sr-only">{t("movingType")}</legend>
+
       {movingTypes.map((type) => (
-        <CircleTextLabel
-          key={type.value}
-          text={type.text}
-          clickAble={true}
-          isSelected={selectedTypes.includes(type.value)}
-          onClick={() => onTypeChange(type.value)}
-        />
+        <div key={type.value} className="flex items-center">
+          <CircleTextLabel
+            text={type.text}
+            clickAble={true}
+            isSelected={selectedTypes.includes(type.value)}
+            onClick={() => onTypeChange(type.value)}
+            aria-pressed={selectedTypes.includes(type.value)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onTypeChange(type.value);
+              }
+            }}
+          />
+        </div>
       ))}
-    </div>
+    </fieldset>
   );
 };

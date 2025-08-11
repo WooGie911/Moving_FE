@@ -6,6 +6,7 @@ import {
   TCompleteEstimateResponse,
 } from "@/types/customerEstimateRequest";
 import { getTokenFromCookie } from "@/utils/auth";
+import * as Sentry from "@sentry/nextjs";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -62,6 +63,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("진행중인 견적 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "getPendingEstimateRequest",
+        },
+        extra: {
+          language,
+          endpoint: "/customer-quotes/pending",
+        },
+      });
       throw error;
     }
   },
@@ -97,6 +108,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("완료된 견적 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "getReceivedEstimateRequests",
+        },
+        extra: {
+          language,
+          endpoint: "/customer-quotes/received",
+        },
+      });
       throw error;
     }
   },
@@ -132,6 +153,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("견적 확정 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "confirmEstimate",
+        },
+        extra: {
+          estimateId,
+          endpoint: "/customer-quotes/confirm",
+        },
+      });
       throw error;
     }
   },
@@ -165,6 +196,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("견적 취소 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "cancelEstimate",
+        },
+        extra: {
+          estimateId,
+          endpoint: "/customer-quotes/cancel",
+        },
+      });
       throw error;
     }
   },
@@ -199,6 +240,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("이사 확정 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "completeEstimate",
+        },
+        extra: {
+          estimateId,
+          endpoint: "/customer-quotes/complete",
+        },
+      });
       throw error;
     }
   },
@@ -233,6 +284,16 @@ const customerEstimateRequestApi = {
       return result.data;
     } catch (error) {
       console.error("견적 반려 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "customer-quotes",
+          action: "rejectEstimate",
+        },
+        extra: {
+          estimateId,
+          endpoint: "/customer-quotes/cancel",
+        },
+      });
       throw error;
     }
   },

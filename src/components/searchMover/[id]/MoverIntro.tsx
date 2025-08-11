@@ -4,15 +4,16 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import badge from "@/assets/icon/etc/icon-chat.svg";
 import like from "@/assets/icon/like/icon-like-black.svg";
-import star from "@/assets/icon/star/icon-star-active-lg.svg";
+import star from "@/assets/icon/star/icon-star-active.svg";
 import type { MoverWithReviewsProps } from "@/types/mover.types";
 
 const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
-  const total = mover.totalReviewCount || 0;
-  const avg = mover.averageRating || 0;
+  const total = mover.reviewCount || 0;
+  const avg = mover.avgRating || 0;
   const t = useTranslations("mover");
   const tShared = useTranslations("shared");
   const [isExpanded, setIsExpanded] = useState(false);
+
   const [showMoreButton, setShowMoreButton] = useState(false);
   const descriptionRef = useRef<HTMLHeadingElement>(null);
 

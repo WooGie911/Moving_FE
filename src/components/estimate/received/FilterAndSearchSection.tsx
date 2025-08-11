@@ -34,24 +34,46 @@ export const FilterAndSearchSection = ({ filters, onFiltersChange, totalCount }:
   }, [methods, onFiltersChange]);
 
   return (
-    <>
-      {/* 하단 인풋 영역 */}
-      <div className="mt-[10px] flex w-full flex-col gap-4 md:gap-7 lg:gap-6">
+    <section
+      className="mt-[10px] flex w-full flex-col gap-4 md:gap-7 lg:gap-6"
+      aria-label={t("ariaLabels.searchSection")}
+      role="search"
+    >
+      {/* 검색 영역 */}
+      <div className="flex w-full flex-col gap-4 md:gap-7 lg:gap-6" aria-label={t("ariaLabels.searchInput")}>
         <FormProvider {...methods}>
           <SearchInput
             name="search"
             inputClassName="w-full bg-bg-secondary"
             wrapperClassName="w-full"
             placeholder={t("searchPlaceholder")}
+            aria-label={t("ariaLabels.searchInput")}
           />
         </FormProvider>
-        <div className="lg:hidden">
+      </div>
+
+      {/* 필터 영역 */}
+      <div
+        className="flex w-full flex-col gap-4 md:gap-7 lg:gap-6"
+        aria-label={t("ariaLabels.filterSection")}
+        role="group"
+        aria-describedby="total-count"
+      >
+        {/* 총 개수 표시 */}
+        <div id="total-count" className="sr-only" aria-live="polite">
+          {t("ariaLabels.totalCount")}: {totalCount}
+        </div>
+
+        {/* 모바일 필터 */}
+        <div className="lg:hidden" aria-label={t("ariaLabels.mobileFilter")}>
           <SmallFilterSection filters={filters} onFiltersChange={onFiltersChange} totalCount={totalCount} />
         </div>
-        <div className="hidden w-full lg:block">
+
+        {/* 데스크톱 필터 */}
+        <div className="hidden w-full lg:block" aria-label={t("ariaLabels.desktopFilter")}>
           <PcFillterSection filters={filters} onFiltersChange={onFiltersChange} totalCount={totalCount} />
         </div>
       </div>
-    </>
+    </section>
   );
 };

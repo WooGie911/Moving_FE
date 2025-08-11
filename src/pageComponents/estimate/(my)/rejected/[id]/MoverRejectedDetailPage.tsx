@@ -25,28 +25,61 @@ export const MoverRejectedDetailPage = () => {
 
   if (isPending) {
     return (
-      <div>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      <main aria-label={t("ariaLabels.detailLoadingSection")}>
+        <section aria-live="polite" aria-busy="true">
+          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        </section>
+      </main>
     );
   }
-  if (isError) return <Error error={error} reset={() => refetch()} />;
+
+  if (isError) {
+    return (
+      <main aria-label={t("ariaLabels.detailErrorSection")}>
+        <section aria-live="assertive">
+          <Error error={error} reset={() => refetch()} />
+        </section>
+      </main>
+    );
+  }
 
   console.log("data", data);
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === id) : null;
 
   if (!mydata) {
-    return <div>{t("estimateNotFound")}</div>;
+    return (
+      <main aria-label={t("ariaLabels.detailMainContent")}>
+        <nav aria-label={t("ariaLabels.detailTabNavigation")}>
+          <EstimateRequestAndEstimateTab userType="Detail" />
+        </nav>
+        <section
+          aria-label={t("ariaLabels.detailNotFoundSection")}
+          className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
+        >
+          <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
+            <h2 className="mb-2 text-lg font-medium text-gray-600" aria-label={t("ariaLabels.detailNotFoundMessage")}>
+              {t("estimateNotFound")}
+            </h2>
+          </div>
+        </section>
+      </main>
+    );
   }
 
   return (
-    <div>
-      <EstimateRequestAndEstimateTab userType="Detail" />
-      <div className="flex flex-col gap-[46px] md:gap-[82px]">
-        <DetailPageImgSection />
-        <RejectDetailMain data={mydata.estimateRequest} />
-      </div>
-    </div>
+    <main aria-label={t("ariaLabels.detailMainContent")}>
+      <nav aria-label={t("ariaLabels.detailTabNavigation")}>
+        <EstimateRequestAndEstimateTab userType="Detail" />
+      </nav>
+      <section aria-label={t("ariaLabels.detailContentSection")} className="flex flex-col gap-[46px] md:gap-[82px]">
+        <section aria-label={t("ariaLabels.detailImageSection")}>
+          <DetailPageImgSection />
+        </section>
+        <section aria-label={t("ariaLabels.detailMainSection")}>
+          <RejectDetailMain data={mydata.estimateRequest} />
+        </section>
+      </section>
+    </main>
   );
 };

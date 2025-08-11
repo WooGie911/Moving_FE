@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import clearIcon from "@/assets/icon/etc/icon-x.png";
+import clearIcon from "@/assets/icon/etc/icon-x.svg";
 
 export interface IBaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;

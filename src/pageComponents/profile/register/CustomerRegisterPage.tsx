@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
+// Vercel CDN 최적화를 위해 public 경로 사용
+const uploadSkeleton: { src: string } = { src: "/img/etc/profile-upload-skeleton.webp" };
 
 import userApi from "@/lib/api/user.api";
 import { useValidationRules } from "@/hooks/useValidationRules";
@@ -38,7 +39,7 @@ const CustomerRegisterPage = () => {
 
   const [services, setServices] = useState<string[]>(["SMALL"]);
   const [regions, setRegions] = useState<string>("SEOUL");
-  const [selectedImage, setSelectedImage] = useState({
+  const [selectedImage, setSelectedImage] = useState<{ name: string; type: string; dataUrl: string }>({
     name: "",
     type: "",
     dataUrl: uploadSkeleton.src,
@@ -58,11 +59,11 @@ const CustomerRegisterPage = () => {
         preferredServices: services,
       });
       await getUser();
-
       router.push(`/${currentLocale}/searchMover`);
       showSuccessToast(t("registerSuccessMessage"));
-    } catch (error: any) {
-      handleAuthErrorToast(t, error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      handleAuthErrorToast(t, message);
     }
   };
 

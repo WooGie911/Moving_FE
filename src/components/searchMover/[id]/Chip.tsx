@@ -48,7 +48,8 @@ const Chip = ({ mover }: MoverProps) => {
           aria-label={`서비스 지역 ${(mover.serviceRegions || []).length}개`}
         >
           {(mover.serviceRegions || []).map((region, idx) => {
-            const regionCode = region.region;
+            // currentAreas는 RegionType[] 배열이므로 region 자체가 지역 코드
+            const regionCode = typeof region === "string" ? region : region.region;
             return (
               <li key={idx} role="listitem">
                 <CircleTextLabel text={getRegionTranslation(regionCode, tRegions)} hasBorder1={true} />
