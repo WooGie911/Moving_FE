@@ -1,24 +1,12 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
-import {
-  getDaysInMonth,
-  addMonths,
-  subMonths,
-  startOfMonth,
-  getDay,
-  isToday as dateFnsIsToday,
-  format,
-  isBefore,
-  startOfDay,
-} from "date-fns";
-import LeftArrowIcon from "@/assets/icon/arrow/icon-left.png";
-import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
-import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
-import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
+import { addMonths, subMonths, isToday as dateFnsIsToday, format, startOfDay } from "date-fns";
+import LeftArrowIcon from "@/assets/icon/arrow/icon-left.svg";
+import RightArrowIcon from "@/assets/icon/arrow/icon-right.svg";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { CalendarDateObj, ScheduleDisplay, CalendarWithScheduleProps } from "@/types/schedule";
+import { CalendarDateObj, CalendarWithScheduleProps } from "@/types/schedule";
 import { createSafeDate, getCalendarMatrix, isToday, isPastDate } from "@/utils/scheduleUtils";
 
 // 캘린더 스타일 상수
@@ -171,11 +159,8 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
       {/* 헤더 - 연/월, 이전/다음 버튼 */}
       <header className={CALENDAR_STYLES.header} role="banner">
         <button onClick={handlePrevMonth} className="focus:outline-none" aria-label="이전 달로 이동">
-          <span className="block lg:hidden">
+          <span className="block cursor-pointer">
             <Image src={LeftArrowIcon} alt="이전 달" />
-          </span>
-          <span className="hidden lg:block">
-            <Image src={LeftBigArrowIcon} alt="이전 달" />
           </span>
         </button>
 
@@ -184,11 +169,8 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
         </h2>
 
         <button onClick={handleNextMonth} className="focus:outline-none" aria-label="다음 달로 이동">
-          <span className="block lg:hidden">
+          <span className="block cursor-pointer">
             <Image src={RightArrowIcon} alt="다음 달" />
-          </span>
-          <span className="hidden lg:block">
-            <Image src={RightBigArrowIcon} alt="다음 달" />
           </span>
         </button>
       </header>

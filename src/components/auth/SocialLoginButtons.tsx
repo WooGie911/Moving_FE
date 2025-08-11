@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTranslations } from "next-intl";
-import google from "@/assets/icon/auth/icon-login-google.webp";
-import kakao from "@/assets/icon/auth/icon-login-kakao.webp";
-import naver from "@/assets/icon/auth/icon-login-naver.webp";
+import google from "@/assets/icon/auth/icon-login-google.svg";
+import kakao from "@/assets/icon/auth/icon-login-kakao.svg";
+import naver from "@/assets/icon/auth/icon-login-naver.svg";
 import { TUserType } from "@/types/user";
 
 const SocialLoginButtons = ({ userType }: { userType: TUserType }) => {
