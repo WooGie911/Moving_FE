@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import baseProfileImage from "@/assets/img/mascot/profile-lg.png";
 import Image from "next/image";
 import notification from "@/assets/icon/notification/icon-notification-lg.svg";
 import { TDeviceType } from "@/types/deviceType";
@@ -199,7 +198,7 @@ export const GnbActions = ({
             >
               <div className="h-10 w-10 overflow-hidden rounded-full">
                 <Image
-                  src={profileImage || baseProfileImage.src}
+                  src={profileImage || "/img/mascot/profile.webp"}
                   alt={t("gnb.profile")}
                   width={40}
                   height={40}
@@ -242,8 +241,8 @@ export const GnbActions = ({
               ></div>
             </div>
           </button>
-                 </>
-       )}
-     </div>
-   );
- };
+        </>
+      )}
+    </div>
+  );
+};
