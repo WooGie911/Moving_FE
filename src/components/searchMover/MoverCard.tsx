@@ -81,7 +81,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
             height={50}
             className="h-[50px] min-h-[50px] w-[50px] min-w-[50px] flex-shrink-0 rounded-[12px] object-cover"
           />
-          <div className={`flex flex-col gap-1 ${variant === "favorite" ? "w-[229px]" : ""}`}>
+          <div className={`flex w-[229px] flex-col gap-1`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 {shouldShowBadge && <Image src={badge} alt="badge" className="h-[23px] w-5" />}
@@ -99,10 +99,8 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
             >
               <div className="flex items-center gap-0.5">
                 <Image src={star} alt="rating" className="h-5 w-5" />
-                <span className="text-[13px] leading-[22px] font-medium">
-                  {mover.averageRating ? Number(mover.averageRating).toFixed(1) : "0.0"}
-                </span>
-                <span className="text-[13px] font-medium text-[#ababab]">({mover.totalReviewCount || 0})</span>
+                <span className="text-[13px] leading-[22px] font-medium">{(mover.avgRating || 0).toFixed(1)}</span>
+                <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount || 0})</span>
               </div>
               <span className="text-[#e6e6e6]">|</span>
               <div className="flex items-center gap-1">
