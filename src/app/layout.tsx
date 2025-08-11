@@ -12,7 +12,7 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: {
     default: "무빙 - 믿을 수 있는 이사 서비스 플랫폼",
-    template: "%s | 무빙",
+    template: "%s",
   },
   description:
     "전국 최고의 이사 전문가들과 함께하세요. 견적 비교부터 예약까지 한 번에! 안전하고 저렴한 이사 서비스를 무빙에서 만나보세요.",
