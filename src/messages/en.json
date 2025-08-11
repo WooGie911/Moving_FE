@@ -881,7 +881,9 @@
       "tokenGeneration": "Login failed. Please try again later.",
       "userCreationFailed": "Signup failed. Please try again later.",
       "tokenInvalid": "Token authentication failed. Please log in again.",
-      "unknown": "An unknown error occurred. Please try again."
+      "unknown": "An unknown error occurred. Please try again.",
+      "tooManyLoginRequests": "Too many login requests. Please try again in 1 minute.",
+      "tooManySignupRequests": "Too many signup requests. Please try again in 30 minutes."
     }
   },
   "landing": {
