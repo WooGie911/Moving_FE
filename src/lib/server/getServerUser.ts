@@ -9,8 +9,7 @@ type GetUserApiResponse = {
 
 export async function getServerUser() {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/users`;
-  // SSR: 최초 접속 시 초기 유저 값만 안전하게 가져온다.
-  // 인증 실패(401) 등은 예외를 던지지 않고 null을 반환해 에러 페이지 전파를 방지한다.
+  // SSR: 초기 유저 값만 안전하게 가져온다. accessToken 없으면 null 반환
   const accessToken = await getServerSideToken("accessToken");
   if (!accessToken) return null;
 

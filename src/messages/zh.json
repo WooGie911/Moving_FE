@@ -905,7 +905,9 @@
       "tokenGeneration": "登录失败，请稍后再试。",
       "userCreationFailed": "注册失败，请稍后再试。",
       "tokenInvalid": "令牌认证失败，请重新登录。",
-      "unknown": "发生未知错误，请重试。"
+      "unknown": "发生未知错误，请重试。",
+      "tooManyLoginRequests": "登录请求过多。请在1分钟后再试。",
+      "tooManySignupRequests": "注册请求过多。请在30分钟后再试。"
     }
   },
   "landing": {

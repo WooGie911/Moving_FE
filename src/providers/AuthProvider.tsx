@@ -120,7 +120,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   // 고정 주기 선제 갱신 타이머 설정 (예: 14분마다 갱신)
   // 만료 exp를 매 라운드마다 갱신하기 어렵다면, 고정 주기 리프레시로 세션을 슬라이딩 유지합니다.
   useEffect(() => {
-    const FIXED_REFRESH_MS = 14 * 60 * 1000; // 서버 액세스토큰 15분 가정 시 14분에 선제 갱신
+    const FIXED_REFRESH_MS = 1 * 60 * 1000; // 서버 액세스토큰 15분 가정 시 14분에 선제 갱신
     const isLoggedIn = Boolean(userData);
     if (!isLoggedIn) return; // 로그인 상태에서만 작동
 
@@ -137,20 +137,6 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
       if (refreshTimerRef.current) window.clearTimeout(refreshTimerRef.current);
     };
   }, [userData, refreshOnce]);
-
-  // 포커스/가시성 변화 시 임박하면 즉시 갱신 (tokenExpiresAt가 없을 수 있어도 유지 가능)
-  useEffect(() => {
-    const onFocus = () => {
-      // 고정 주기 방식에서도 포커스 복귀 시점에 선제적으로 한 번 갱신해 UX를 안정화
-      void refreshOnce();
-    };
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onFocus);
-    return () => {
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onFocus);
-    };
-  }, [refreshOnce]);
 
   const login = async (email: string, password: string, userType: TUser["userType"]) => {
     try {

@@ -28,6 +28,8 @@ export const TextInput = ({
   } = useFormContext();
   const error = get(errors, name)?.message;
 
+  const inputProps = register(name, rules);
+  const isCareer = name === "career";
   return (
     <BaseInput
       type="text"
@@ -37,7 +39,16 @@ export const TextInput = ({
       errorClassName={errorClassName}
       wrapperClassName={wrapperClassName}
       maxLength={maxLength}
-      {...register(name, rules)}
+      // 숫자만 입력, 두 자리 제한
+      onInput={
+        isCareer
+          ? (e) => {
+              const target = e.currentTarget as HTMLInputElement;
+              target.value = target.value.replace(/[^\d]/g, "").slice(0, 2);
+            }
+          : undefined
+      }
+      {...inputProps}
     />
   );
 };
