@@ -10,22 +10,71 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "무빙",
-  description: "안전하고 신뢰할 수 있는 이사 서비스를 찾아보세요",
+  title: {
+    default: "무빙 - 믿을 수 있는 이사 서비스 플랫폼",
+    template: "%s | 무빙",
+  },
+  description:
+    "전국 최고의 이사 전문가들과 함께하세요. 견적 비교부터 예약까지 한 번에! 안전하고 저렴한 이사 서비스를 무빙에서 만나보세요.",
+  keywords: [
+    "이사",
+    "이사업체",
+    "이사견적",
+    "포장이사",
+    "반포장이사",
+    "이사비용",
+    "이사서비스",
+    "무빙",
+    "moving",
+    "이사예약",
+    "이사전문가",
+  ],
+  authors: [{ name: "무빙팀" }],
+  creator: "무빙",
+  publisher: "무빙",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "무빙 - 이사 서비스",
-    description: "안전하고 신뢰할 수 있는 이사 서비스를 찾아보세요",
+    title: "무빙 - 믿을 수 있는 이사 서비스 플랫폼",
+    description: "전국 최고의 이사 전문가들과 함께하세요. 견적 비교부터 예약까지 한 번에!",
     type: "website",
     url: "https://gomoving.site",
+    siteName: "무빙",
+    locale: "ko_KR",
     images: [
       {
         url: "https://gomoving.site/og-image.png",
         width: 1200,
         height: 630,
-        alt: "무빙 - 이사 서비스",
+        alt: "무빙 - 이사 서비스 플랫폼",
+        type: "image/png",
       },
     ],
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  alternates: {
+    canonical: "https://gomoving.site",
+    languages: {
+      "ko-KR": "https://gomoving.site/ko",
+      "en-US": "https://gomoving.site/en",
+      "zh-CN": "https://gomoving.site/zh",
+    },
+  },
+  category: "service",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

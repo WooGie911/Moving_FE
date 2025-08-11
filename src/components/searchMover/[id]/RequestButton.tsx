@@ -148,10 +148,13 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
   };
 
   return (
-    <>
+    <section role="group" aria-labelledby="request-actions-title">
+      <h3 id="request-actions-title" className="sr-only">
+        견적 요청 및 찜하기
+      </h3>
       {deviceType === "desktop" ? (
         <div className="flex flex-col gap-4">
-          <p className="text-2lg leading-[26px] font-semibold">
+          <p className="text-2lg leading-[26px] font-semibold" role="text">
             {mover.nickname} {t("driverSuffix")} {t("to")} <br />
             {t("requestDesignatedQuote")}
           </p>
@@ -216,7 +219,7 @@ const RequestButton = ({ mover, estimateRequestId, onMoverUpdate }: RequestButto
           </Button>
         </div>
       )}
-    </>
+    </section>
   );
 };
 

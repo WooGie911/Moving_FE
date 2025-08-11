@@ -18,8 +18,12 @@ import {
 import { isValidName } from "@/utils/validators";
 import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const MoverRegisterPage = () => {
+  const { getUser } = useAuth();
+  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const currentLocale = useLocale();
@@ -61,10 +65,10 @@ const MoverRegisterPage = () => {
         currentAreas: regions,
         serviceTypes: services,
       };
-
       await userApi.postProfile(profileData);
+      await getUser();
 
-      window.location.href = `/${currentLocale}/estimate/received`;
+      router.push(`/${currentLocale}/estimate/received`);
       showSuccessToast(t("registerSuccessMessage"));
     } catch (error: any) {
       handleAuthErrorToast(t, error.message);

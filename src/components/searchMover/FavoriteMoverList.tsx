@@ -32,24 +32,42 @@ const FavoriteMoverList = () => {
 
   if (isError) {
     return (
-      <div className={`sticky ml-[54px] flex h-fit flex-col`} style={{ top: `${topValue}px` }}>
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">{t("favoriteMoversTitle")}</h2>
-        <div className="text-red-500">찜한 기사님 목록을 불러오는데 실패했습니다.</div>
-      </div>
+      <aside
+        className={`sticky ml-[54px] flex h-fit flex-col`}
+        style={{ top: `${topValue}px` }}
+        role="complementary"
+        aria-live="polite"
+      >
+        <h2 className="mb-4 text-xl font-semibold text-gray-900" role="heading" aria-level={2}>
+          {t("favoriteMoversTitle")}
+        </h2>
+        <div className="text-red-500" role="alert" aria-live="assertive">
+          찜한 기사님 목록을 불러오는데 실패했습니다.
+        </div>
+      </aside>
     );
   }
 
   if (!movers || movers.length === 0) return null;
 
   return (
-    <div className={`sticky ml-[54px] flex h-fit flex-col`} style={{ top: `${topValue}px` }}>
-      <h2 className="mb-4 text-xl font-semibold text-gray-900">{t("favoriteMoversTitle")}</h2>
-      <div className="space-y-4">
+    <aside
+      className={`sticky ml-[54px] flex h-fit flex-col`}
+      style={{ top: `${topValue}px` }}
+      role="complementary"
+      aria-labelledby="favorite-list-title"
+    >
+      <h2 id="favorite-list-title" className="mb-4 text-xl font-semibold text-gray-900" role="heading" aria-level={2}>
+        {t("favoriteMoversTitle")}
+      </h2>
+      <ul className="space-y-4" role="list" aria-label={`찜한 기사님 ${movers.length}명`}>
         {movers.map((mover) => (
-          <MoverCard key={mover.id} mover={mover} variant="favorite" />
+          <li key={mover.id} role="listitem">
+            <MoverCard mover={mover} variant="favorite" />
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </aside>
   );
 };
 

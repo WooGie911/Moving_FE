@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import Providers from "./providers";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { getServerUser } from "@/lib/server/getServerUser";
 import { Gnb } from "@/components/common/gnb/Gnb";
 import { ToastContainer } from "react-toastify";
 import { LanguageInitializer } from "@/components/common/LanguageInitializer";
@@ -22,16 +24,20 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   // 유효한 locale인지 확인
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
     notFound();
   }
 
   // 해당 locale의 메시지 로드
   const messages = await getMessages();
 
+  // SSR에서 유저 프리패치 → AuthProvider 위에서 하이드레이션
+  const qc = new QueryClient();
+  await qc.prefetchQuery({ queryKey: ["user"], queryFn: getServerUser });
+
   return (
     <NextIntlClientProvider messages={messages}>
-      <Providers>
+      <Providers reactQueryState={dehydrate(qc)}>
         <LanguageInitializer>
           <Gnb />
           {children}

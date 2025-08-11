@@ -39,15 +39,20 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
   const loadMore = useCallback(async () => {
     if (loadingRef.current || isLoading) return;
     loadingRef.current = true;
-    await fetchNotifications(limit, notifications.length, locale, user?.userType);
-    loadingRef.current = false;
+    try {
+      await fetchNotifications(limit, notifications.length, locale, user?.userType);
+    } catch (error) {
+      console.error("알림 로드 실패:", error);
+    } finally {
+      loadingRef.current = false;
+    }
   }, [fetchNotifications, notifications.length, limit, locale, user?.userType, isLoading]);
 
   useEffect(() => {
     if (inView && hasMore && !loadingRef.current && !isLoading) {
       loadMore();
     }
-  }, [inView, hasMore, loadMore, isLoading]);
+  }, [inView, hasMore, loadMore]);
 
   // 알림 클릭 핸들러 -> 읽음처리 후 이동.
   const handleClick = async (notification: INotification) => {
@@ -80,7 +85,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                   idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
                 }`}
               >
-                <header className="text-sm break-words text-gray-500">{parse(DOMPurify.sanitize(notification.title))}</header>
+                <header className="text-sm break-words text-gray-500">{parse(DOMPurify.sanitize(notification.message))}</header>
                 <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
                   {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                 </time>
@@ -93,7 +98,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
                 }`}
               >
                 <article>
-                  <header className="text-sm break-words font-medium">{parse(DOMPurify.sanitize(notification.title))}</header>
+                  <header className="text-sm break-words font-medium">{parse(DOMPurify.sanitize(notification.message))}</header>
                   <time className="mt-1 text-xs text-gray-400" dateTime={notification.createdAt}>
                     {formatRelativeTimeWithTranslations(new Date(notification.createdAt), timeTranslations, locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN")}
                   </time>
@@ -112,7 +117,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
       )}
       
       {/* 더 로드할 데이터가 있는 경우 */}
-      {hasMore && !isLoading && <div ref={ref} style={{ height: 40 }} aria-hidden="true" />}
+      {hasMore && !isLoading && notifications.length > 0 && <div ref={ref} style={{ height: 40 }} aria-hidden="true" />}
       
       {/* 모든 알림 로드 완료 */}
       {!hasMore && notifications.length > 0 && (

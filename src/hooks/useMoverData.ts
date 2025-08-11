@@ -14,6 +14,7 @@ export const useMoverList = (params: IMoverListParams) => {
     initialPageParam: undefined as string | undefined,
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, // 10분
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -152,6 +153,18 @@ export const useRemoveFavorite = () => {
       queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
         if (!oldData) return oldData;
         return { ...oldData, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited };
+      });
+
+      // 즐겨찾기 무한 목록에서도 즉시 제거 (옵티미스틱 후속 보장)
+      queryClient.setQueriesData({ queryKey: ["favoriteMovers"] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            items: (page.items || []).filter((mover: any) => mover.id !== moverId),
+          })),
+        };
       });
     },
   });

@@ -8,12 +8,14 @@ import { useEstimateRequestForm } from "@/hooks/useEstimateRequestForm";
 import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
 import { useEstimateRequestAddressModal } from "@/hooks/useEstimateRequestAddressModal";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import { UseQueryResult } from "@tanstack/react-query";
 
 interface EstimateRequestFlowProps {
   title: string;
   onConfirm: (form: any) => void;
   customButtonText?: string;
   showConfirmModal?: (callback: () => void) => void;
+  activeQuery: UseQueryResult<any>;
 }
 
 export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
@@ -21,6 +23,7 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
   onConfirm,
   customButtonText,
   showConfirmModal,
+  activeQuery: externalActiveQuery,
 }) => {
   // 공통 훅들 사용
   const formLogic = useEstimateRequestForm();
@@ -42,7 +45,8 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
     locale,
   } = formLogic;
 
-  const { activeQuery } = apiLogic;
+  // 외부에서 전달받은 activeQuery 사용
+  const activeQuery = externalActiveQuery;
 
   // API 로딩 상태 확인
   const isPending = activeQuery.isLoading || activeQuery.isFetching;
@@ -70,19 +74,25 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
   // 로딩 중일 때
   if (isPending) {
     return (
-      <div className="min-h-screen bg-gray-200">
+      <main className="min-h-screen bg-gray-200" role="main" aria-label="견적 요청 로딩 중">
         <MovingTruckLoader size="lg" loadingText={t("estimateRequest.loadingText")} />
-      </div>
+      </main>
     );
   }
 
   return (
     <EstimateRequestLayout title={title} progress={progress}>
-      <section className="fade-in-up" role="region" aria-label="견적 요청 소개">
-        <SpeechBubble type="question">{t("estimateRequest.intro")}</SpeechBubble>
+      <section role="region" aria-label="견적 요청 소개">
+        <SpeechBubble type="question">
+          <span className="sr-only">견적 요청 안내: </span>
+          {t("estimateRequest.intro")}
+        </SpeechBubble>
       </section>
-      <section className="fade-in-up" role="region" aria-label="이사 종류 질문">
-        <SpeechBubble type="question">{t("estimateRequest.movingTypeQuestion")}</SpeechBubble>
+      <section role="region" aria-label="이사 종류 질문">
+        <SpeechBubble type="question">
+          <span className="sr-only">이사 종류 질문: </span>
+          {t("estimateRequest.movingTypeQuestion")}
+        </SpeechBubble>
       </section>
 
       {/* 이전 답변들 */}

@@ -65,41 +65,71 @@ const MoverList = () => {
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 lg:w-205">
-        <div className="mb-4 text-lg text-red-500">{t("errorTitle")}</div>
-        <div className="text-sm text-gray-500">{error?.message || t("errorMessage")}</div>
+      <div className="flex flex-col items-center justify-center py-12 lg:w-205" role="alert" aria-live="polite">
+        <h3 className="mb-4 text-lg text-red-500" role="heading" aria-level={3}>
+          {t("errorTitle")}
+        </h3>
+        <p className="text-sm text-gray-500">{error?.message || t("errorMessage")}</p>
       </div>
     );
   }
 
   if (!allMovers.length) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center py-12 lg:w-205">
-        <div className="mb-2 text-lg text-gray-500">{t("noSearchResult")}</div>
-        <div className="text-sm text-gray-400">{t("tryOtherSearch")}</div>
+      <div
+        className="flex min-h-[400px] flex-col items-center justify-center py-12 lg:w-205"
+        role="status"
+        aria-live="polite"
+      >
+        <h3 className="mb-2 text-lg text-gray-500" role="heading" aria-level={3}>
+          {t("noSearchResult")}
+        </h3>
+        <p className="text-sm text-gray-400">{t("tryOtherSearch")}</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="mb-10 space-y-6 lg:space-y-5">
+      <ul
+        className="mb-10 space-y-6 lg:space-y-5"
+        role="list"
+        aria-label={`검색된 기사님 ${allMovers.length}명`}
+        aria-describedby="mover-list-info"
+      >
+        <li className="sr-only" id="mover-list-info">
+          총 {allMovers.length}명의 기사님이 검색되었습니다.
+          {hasNextPage ? "스크롤하면 더 많은 기사님을 보실 수 있습니다." : ""}
+        </li>
         {allMovers.map((mover, index) => (
-          <MoverCard key={`${mover.id}-${index}`} mover={mover} variant="list" />
+          <li key={`${mover.id}-${index}`} role="listitem">
+            <MoverCard mover={mover} variant="list" />
+          </li>
         ))}
 
         {/* 무한스크롤 감지용 div */}
-        <div ref={ref} style={{ height: 1 }} />
+        <div ref={ref} style={{ height: 1 }} aria-hidden="true" />
 
-        {isFetchingNextPage && <div className="py-4 text-center text-gray-500">{t("loadingMoverInfo")}</div>}
-      </div>
+        {isFetchingNextPage && (
+          <li
+            className="py-4 text-center text-gray-500"
+            role="status"
+            aria-live="polite"
+            aria-label="추가 기사님 정보 로딩 중"
+          >
+            {t("loadingMoverInfo")}
+          </li>
+        )}
+      </ul>
 
       {/* 맨 위로 올라가는 버튼 */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
           className="hover:bg-primary-400 fixed bottom-6 left-1/2 z-50 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 shadow-lg transition-all hover:scale-110 hover:text-white"
-          aria-label="맨 위로 올라가기"
+          aria-label="페이지 맨 위로 이동"
+          title="맨 위로 올라가기"
+          type="button"
         >
           <svg
             className="h-6 w-6"
@@ -107,6 +137,7 @@ const MoverList = () => {
             stroke="currentColor"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>

@@ -6,7 +6,7 @@ import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 import { Button } from "@/components/common/button/Button";
 import { EstimateRequestLayout } from "@/components/estimateRequest/common/EstimateRequestLayout";
 import { useEstimateRequestForm } from "@/hooks/useEstimateRequestForm";
-import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
+import { useEstimateRequestApi, useActiveEstimateRequest } from "@/hooks/useEstimateRequestApi";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDateByLanguage } from "@/utils/dateUtils";
 import { estimateRequestClientApi } from "@/lib/api/estimateRequest.client";
@@ -28,6 +28,7 @@ const EstimateRequestEditPage = () => {
   // 공통 훅들 사용
   const formLogic = useEstimateRequestForm();
   const apiLogic = useEstimateRequestApi();
+  const activeQuery = useActiveEstimateRequest();
 
   const {
     form,
@@ -74,72 +75,38 @@ const EstimateRequestEditPage = () => {
 
   // 활성 견적 데이터 로드 및 존재 여부 확인
   useEffect(() => {
-    fetchEstimateRequestData();
-  }, []);
-
-  // 견적 존재 여부 확인 및 create 페이지로 리다이렉트
-  const checkAndRedirectToCreate = async () => {
-    try {
-      const response = await estimateRequestClientApi.getActive(locale);
-
-      if (!response.success || !response.hasActive) {
-        // 활성 견적이 없으면 create 페이지로 리다이렉트
-        router.push("/estimateRequest/create");
-        return;
-      }
-
-      // 활성 견적이 있으면 edit 페이지에서 계속 진행
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          page: "estimateRequestEdit",
-          method: "checkAndRedirectToCreate",
-          locale,
-        },
-      });
-      // 에러 발생 시 create 페이지로 리다이렉트
-      router.push("/estimateRequest/create");
+    // activeQuery가 로딩 중이면 대기
+    if (activeQuery.isLoading || activeQuery.isFetching) {
+      return;
     }
-  };
 
-  const fetchEstimateRequestData = async () => {
-    try {
-      const response = await estimateRequestClientApi.getActive(locale);
-
+    // activeQuery에서 데이터가 있으면 사용
+    if (activeQuery.data) {
+      const response = activeQuery.data;
       if (response.success && response.hasActive && response.data) {
         setEstimateRequestData(response.data);
-        setHasEstimates(response.hasEstimate || false);
+        setHasEstimates((response as any).hasEstimate || false);
         initializeFormFromData(response.data);
       } else if (response.success && !response.hasActive) {
         showErrorModal(t("estimateRequest.noActiveEstimateRequest"));
       } else {
         showErrorModal(response.message || t("estimateRequest.failedToLoadEstimateData"));
       }
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          page: "estimateRequestEdit",
-          method: "fetchEstimateRequestData",
-          locale,
-        },
-      });
-      logDevError(error, "견적 데이터를 불러오는데 실패했습니다");
-
-      // API 응답에서 에러 메시지 추출
-      if (error instanceof Error) {
-        try {
-          const errorData = JSON.parse(error.message);
-          showErrorModal(errorData.message || t("estimateRequest.failedToLoadEstimateData"));
-        } catch {
-          showErrorModal(error.message || t("estimateRequest.failedToLoadEstimateData"));
-        }
-      } else {
-        showErrorModal(t("estimateRequest.failedToLoadEstimateData"));
-      }
-    } finally {
+      setLoading(false);
+    } else if (activeQuery.isError) {
+      // 에러 처리
+      showErrorModal(t("estimateRequest.failedToLoadEstimateData"));
       setLoading(false);
     }
-  };
+  }, [
+    activeQuery.data,
+    activeQuery.isLoading,
+    activeQuery.isFetching,
+    activeQuery.isError,
+    initializeFormFromData,
+    showErrorModal,
+    t,
+  ]);
 
   // 답변 후 다음 질문 표시를 위한 타이머
   useEffect(() => {
@@ -225,7 +192,7 @@ const EstimateRequestEditPage = () => {
     const answerText = getAnswerText(step, pendingAnswer);
 
     return (
-      <div className="fade-in-up">
+      <div role="region" aria-label="현재 답변">
         <SpeechBubble type="answer" isLatest={true}>
           {answerText}
         </SpeechBubble>
@@ -239,7 +206,7 @@ const EstimateRequestEditPage = () => {
 
     if (step > 1 && form.movingType) {
       answers.push(
-        <div key="movingType" className="fade-in-up">
+        <div key="movingType" role="region" aria-label="이사 종류 답변">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingType}>
             {form.movingType
               ? `${t(`shared.movingTypes.${form.movingType}`)} (${t(`shared.movingTypes.${form.movingType}Desc`)})`
@@ -251,7 +218,7 @@ const EstimateRequestEditPage = () => {
 
     if (step > 2 && form.movingDate) {
       answers.push(
-        <div key="movingDate" className="fade-in-up">
+        <div key="movingDate" role="region" aria-label="이사 날짜 답변">
           <SpeechBubble type="answer" isLatest={false} onEdit={handleEditMovingDate}>
             {formatDateByLanguage(form.movingDate, locale as "ko" | "en" | "zh")}
           </SpeechBubble>
@@ -261,6 +228,19 @@ const EstimateRequestEditPage = () => {
 
     return answers;
   }, [step, form, t, locale, handleEditMovingType, handleEditMovingDate]);
+
+  // 로딩 상태
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-200" role="main" aria-label="견적 요청 편집 페이지 로딩 중">
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-lg" role="status" aria-live="polite">
+            {t("estimateRequest.loadingText")}
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   // 데이터 없음 상태
   if (!estimateRequestData) {
@@ -304,6 +284,7 @@ const EstimateRequestEditPage = () => {
         onConfirm={(form: any) => updateMutation.mutate(form)}
         customButtonText={t("estimateRequest.editButton")}
         showConfirmModal={apiLogic.showUpdateConfirmModal}
+        activeQuery={activeQuery}
       />
     );
   }
@@ -312,23 +293,27 @@ const EstimateRequestEditPage = () => {
   return (
     <EstimateRequestLayout title={t("estimateRequest.editTitle")} progress={100}>
       {/* 기존 견적 정보 말풍선들 */}
-      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
+      <section role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
+          <span className="sr-only">이사 종류: </span>
           {t("estimateRequest.result.movingType")}: {getMoveTypeLabel(estimateRequestData.movingType)}
         </SpeechBubble>
       </section>
-      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
+      <section role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
+          <span className="sr-only">이사 날짜: </span>
           {t("estimateRequest.result.movingDate")}: {moveDateLabel}
         </SpeechBubble>
       </section>
-      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
+      <section role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
+          <span className="sr-only">출발지: </span>
           {t("estimateRequest.result.departure")}: {departureDisplay}
         </SpeechBubble>
       </section>
-      <section className="fade-in-up" role="region" aria-label="견적 요청 정보">
+      <section role="region" aria-label="견적 요청 정보">
         <SpeechBubble type="answer" isLatest={false}>
+          <span className="sr-only">도착지: </span>
           {t("estimateRequest.result.arrival")}: {arrivalDisplay}
         </SpeechBubble>
       </section>
@@ -336,11 +321,13 @@ const EstimateRequestEditPage = () => {
       {/* 기사님이 보낸 견적이 있는 경우와 없는 경우 분기 처리 */}
       {hasEstimates ? (
         // 기사님이 보낸 견적이 있는 경우 - 보러가기 버튼
-        <section className="fade-in-up" role="region" aria-label="견적 확인">
+        <section role="region" aria-label="견적 확인">
           <SpeechBubble type="question">
             <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
-              <p className="text-black-400">{t("estimateRequest.hasEstimatesMessage")}</p>
-              <div className="flex gap-3">
+              <p className="text-black-400" role="status" aria-live="polite">
+                {t("estimateRequest.hasEstimatesMessage")}
+              </p>
+              <div className="flex gap-3" role="group" aria-label="견적 확인 버튼 그룹">
                 <Button
                   variant="solid"
                   width="w-full"
@@ -357,11 +344,13 @@ const EstimateRequestEditPage = () => {
         </section>
       ) : (
         // 기사님이 보낸 견적이 없는 경우 - 수정/삭제 버튼
-        <section className="fade-in-up" role="region" aria-label="견적 요청 수정 또는 삭제">
+        <section role="region" aria-label="견적 요청 수정 또는 삭제">
           <SpeechBubble type="question">
             <div className="flex min-w-[279px] flex-col gap-3 px-6 py-5">
-              <p className="text-black-400">{t("estimateRequest.editQuestion")}</p>
-              <div className="flex gap-3">
+              <p className="text-black-400" role="status" aria-live="polite">
+                {t("estimateRequest.editQuestion")}
+              </p>
+              <div className="flex gap-3" role="group" aria-label="견적 요청 수정 및 삭제 버튼 그룹">
                 <Button
                   variant="outlined"
                   width="flex-1"
