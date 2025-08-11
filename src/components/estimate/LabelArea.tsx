@@ -15,43 +15,74 @@ interface ILabelAreaProps {
 export const LabelArea = ({ movingType, isDesignated, createdAt, usedAt, estimateStatus }: ILabelAreaProps) => {
   const t = useTranslations("relativeTime");
   const estimateT = useTranslations("estimateRequest");
+  const ariaT = useTranslations("estimateRequest.ariaLabels");
   const locale = useLocale();
+
   return (
-    <div className="flex w-full flex-row items-center justify-between gap-2">
-      <div className="flex flex-row items-center justify-center gap-2">
-        <MoveTypeLabel type={movingType} />
-        {isDesignated ? <MoveTypeLabel type="document" /> : ""}
-      </div>
+    <section
+      className="flex w-full flex-row items-center justify-between gap-2"
+      aria-label={ariaT("labelArea")}
+      role="region"
+    >
+      <section
+        className="flex flex-row items-center justify-center gap-2"
+        aria-label={ariaT("movingTypeSection")}
+        role="group"
+      >
+        <MoveTypeLabel type={movingType} aria-label={ariaT("movingTypeLabel")} />
+        {isDesignated && <MoveTypeLabel type="document" aria-label={ariaT("designatedLabel")} />}
+      </section>
 
       {usedAt === "received" && createdAt && (
-        <span className="text-[14px] leading-[24px] font-normal text-gray-500">
-          {formatRelativeTimeWithTranslations(
-            createdAt,
-            {
-              justNow: t("justNow"),
-              minutesAgo: t("minutesAgo"),
-              hoursAgo: t("hoursAgo"),
-              daysAgo: t("daysAgo"),
-            },
-            locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN",
-          )}
-        </span>
+        <section
+          className="text-[14px] leading-[24px] font-normal text-gray-500"
+          aria-label={ariaT("timeSection")}
+          role="group"
+        >
+          <span aria-label={ariaT("relativeTime")}>
+            {formatRelativeTimeWithTranslations(
+              createdAt,
+              {
+                justNow: t("justNow"),
+                minutesAgo: t("minutesAgo"),
+                hoursAgo: t("hoursAgo"),
+                daysAgo: t("daysAgo"),
+              },
+              locale === "ko" ? "ko-KR" : locale === "en" ? "en-US" : "zh-CN",
+            )}
+          </span>
+        </section>
       )}
 
       {usedAt === "detail" && (
-        <div className="flex flex-row items-center justify-end gap-1 md:hidden">
+        <section
+          className="flex flex-row items-center justify-end gap-1 md:hidden"
+          aria-label={ariaT("statusSection")}
+          role="group"
+        >
           {estimateStatus === "PROPOSED" ? (
-            <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateT("estimateWaiting")}</p>
+            <p className="text-[16px] leading-[26px] font-semibold text-gray-300" aria-label={ariaT("estimateStatus")}>
+              {estimateT("estimateWaiting")}
+            </p>
           ) : estimateStatus === "ACCEPTED" ? (
-            <div className="flex flex-row items-center justify-center gap-1">
-              <Image src={confirm} alt="confirm" width={16} height={16} className="object-contain" />
+            <div
+              className="flex flex-row items-center justify-center gap-1"
+              aria-label={ariaT("confirmedEstimate")}
+              role="group"
+            >
+              <Image src={confirm} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
               <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{estimateT("confirmedEstimate")}</p>
             </div>
           ) : (
-            <p className="text-[16px] leading-[26px] font-semibold text-gray-300">{estimateT("rejectedEstimate")}</p>
+            <p
+              className="text-[16px] leading-[26px] font-semibold text-gray-300"
+              aria-label={ariaT("rejectedEstimate")}
+            >
+              {estimateT("rejectedEstimate")}
+            </p>
           )}
-        </div>
+        </section>
       )}
-    </div>
+    </section>
   );
 };

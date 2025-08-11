@@ -24,6 +24,9 @@ export interface IButtonProps {
   rounded?: string;
   fontSize?: string;
   style?: React.CSSProperties;
+  // 웹접근성을 위한 ARIA 속성들
+  ariaLabel?: string;
+  ariaDescribedby?: string;
 }
 
 // 공유 버튼 Props 인터페이스

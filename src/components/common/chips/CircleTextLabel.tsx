@@ -9,6 +9,10 @@ export const CircleTextLabel = ({
   hasBorder1,
   hasBorder2,
   isSelected,
+  "aria-pressed": ariaPressed,
+  role,
+  tabIndex,
+  onKeyDown,
 }: ICircleTextLabelProps) => {
   const [isClicked, setIsClicked] = useState(false);
 
@@ -27,11 +31,24 @@ export const CircleTextLabel = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (onKeyDown) {
+      onKeyDown(e);
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return clickAble ? (
     <div>
       <div
-        className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 lg:h-[46px] lg:px-5 ${isClicked ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
+        className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 focus:outline-none lg:h-[46px] lg:px-5 ${isClicked ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        aria-pressed={ariaPressed !== undefined ? ariaPressed : isClicked}
+        role={role || "button"}
+        tabIndex={tabIndex !== undefined ? tabIndex : 0}
       >
         <p
           className={`text-sm text-[14px] leading-[20px] font-semibold lg:text-[18px] lg:leading-[26px] ${isClicked ? "text-primary-400" : "text-gray-900"}`}
@@ -42,8 +59,12 @@ export const CircleTextLabel = ({
     </div>
   ) : hasBorder1 ? (
     <div
-      className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 lg:h-[46px] lg:px-5 ${hasBorder2 ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
+      className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 focus:outline-none lg:h-[46px] lg:px-5 ${hasBorder2 ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      aria-pressed={ariaPressed !== undefined ? ariaPressed : hasBorder2}
+      role={role || "button"}
+      tabIndex={tabIndex !== undefined ? tabIndex : 0}
     >
       <p
         className={`text-sm text-[14px] leading-[20px] font-semibold lg:text-[18px] lg:leading-[26px] ${hasBorder2 ? "text-primary-400" : "text-gray-900"}`}
