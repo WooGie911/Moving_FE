@@ -184,7 +184,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   const isPastDate = moveDate < new Date();
 
   // 견적 개수 확인 (최대 5개) - REJECTED 상태 제외 + 지정견적 개수 확인
-  const estimateCount = data.estimates?.filter((estimate) => estimate?.status !== "REJECTED").length || 0;
+  const estimateCount = data.estimates?.filter((estimate) => estimate?.status !== "AUTO_REJECTED").length || 0;
   const designatedCount = data.estimates?.filter((estimate) => estimate?.isDesignated === true).length || 0;
 
   // 지정견적 여부에 따른 최대 견적 개수 결정
@@ -237,7 +237,11 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
     });
   };
   return (
-    <div className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-4 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px] lg:px-5">
+    <article
+      className="border-border-light relative flex w-full max-w-[327px] flex-col items-center justify-center gap-6 rounded-[20px] border-[0.5px] bg-[#ffffff] px-4 py-6 md:max-w-[600px] md:px-10 lg:max-w-[588px] lg:px-5"
+      aria-label={t("ariaLabels.estimateCard")}
+      role="article"
+    >
       {(isPastDate || estimateStatus === "AUTO_REJECTED") && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-[20px] bg-black/50">
           {isPastDate && (
@@ -480,6 +484,6 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
           )}
         </>
       )}
-    </div>
+    </article>
   );
 };

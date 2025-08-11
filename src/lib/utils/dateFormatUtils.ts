@@ -30,9 +30,10 @@ export const getMovingDateFormatKeys = () => {
 // 날짜 포맷 함수들 (번역된 텍스트를 받아서 포맷)
 export const formatRequestDate = (dateStr: string, yearSuffix: string, monthSuffix: string, daySuffix: string) => {
   const date = new Date(dateStr);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+  // UTC 기준으로 날짜를 가져와서 시간대 변환 문제를 방지
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
 
   // 영어인 경우 MM/DD/YYYY 형식
   if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {
@@ -52,10 +53,11 @@ export const formatDateWithDay = (
   weekdays: string[],
 ) => {
   const date = new Date(dateStr);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const dayOfWeek = weekdays[date.getDay()];
+  // UTC 기준으로 날짜를 가져와서 시간대 변환 문제를 방지
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const dayOfWeek = weekdays[date.getUTCDay()];
 
   // 영어인 경우 MM/DD/YYYY 형식
   if (monthSuffix === "/" && yearSuffix === "" && daySuffix === "") {

@@ -3,8 +3,8 @@
 import { BaseInput } from "./BaseInput";
 import { useFormContext, get, RegisterOptions } from "react-hook-form";
 import Image from "next/image";
-import visibilityOn from "@/assets/icon/etc/icon-visibility-on.png";
-import visibilityOff from "@/assets/icon/etc/icon-visibility-off.png";
+import visibilityOn from "@/assets/icon/etc/icon-visibility-on.svg";
+import visibilityOff from "@/assets/icon/etc/icon-visibility-off.svg";
 import { useState } from "react";
 
 interface IInputProps {

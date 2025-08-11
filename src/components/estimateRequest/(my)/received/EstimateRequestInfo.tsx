@@ -33,11 +33,13 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
     else if (locale === "zh") localeCode = "zh-CN";
     else if (locale === "ko") localeCode = "ko-KR";
 
+    // UTC 기준으로 날짜를 처리하여 시간대 변환 문제를 방지
     return d.toLocaleDateString(localeCode, {
       year: "numeric",
       month: "long",
       day: "numeric",
       weekday: "long",
+      timeZone: "UTC",
     });
   };
 
@@ -46,9 +48,10 @@ export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
     if (!date) return "";
     const d = typeof date === "string" ? new Date(date) : date;
 
-    const year = d.getFullYear().toString().slice(-2); // 24
-    const month = (d.getMonth() + 1).toString().padStart(2, "0"); // 07
-    const day = d.getDate().toString().padStart(2, "0"); // 04
+    // UTC 기준으로 날짜를 가져와서 시간대 변환 문제를 방지
+    const year = d.getUTCFullYear().toString().slice(-2); // 24
+    const month = (d.getUTCMonth() + 1).toString().padStart(2, "0"); // 07
+    const day = d.getUTCDate().toString().padStart(2, "0"); // 04
 
     return `${year}.${month}.${day}`;
   };

@@ -5,6 +5,10 @@ export interface ICircleTextLabelProps {
   hasBorder1?: boolean;
   hasBorder2?: boolean;
   isSelected?: boolean;
+  "aria-pressed"?: boolean;
+  role?: string;
+  tabIndex?: number;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 export interface IMoveTypeLabelProps {
   type: "small" | "home" | "office" | "document" | string;

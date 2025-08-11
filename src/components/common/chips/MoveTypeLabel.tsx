@@ -62,13 +62,32 @@ export const MoveTypeLabel = ({ type, variant, "aria-label": ariaLabel }: Extend
 
   const label = getLabel();
 
+  // 아이콘에 대한 alt 텍스트 생성
+  const getIconAlt = () => {
+    switch (type.toLowerCase()) {
+      case "small":
+        return "소형 이사 아이콘";
+      case "home":
+        return "가정 이사 아이콘";
+      case "office":
+        return "사무실 이사 아이콘";
+      case "document":
+        return "지정 이사 아이콘";
+      default:
+        return "이사 유형 아이콘";
+    }
+  };
+
   return (
-    <div aria-label={ariaLabel}>
+    <div aria-label={ariaLabel || `${label} 라벨`} role="img" aria-labelledby={`move-type-${type}`}>
       <div className="bg-primary-100 inline-flex h-[26px] items-center justify-start gap-[2px] rounded-sm py-[2px] pr-[7px] pl-[4px] md:h-[32px] md:py-[4px]">
         <div className="relative h-[20px] w-[20px]">
-          <Image src={iconSrc} alt="movetype" fill className="object-contain" />
+          <Image src={iconSrc} alt={getIconAlt()} fill className="object-contain" aria-hidden="true" />
         </div>
-        <p className="text-primary-400 text-center text-[13px] leading-[22px] font-semibold md:text-[14px] md:leading-[24px]">
+        <p
+          id={`move-type-${type}`}
+          className="text-primary-400 text-center text-[13px] leading-[22px] font-semibold md:text-[14px] md:leading-[24px]"
+        >
           {label}
         </p>
       </div>

@@ -23,49 +23,83 @@ export const MoverRejectedPage = () => {
   // 로딩 상태
   if (isPending) {
     return (
-      <div>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      <main aria-label={t("ariaLabels.loadingSection")}>
+        <section aria-live="polite" aria-busy="true">
+          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        </section>
+      </main>
     );
   }
 
   // 에러 상태
-  if (isError) return <Error error={error} reset={() => refetch()} />;
+  if (isError) {
+    return (
+      <main aria-label={t("ariaLabels.errorSection")}>
+        <section aria-live="assertive">
+          <Error error={error} reset={() => refetch()} />
+        </section>
+      </main>
+    );
+  }
 
   // 데이터가 없는 경우
   if (!data || data.length === 0) {
     return (
-      <div>
-        <EstimateRequestAndEstimateTab userType="Mover" />
-        <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]">
+      <main aria-label={t("ariaLabels.mainContent")}>
+        <nav aria-label={t("ariaLabels.tabNavigation")}>
+          <EstimateRequestAndEstimateTab userType="Mover" />
+        </nav>
+        <section
+          aria-label={t("ariaLabels.emptyStateSection")}
+          className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
+        >
           <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
-            <p className="mb-2 text-lg font-medium text-gray-600">{t("noRejectedEstimates")}</p>
-            <p className="text-sm text-gray-500">{t("noRejectedEstimates")}</p>
+            <h2 className="mb-2 text-lg font-medium text-gray-600" aria-label={t("ariaLabels.emptyStateTitle")}>
+              {t("noRejectedEstimates")}
+            </h2>
+            <p className="text-sm text-gray-500" aria-label={t("ariaLabels.emptyStateDescription")}>
+              {t("noRejectedEstimates")}
+            </p>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <EstimateRequestAndEstimateTab userType="Mover" />
-      <div className="flex min-h-screen w-full flex-col items-center justify-start bg-[#fafafa]">
+    <main aria-label={t("ariaLabels.mainContent")}>
+      <nav aria-label={t("ariaLabels.tabNavigation")}>
+        <EstimateRequestAndEstimateTab userType="Mover" />
+      </nav>
+      <section
+        aria-label={t("ariaLabels.estimateListSection")}
+        className="flex min-h-screen w-full flex-col items-center justify-start bg-[#fafafa]"
+      >
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="mb-[66px] flex w-full max-w-[1200px] flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+          <div
+            className="mb-[66px] flex w-full max-w-[1200px] flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6"
+            aria-label={t("ariaLabels.estimateListContainer")}
+            role="list"
+          >
             {data.map((item: any, index: number) => (
-              <CardList
+              <article
+                className="flex w-full flex-col items-center justify-center"
                 key={item.id}
-                data={item.estimateRequest}
-                id={item.id}
-                isDesignated={item.isDesignated}
-                usedAt="rejected"
-                index={index}
-              />
+                role="listitem"
+                aria-label={`${t("ariaLabels.estimateCard")} ${index + 1}`}
+              >
+                <CardList
+                  data={item.estimateRequest}
+                  id={item.id}
+                  isDesignated={item.isDesignated}
+                  usedAt="rejected"
+                  index={index}
+                />
+              </article>
             ))}
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
