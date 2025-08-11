@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
 import userApi from "@/lib/api/user.api";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
+import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.webp";
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
