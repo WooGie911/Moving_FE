@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import userApi from "@/lib/api/user.api";
 import { showWarningToast } from "@/utils/toastUtils";
+import { renameFileWithTimestamp } from "@/utils/fileName";
 
 interface IProfileEditImageUploadProps {
   selectedImage: { name: string; type: string; dataUrl: string };
@@ -36,10 +37,13 @@ export const ProfileEditImageUpload = ({
         return;
       }
 
-      const fileUrl = await userApi.uploadFilesToS3(file);
+      const renamedFile = renameFileWithTimestamp(file);
+      console.log("renamedFile", renamedFile);
+      const fileUrl = await userApi.uploadFilesToS3(renamedFile);
+
       onImageChange({
-        name: file.name,
-        type: file.type,
+        name: renamedFile.name,
+        type: renamedFile.type,
         dataUrl: fileUrl,
       });
     },
