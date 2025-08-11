@@ -3,10 +3,29 @@ import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-type ApiResponse<T = unknown> = {
+export type TApiResponse<T = unknown> = {
   success: boolean;
   data?: T;
   message?: string;
+};
+
+// 프로필 조회 응답 타입(고객/기사 공통 초과 타입)
+export type TUserProfile = {
+  // 공통/고객 필드
+  name?: string;
+  nickname?: string;
+  email?: string;
+  phoneNumber?: string;
+  preferredServices?: string[];
+  currentArea?: string;
+  customerImage?: string;
+  // 기사 필드
+  moverImage?: string;
+  career?: number;
+  shortIntro?: string;
+  detailIntro?: string;
+  currentAreas?: string[];
+  serviceTypes?: string[];
 };
 
 const getAccessToken = async () => {
@@ -58,14 +77,14 @@ interface IMoverBasicInfoUpdate {
 
 const userApi = {
   // 사용자 정보 조회
-  getUser: async (): Promise<ApiResponse<unknown>> => {
-    return fetchWithAuth<ApiResponse<unknown>>(`${API_URL}/users`);
+  getUser: async (): Promise<TApiResponse<unknown>> => {
+    return fetchWithAuth<TApiResponse<unknown>>(`${API_URL}/users`);
   },
 
   // 프로필 조회
-  getProfile: async (language?: string) => {
+  getProfile: async (language?: string): Promise<TApiResponse<TUserProfile>> => {
     const query = language ? `?lang=${language}` : "";
-    return fetchWithAuth(`${API_URL}/users/profile${query}`);
+    return fetchWithAuth<TApiResponse<TUserProfile>>(`${API_URL}/users/profile${query}`);
   },
 
   // 프로필 등록
