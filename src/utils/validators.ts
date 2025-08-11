@@ -79,10 +79,15 @@ export const isValidPassword = (password: string): boolean => {
 
 /**
  * 경력 유효성 검사
- * - 숫자만, 0 이상 (백엔드 기준)
+ * - 두 자리 숫자만 허용 (0 ~ 99)
  */
-export const isValidCareer = (career: number): boolean => {
-  return !isNaN(career) && career >= 0;
+export const isValidCareer = (career: number | string): boolean => {
+  if (typeof career === "string") {
+    if (!/^\d{1,2}$/.test(career)) return false;
+    const n = Number(career);
+    return n >= 0 && n <= 99;
+  }
+  return Number.isFinite(career) && career >= 0 && career <= 99;
 };
 
 /**
