@@ -48,63 +48,97 @@ const FilterBar = () => {
   // 스켈레톤 로딩
   if (isLoading) {
     return (
-      <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]">
+      <div
+        className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]"
+        role="status"
+        aria-live="polite"
+        aria-label="필터 옵션 로딩 중"
+      >
         <div className="flex w-full items-center">
-          <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
-          <div className="ml-3 h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
-          <div className="ml-[25px] h-[32px] w-[48px] animate-pulse rounded bg-gray-200" />
+          <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" aria-hidden="true" />
+          <div className="ml-3 h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" aria-hidden="true" />
+          <div className="ml-[25px] h-[32px] w-[48px] animate-pulse rounded bg-gray-200" aria-hidden="true" />
         </div>
-        <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" />
+        <div className="h-[50px] w-[160px] animate-pulse rounded-[12px] bg-gray-200" aria-hidden="true" />
+        <span className="sr-only">필터 옵션을 불러오는 중입니다.</span>
       </div>
     );
   }
 
   return (
-    <div className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]">
-      <div className="flex w-full items-center">
+    <section
+      className="mb-7 flex w-[327px] items-center justify-between md:mb-10 md:w-[600px] lg:mb-[37px] lg:w-[820px]"
+      role="group"
+      aria-labelledby="filter-section-title"
+    >
+      <h3 id="filter-section-title" className="sr-only">
+        검색 필터 옵션
+      </h3>
+
+      <div className="flex w-full items-center" role="group" aria-label="지역 및 서비스 타입 필터">
         {/* 지역 필터 */}
-        <CustomDropdown
-          options={regionOptions}
-          value={region}
-          onChange={(value) => setRegion(value as string)}
-          placeholder={t("region")}
-          twoColumns={true}
-          onOpenChange={setIsRegionOpen}
-          className="min-w-0 text-[14px] lg:text-lg"
-          buttonClassName="w-[100px] h-9 pr-[10px] pl-[14px] md:w-[120px] lg:w-[160px] lg:h-[50px] rounded-[8px] lg:rounded-[12px] lg:pr-3 lg:pl-[20px] border border-gray-300"
-          dropdownClassName=""
-          dropdownWidth={deviceType === "desktop" ? 400 : 200}
-          dropdownHeight={deviceType === "desktop" ? 320 : 180}
-          optionClassName="py-[6px] px-[14px] text-[14px] leading-[24px] lg:py-[19px] lg:px-[24px] lg:text-2lg "
-        />
+        <div role="group" aria-labelledby="region-filter-label">
+          <span id="region-filter-label" className="sr-only">
+            지역 선택
+          </span>
+          <CustomDropdown
+            options={regionOptions}
+            value={region}
+            onChange={(value) => setRegion(value as string)}
+            placeholder={t("region")}
+            twoColumns={true}
+            onOpenChange={setIsRegionOpen}
+            className="min-w-0 text-[14px] lg:text-lg"
+            buttonClassName="w-[100px] h-9 pr-[10px] pl-[14px] md:w-[120px] lg:w-[160px] lg:h-[50px] rounded-[8px] lg:rounded-[12px] lg:pr-3 lg:pl-[20px] border border-gray-300"
+            dropdownClassName=""
+            dropdownWidth={deviceType === "desktop" ? 400 : 200}
+            dropdownHeight={deviceType === "desktop" ? 320 : 180}
+            optionClassName="py-[6px] px-[14px] text-[14px] leading-[24px] lg:py-[19px] lg:px-[24px] lg:text-2lg "
+          />
+        </div>
+
         {/* 서비스 타입 필터 */}
-        <CustomDropdown
-          options={serviceOptions}
-          value={serviceTypeId}
-          onChange={(value) => setServiceTypeId(value as number)}
-          placeholder={t("service")}
-          onOpenChange={setIsServiceOpen}
-          className="min-w-0 text-[14px] lg:text-lg"
-          buttonClassName="w-[100px] h-9 pr-[10px] pl-[14px] md:w-[120px] lg:w-[160px] lg:h-[50px] rounded-[8px] lg:rounded-[12px] lg:pr-3 lg:pl-[20px] border border-gray-300 ml-3"
-          dropdownClassName="ml-3"
-          dropdownWidth={deviceType === "desktop" ? 160 : 106}
-          dropdownHeight={deviceType === "desktop" ? 240 : 160}
-          optionClassName="py-2 px-[14px] text-[14px] lg:py-[17px] lg:px-[24px] lg:text-2lg "
-        />
+        <div role="group" aria-labelledby="service-filter-label">
+          <span id="service-filter-label" className="sr-only">
+            서비스 타입 선택
+          </span>
+          <CustomDropdown
+            options={serviceOptions}
+            value={serviceTypeId}
+            onChange={(value) => setServiceTypeId(value as number)}
+            placeholder={t("service")}
+            onOpenChange={setIsServiceOpen}
+            className="min-w-0 text-[14px] lg:text-lg"
+            buttonClassName="w-[100px] h-9 pr-[10px] pl-[14px] md:w-[120px] lg:w-[160px] lg:h-[50px] rounded-[8px] lg:rounded-[12px] lg:pr-3 lg:pl-[20px] border border-gray-300 ml-3"
+            dropdownClassName="ml-3"
+            dropdownWidth={deviceType === "desktop" ? 160 : 106}
+            dropdownHeight={deviceType === "desktop" ? 240 : 160}
+            optionClassName="py-2 px-[14px] text-[14px] lg:py-[17px] lg:px-[24px] lg:text-2lg "
+          />
+        </div>
+
         {/* 초기화 버튼 -> 데스크탑에서만 보임 */}
         {deviceType === "desktop" && (
           <button
             type="button"
             onClick={reset}
-            className="hover:text-primary-400 ml-[25px] cursor-pointer text-lg font-medium text-[#ababab] focus:outline-none"
+            className="hover:text-primary-400 focus:ring-primary-400 ml-[25px] cursor-pointer rounded text-lg font-medium text-[#ababab] focus:ring-2 focus:ring-offset-2 focus:outline-none"
+            aria-label="모든 필터 초기화"
+            title="선택한 지역과 서비스 타입을 초기화합니다"
           >
             {t("reset")}
           </button>
         )}
       </div>
+
       {/* 정렬 */}
-      <SortBar />
-    </div>
+      <div role="group" aria-labelledby="sort-label">
+        <span id="sort-label" className="sr-only">
+          정렬 옵션
+        </span>
+        <SortBar />
+      </div>
+    </section>
   );
 };
 
