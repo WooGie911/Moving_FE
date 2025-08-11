@@ -5,6 +5,7 @@ import React, { useRef } from "react";
 import userApi from "@/lib/api/user.api";
 import { useTranslations } from "next-intl";
 import { showWarningToast } from "@/utils/toastUtils";
+import { renameFileWithTimestamp } from "@/utils/fileName";
 
 interface IProfileImageUploadProps {
   uploadSkeleton: string;
@@ -36,18 +37,24 @@ export const ProfileImageUpload = ({
       return;
     }
 
-    const fileUrl = await userApi.uploadFilesToS3(file);
+    // ✅ 파일명 변경
+    const renamedFile = renameFileWithTimestamp(file);
+    console.log("renamedFile", renamedFile);
 
+    // ✅ 업로드
+    const fileUrl = await userApi.uploadFilesToS3(renamedFile);
+
+    // ✅ 상태 업데이트
     const reader = new FileReader();
     reader.onload = () => {
       onImageChange({
-        name: file.name,
-        type: file.type,
+        name: renamedFile.name,
+        type: renamedFile.type,
         dataUrl: fileUrl,
       });
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(renamedFile);
   };
 
   const isUploaded = Boolean(selectedImage.name);
