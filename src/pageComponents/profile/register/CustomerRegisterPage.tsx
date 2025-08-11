@@ -58,7 +58,6 @@ const CustomerRegisterPage = () => {
         preferredServices: services,
       });
       await getUser();
-
       router.push(`/${currentLocale}/searchMover`);
       showSuccessToast(t("registerSuccessMessage"));
     } catch (error: any) {

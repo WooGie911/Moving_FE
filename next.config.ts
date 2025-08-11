@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "part4-moving-s3.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "d29ije7v1csha8.cloudfront.net",
+        pathname: "/**",
       },
       {
         protocol: "https",

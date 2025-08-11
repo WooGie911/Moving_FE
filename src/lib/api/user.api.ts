@@ -2,6 +2,7 @@ import { getTokenFromCookie } from "@/utils/auth";
 import { fetchWithAuth } from "./fetcher.api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 type ApiResponse<T = unknown> = {
   success: boolean;
   data?: T;
@@ -141,14 +142,28 @@ const userApi = {
     const presigned = await presignedResponse.json();
 
     // 2. Presigned URL로 S3에 직접 업로드
-    await fetch(presigned.uploadUrl, {
+    const uploadResponse = await fetch(presigned.uploadUrl, {
       method: "PUT",
       headers: { "Content-Type": file.type },
       body: file,
     });
 
-    // 3. 업로드 완료된 S3 접근 URL 반환
-    return presigned.fileUrl;
+    if (!uploadResponse.ok) {
+      throw new Error("S3 업로드 실패");
+    }
+
+    // 3. fileUrl에서 objectKey 바로 추출 및 클라우드프론트 URL 생성
+    const objectKey = new URL(presigned.fileUrl).pathname.slice(1);
+
+    const CLOUDFRONT_URL = process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_URL;
+
+    if (!CLOUDFRONT_URL) {
+      throw new Error("AWS_CLOUDFRONT_URL is not set");
+    }
+    const fileUrl = `https://${CLOUDFRONT_URL}/${objectKey}`;
+
+    // 4. fileUrl 반환 (서버 저장용)
+    return fileUrl;
   },
 };
 
