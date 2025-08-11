@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { IButtonProps } from "@/types/button";
-import iconEdit from "@/assets/icon/edit/icon-edit.png";
-import iconLikeBlack from "@/assets/icon/like/icon-like-black.png";
-import iconUnLike from "@/assets/icon/like/icon-like-white-lg.png";
+import iconEdit from "@/assets/icon/edit/icon-edit.svg";
+import iconLikeBlack from "@/assets/icon/like/icon-like-black.svg";
+import iconUnLike from "@/assets/icon/like/icon-like-white-lg.svg";
 
 /**
  * Button 컴포넌트
