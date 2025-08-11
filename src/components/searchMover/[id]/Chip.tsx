@@ -9,6 +9,11 @@ const Chip = ({ mover }: MoverProps) => {
   const tRegions = useTranslations("regions");
   const tService = useTranslations("service");
 
+  // 디버깅을 위한 콘솔 로그
+  console.log("Chip 컴포넌트 - mover 데이터:", mover);
+  console.log("Chip 컴포넌트 - serviceRegions:", mover.serviceRegions);
+  console.log("Chip 컴포넌트 - serviceAreas:", mover.serviceAreas);
+
   return (
     <section className="flex flex-col gap-8" role="group" aria-labelledby="service-details-title">
       <h3 id="service-details-title" className="sr-only">
@@ -48,7 +53,8 @@ const Chip = ({ mover }: MoverProps) => {
           aria-label={`서비스 지역 ${(mover.serviceRegions || []).length}개`}
         >
           {(mover.serviceRegions || []).map((region, idx) => {
-            const regionCode = region.region;
+            // currentAreas는 RegionType[] 배열이므로 region 자체가 지역 코드
+            const regionCode = typeof region === "string" ? region : region.region;
             return (
               <li key={idx} role="listitem">
                 <CircleTextLabel text={getRegionTranslation(regionCode, tRegions)} hasBorder1={true} />

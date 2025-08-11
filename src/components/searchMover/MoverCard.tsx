@@ -27,6 +27,13 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
   const shouldShowBadge = showBadge && variant === "list";
 
+  // 디버깅을 위한 콘솔 로그
+  console.log("MoverCard 컴포넌트 - mover 데이터:", mover);
+  console.log("MoverCard 컴포넌트 - experience:", mover.experience);
+  console.log("MoverCard 컴포넌트 - completedCount:", mover.completedCount);
+  console.log("MoverCard 컴포넌트 - avgRating:", mover.avgRating);
+  console.log("MoverCard 컴포넌트 - reviewCount:", mover.reviewCount);
+
   const renderMobileCard = () => (
     <article
       className={`${variant === "favorite" ? "max-h-[542px]" : "max-h-[250px]"} w-full max-w-[327px] rounded-2xl border-[0.5px] bg-white p-5 ${
@@ -218,9 +225,9 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
                     <div className="flex items-center gap-0.5">
                       <Image src={star} alt="rating" className="h-5 w-5" />
                       <span className="text-[13px] leading-[22px] font-medium">
-                        {(mover.averageRating || 0).toFixed(1)}
+                        {(mover.avgRating || 0).toFixed(1)}
                       </span>
-                      <span className="text-[13px] font-medium text-[#ababab]">({mover.totalReviewCount})</span>
+                      <span className="text-[13px] font-medium text-[#ababab]">({mover.reviewCount || 0})</span>
                     </div>
                     <span className="text-[#e6e6e6]">|</span>
                     <div className="flex min-w-0 items-center gap-1">

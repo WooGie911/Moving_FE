@@ -33,12 +33,12 @@ const DetailInformation = ({ mover, onMoverUpdate }: DetailInformationProps) => 
         .filter(Boolean)
         .join(", ") || "이사 서비스";
 
-    const careerYears = mover.career || 0;
+    const careerYears = mover.experience || 0;
 
-    const rating = mover.averageRating || 0;
+    const rating = mover.avgRating || 0;
 
     const shareDescription = `${mover.nickname} 기사님을 소개합니다! ${careerYears}년 경력의 전문 기사님으로, ${serviceTypeNames} 서비스를 제공합니다. 평점 ${rating.toFixed(1)}점의 신뢰할 수 있는 기사님입니다.`;
-    const shareImageUrl = mover.profileImage || "https://gomoving.site/logo-m.png"; 
+    const shareImageUrl = mover.profileImage || "https://gomoving.site/logo-m.png";
 
     return { title: shareTitle, description: shareDescription, imageUrl: shareImageUrl };
   };
