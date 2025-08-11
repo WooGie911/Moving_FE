@@ -15,6 +15,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import * as Sentry from "@sentry/nextjs";
 
 
 const SERVICE_OPTIONS = ["small", "home", "office"];
@@ -98,45 +99,59 @@ export default function MoverEditPage() {
   // 프로필 정보 불러와서 폼 초기값 세팅
   useEffect(() => {
     async function fetchProfile() {
-      const res = await userApi.getProfile();
-      if (res.success && res.data) {
-        reset({
-          nickname: res.data.nickname || "",
-          career: res.data.career?.toString() || "",
-          intro: res.data.shortIntro || "",
-          desc: res.data.detailIntro || "",
+      try {
+        const res = await userApi.getProfile();
+        if (res.success && res.data) {
+          reset({
+            nickname: res.data.nickname || "",
+            career: res.data.career?.toString() || "",
+            intro: res.data.shortIntro || "",
+            desc: res.data.detailIntro || "",
+          });
+
+          // 서비스 타입 설정
+          if (res.data.serviceTypes) {
+            const serviceNames = res.data.serviceTypes
+              .map((type: string) => {
+                // MoveType enum을 한글 이름으로 변환
+                const serviceNameMap: { [key: string]: string } = {
+                  SMALL: "소형이사",
+                  HOME: "가정이사",
+                  OFFICE: "사무실이사",
+                };
+                return serviceNameMap[type] || "";
+              })
+              .filter(Boolean);
+            setServices(serviceNames);
+          }
+
+          // 지역 설정
+          if (res.data.currentAreas) {
+            const regionNames = res.data.currentAreas
+              .map((area: string) => {
+                return regionLabelMap[area] || "";
+              })
+              .filter(Boolean);
+            setRegions(regionNames);
+          }
+
+          // 이미지 설정
+          if (res.data.moverImage) {
+            setSelectedImage({ file: null, dataUrl: res.data.moverImage });
+          }
+        }
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            page: "mover-profile-edit-page",
+            action: "fetch-profile",
+          },
+          extra: {
+            component: "MoverEditPage",
+            method: "fetchProfile",
+          },
         });
-
-        // 서비스 타입 설정
-        if (res.data.serviceTypes) {
-          const serviceNames = res.data.serviceTypes
-            .map((type: string) => {
-              // MoveType enum을 한글 이름으로 변환
-              const serviceNameMap: { [key: string]: string } = {
-                SMALL: "소형이사",
-                HOME: "가정이사",
-                OFFICE: "사무실이사",
-              };
-              return serviceNameMap[type] || "";
-            })
-            .filter(Boolean);
-          setServices(serviceNames);
-        }
-
-        // 지역 설정
-        if (res.data.currentAreas) {
-          const regionNames = res.data.currentAreas
-            .map((area: string) => {
-              return regionLabelMap[area] || "";
-            })
-            .filter(Boolean);
-          setRegions(regionNames);
-        }
-
-        // 이미지 설정
-        if (res.data.moverImage) {
-          setSelectedImage({ file: null, dataUrl: res.data.moverImage });
-        }
+        showErrorToast("프로필 정보를 불러오는데 실패했습니다.");
       }
     }
     fetchProfile();
@@ -196,9 +211,28 @@ export default function MoverEditPage() {
       } else {
         showErrorToast(result.message || t("edit.errorMessage"));
       }
-          } catch (e) {
-        showErrorToast(t("edit.generalError"));
-      }
+    } catch (e) {
+      Sentry.captureException(e, {
+        tags: {
+          page: "mover-profile-edit-page",
+          action: "update-profile",
+        },
+        extra: {
+          component: "MoverEditPage",
+          method: "onSubmit",
+          formData: {
+            nickname: data.nickname,
+            career: data.career,
+            intro: data.intro,
+            desc: data.desc,
+            services,
+            regions,
+            hasImage: !!selectedImage.file,
+          },
+        },
+      });
+      showErrorToast(t("edit.generalError"));
+    }
   };
 
   return (

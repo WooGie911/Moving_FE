@@ -3,54 +3,20 @@
 import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
-import defaultHeader from "@/assets/img/etc/detailHeader.png";
+import defaultHeader from "@/assets/img/etc/detail-header.webp";
 import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
-import editIcon from "@/assets/icon/edit/icon-edit.png";
+import editIcon from "@/assets/icon/edit/icon-edit-white.svg";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Favorite from "@/components/common/button/Favorite";
-import { getRegionTranslation, getServiceTypeTranslation } from "@/lib/utils/translationUtils";
+import { getRegionTranslation } from "@/lib/utils/translationUtils";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import ReviewAvg from "@/components/searchMover/[id]/ReviewAvg";
 import ReviewList from "@/components/searchMover/[id]/ReviewList";
 import { IMoverInfo } from "@/types/mover.types";
-import { IReview, IApiReview } from "@/types/review";
+import { IReview } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
-
-// 프로필 상세 정보 타입 정의
-type TMoverProfileDetail = {
-  name: string;
-  nickname: string;
-  moverImage: string;
-  career: number;
-  shortIntro: string;
-  detailIntro: string;
-  serviceTypes: string[];
-  currentAreas: string[];
-  isVeteran: boolean;
-  workedCount: number;
-  averageRating: number;
-  totalReviewCount: number;
-  totalFavoriteCount: number;
-};
-
-// 기본 프로필 상세 정보
-const DEFAULT_PROFILE_DETAIL: TMoverProfileDetail = {
-  name: "",
-  nickname: "",
-  moverImage: "",
-  career: 0,
-  shortIntro: "",
-  detailIntro: "",
-  serviceTypes: [],
-  currentAreas: [],
-  isVeteran: false,
-  workedCount: 0,
-  averageRating: 0,
-  totalReviewCount: 0,
-  totalFavoriteCount: 0,
-};
 
 const MoverMyPage = () => {
   const router = useRouter();
@@ -59,7 +25,6 @@ const MoverMyPage = () => {
   const tRegions = useTranslations("regions");
   const tShared = useTranslations();
   const [profile, setProfile] = useState<IMoverInfo | null>(null);
-  const [profileDetail, setProfileDetail] = useState<TMoverProfileDetail>(DEFAULT_PROFILE_DETAIL);
   const [allReviews, setAllReviews] = useState<IReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -80,34 +45,14 @@ const MoverMyPage = () => {
 
         const userId = userRes.data.id;
 
-        // 상세페이지와 동일한 방식으로 기사님 정보 가져오기
+        // 기사님 정보 가져오기
         const moverData = await findMoverApi.fetchMoverDetail(userId, locale);
 
         if (moverData) {
           setProfile(moverData);
         } else {
           setError("기사님 정보를 불러오는데 실패했습니다.");
-        }
-
-        // 프로필 상세 정보 가져오기 (currentAreas 포함)
-        const profileRes = await userApi.getProfile(locale);
-        if (profileRes.success && profileRes.data) {
-          const profileData = profileRes.data as any;
-          setProfileDetail({
-            name: profileData.name || "",
-            nickname: profileData.nickname || "",
-            moverImage: profileData.moverImage || "",
-            career: profileData.career || 0,
-            shortIntro: profileData.shortIntro || "",
-            detailIntro: profileData.detailIntro || "",
-            serviceTypes: profileData.serviceTypes || [],
-            currentAreas: profileData.currentAreas || [],
-            isVeteran: profileData.isVeteran || false,
-            workedCount: profileData.workedCount || 0,
-            averageRating: profileData.averageRating || 0,
-            totalReviewCount: profileData.totalReviewCount || 0,
-            totalFavoriteCount: profileData.totalFavoriteCount || 0,
-          });
+          return;
         }
       } catch (err) {
         setError("기사님 정보를 불러오는데 실패했습니다.");
@@ -123,31 +68,8 @@ const MoverMyPage = () => {
     if (profile) {
       const fetchAllReviews = async () => {
         try {
-          const response = await findMoverApi.getMoverReviews(profile.id, 1, 1000, locale, "COMPLETED");
-
-          const convertedReviews = response.data.items.map((apiReview: IApiReview) => ({
-            id: apiReview.id,
-            rating: apiReview.rating,
-            content: apiReview.content,
-            createdAt: apiReview.createdAt,
-            updatedAt: apiReview.createdAt,
-            deletedAt: null,
-            userId: apiReview.customerId,
-            customerId: apiReview.customerId,
-            moverId: apiReview.moverId,
-            quoteId: apiReview.estimateRequestId,
-            estimateRequestId: apiReview.estimateRequestId,
-            estimateId: apiReview.estimate?.id || "",
-            estimateRequest: null,
-            estimate: apiReview.estimate || null,
-            status: "COMPLETED" as const,
-            isPublic: true,
-            user: {
-              id: apiReview.customerId,
-              name: apiReview.nickname,
-            },
-          }));
-          setAllReviews(convertedReviews as unknown as IReview[]);
+          const response = await findMoverApi.getMoverReviews(profile.id, 1, 20, locale, "COMPLETED");
+          setAllReviews(response.data.items as unknown as IReview[]);
         } catch (error) {
           setAllReviews([]);
         }
@@ -156,14 +78,6 @@ const MoverMyPage = () => {
       fetchAllReviews();
     }
   }, [profile, locale]);
-
-  if (isLoading) {
-    return (
-      <div className="bg-bg-primary flex min-h-screen w-full items-center justify-center">
-        <div className="text-lg">{tShared("common.loading")}</div>
-      </div>
-    );
-  }
 
   if (error !== "") {
     return (
@@ -190,123 +104,144 @@ const MoverMyPage = () => {
   }
 
   return (
-    <div className="bg-bg-primary min-h-screen">
-      <div className="hidden lg:block">
-        <div className="relative w-full">
-          <Image src={defaultHeader} alt="default-header" className="h-[180px] w-full" />
+    <main className="bg-bg-primary min-h-screen" role="main" aria-label="기사님 마이페이지">
+      <header>
+        <div className="relative w-full h-[122px] md:h-[157px] lg:h-[180px]">
+          <Image src={defaultHeader} alt="기사님 프로필 배너" fill priority sizes="100vw" className="object-cover" />
         </div>
-      </div>
+      </header>
 
-      <div className="lg:hidden">
-        <div className="relative w-full">
-          <Image src={defaultHeader} alt="default-header" className="h-[122px] w-full md:h-[157px]" />
+      {/* 스켈레톤 UI */}
+      {isLoading ? (
+        <div className="mx-auto max-w-6xl px-8 py-8">
+          <div className="flex flex-col gap-8 md:flex-row md:gap-12 lg:flex-row lg:gap-24">
+            <div className="flex w-full max-w-[821px] flex-col gap-10">
+              <div className="flex items-center gap-3">
+                <div className="w-20 h-20 bg-gray-200 animate-pulse rounded-[20px]" />
+                <div className="flex flex-col gap-2">
+                  <div className="w-32 h-8 bg-gray-200 animate-pulse rounded" />
+                  <div className="w-24 h-4 bg-gray-200 animate-pulse rounded" />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="w-full h-4 bg-gray-200 animate-pulse rounded" />
+                <div className="w-3/4 h-4 bg-gray-200 animate-pulse rounded" />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-8 py-8">
-        <div className="flex flex-col gap-8 md:flex-row md:gap-12 lg:flex-row lg:gap-24">
-          <div className="flex w-full max-w-[821px] flex-col gap-10">
-            <div className="flex flex-col items-start justify-start gap-8 self-stretch">
-              <div className="flex flex-col items-start justify-start gap-4 self-stretch">
-                <div className="inline-flex items-end justify-start gap-3 self-stretch">
-                  {profile.profileImage ? (
-                    <Image
-                      src={profile.profileImage}
-                      alt="profile-image"
-                      width={80}
-                      height={85}
-                      className="h-20 w-20 rounded-[20px] object-cover"
-                    />
-                  ) : (
-                    <Image
-                      src={defaultProfileImage}
-                      alt="default-profile-image"
-                      width={80}
-                      height={85}
-                      className="h-20 w-20 rounded-[20px] object-cover"
-                    />
-                  )}
-                  <div className="inline-flex flex-col items-start justify-end gap-2">
-                    <div className="inline-flex items-center justify-start gap-1">
-                      <div className="justify-center text-2xl leading-loose font-semibold text-gray-800">
-                        {profile.nickname}
+      ) : (
+        <div className="mx-auto max-w-6xl px-8 py-8">
+          <div className="flex flex-col gap-8 md:flex-row md:gap-12 lg:flex-row lg:gap-24">
+            <div className="flex w-full max-w-[821px] flex-col gap-10">
+              <section aria-label="프로필 정보" className="flex flex-col items-start justify-start gap-8 self-stretch">
+                <div className="flex flex-col items-start justify-start gap-4 self-stretch">
+                  <div className="inline-flex items-end justify-start gap-3 self-stretch">
+                    {profile.profileImage ? (
+                      <Image
+                        src={profile.profileImage}
+                        alt={`${profile.nickname} 기사님 프로필 사진`}
+                        width={80}
+                        height={85}
+                        sizes="80px"
+                        className="h-20 w-20 rounded-[20px] object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={defaultProfileImage}
+                        alt={`${profile.nickname} 기사님 기본 프로필 사진`}
+                        width={80}
+                        height={85}
+                        sizes="80px"
+                        className="h-20 w-20 rounded-[20px] object-cover"
+                      />
+                    )}
+                    <div className="inline-flex flex-col items-start justify-end gap-2">
+                      <div className="inline-flex items-center justify-start gap-1">
+                        <h1 className="justify-center text-2xl leading-loose font-semibold text-gray-800">
+                          {profile.nickname}
+                        </h1>
+                      </div>
+                      <div className="inline-flex items-center justify-start gap-1">
+                        <Favorite
+                          isFavorited={true}
+                          favoriteCount={profile.favoriteCount || 0}
+                          moverId={profile.id}
+                          favoritedColor="text-black"
+                          unfavoritedColor="text-black"
+                          textColor="text-gray-500"
+                          heartPosition="left"
+                          onFavoriteChange={() => {}}
+                          disabled={true}
+                        />
                       </div>
                     </div>
-                    <div className="inline-flex items-center justify-start gap-1">
-                      <Favorite
-                        isFavorited={true}
-                        favoriteCount={profile.favoriteCount || 0}
-                        moverId={profile.id}
-                        favoritedColor="text-black"
-                        unfavoritedColor="text-black"
-                        textColor="text-gray-500"
-                        heartPosition="left"
-                        onFavoriteChange={() => {}}
-                        disabled={true}
-                      />
+                  </div>
+                  <div className="flex flex-col items-start justify-start gap-3 self-stretch">
+                    <div className="justify-start self-stretch text-lg leading-relaxed font-semibold text-gray-800">
+                      {profile.introduction}
+                    </div>
+                    <div className="justify-start self-stretch text-base leading-relaxed font-normal text-gray-500">
+                      {profile.description}
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col items-start justify-start gap-3 self-stretch">
-                  <div className="justify-start self-stretch text-lg leading-relaxed font-semibold text-gray-800">
-                    {profile.introduction}
-                  </div>
-                  <div className="justify-start self-stretch text-base leading-relaxed font-normal text-gray-500">
-                    {profile.description}
-                  </div>
+
+                <div className="flex w-full flex-col gap-4 md:hidden">
+                  <button
+                    onClick={() => router.push(`/${locale}/profile/edit`)}
+                    className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 w-full cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
+                    aria-label="프로필 수정하기"
+                  >
+                    {t("myPage.editProfile")}
+                    <Image src={editIcon} alt="편집 아이콘" className="h-6 w-6" />
+                  </button>
+                  <button
+                    onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
+                    className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                    aria-label="기본 정보 수정하기"
+                  >
+                    <div className="flex items-center justify-start gap-1.5">
+                      <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
+                        {t("myPage.editBasicInfo")}
+                      </div>
+                      <div className="relative h-6 w-6 overflow-hidden">
+                        <Image src={editGrayIcon} alt="편집 아이콘" className="h-6 w-6" />
+                      </div>
+                    </div>
+                  </button>
                 </div>
-              </div>
 
-              <div className="flex w-full flex-col gap-4 md:hidden">
-                <button
-                  onClick={() => router.push(`/${locale}/profile/edit`)}
-                  className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 w-full cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
-                >
-                  {t("myPage.editProfile")}
-                  <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
-                </button>
-                <button
-                  onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 w-full cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
-                >
-                  <div className="flex items-center justify-start gap-1.5">
-                    <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
-                      {t("myPage.editBasicInfo")}
+                <div className="hidden w-full flex-row gap-4 md:flex lg:hidden">
+                  <button
+                    onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
+                    className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
+                    aria-label="기본 정보 수정하기"
+                  >
+                    <div className="flex items-center justify-start gap-1.5">
+                      <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
+                        {t("myPage.editBasicInfo")}
+                      </div>
+                      <div className="relative h-6 w-6 overflow-hidden">
+                        <Image src={editGrayIcon} alt="편집 아이콘" className="h-6 w-6" />
+                      </div>
                     </div>
-                    <div className="relative h-6 w-6 overflow-hidden">
-                      <Image src={editGrayIcon} alt="edit-icon" className="h-6 w-6" />
-                    </div>
-                  </div>
-                </button>
-              </div>
+                  </button>
+                  <button
+                    onClick={() => router.push(`/${locale}/profile/edit`)}
+                    className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 flex-1 cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
+                    aria-label="프로필 수정하기"
+                  >
+                    {t("myPage.editProfile")}
+                    <Image src={editIcon} alt="편집 아이콘" className="h-6 w-6" />
+                  </button>
+                </div>
+              </section>
 
-              <div className="hidden w-full flex-row gap-4 md:flex lg:hidden">
-                <button
-                  onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-                  className="rounded-16 hover:bg-bg-secondary inline-flex h-16 flex-1 cursor-pointer items-center justify-center p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors"
-                >
-                  <div className="flex items-center justify-start gap-1.5">
-                    <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
-                      {t("myPage.editBasicInfo")}
-                    </div>
-                    <div className="relative h-6 w-6 overflow-hidden">
-                      <Image src={editGrayIcon} alt="edit-icon" className="h-6 w-6" />
-                    </div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => router.push(`/${locale}/profile/edit`)}
-                  className="bg-primary-400 rounded-16 hover:bg-primary-500 flex h-16 flex-1 cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors"
-                >
-                  {t("myPage.editProfile")}
-                  <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
-                </button>
-              </div>
-
-              <div className="flex flex-col items-start justify-start gap-4 self-stretch">
-                <div className="justify-start self-stretch text-xl leading-loose font-semibold text-neutral-800">
+              <section aria-label="활동 현황" className="flex flex-col items-start justify-start gap-4 self-stretch">
+                <h2 className="justify-start self-stretch text-xl leading-loose font-semibold text-neutral-800">
                   {t("myPage.activityStatus")}
-                </div>
+                </h2>
                 <div className="bg-bg-secondary rounded-24 inline-flex h-28 items-center justify-between self-stretch border border-gray-200 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40">
                   <div className="inline-flex flex-1 flex-col items-center justify-start gap-1">
                     <div className="justify-start self-stretch text-center text-sm leading-relaxed font-normal whitespace-nowrap text-gray-800 sm:text-base">
@@ -335,92 +270,90 @@ const MoverMyPage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-start justify-start gap-4">
-              <div className="justify-start text-xl leading-loose font-semibold text-neutral-800">
-                {t("myPage.providedServices")}
-              </div>
-              <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
-                {profile.serviceTypes.map((serviceType: any, idx: number) => {
-                  const serviceName = serviceType.service?.name || serviceType;
-                  // 서비스 타입에 따른 번역 처리
-                  let translatedText = serviceName;
-                  if (serviceName === "소형이사") {
-                    translatedText = tShared("service.소형이사");
-                  } else if (serviceName === "가정이사") {
-                    translatedText = tShared("service.가정이사");
-                  } else if (serviceName === "사무실이사") {
-                    translatedText = tShared("service.사무실이사");
-                  }
+              </section>
 
-                  return (
-                    <CircleTextLabel
-                      key={idx}
-                      text={translatedText}
-                      clickAble={false}
-                      hasBorder1={true}
-                      hasBorder2={true}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-            <div className="flex flex-col items-start justify-start gap-4">
-              <div className="justify-start text-xl leading-loose font-semibold text-neutral-800">
-                {t("myPage.serviceAreas")}
-              </div>
-              <div className="flex max-w-full flex-wrap items-start gap-1.5 lg:gap-3">
-                {(profileDetail.currentAreas.length > 0 ? profileDetail.currentAreas : profile.serviceRegions).map(
-                  (region: any, idx: number) => (
-                    <CircleTextLabel
-                      key={idx}
-                      text={getRegionTranslation(typeof region === "string" ? region : region.region, tRegions)}
-                      clickAble={false}
-                      hasBorder1={true}
-                      hasBorder2={false}
-                    />
-                  ),
-                )}
-              </div>
-            </div>
-            <div className="h-0 w-full outline-1 outline-offset-[-0.50px] outline-gray-200" />
-            <div className="flex flex-col items-start justify-start gap-10 self-stretch">
-              <div className="rounded-24 w-full bg-white p-6">
-                <ReviewAvg mover={profile} reviews={allReviews} />
-              </div>
+              <section aria-label="제공 서비스" className="flex flex-col items-start justify-start gap-4">
+                <h2 className="justify-start text-xl leading-loose font-semibold text-neutral-800">
+                  {t("myPage.providedServices")}
+                </h2>
+                <div className="inline-flex items-start justify-start gap-1.5 lg:gap-3">
+                  {profile.serviceTypes.map((serviceType: any, idx: number) => {
+                    const serviceName = serviceType.service?.name || serviceType;
+                    const translatedText = tShared(`service.${serviceName}`);
 
-              <div className="w-full">
-                <ReviewList moverId={profile.id} />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-16 hidden min-w-[200px] flex-col gap-4 lg:flex">
-            <button
-              onClick={() => router.push(`/${locale}/profile/edit`)}
-              className="bg-primary-400 rounded-16 hover:bg-primary-500 flex cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors lg:h-16 lg:w-[283px]"
-            >
-              {t("myPage.editProfile")}
-              <Image src={editIcon} alt="edit-icon" className="h-6 w-6" />
-            </button>
-            <button
-              onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
-              className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
-            >
-              <div className="flex items-center justify-start gap-1.5">
-                <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
-                  {t("myPage.editBasicInfo")}
+                    return (
+                      <CircleTextLabel
+                        key={idx}
+                        text={translatedText}
+                        clickAble={false}
+                        hasBorder1={true}
+                        hasBorder2={true}
+                      />
+                    );
+                  })}
                 </div>
-                <div className="relative h-6 w-6 overflow-hidden">
-                  <Image src={editGrayIcon} alt="edit-icon" className="h-6 w-6" />
+              </section>
+
+              <section aria-label="서비스 지역" className="flex flex-col items-start justify-start gap-4">
+                <h2 className="justify-start text-xl leading-loose font-semibold text-neutral-800">
+                  {t("myPage.serviceAreas")}
+                </h2>
+                <div className="flex max-w-full flex-wrap items-start gap-1.5 lg:gap-3">
+                  {profile.serviceRegions.map(
+                    (region: any, idx: number) => (
+                      <CircleTextLabel
+                        key={idx}
+                        text={getRegionTranslation(typeof region === "string" ? region : region.region, tRegions)}
+                        clickAble={false}
+                        hasBorder1={true}
+                        hasBorder2={false}
+                      />
+                    ),
+                  )}
                 </div>
-              </div>
-            </button>
+              </section>
+
+              <div className="h-0 w-full outline-1 outline-offset-[-0.50px] outline-gray-200" />
+              
+              <section aria-label="리뷰 및 평가" className="flex flex-col items-start justify-start gap-10 self-stretch">
+                <div className="rounded-24 w-full bg-white p-6">
+                  <ReviewAvg mover={profile} reviews={allReviews} />
+                </div>
+
+                <div className="w-full">
+                  <ReviewList moverId={profile.id} />
+                </div>
+              </section>
+            </div>
+
+            <aside aria-label="편집 메뉴" className="mt-16 hidden min-w-[200px] flex-col gap-4 lg:flex">
+              <button
+                onClick={() => router.push(`/${locale}/profile/edit`)}
+                className="bg-primary-400 rounded-16 hover:bg-primary-500 flex cursor-pointer items-center justify-center gap-2 px-6 py-3 font-semibold text-white shadow-md transition-colors lg:h-16 lg:w-[283px]"
+                aria-label="프로필 수정하기"
+              >
+                {t("myPage.editProfile")}
+                <Image src={editIcon} alt="편집 아이콘" className="h-6 w-6" />
+              </button>
+              <button
+                onClick={() => router.push(`/${locale}/moverMyPage/edit`)}
+                className="rounded-16 hover:bg-bg-secondary inline-flex h-16 cursor-pointer items-center justify-center self-stretch p-4 outline-1 outline-offset-[-1px] outline-gray-200 transition-colors lg:w-[283px]"
+                aria-label="기본 정보 수정하기"
+              >
+                <div className="flex items-center justify-start gap-1.5">
+                  <div className="justify-center text-center text-lg leading-relaxed font-semibold text-neutral-400">
+                    {t("myPage.editBasicInfo")}
+                  </div>
+                  <div className="relative h-6 w-6 overflow-hidden">
+                    <Image src={editGrayIcon} alt="편집 아이콘" className="h-6 w-6" />
+                  </div>
+                </div>
+              </button>
+            </aside>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </main>
   );
 };
 
