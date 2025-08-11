@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { REGION_OPTIONS, SERVICE_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
 import userApi, { TUserProfile, TApiResponse } from "@/lib/api/user.api";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.webp";
+// Vercel CDN 최적화를 위해 public 경로 사용
+const uploadSkeleton: { src: string } = { src: "/img/etc/profile-upload-skeleton.webp" };
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "use-intl";
