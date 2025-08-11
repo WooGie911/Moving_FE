@@ -64,8 +64,20 @@
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
     "metadata": {
-      "title": "Estimate Request | 무빙",
-      "description": "Request and manage your moving estimates"
+      "title": "Estimate Request | Moving",
+      "description": "Request and manage your moving estimates",
+      "pending": {
+        "title": "Pending Estimates | Moving",
+        "description": "Check and manage your current moving estimates. Compare quotes from multiple movers."
+      },
+      "received": {
+        "title": "Received Estimates | Moving",
+        "description": "View your completed moving estimates and write reviews. Manage your moving history."
+      },
+      "detail": {
+        "title": "Estimate Details | Moving",
+        "description": "Check detailed estimate information and communicate with movers. Review your moving estimate thoroughly."
+      }
     },
     "loadingText": "Checking estimate information...",
     "intro": "Just provide a few pieces of information and you can receive up to 5 estimates :)",
@@ -897,6 +909,24 @@
   },
 
   "estimate": {
+    "metadata": {
+      "received": {
+        "title": "Received Estimates | Moving",
+        "description": "Check estimate requests from customers and send your quotes. Manage new moving requests efficiently."
+      },
+      "request": {
+        "title": "Requested Estimates | Moving",
+        "description": "View and manage the estimates you've sent. Track quotes waiting for customer responses."
+      },
+      "rejected": {
+        "title": "Rejected Estimates | Moving",
+        "description": "Review rejected estimates to identify improvement areas. Use insights for better future quotes."
+      },
+      "detail": {
+        "title": "Estimate Details | Moving",
+        "description": "Check detailed estimate information and communicate with customers. Manage your moving estimates thoroughly."
+      }
+    },
     "apiError": "API Error:",
     "createEstimateSuccessTitle": "Estimate Created Successfully",
     "createEstimateSuccessMessage": "Estimate has been sent successfully",

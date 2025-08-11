@@ -63,7 +63,19 @@
     "editTitle": "견적 수정",
     "metadata": {
       "title": "견적 요청 | Moving",
-      "description": "이사 견적을 요청하고 관리하세요"
+      "description": "이사 견적을 요청하고 관리하세요",
+      "pending": {
+        "title": "진행중인 견적 | Moving",
+        "description": "현재 진행중인 이사 견적을 확인하고 관리하세요. 여러 업체의 견적을 비교해보세요."
+      },
+      "received": {
+        "title": "받은 견적 | Moving",
+        "description": "완료된 이사 견적을 확인하고 리뷰를 작성하세요. 과거 이사 기록을 관리할 수 있습니다."
+      },
+      "detail": {
+        "title": "견적 상세 | Moving",
+        "description": "견적 상세 정보를 확인하고 업체와 소통하세요. 이사 견적을 자세히 살펴보세요."
+      }
     },
     "loadingText": "견적 정보를 확인하는 중...",
     "intro": "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)",
@@ -852,6 +864,24 @@
   },
 
   "estimate": {
+    "metadata": {
+      "received": {
+        "title": "받은 견적 | Moving",
+        "description": "고객으로부터 받은 이사 견적 요청을 확인하고 견적을 보내세요. 새로운 이사 의뢰를 관리하세요."
+      },
+      "request": {
+        "title": "요청한 견적 | Moving",
+        "description": "내가 보낸 견적 목록을 확인하고 관리하세요. 고객의 응답을 기다리는 견적들을 추적하세요."
+      },
+      "rejected": {
+        "title": "반려된 견적 | Moving",
+        "description": "반려된 견적 목록을 확인하고 개선점을 파악하세요. 향후 견적 개선에 활용하세요."
+      },
+      "detail": {
+        "title": "견적 상세 | Moving",
+        "description": "견적 상세 정보를 확인하고 고객과 소통하세요. 이사 견적을 자세히 관리하세요."
+      }
+    },
     "apiError": "API 에러:",
     "createEstimateSuccessTitle": "견적생성성공",
     "createEstimateSuccessMessage": "견적보내기에 성공했습니다",

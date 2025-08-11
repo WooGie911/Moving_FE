@@ -65,7 +65,19 @@
     "editTitle": "编辑报价",
     "metadata": {
       "title": "报价请求 | Moving",
-      "description": "申请和管理您的搬家报价"
+      "description": "申请和管理您的搬家报价",
+      "pending": {
+        "title": "待处理报价 | Moving",
+        "description": "查看和管理您当前的搬家报价。比较多个搬家公司的报价。"
+      },
+      "received": {
+        "title": "已收到报价 | Moving",
+        "description": "查看您已完成的搬家报价并撰写评价。管理您的搬家历史记录。"
+      },
+      "detail": {
+        "title": "报价详情 | Moving",
+        "description": "查看详细的报价信息并与搬家公司沟通。仔细查看您的搬家报价。"
+      }
     },
     "loadingText": "正在检查报价信息...",
     "intro": "只需提供一些信息，您就可以获得最多5个报价 :)",
@@ -921,6 +933,24 @@
   },
 
   "estimate": {
+    "metadata": {
+      "received": {
+        "title": "收到的报价 | Moving",
+        "description": "查看客户的搬家报价请求并发送您的报价。高效管理新的搬家委托。"
+      },
+      "request": {
+        "title": "已请求报价 | Moving",
+        "description": "查看和管理您发送的报价。跟踪等待客户回复的报价。"
+      },
+      "rejected": {
+        "title": "被拒绝的报价 | Moving",
+        "description": "查看被拒绝的报价以找出改进点。利用洞察改善未来的报价。"
+      },
+      "detail": {
+        "title": "报价详情 | Moving",
+        "description": "查看详细的报价信息并与客户沟通。全面管理您的搬家报价。"
+      }
+    },
     "apiError": "API错误：",
     "createEstimateSuccessTitle": "报价创建成功",
     "createEstimateSuccessMessage": "报价发送成功",
