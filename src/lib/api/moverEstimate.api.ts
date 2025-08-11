@@ -14,6 +14,7 @@ import {
   IUpdateEstimateResponse,
 } from "@/types/moverEstimate";
 import { getTokenFromCookie } from "@/utils/auth";
+import * as Sentry from "@sentry/nextjs";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -59,6 +60,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적 생성 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "createEstimate",
+        },
+        extra: {
+          estimateRequestId: data.estimateRequestId,
+          endpoint: "/mover-estimates/create",
+        },
+      });
       throw error;
     }
   },
@@ -98,6 +109,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적 반려 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "rejectEstimate",
+        },
+        extra: {
+          estimateRequestId: data.estimateRequestId,
+          endpoint: "/mover-estimates/reject",
+        },
+      });
       throw error;
     }
   },
@@ -142,6 +163,17 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("서비스 가능 지역 견적 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getRegionEstimateRequests",
+        },
+        extra: {
+          params,
+          language,
+          endpoint: "/mover-estimates/region",
+        },
+      });
       throw error;
     }
   },
@@ -185,6 +217,17 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("지정 견적 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getDesignatedEstimateRequests",
+        },
+        extra: {
+          params,
+          language,
+          endpoint: "/mover-estimates/designated",
+        },
+      });
       throw error;
     }
   },
@@ -244,6 +287,17 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적 통합 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getAllEstimateRequests",
+        },
+        extra: {
+          params,
+          language,
+          endpoint: "/mover-estimates/list",
+        },
+      });
       throw error;
     }
   },
@@ -279,6 +333,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적 상세 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getEstimateRequestById",
+        },
+        extra: {
+          estimateRequestId,
+          endpoint: `/mover-estimates/${estimateRequestId}`,
+        },
+      });
       throw error;
     }
   },
@@ -313,6 +377,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("내가 보낸 견적서 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getMyEstimates",
+        },
+        extra: {
+          language,
+          endpoint: "/mover-estimates/my-estimates",
+        },
+      });
       throw error;
     }
   },
@@ -347,6 +421,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("내가 반려한 견적 조회 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "getMyRejectedEstimateRequests",
+        },
+        extra: {
+          language,
+          endpoint: "/mover-estimates/my-rejected",
+        },
+      });
       throw error;
     }
   },
@@ -386,6 +470,17 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적 상태 업데이트 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "updateEstimateStatus",
+        },
+        extra: {
+          estimateId,
+          status: data.status,
+          endpoint: "/mover-estimates/status",
+        },
+      });
       throw error;
     }
   },
@@ -422,6 +517,16 @@ const moverEstimateApi = {
       return result.data;
     } catch (error) {
       console.error("견적서 업데이트 실패:", error);
+      Sentry.captureException(error, {
+        tags: {
+          api: "mover-estimates",
+          action: "updateEstimate",
+        },
+        extra: {
+          estimateId,
+          endpoint: "/mover-estimates/estimate",
+        },
+      });
       throw error;
     }
   },

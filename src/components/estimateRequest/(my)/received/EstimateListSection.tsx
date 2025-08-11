@@ -2,9 +2,9 @@
 import { ICardListProps } from "@/types/customerEstimateRequest";
 import React, { useState } from "react";
 import { CardList } from "../CardList";
-import down from "@/assets/icon/arrow/icon-down-md.svg";
+import down from "@/assets/icon/arrow/icon-down.svg";
 import downLg from "@/assets/icon/arrow/icon-down-lg.svg";
-import up from "@/assets/icon/arrow/icon-up-md.svg";
+import up from "@/assets/icon/arrow/icon-up.svg";
 import upLg from "@/assets/icon/arrow/icon-up-lg.svg";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";

@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
-import defaultHeader from "@/assets/img/etc/detailHeader.png";
+import defaultHeader from "@/assets/img/etc/detail-header.webp";
 import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
-import editIcon from "@/assets/icon/edit/icon-edit.png";
+import editIcon from "@/assets/icon/edit/icon-edit-white-lg.svg";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
 import Favorite from "@/components/common/button/Favorite";

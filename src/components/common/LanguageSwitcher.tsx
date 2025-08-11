@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import iconDown from "@/assets/icon/arrow/icon-down.png";
-import iconUp from "@/assets/icon/arrow/icon-up.png";
+import iconDown from "@/assets/icon/arrow/icon-down.svg";
+import iconUp from "@/assets/icon/arrow/icon-up.svg";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { setLanguagePreference } from "@/utils/languageUtils";
@@ -68,9 +68,12 @@ export function LanguageSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`focus:ring-primary-400 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-all duration-200 focus:border-none focus:ring-2 focus:ring-offset-1 focus:outline-none ${
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-pressed={isOpen}
+        className={`active:bg-primary-100 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
           isOpen
-            ? "border-primary-400 bg-primary-50 text-primary-400"
+            ? "border-primary-400 bg-primary-100 text-primary-400"
             : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
         }`}
       >
@@ -90,8 +93,12 @@ export function LanguageSwitcher() {
             <button
               key={loc}
               onClick={() => handleLanguageChange(loc)}
-              className={`block w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors ${
-                locale === loc ? "bg-primary-100 text-primary-400 font-medium" : "text-gray-700 hover:bg-gray-50"
+              role="option"
+              aria-selected={locale === loc}
+              className={`active:bg-primary-100 block w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors focus:outline-none ${
+                locale === loc
+                  ? "bg-primary-100 text-primary-400 font-medium"
+                  : "text-gray-700 hover:bg-gray-50 focus:bg-gray-50"
               }`}
             >
               {loc === "ko" ? t("common.korean") : loc === "en" ? t("common.english") : t("common.chinese")}

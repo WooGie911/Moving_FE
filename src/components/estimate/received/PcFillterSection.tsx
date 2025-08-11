@@ -14,6 +14,7 @@ interface IPcFillterSectionProps {
 
 export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFillterSectionProps) => {
   const t = useTranslations("estimate");
+
   // 이사 유형 변경 핸들러
   const handleTypeChange = (type: string) => {
     const newTypes = filters.movingTypes.includes(type)
@@ -37,13 +38,32 @@ export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFi
   };
 
   return (
-    <div className="flex w-full flex-col items-start justify-center gap-10">
+    <section
+      className="flex w-full flex-col items-start justify-center gap-10"
+      aria-label={t("ariaLabels.pcFilterSection")}
+      role="region"
+    >
       {/* 이사유형 선택 라벨*/}
       <SelectMovingType selectedTypes={filters.movingTypes} onTypeChange={handleTypeChange} />
-      <div className="flex w-full flex-row items-center justify-start pt-6">
-        <p className="text-black-500 text-[18px] leading-[26px] font-semibold">{`${t("totalCount")} ${totalCount}${t("countUnit")}`}</p>
-      </div>
-      <div className="flex w-full flex-row items-center justify-between">
+
+      <section
+        className="flex w-full flex-row items-center justify-start pt-6"
+        aria-label={t("ariaLabels.totalCountSection")}
+        role="group"
+      >
+        <p
+          className="text-black-500 text-[18px] leading-[26px] font-semibold"
+          aria-label={`${t("ariaLabels.totalCount")} ${totalCount}${t("countUnit")}`}
+        >
+          {`${t("totalCount")} ${totalCount}${t("countUnit")}`}
+        </p>
+      </section>
+
+      <section
+        className="flex w-full flex-row items-center justify-between"
+        aria-label={t("ariaLabels.filterOptionsSection")}
+        role="group"
+      >
         <SelectCheckBox
           isDesignatedOnly={filters.isDesignatedOnly}
           isServiceAreaOnly={filters.isServiceAreaOnly}
@@ -51,7 +71,7 @@ export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFi
           onServiceAreaChange={handleServiceAreaChange}
         />
         <Dropdown value={filters.sortBy} onChange={handleSortChange} />
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };

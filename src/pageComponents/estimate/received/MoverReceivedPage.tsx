@@ -79,13 +79,7 @@ export const MoverReceivedPage = () => {
 
     // 검색어 필터링
     if (filters.searchKeyword) {
-      filtered = filtered.filter(
-        (item) =>
-          item.customer.name.includes(filters.searchKeyword) ||
-          item.customer.nickname?.includes(filters.searchKeyword) ||
-          item.toAddress.region.includes(filters.searchKeyword) ||
-          item.moveType.includes(filters.searchKeyword),
-      );
+      filtered = filtered.filter((item) => item.customer.nickname?.includes(filters.searchKeyword));
     }
 
     // 이사 유형 필터링
@@ -122,53 +116,68 @@ export const MoverReceivedPage = () => {
   // 로딩 상태
   if (isPending) {
     return (
-      <div>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
-      </div>
+      <main role="main" aria-label={t("receivedRequests")}>
+        <div aria-live="polite" aria-busy="true">
+          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        </div>
+      </main>
     );
   }
 
   // 에러 상태
   if (isError) return <Error error={error} reset={() => refetch()} />;
+
   // 데이터가 없는 경우
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (
-      <div className="mx-auto flex h-full w-full flex-col items-center justify-center">
-        <div className="flex w-full max-w-[1200px] justify-start px-6 md:px-18 lg:px-0">
-          <div className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
-            {t("receivedRequests")}
-          </div>
-        </div>
-        <div className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]">
-          <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
-            <div className="text-center">
-              <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage1")}</p>
-              <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage2")}</p>
+      <main role="main" aria-label={t("receivedRequests")}>
+        <div className="mx-auto flex h-full w-full flex-col items-center justify-center">
+          <header className="flex w-full max-w-[1200px] justify-start px-6 md:px-18 lg:px-0">
+            <h1 className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
+              {t("receivedRequests")}
+            </h1>
+          </header>
+          <section
+            className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
+            aria-label={t("noAvailableEstimatesMessage1")}
+          >
+            <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
+              <div className="text-center" role="status" aria-live="polite">
+                <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage1")}</p>
+                <p className="mb-2 text-lg font-medium text-gray-600">{t("noAvailableEstimatesMessage2")}</p>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
-      {/* 최상단 탭 */}
-      <div className="flex w-full justify-start">
-        <div className="text-black-500 h-[96px] cursor-pointer py-8 text-[24px] font-bold whitespace-nowrap transition-colors">
-          {t("receivedRequests")}
-        </div>
+    <main role="main" aria-label={t("receivedRequests")}>
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center px-6 md:px-18 lg:px-0">
+        {/* 상단 인풋 영역 */}
+        <FilterAndSearchSection filters={filters} onFiltersChange={updateFilters} totalCount={filteredData.length} />
+
+        {/* 하단 견적 목록들 */}
+        <section
+          className="flex w-full flex-col items-center justify-center"
+          aria-label={t("receivedRequests")}
+          aria-live="polite"
+        >
+          <div
+            className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[36px]"
+            role="list"
+            aria-label={`${filteredData.length}개의 견적 요청`}
+          >
+            {filteredData.map((item, index) => (
+              <article key={item.id} role="listitem" aria-label={`${index + 1}번째 견적 요청`}>
+                <CardList id={item.id} data={item} isDesignated={item.isDesignated} usedAt="received" />
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
-      {/* 상단 인풋 영역 */}
-      <FilterAndSearchSection filters={filters} onFiltersChange={updateFilters} totalCount={filteredData.length} />
-      {/* 하단 견적 목록들 */}
-      <div className="flex w-full flex-col items-center justify-center">
-        <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 pt-[35px] md:mb-[98px] md:pt-[42px] lg:mb-[122px] lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[36px]">
-          {filteredData.map((item) => (
-            <CardList key={item.id} id={item.id} data={item} isDesignated={item.isDesignated} usedAt="received" />
-          ))}
-        </div>
-      </div>
-    </div>
+    </main>
   );
 };

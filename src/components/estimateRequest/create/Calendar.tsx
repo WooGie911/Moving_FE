@@ -12,10 +12,9 @@ import {
   isBefore,
   startOfDay,
 } from "date-fns";
-import LeftArrowIcon from "@/assets/icon/arrow/icon-left.png";
-import RightArrowIcon from "@/assets/icon/arrow/icon-right.png";
-import LeftBigArrowIcon from "@/assets/icon/arrow/icon-left-lg.png";
-import RightBigArrowIcon from "@/assets/icon/arrow/icon-right-lg.png";
+import LeftArrowIcon from "@/assets/icon/arrow/icon-left.svg";
+import RightArrowIcon from "@/assets/icon/arrow/icon-right.svg";
+
 import Image from "next/image";
 import { ICalendarProps, IDateObj } from "@/types/estimateRequest";
 import { useTranslations } from "next-intl";
@@ -183,22 +182,16 @@ const Calendar: React.FC<ICalendarProps> = ({ value, onChange, className }) => {
       {/* 헤더 - 연/월, 이전/다음 버튼 */}
       <div className={CALENDAR_STYLES.header}>
         <button onClick={handlePrevMonth} className="focus:outline-none">
-          <span className="block lg:hidden">
+          <span className="block cursor-pointer">
             <Image src={LeftArrowIcon} alt="이전 달" />
-          </span>
-          <span className="hidden lg:block">
-            <Image src={LeftBigArrowIcon} alt="이전 달" />
           </span>
         </button>
 
         <span className={CALENDAR_STYLES.monthText}>{format(currentDate, "yyyy. MM")}</span>
 
         <button onClick={handleNextMonth} className="focus:outline-none">
-          <span className="block lg:hidden">
+          <span className="block cursor-pointer">
             <Image src={RightArrowIcon} alt="다음 달" />
-          </span>
-          <span className="hidden lg:block">
-            <Image src={RightBigArrowIcon} alt="다음 달" />
           </span>
         </button>
       </div>

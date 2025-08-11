@@ -20,8 +20,8 @@ const FavoriteMoverPage = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const queryClient = useQueryClient();
 
-  // 무한스크롤을 위한 intersection observer
-  const { ref, inView } = useInView();
+  // 무한스크롤을 위한 intersection observer (기사님 찾기와 동일 설정)
+  const { ref, inView } = useInView({ threshold: 0, rootMargin: "100px" });
 
   // 스크롤 위치 감지
   useEffect(() => {
@@ -42,8 +42,8 @@ const FavoriteMoverPage = () => {
     });
   };
 
-  // 무한스크롤 찜한 기사님 조회
-  const FAVORITE_LIMIT = 3;
+  // 무한스크롤 찜한 기사님 조회 (기사님 찾기와 동일 개수)
+  const FAVORITE_LIMIT = 4;
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } = useInfiniteFavoriteMovers(
     FAVORITE_LIMIT,
     locale,

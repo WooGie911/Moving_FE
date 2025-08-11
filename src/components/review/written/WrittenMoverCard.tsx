@@ -1,8 +1,8 @@
 "use client";
 
 import { MoveTypeLabel } from "@/components/common/chips/MoveTypeLabel";
-import StarFill from "@/assets/icon/star/icon-star-active-lg.svg";
-import Star from "@/assets/icon/star/icon-star-inactive-lg.svg";
+import StarFill from "@/assets/icon/star/icon-star-active.svg";
+import Star from "@/assets/icon/star/icon-star-inactive.svg";
 import Image from "next/image";
 import React from "react";
 import estimateIcon from "@/assets/icon/etc/icon-estimate.svg";

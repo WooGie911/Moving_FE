@@ -100,35 +100,73 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   const isFilterActive = () => {
     return filters.movingTypes.length > 0 || filters.isDesignatedOnly || filters.isServiceAreaOnly;
   };
-  return (
-    <div className="flex w-full flex-row justify-between">
-      <p>{`${t("totalCount")} ${totalCount}${t("countUnit")}`}</p>
-      <div className="flex flex-row items-center justify-center gap-1">
-        {/* 정렬 버튼 */}
-        <Dropdown value={filters.sortBy} onChange={(sortBy) => onFiltersChange({ sortBy })} />
 
+  // 활성화된 필터 수 계산
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (filters.movingTypes.length > 0) count += 1;
+    if (filters.isDesignatedOnly) count += 1;
+    if (filters.isServiceAreaOnly) count += 1;
+    return count;
+  };
+
+  return (
+    <section className="flex w-full flex-row justify-between" aria-label={t("ariaLabels.filterSection")} role="region">
+      <p className="text-sm text-gray-600" aria-label={t("ariaLabels.totalCount")}>
+        {`${t("totalCount")} ${totalCount}${t("countUnit")}`}
+      </p>
+
+      <div
+        className="flex flex-row items-center justify-center gap-1"
+        role="group"
+        aria-label={t("ariaLabels.filterSection")}
+      >
+        {/* 정렬 드롭다운 */}
+        <Dropdown
+          value={filters.sortBy}
+          onChange={(sortBy) => onFiltersChange({ sortBy })}
+          aria-label={t("ariaLabels.sortDropdown")}
+        />
+
+        {/* 필터 버튼 */}
         <button
-          className="flex h-[32px] w-[32px] items-center justify-center"
+          className="flex h-[32px] w-[32px] items-center justify-center rounded-md transition-colors hover:bg-gray-100 focus:outline-none"
           onClick={() => {
             isModalOpening.current = true;
             open({
               title: t("filter"),
               children: (
-                <div className="flex flex-col items-start justify-center gap-4">
+                <div
+                  className="flex flex-col items-start justify-center gap-4"
+                  role="dialog"
+                  aria-label={t("ariaLabels.filterModal")}
+                  aria-modal="true"
+                >
                   {/* 이사유형 라벨 선택 영역 */}
-                  <div className="flex flex-col items-start justify-center gap-2 pb-7">
-                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">{t("movingType")}</p>
+                  <section
+                    className="flex flex-col items-start justify-center gap-2 pb-7"
+                    aria-label={t("ariaLabels.movingTypeSection")}
+                    role="group"
+                  >
+                    <h3 className="text-black-500 text-[16px] leading-[26px] font-semibold">{t("movingType")}</h3>
                     <SelectMovingType selectedTypes={modalFilters.movingTypes} onTypeChange={handleModalTypeChange} />
-                  </div>
-                  <div className="flex flex-col items-start justify-center gap-2">
-                    <p className="text-black-500 text-[16px] leading-[26px] font-semibold">{t("regionAndEstimate")}</p>
+                  </section>
+
+                  <section
+                    className="flex flex-col items-start justify-center gap-2"
+                    aria-label={t("ariaLabels.regionSection")}
+                    role="group"
+                  >
+                    <h3 className="text-black-500 text-[16px] leading-[26px] font-semibold">
+                      {t("regionAndEstimate")}
+                    </h3>
                     <SelectCheckBox
                       isDesignatedOnly={modalFilters.isDesignatedOnly}
                       isServiceAreaOnly={modalFilters.isServiceAreaOnly}
                       onDesignatedChange={handleModalDesignatedChange}
                       onServiceAreaChange={handleModalServiceAreaChange}
                     />
-                  </div>
+                  </section>
                 </div>
               ),
               type: "bottomSheet", // "center" | "bottomSheet" (생략 시 기본값: "center")
@@ -144,10 +182,24 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
               ],
             });
           }}
+          aria-label={isFilterActive() ? t("ariaLabels.filterButtonActive") : t("ariaLabels.filterButton")}
+          aria-pressed={isFilterActive()}
+          aria-describedby={isFilterActive() ? "filter-count" : undefined}
         >
-          <Image src={isFilterActive() ? sort_active : sort_inactive} alt="sortModal" width={32} height={32} />
+          <Image
+            src={isFilterActive() ? sort_active : sort_inactive}
+            alt=""
+            width={32}
+            height={32}
+            aria-hidden="true"
+          />
+          {isFilterActive() && (
+            <span id="filter-count" className="sr-only" aria-label={t("ariaLabels.filterCount")}>
+              {getActiveFilterCount()}
+            </span>
+          )}
         </button>
       </div>
-    </div>
+    </section>
   );
 };

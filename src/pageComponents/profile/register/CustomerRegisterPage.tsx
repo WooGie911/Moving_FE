@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.png";
+import uploadSkeleton from "@/assets/img/etc/profile-upload-skeleton.webp";
 
 import userApi from "@/lib/api/user.api";
 import { useValidationRules } from "@/hooks/useValidationRules";
