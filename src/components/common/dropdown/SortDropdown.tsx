@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import iconDown from "@/assets/icon/arrow/icon-down-md.png";
-import iconUp from "@/assets/icon/arrow/icon-up-md.png";
+import iconDown from "@/assets/icon/arrow/icon-down-md.svg";
+import iconUp from "@/assets/icon/arrow/icon-up-md.svg";
 import { Option, BaseDropdownProps } from "@/types/dropdown";
 
 const SortDropdown: React.FC<BaseDropdownProps> = ({

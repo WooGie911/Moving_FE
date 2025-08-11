@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import iconDown from "@/assets/icon/arrow/icon-down.png";
-import iconUp from "@/assets/icon/arrow/icon-up.png";
+import iconDown from "@/assets/icon/arrow/icon-down-md.svg";
+import iconUp from "@/assets/icon/arrow/icon-up-md.svg";
 import { Option, CustomDropdownProps } from "@/types/dropdown";
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
