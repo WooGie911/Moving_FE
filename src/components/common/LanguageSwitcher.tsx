@@ -71,7 +71,7 @@ export function LanguageSwitcher() {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-pressed={isOpen}
-        className={`focus:ring-primary-400 active:bg-primary-100 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-200 focus:border-none focus:ring-2 focus:ring-offset-1 focus:outline-none ${
+        className={`active:bg-primary-100 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
           isOpen
             ? "border-primary-400 bg-primary-100 text-primary-400"
             : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
