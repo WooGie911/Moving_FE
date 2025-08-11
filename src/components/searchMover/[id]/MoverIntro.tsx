@@ -14,12 +14,6 @@ const MoverIntro = ({ mover }: MoverWithReviewsProps) => {
   const tShared = useTranslations("shared");
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // 디버깅을 위한 콘솔 로그
-  console.log("MoverIntro 컴포넌트 - mover 데이터:", mover);
-  console.log("MoverIntro 컴포넌트 - experience:", mover.experience);
-  console.log("MoverIntro 컴포넌트 - completedCount:", mover.completedCount);
-  console.log("MoverIntro 컴포넌트 - avgRating:", mover.avgRating);
-  console.log("MoverIntro 컴포넌트 - reviewCount:", mover.reviewCount);
   const [showMoreButton, setShowMoreButton] = useState(false);
   const descriptionRef = useRef<HTMLHeadingElement>(null);
 

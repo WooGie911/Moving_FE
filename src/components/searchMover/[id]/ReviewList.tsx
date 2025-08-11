@@ -161,7 +161,7 @@ const ReviewList = ({ moverId, onReviewsFetched }: IReviewListProps) => {
                   <header className="mb-4 flex flex-col gap-2 md:mb-6">
                     <div className="flex items-center gap-3 md:gap-[14px]">
                       <span id={`review-${review.id}-author`} className="text-md md:text-2lg font-normal" role="text">
-                        {maskUserName(apiReview?.customer?.nickname || "익명")}
+                        {maskUserName(apiReview?.nickname || "익명")}
                       </span>
                       <span className="text-[#E6E6E6]" aria-hidden="true">
                         |

@@ -27,13 +27,6 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
   const shouldShowBadge = showBadge && variant === "list";
 
-  // 디버깅을 위한 콘솔 로그
-  console.log("MoverCard 컴포넌트 - mover 데이터:", mover);
-  console.log("MoverCard 컴포넌트 - experience:", mover.experience);
-  console.log("MoverCard 컴포넌트 - completedCount:", mover.completedCount);
-  console.log("MoverCard 컴포넌트 - avgRating:", mover.avgRating);
-  console.log("MoverCard 컴포넌트 - reviewCount:", mover.reviewCount);
-
   const renderMobileCard = () => (
     <article
       className={`${variant === "favorite" ? "max-h-[542px]" : "max-h-[250px]"} w-full max-w-[327px] rounded-2xl border-[0.5px] bg-white p-5 ${
