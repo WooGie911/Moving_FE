@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import notFoundImage from "@/assets/img/mascot/notfound.png";
+import notFoundImage from "@/assets/img/mascot/notfound.webp";
 
 const NotFound = () => {
   const router = useRouter();
