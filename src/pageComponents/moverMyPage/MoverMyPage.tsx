@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import userApi from "@/lib/api/user.api";
 import Image from "next/image";
 import defaultHeader from "@/assets/img/etc/detail-header.webp";
-import defaultHeader from "@/assets/img/etc/detail-header.webp";
 import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
 import editIcon from "@/assets/icon/edit/icon-edit-white.svg";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
@@ -44,7 +43,14 @@ const MoverMyPage = () => {
           return;
         }
 
-        const userId = userRes.data.id;
+        // 타입 안전성을 위한 타입 가드
+        const userData = userRes.data as { id: string; userType: string };
+        if (!userData.id || !userData.userType) {
+          setError("사용자 정보가 올바르지 않습니다.");
+          return;
+        }
+
+        const userId = userData.id;
 
         // 기사님 정보 가져오기
         const moverData = await findMoverApi.fetchMoverDetail(userId, locale);
