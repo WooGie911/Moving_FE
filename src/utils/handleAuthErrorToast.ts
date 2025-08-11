@@ -20,6 +20,8 @@ export const handleAuthErrorToast = (t: TFunction, message: string) => {
     "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.": t("error.passwordWeak"),
     "전화번호는 숫자만 입력해야 합니다.": t("error.invalidPhoneNumber"),
     "전화번호는 최소 10자 이상이어야 합니다.": t("error.phoneTooShort"),
+    "로그인 요청이 너무 많습니다. 1분 후 다시 시도해주세요.": t("error.tooManyLoginRequests"),
+    "회원가입 요청이 너무 많습니다. 30분 후 다시 시도해주세요.": t("error.tooManySignupRequests"),
     "토큰 생성 실패로 인한 로그인 실패": t("error.tokenGeneration"),
     "토큰 생성 실패로 인한 회원가입 실패": t("error.tokenGeneration"),
     "유저 생성 실패로 인한 회원가입 실패": t("error.userCreationFailed"),
