@@ -7,7 +7,7 @@ const uploadSkeleton: { src: string } = { src: "/img/etc/profile-upload-skeleton
 
 import userApi from "@/lib/api/user.api";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useLocale, useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ProfileFormHeader,
   ProfileImageUpload,
