@@ -39,10 +39,19 @@ async function getUserFromAccessOrRefreshToken(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 매직 넘버는 상수로 분리
+  const STATIC_PREFIXES = ["/_next", "/static", "/assets", "/img", "/images", "/fonts", "/icons", "/favicon.ico"];
+  const hasFileExt = /\.[a-zA-Z0-9]+$/.test(pathname);
+
+  // 정적/파일 요청은 미들웨어 우회
+  const isStatic = STATIC_PREFIXES.some((p) => pathname.startsWith(p)) || hasFileExt;
+  if (isStatic) return NextResponse.next();
+
+  // ⬇️ 정적 우회 이후에만 i18n 라우팅 적용
   const handleI18nRouting = createMiddleware(routing);
   const response = handleI18nRouting(request);
-
-  const pathname = request.nextUrl.pathname;
 
   // ✅ 루트 경로 접근 처리
   if (pathname === "/") {
