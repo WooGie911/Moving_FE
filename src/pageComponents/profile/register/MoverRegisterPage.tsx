@@ -20,11 +20,9 @@ import { isValidName } from "@/utils/validators";
 import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 import { useAuth } from "@/providers/AuthProvider";
-import { useRouter } from "next/navigation";
 
 const MoverRegisterPage = () => {
   const { getUser } = useAuth();
-  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const currentLocale = useLocale();
@@ -69,7 +67,7 @@ const MoverRegisterPage = () => {
       await userApi.postProfile(profileData);
       await getUser();
 
-      router.push(`/${currentLocale}/estimate/received`);
+      window.location.href = `/${currentLocale}/estimate/received`;
       showSuccessToast(t("registerSuccessMessage"));
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";

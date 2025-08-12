@@ -112,6 +112,10 @@ const userApi = {
       body: JSON.stringify(data),
       credentials: "include",
     });
+    if (!response.ok) {
+      const err = (await response.json()) as { message?: string };
+      throw new Error(err?.message || "API 요청 실패");
+    }
     return response.json();
   },
 
@@ -176,16 +180,11 @@ const userApi = {
 
     const CLOUDFRONT_URL = process.env.NEXT_PUBLIC_AWS_CLOUDFRONT_URL;
 
-    console.log("uploadResponse.key", presigned.key);
-    console.log("objectKey", objectKey);
-
     if (!CLOUDFRONT_URL) {
       throw new Error("AWS_CLOUDFRONT_URL is not set");
     }
 
     const fileUrl = `https://${CLOUDFRONT_URL}/${objectKey}`;
-
-    console.log("fileUrl", fileUrl);
 
     // 4. fileUrl 반환 (서버 저장용)
     return fileUrl;
