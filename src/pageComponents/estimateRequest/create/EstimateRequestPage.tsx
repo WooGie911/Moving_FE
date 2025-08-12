@@ -34,19 +34,14 @@ export default function EstimateRequestPage() {
         // 에러 발생 시 기본적으로 생성 페이지로 설정
         setHasActiveEstimate(false);
       } finally {
-        // 최소 로딩 시간을 보장하여 사용자가 로딩 상태를 확실히 볼 수 있도록 함
-        setTimeout(() => {
-          setLoading(false);
-        }, 800);
+        // 불필요한 최소 로딩 지연 제거: 즉시 콘텐츠 렌더링
+        setLoading(false);
       }
     };
 
-    // 초기 로딩 상태를 확실히 보이도록 약간의 지연
-    const timer = setTimeout(() => {
-      checkActiveEstimate();
-    }, 200);
-
-    return () => clearTimeout(timer);
+    // 즉시 활성 견적 여부 확인 (추가 지연 제거)
+    checkActiveEstimate();
+    return () => {};
   }, [locale]);
 
   if (loading) {
