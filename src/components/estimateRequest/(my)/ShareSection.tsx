@@ -39,7 +39,7 @@ interface ShareSectionProps {
 }
 
 export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
   const locale = useLocale();
 

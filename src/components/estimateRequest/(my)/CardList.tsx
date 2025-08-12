@@ -16,9 +16,8 @@ import { formatNumber } from "@/lib/utils/formatNumber";
 
 export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstimate }: ICardListProps) => {
   const { open, close } = useModal();
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
-  const tCommon = useTranslations("common");
   const queryClient = useQueryClient();
   const locale = useLocale();
 
@@ -63,12 +62,12 @@ export const CardList = ({ estimate, estimateRequest, usedAt, hasConfirmedEstima
       type: "bottomSheet",
       buttons: [
         {
-          text: tCommon("cancel"),
+          text: t("cancel"),
           onClick: () => close(),
           variant: "outlined",
         },
         {
-          text: isConfirming ? tCommon("loading") : tCommon("confirm"),
+          text: isConfirming ? t("loading") : t("confirm"),
           onClick: handleConfirmEstimate,
           disabled: isConfirming,
         },

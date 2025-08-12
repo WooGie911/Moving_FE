@@ -20,7 +20,7 @@ export const DetailPageMainSeaction = ({
   type,
   estimates,
 }: IDetailPageMainSeactionProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
   const locale = useLocale();
 

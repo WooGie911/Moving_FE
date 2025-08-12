@@ -17,9 +17,8 @@ export const DetailMoveInfo = ({
   arrivalDistrict,
   arrivalDetail,
 }: IEstimateRequest) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
-  const tMoveTypes = useTranslations("moveTypes");
 
   // 요일과 시간 포맷 가져오기
   const weekdays = [
@@ -39,7 +38,7 @@ export const DetailMoveInfo = ({
   // movingType을 다국어로 변환하는 함수
   const getMovingTypeText = (type: string) => {
     const key = getMovingTypeKey(type.toLowerCase());
-    return tMoveTypes(key);
+    return t(`movingTypes.${key}`);
   };
 
   return (

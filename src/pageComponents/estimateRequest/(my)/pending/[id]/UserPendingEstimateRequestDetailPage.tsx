@@ -15,8 +15,7 @@ const UserPendingEstimateRequestDetailPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
 
   const { id } = useParams();
-  const t = useTranslations("estimateRequest");
-  const commonT = useTranslations("common");
+  const t = useTranslations("customerEstimateRequest");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["pendingEstimateRequests", locale],
@@ -27,7 +26,7 @@ const UserPendingEstimateRequestDetailPage = () => {
   if (isPending)
     return (
       <div>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        <MovingTruckLoader size="lg" loadingText={t("loading")} />
       </div>
     ); // 또는 로딩 스피너 컴포넌트
   if (isError) return <Error error={error} reset={() => refetch()} />;

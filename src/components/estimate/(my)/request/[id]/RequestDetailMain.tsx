@@ -14,8 +14,8 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
   const tShared = useTranslations();
   const locale = useLocale();
 
-  const estimateT = useTranslations("estimateRequest");
-  const ariaT = useTranslations("estimateRequest.ariaLabels"); // Added
+  const estimateT = useTranslations("customerEstimateRequest");
+  const ariaT = useTranslations("customerEstimateRequest.ariaLabels"); // Added
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
