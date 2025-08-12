@@ -1,5 +1,7 @@
+"use client";
 import ProgressBar from "@/components/estimateRequest/create/ProgressBar";
 import { IEstimateRequestLayoutProps } from "@/types/estimateRequest";
+import { useTranslations } from "next-intl";
 
 // 공통 스타일 변수
 export const ESTIMATE_REQUEST_STYLES = {
@@ -20,8 +22,9 @@ export const ESTIMATE_REQUEST_STYLES = {
 } as const;
 
 export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ title, progress, children }) => {
+  const t = useTranslations("estimateRequest");
   return (
-    <main className={ESTIMATE_REQUEST_STYLES.container} role="main" aria-label="견적 요청 페이지">
+    <main className={ESTIMATE_REQUEST_STYLES.container} role="main" aria-label={t("aria.main") || "견적 요청 페이지"}>
       {/* 헤더 영역 */}
       <header className={ESTIMATE_REQUEST_STYLES.header} role="banner">
         <div className={ESTIMATE_REQUEST_STYLES.headerContent}>
@@ -30,7 +33,11 @@ export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ t
               {title}
             </h1>
           </div>
-          <ProgressBar value={progress} aria-labelledby="estimate-request-title" aria-label={`진행률 ${progress}%`} />
+          <ProgressBar
+            value={progress}
+            aria-labelledby="estimate-request-title"
+            aria-label={`${t("aria.progress") || "진행률"} ${progress}%`}
+          />
         </div>
       </header>
 
@@ -39,7 +46,7 @@ export const EstimateRequestLayout: React.FC<IEstimateRequestLayoutProps> = ({ t
         className={ESTIMATE_REQUEST_STYLES.content}
         role="region"
         aria-labelledby="estimate-request-title"
-        aria-label="견적 요청 콘텐츠"
+        aria-label={t("aria.content") || "견적 요청 콘텐츠"}
       >
         {children}
       </section>

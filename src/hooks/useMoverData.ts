@@ -157,14 +157,31 @@ export const useRemoveFavorite = () => {
 
       // 즐겨찾기 무한 목록에서도 즉시 제거 (옵티미스틱 후속 보장)
       queryClient.setQueriesData({ queryKey: ["favoriteMovers"] }, (oldData: any) => {
-        if (!oldData?.pages) return oldData;
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: any) => ({
-            ...page,
-            items: (page.items || []).filter((mover: any) => mover.id !== moverId),
-          })),
-        };
+        // infiniteQuery 형태 처리
+        if (oldData?.pages) {
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: any) => ({
+              ...page,
+              items: (page.items || []).filter((mover: any) => mover.id !== moverId),
+            })),
+          };
+        }
+
+        // 일반 query에서 select로 items 배열만 보관하는 경우 (preview 리스트)
+        if (Array.isArray(oldData)) {
+          return oldData.filter((mover: any) => mover.id !== moverId);
+        }
+
+        // 일반 query 원형을 보관하는 경우
+        if (oldData?.items) {
+          return {
+            ...oldData,
+            items: (oldData.items || []).filter((mover: any) => mover.id !== moverId),
+          };
+        }
+
+        return oldData;
       });
     },
   });

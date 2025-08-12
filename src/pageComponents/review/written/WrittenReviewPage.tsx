@@ -46,6 +46,7 @@ const WrittenReviewPage = () => {
   return (
     <>
       {isPending ? (
+        /*TODO: 한국어 하드 코딩 번역으로 변경할 것 */
         <MovingTruckLoader size="lg" loadingText="내가 작성한 리뷰를 불러오는 중입니다..." />
       ) : (
         <main className="flex min-h-screen flex-col items-center bg-gray-100 px-6 py-10">

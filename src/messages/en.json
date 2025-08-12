@@ -60,6 +60,28 @@
       "storage": "Storage"
     }
   },
+  "calendar": {
+    "weekdays": {
+      "sunday": "Sun",
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat"
+    },
+    "aria": {
+      "calendar": "Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "weekHeader": "Weekday header",
+      "calendarGrid": "Calendar",
+      "today": "Today",
+      "pastDate": "Past date",
+      "selected": "Selected",
+      "scheduleCountSuffix": "schedules"
+    }
+  },
   "estimateRequest": {
     "title": "Estimate Request",
     "editTitle": "Edit Estimate Request",
@@ -311,6 +333,14 @@
     "editButton": "Edit",
     "deleteButton": "Delete",
     "aria": {
+      "main": "Estimate request page",
+      "content": "Estimate request content",
+      "progress": "Progress",
+      "question": "Question",
+      "answer": "Answer",
+      "questionContent": "Question content",
+      "answerContent": "Answer content",
+      "editAnswer": "Edit answer",
       "estimateDetailSection": "Estimate detail information section",
       "moverProfileImage": "Driver profile image",
       "estimatePriceSection": "Estimate price section",
@@ -709,6 +739,13 @@
       "totalExperience": "Career",
       "providedServices": "Provided Services",
       "serviceAreas": "Service Areas"
+    },
+    "aria": {
+      "searchResults": "{count} movers found",
+      "listSummary": "Total {count} movers found. Scroll to load more.",
+      "moreOnScroll": "Scroll to load more results.",
+      "loadingMore": "Loading more movers...",
+      "scrollTop": "Scroll to top"
     },
     "serviceTypes": {
       "small": "Small Move",

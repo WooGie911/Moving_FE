@@ -60,6 +60,28 @@
       "storage": "存储"
     }
   },
+  "calendar": {
+    "weekdays": {
+      "sunday": "日",
+      "monday": "一",
+      "tuesday": "二",
+      "wednesday": "三",
+      "thursday": "四",
+      "friday": "五",
+      "saturday": "六"
+    },
+    "aria": {
+      "calendar": "日历",
+      "prevMonth": "上一月",
+      "nextMonth": "下一月",
+      "weekHeader": "星期标题",
+      "calendarGrid": "日历",
+      "today": "今天",
+      "pastDate": "过去日期",
+      "selected": "已选择",
+      "scheduleCountSuffix": "个日程"
+    }
+  },
   "estimateRequest": {
     "title": "报价请求",
     "editTitle": "编辑报价",
@@ -307,6 +329,14 @@
     "editButton": "编辑",
     "deleteButton": "删除",
     "aria": {
+      "main": "报价请求页面",
+      "content": "报价请求内容",
+      "progress": "进度",
+      "question": "问题",
+      "answer": "回答",
+      "questionContent": "问题内容",
+      "answerContent": "回答内容",
+      "editAnswer": "修改回答",
       "estimateDetailSection": "报价详细信息部分",
       "moverProfileImage": "司机个人资料图片",
       "estimatePriceSection": "报价价格部分",
@@ -716,6 +746,13 @@
       "totalExperience": "总经验",
       "providedServices": "提供的服务",
       "serviceAreas": "服务区域"
+    },
+    "aria": {
+      "searchResults": "共找到 {count} 位司机",
+      "listSummary": "共找到 {count} 位司机，向下滚动加载更多。",
+      "moreOnScroll": "向下滚动加载更多结果。",
+      "loadingMore": "正在加载更多司机...",
+      "scrollTop": "回到顶部"
     },
     "serviceTypes": {
       "small": "小型",

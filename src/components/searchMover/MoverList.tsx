@@ -94,12 +94,12 @@ const MoverList = () => {
       <ul
         className="mb-10 space-y-6 lg:space-y-5"
         role="list"
-        aria-label={`검색된 기사님 ${allMovers.length}명`}
+        aria-label={t("aria.searchResults", { count: allMovers.length })}
         aria-describedby="mover-list-info"
       >
         <li className="sr-only" id="mover-list-info">
-          총 {allMovers.length}명의 기사님이 검색되었습니다.
-          {hasNextPage ? "스크롤하면 더 많은 기사님을 보실 수 있습니다." : ""}
+          {t("aria.listSummary", { count: allMovers.length })}
+          {hasNextPage ? t("aria.moreOnScroll") : ""}
         </li>
         {allMovers.map((mover, index) => (
           <li key={`${mover.id}-${index}`} role="listitem">
@@ -115,7 +115,7 @@ const MoverList = () => {
             className="py-4 text-center text-gray-500"
             role="status"
             aria-live="polite"
-            aria-label="추가 기사님 정보 로딩 중"
+            aria-label={t("aria.loadingMore")}
           >
             {t("loadingMoverInfo")}
           </li>
@@ -127,8 +127,8 @@ const MoverList = () => {
         <button
           onClick={scrollToTop}
           className="hover:bg-primary-400 fixed bottom-6 left-1/2 z-50 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 shadow-lg transition-all hover:scale-110 hover:text-white"
-          aria-label="페이지 맨 위로 이동"
-          title="맨 위로 올라가기"
+          aria-label={t("aria.scrollTop")}
+          title={t("aria.scrollTop")}
           type="button"
         >
           <svg
