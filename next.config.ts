@@ -12,27 +12,16 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // TODO : 충돌 테스트
-      // {
-      //   protocol: "https",
-      //   hostname: "part4-moving-s3.s3.ap-northeast-2.amazonaws.com",
-      //   pathname: "/**",
-      // },
       {
         protocol: "https",
         hostname: "d29ije7v1csha8.cloudfront.net",
         pathname: "/**",
       },
-      // {
-      //   protocol: "https",
-      //   hostname: "s3.amazonaws.com",
-      // },
       {
         protocol: "https",
         hostname: "example.com",
       },
     ],
-    // domains: ["part4-moving-s3.s3.ap-northeast-2.amazonaws.com", "s3.amazonaws.com", "example.com"],
     domains: ["d29ije7v1csha8.cloudfront.net", "example.com"],
     formats: ["image/webp", "image/avif"],
     deviceSizes: [375, 744, 1200],

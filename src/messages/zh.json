@@ -633,7 +633,10 @@
     "editLoadingText": "正在加载个人资料编辑页面...",
     "imageUploadError": "只能上传图片文件。",
     "error": {
-      "duplicateNickname": "该昵称已被使用。"
+      "duplicateNickname": "该昵称已被使用。",
+      "passwordMismatch": "当前密码与新密码相同",
+      "invalidCurrentPassword": "当前密码不正确",
+      "currentPasswordRequired": "请输入当前密码"
     }
   },
   "search": {
