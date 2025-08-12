@@ -14,8 +14,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverRequestDetailPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimate");
-  const commonT = useTranslations("common");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
   const { id: estimateId } = useParams();
   const { data, isPending, isError, error, refetch } = useQuery({
@@ -28,7 +27,7 @@ export const MoverRequestDetailPage = () => {
     return (
       <main aria-label={t("ariaLabels.requestDetailLoadingSection")}>
         <section aria-live="polite" aria-busy="true">
-          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+          <MovingTruckLoader size="lg" loadingText={t("loading")} />
         </section>
       </main>
     );

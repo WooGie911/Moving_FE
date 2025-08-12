@@ -14,7 +14,7 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({ value = "createdAt", onChange, "aria-label": ariaLabel }: DropdownProps) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
   const [sortOption, setSortOption] = useState<string>(
     value === "moveDate" ? t("sortByMoveDate") : t("sortByRequestDate"),
   );

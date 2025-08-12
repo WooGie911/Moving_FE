@@ -23,7 +23,7 @@ export const SmallFilterSection = ({ filters, onFiltersChange, totalCount }: Sma
   const deviceType = useWindowWidth();
   const isModalOpening = useRef(false);
   const currentModalFilters = useRef<IFilterState>(filters);
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
 
   // 모달 내부 상태 관리 (실시간 반영을 위해)
   const [modalFilters, setModalFilters] = useState<IFilterState>(filters);

@@ -21,7 +21,7 @@ interface IModalProps {
 export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalProps) => {
   const methods = useForm();
   const { watch, setValue } = methods;
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
   const tShared = useTranslations();
   const locale = useLocale();
 

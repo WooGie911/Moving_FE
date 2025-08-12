@@ -10,25 +10,22 @@ import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { useTranslations, useLocale } from "next-intl";
 
 export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
   const tShared = useTranslations();
   const locale = useLocale();
-
-  const estimateT = useTranslations("customerEstimateRequest");
-  const ariaT = useTranslations("customerEstimateRequest.ariaLabels"); // Added
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
   return (
     <main // Changed from div to main
       className={`flex w-full flex-col items-center justify-center px-5 pb-30 lg:flex-row lg:gap-[140px]`}
-      aria-label={ariaT("requestDetailMain")} // Added
-      role="main" // Added
+      aria-label={t("ariaLabels.requestDetailMain")}
+      role="main"
     >
-      <section // Changed from div to section
+      <section
         className="flex w-full max-w-[744px] flex-col items-start justify-center gap-5"
-        aria-label={ariaT("requestDetailMain")} // Added
-        role="region" // Added
+        aria-label={t("ariaLabels.requestDetailMain")}
+        role="region"
       >
         {/* 프로필사진 영역 */}
         {/* <div className="relative w-full">
@@ -47,12 +44,10 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         {/* 유저 정보 */}
         <section // Changed from div to section
           className="border-border-light flex w-full flex-row items-center justify-between border-b-[0.5px] pb-7"
-          aria-label={ariaT("customerInfoSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.customerInfoSection")}
+          role="region"
         >
-          <h2 // Changed from p to h2
-            className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]"
-          >
+          <h2 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]">
             {`${data.estimateRequest.customer.name}${t("customerSuffix")}`}
           </h2>
           <div className="hidden md:block">
@@ -60,34 +55,25 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
               {data.status === "PROPOSED" ? (
                 <p
                   className="text-[16px] leading-[26px] font-semibold text-gray-300"
-                  aria-label={ariaT("estimateWaiting")} // Added
+                  aria-label={t("ariaLabels.estimateWaiting")}
                 >
-                  {estimateT("estimateWaiting")}
+                  {t("estimateWaiting")}
                 </p>
               ) : data.status === "ACCEPTED" ? (
                 <div
                   className="flex flex-row items-center justify-center gap-1"
-                  aria-label={ariaT("confirmedEstimate")} // Added
-                  role="group" // Added
+                  aria-label={t("ariaLabels.confirmedEstimate")}
+                  role="group"
                 >
-                  <Image
-                    src={confirm}
-                    alt="" // Changed alt to empty
-                    width={16}
-                    height={16}
-                    className="object-contain"
-                    aria-hidden="true" // Added
-                  />
-                  <p className="text-primary-400 text-[16px] leading-[26px] font-bold">
-                    {estimateT("confirmedEstimate")}
-                  </p>
+                  <Image src={confirm} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
+                  <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
                 </div>
               ) : (
                 <p
                   className="text-[16px] leading-[26px] font-semibold text-gray-300"
-                  aria-label={ariaT("rejectedEstimate")} // Added
+                  aria-label={t("ariaLabels.rejectedEstimate")}
                 >
-                  {estimateT("rejectedEstimate")}
+                  {t("rejectedEstimate")}
                 </p>
               )}
             </div>
@@ -97,28 +83,22 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         {/* 견적가 */}
         <section // Changed from div to section
           className="border-border-light my-2 flex w-full flex-row items-center justify-between border-b-1 pb-7 md:justify-start md:gap-15"
-          aria-label={ariaT("estimatePriceSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.estimatePriceSection")}
+          role="region"
         >
-          <h3 // Changed from p to h3
-            className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold"
-          >
+          <h3 className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold">
             {t("estimatePrice")}
           </h3>
           <p
             className="text-black-300 text-[20px] leading-[32px] font-bold md:text-[24px] md:font-bold"
-            aria-label={`${ariaT("priceDisplay")}: ${formatNumber(data.price || 0)}${tShared("shared.units.currency")}`} // Added
+            aria-label={`${t("ariaLabels.priceDisplay")}: ${formatNumber(data.price || 0)}${tShared("shared.units.currency")}`}
           >
             {`${formatNumber(data.price || 0)}${tShared("shared.units.currency")}`}
           </p>
         </section>
 
         {/* 이사견적 상세정보들 */}
-        <section // Changed from div to section
-          aria-label={ariaT("movingDetailSection")} // Added
-          role="region" // Added
-          className="w-full"
-        >
+        <section aria-label={t("ariaLabels.movingDetailSection")} role="region" className="w-full">
           <DetailMoveInfo
             id={data.estimateRequest.id}
             movingType={data.estimateRequest.moveType}
@@ -148,10 +128,10 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         </section>
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
-        <section // Changed from div to section
+        <section
           className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden"
-          aria-label={ariaT("shareSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.shareSection")}
+          role="region"
         >
           <ShareSection
             estimate={{
@@ -163,14 +143,8 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           />
         </section>
       </section>
-      <section // Changed from div to section
-        className="hidden lg:block"
-        aria-label={ariaT("shareSection")} // Added
-        role="region" // Added
-      >
-        <section // Changed from div to section
-          className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start"
-        >
+      <section className="hidden lg:block" aria-label={t("ariaLabels.shareSection")} role="region">
+        <section className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start">
           <ShareSection
             estimate={{
               ...data,
