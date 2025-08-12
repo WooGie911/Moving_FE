@@ -20,11 +20,9 @@ import { isValidName } from "@/utils/validators";
 import { showSuccessToast } from "@/utils/toastUtils";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 import { useAuth } from "@/providers/AuthProvider";
-import { useRouter } from "next/navigation";
 
 const CustomerRegisterPage = () => {
   const { getUser } = useAuth();
-  const router = useRouter();
   const validationRules = useValidationRules();
   const t = useTranslations("profile");
   const currentLocale = useLocale();
@@ -59,7 +57,7 @@ const CustomerRegisterPage = () => {
         preferredServices: services,
       });
       await getUser();
-      router.push(`/${currentLocale}/searchMover`);
+      window.location.href = `/${currentLocale}/searchMover`;
       showSuccessToast(t("registerSuccessMessage"));
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
