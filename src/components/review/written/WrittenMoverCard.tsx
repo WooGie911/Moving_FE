@@ -43,6 +43,14 @@ const WrittenMoverCard = ({
   const t = useTranslations("review");
   const locale = useLocale();
 
+  // profileImage가 유효한 URL인지 확인하는 함수
+  const isValidImageUrl = (url: string | null | undefined): boolean => {
+    if (!url) return false;
+    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+  };
+
+  const profileImageSrc = isValidImageUrl(profileImage) ? profileImage! : defaultProfile;
+
   return (
     <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between">
       <div className="flex flex-col gap-y-1 md:gap-y-1">
@@ -52,7 +60,7 @@ const WrittenMoverCard = ({
         <div className="flex flex-row items-start justify-between">
           {/* 프로필 이미지 */}
           <Image
-            src={profileImage || defaultProfile}
+            src={profileImageSrc}
             alt="프로필"
             width={56}
             height={56}
