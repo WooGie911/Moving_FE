@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decodeAccessToken, decodeRefreshToken } from "./utils/decodeAccessToken";
 import { TUserRole } from "./types/user.types";
-import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { logDevError } from "./utils/logDevError";
 
@@ -49,9 +48,7 @@ export async function middleware(request: NextRequest) {
   const isStatic = STATIC_PREFIXES.some((p) => pathname.startsWith(p)) || hasFileExt;
   if (isStatic) return NextResponse.next();
 
-  // ⬇️ 정적 우회 이후에만 i18n 라우팅 적용
-  const handleI18nRouting = createMiddleware(routing);
-  const response = handleI18nRouting(request);
+  // i18n 미들웨어 비활성화: 수동으로 비로케일 경로만 로케일로 리다이렉트 처리
 
   // ✅ 루트 경로 접근 처리
   if (pathname === "/") {
@@ -86,9 +83,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/${preferredLocale}`, request.url));
   }
 
-  // ✅ locale 경로가 아닌 경우는 i18n만 처리하고 반환
+  // ✅ locale 경로가 아닌 경우: 선호 로케일로 SSR 리다이렉트
   const localeMatch = pathname.match(/^\/(ko|en|zh)(\/.*)?$/);
-  if (!localeMatch) return response;
+  if (!localeMatch) {
+    const userLanguagePreference = request.cookies.get("user_language_preference")?.value;
+    const preferredLocale =
+      userLanguagePreference && routing.locales.includes(userLanguagePreference as (typeof routing.locales)[number])
+        ? userLanguagePreference
+        : routing.defaultLocale;
+    return NextResponse.redirect(new URL(`/${preferredLocale}${pathname}`, request.url));
+  }
 
   const actualPath = localeMatch[2] || "/";
   const locale = localeMatch[1];
@@ -161,9 +165,12 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)"],
+  matcher: [
+    "/", // 루트
+    "/:path*", // 모든 경로 (정적 제외는 코드 상단에서 직접 우회)
+  ],
 };

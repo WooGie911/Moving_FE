@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useRouter, usePathname } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { initializeLanguagePreference, syncLanguageSettings } from "@/utils/languageUtils";
 
@@ -10,38 +9,20 @@ interface LanguageInitializerProps {
 }
 
 export function LanguageInitializer({ children }: LanguageInitializerProps) {
-  const router = useRouter();
-  const pathname = usePathname();
   const locale = useLocale();
   const hasInitialized = useRef(false);
 
+  // 앱 최초 1회: 선호 언어 초기화만 수행 (리다이렉트 없음)
   useEffect(() => {
-    // 이미 초기화되었거나 루트 경로인 경우 스킵
-    if (hasInitialized.current || pathname === "/") {
-      return;
-    }
-
-    // 앱이 처음 로드될 때만 언어 설정 초기화
-    const preferredLanguage = initializeLanguagePreference();
-
-    // 현재 경로에서 locale을 추출
-    const currentLocale = pathname.split("/")[1];
-    const validLocales = ["ko", "en", "zh"];
-
-    // 현재 locale이 유효하지 않거나 선호 언어와 다르면 리다이렉트
-    if (!validLocales.includes(currentLocale) || currentLocale !== preferredLanguage) {
-      const newPath = pathname.replace(/^\/(ko|en|zh)/, `/${preferredLanguage}`);
-      router.replace(newPath);
-    }
-
+    if (hasInitialized.current) return;
+    initializeLanguagePreference();
     hasInitialized.current = true;
-  }, []); // 의존성 배열을 비워서 한 번만 실행
+  }, []);
 
-  // 현재 locale이 변경될 때마다 언어 설정 동기화
+  // 로케일 변화 시 저장소/쿠키 동기화만 수행
   useEffect(() => {
-    if (hasInitialized.current) {
-      syncLanguageSettings();
-    }
+    if (!hasInitialized.current) return;
+    syncLanguageSettings();
   }, [locale]);
 
   return <>{children}</>;
