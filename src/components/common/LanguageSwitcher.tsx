@@ -61,7 +61,9 @@ export function LanguageSwitcher() {
     setLanguagePreference(newLanguage);
 
     // 페이지 이동
-    await router.push(pathname, { locale: newLanguage });
+    // 현재 경로에 기존 로케일 접두어가 있으면 제거한 뒤 locale 옵션으로 재적용
+    const nonLocalizedPath = pathname.replace(/^\/(ko|en|zh)(?=\/|$)/, "") || "/";
+    await router.push(nonLocalizedPath, { locale: newLanguage });
   };
 
   return (

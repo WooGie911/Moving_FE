@@ -3,6 +3,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { MoveTypeLabel } from "../common/chips/MoveTypeLabel";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
@@ -23,6 +24,7 @@ interface MoverCardProps {
 
 const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = false, onSelect }: MoverCardProps) => {
   const t = useTranslations("mover");
+  const locale = useLocale();
   const deviceType = useWindowWidth();
   const defaultProfile = deviceType === "mobile" ? defaultProfileSm : defaultProfileLg;
   const shouldShowBadge = showBadge && variant === "list";
@@ -297,7 +299,7 @@ const MoverCard = ({ mover, variant = "list", showBadge = true, isSelected = fal
 
   return (
     <Link
-      href={`/searchMover/${mover.id}`}
+      href={`/${locale}/searchMover/${mover.id}`}
       className="block focus:outline-none focus-visible:outline-none"
       aria-label={`View profile of ${mover.nickname || mover.name}`}
     >
