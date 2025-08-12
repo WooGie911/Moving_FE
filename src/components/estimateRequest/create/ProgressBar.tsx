@@ -1,9 +1,12 @@
+import { useTranslations } from "next-intl";
+
 interface IProgressBarProps {
   value: number;
   "aria-labelledby"?: string;
 }
 
 const ProgressBar: React.FC<IProgressBarProps> = ({ value, "aria-labelledby": ariaLabelledby }) => {
+  const t = useTranslations("estimateRequest");
   // 진행률을 0-100 범위로 제한
   const clampedValue = Math.max(0, Math.min(100, value));
 
@@ -23,7 +26,9 @@ const ProgressBar: React.FC<IProgressBarProps> = ({ value, "aria-labelledby": ar
           aria-hidden="true"
         />
       </div>
-      <span className="sr-only">진행률 {clampedValue}%</span>
+      <span className="sr-only">
+        {t("aria.progress") || "진행률"} {clampedValue}%
+      </span>
     </div>
   );
 };

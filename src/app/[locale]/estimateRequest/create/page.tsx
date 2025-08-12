@@ -7,9 +7,13 @@ import MovingTypeOffice from "@/assets/img/etc/officeMoving.webp";
 
 // ISR: 5분마다 재생성
 export const revalidate = 300;
+// 로케일 캐싱 이슈 방지: 이 페이지는 항상 현재 요청 기준으로 렌더
+export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations("estimateRequest.metadata");
+// Next.js (App Router) 최신 버전에서는 params가 Promise 형태로 전달되기에 비동기 처리 필요
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "estimateRequest.metadata" });
 
   return {
     title: t("title"),
