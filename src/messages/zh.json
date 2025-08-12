@@ -1318,6 +1318,7 @@
     "noAvailableEstimatesMessage2": "或发送给司机的指定报价不存在。",
     "estimateNotFound": "找不到该报价。",
     "rejectedEstimateMessage": "此报价已被拒绝。",
+    "sharedEstimateMessage": "共享的报价",
     "customerEstimate": "的报价",
     "rejectedEstimateNoPrice": "报价已被拒绝，无法显示价格。",
     "rejectionDate": "拒绝日期",
@@ -1650,7 +1651,12 @@
     "rejectedEstimateNoPrice": "报价被拒绝，无法查看价格",
     "profileImage": "个人资料图片",
     "rejectedEstimateMessage": "此报价已被拒绝",
+    "sharedEstimateMessage": "共享的报价",
     "rejectionDate": "拒绝日期",
+    "metadata": {
+      "title": "共享报价 | 搬家",
+      "description": "查看共享的搬家报价。我们提供安全可靠的搬家服务信息。"
+    },
     "customerEstimate": "的报价",
     "ariaLabels": {
       "requestLoadingSection": "已发送报价加载部分",

@@ -135,7 +135,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
         >
           <ShareSection
             estimate={{
-              ...data,
+              id: data.id,
               price: data.price || 0,
               mover: { ...data.mover, nickname: data.mover.nickname || "" },
             }}

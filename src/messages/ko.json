@@ -1725,7 +1725,12 @@
     "rejectedEstimateNoPrice": "견적이 반려되어 견적가를 확인할 수 없습니다",
     "profileImage": "프로필 이미지",
     "rejectedEstimateMessage": "반려된 견적입니다",
+    "sharedEstimateMessage": "공유된 견적입니다",
     "rejectionDate": "반려 일자",
+    "metadata": {
+      "title": "공유된 견적 | 무빙",
+      "description": "공유된 이사 견적을 확인하세요. 안전하고 신뢰할 수 있는 이사 서비스 정보를 제공합니다."
+    },
     "customerEstimate": "의 견적",
     "ariaLabels": {
       "requestLoadingSection": "보낸 견적 로딩 섹션",

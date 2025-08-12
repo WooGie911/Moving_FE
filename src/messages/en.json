@@ -1337,6 +1337,7 @@
     "noAvailableEstimatesMessage2": "or designated estimates sent to driver do not exist.",
     "estimateNotFound": "The requested estimate could not be found.",
     "rejectedEstimateMessage": "This estimate has been rejected.",
+    "sharedEstimateMessage": "Shared estimate",
     "customerEstimate": "'s Estimate",
     "rejectedEstimateNoPrice": "Estimate price is not available<br />as the estimate was rejected.",
     "rejectionDate": "Rejection Date",
@@ -1674,7 +1675,12 @@
     "rejectedEstimateNoPrice": "Estimate price is not available as the estimate was rejected",
     "profileImage": "Profile Image",
     "rejectedEstimateMessage": "This estimate has been rejected",
+    "sharedEstimateMessage": "Shared estimate",
     "rejectionDate": "Rejection Date",
+    "metadata": {
+      "title": "Shared Estimate | Moving",
+      "description": "Check the shared moving estimate. We provide safe and reliable moving service information."
+    },
     "customerEstimate": "'s estimate",
     "ariaLabels": {
       "requestLoadingSection": "Sent estimates loading section",

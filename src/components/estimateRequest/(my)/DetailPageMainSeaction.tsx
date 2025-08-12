@@ -141,7 +141,11 @@ export const DetailPageMainSeaction = ({
           aria-label={t("aria.actionButtonsSection")}
         >
           <ShareSection
-            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimate={{
+              id: estimate.id,
+              price: estimate.price,
+              mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" },
+            }}
             estimateRequest={estimateRequest || undefined}
           />
           {type === "pending" ? (
@@ -174,7 +178,11 @@ export const DetailPageMainSeaction = ({
           )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
           <ShareSection
-            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimate={{
+              id: estimate.id,
+              price: estimate.price,
+              mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" },
+            }}
             estimateRequest={estimateRequest || undefined}
           />
         </section>
