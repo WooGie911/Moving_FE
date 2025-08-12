@@ -12,7 +12,7 @@ const SPEECH_BUBBLE_STYLES = {
 } as const;
 
 const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest = false, onEdit }) => {
-  const t = useTranslations();
+  const t = useTranslations("estimateRequest");
   const isQuestion = type === "question";
   const isAnswer = type === "answer";
 
@@ -28,14 +28,18 @@ const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest =
   ].join(" ");
 
   return (
-    <article className="flex flex-col items-end" role="article" aria-label={isQuestion ? "질문" : "답변"}>
+    <article
+      className="flex flex-col items-end"
+      role="article"
+      aria-label={isQuestion ? t("aria.question") : t("aria.answer")}
+    >
       <div
         className={bubbleClass}
         style={{
           alignSelf: isQuestion ? "flex-start" : "flex-end",
         }}
-        role={isQuestion ? "region" : "region"}
-        aria-label={isQuestion ? "질문 내용" : "답변 내용"}
+        role={"region"}
+        aria-label={isQuestion ? t("aria.questionContent") : t("aria.answerContent")}
         aria-live={isLatest ? "polite" : "off"}
       >
         {children}
@@ -43,8 +47,13 @@ const SpeechBubble: React.FC<ISpeechBubbleProps> = ({ type, children, isLatest =
 
       {/* 수정하기 버튼 - 답변이고 최신이 아니고 수정 함수가 있을 때만 표시 */}
       {isAnswer && !isLatest && onEdit && (
-        <button className={SPEECH_BUBBLE_STYLES.editButton} onClick={onEdit} aria-label={`답변 수정하기`} type="button">
-          {t("estimateRequest.editAnswer")}
+        <button
+          className={SPEECH_BUBBLE_STYLES.editButton}
+          onClick={onEdit}
+          aria-label={t("aria.editAnswer")}
+          type="button"
+        >
+          {t("editAnswer")}
         </button>
       )}
     </article>

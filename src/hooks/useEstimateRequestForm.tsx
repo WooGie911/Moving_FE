@@ -29,6 +29,17 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
   const progress = step === 4 ? 100 : step * 33;
 
+  // 과거에 사용하던 견적요청 드래프트 로컬스토리지 키를 더 이상 사용하지 않도록 초기화 시 제거
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("estimateRequest_draft");
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   // 폼 유효성 검사
   const isFormValid = useCallback(() => {
     return !!(form.movingType && form.movingDate && form.departure.roadAddress && form.arrival.roadAddress);

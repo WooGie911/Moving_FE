@@ -88,7 +88,10 @@ const EstimateRequestEditPage = () => {
         setHasEstimates((response as any).hasEstimate || false);
         initializeFormFromData(response.data);
       } else if (response.success && !response.hasActive) {
-        showErrorModal(t("estimateRequest.noActiveEstimateRequest"));
+        // 활성 견적이 없는 경우 편집 페이지가 의미 없어 생성 페이지로 이동
+        router.replace("/estimateRequest/create");
+        setLoading(false);
+        return;
       } else {
         showErrorModal(response.message || t("estimateRequest.failedToLoadEstimateData"));
       }

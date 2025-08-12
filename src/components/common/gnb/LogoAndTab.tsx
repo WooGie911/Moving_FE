@@ -4,6 +4,7 @@ import { TDeviceType } from "@/types/deviceType";
 import { TUserRole } from "@/types/user.types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import { GEUST_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
 import { getPathWithoutLocale } from "@/utils/locale";
 import { useTranslations } from "next-intl";
@@ -21,6 +22,7 @@ type TNavigationItem = {
 export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
   const pathname = usePathname();
   const t = useTranslations("navigation");
+  const locale = useLocale();
 
   const cleanPath = getPathWithoutLocale(pathname);
 
@@ -48,7 +50,7 @@ export const LogoAndTab = ({ deviceType, userRole }: ILogoAndTabProps) => {
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
-                href={item.href}
+                href={`/${locale}${item.href}`}
                 className={`text-2lg font-bold transition-colors ${
                   cleanPath === "/ko" ||
                   cleanPath === "/en" ||

@@ -8,7 +8,7 @@ import userApi, { TUserProfile, TApiResponse } from "@/lib/api/user.api";
 const uploadSkeleton: { src: string } = { src: "/img/etc/profile-upload-skeleton.webp" };
 import { useRouter } from "next/navigation";
 import { useValidationRules } from "@/hooks/useValidationRules";
-import { useLocale, useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ProfileEditHeader,
   ProfileEditImageUpload,

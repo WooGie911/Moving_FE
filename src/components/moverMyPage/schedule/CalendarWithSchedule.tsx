@@ -38,7 +38,7 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const today = startOfDay(new Date());
-  const t = useTranslations();
+  const t = useTranslations("calendar");
 
   // 언어 변경 시 강제 리렌더링을 위한 언어 상태 사용
   const locale = useLocale();
@@ -46,15 +46,15 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
   // 요일 배열을 번역 함수로 생성 (언어 변경 시 자동 업데이트)
   const daysOfWeek = useMemo(
     () => [
-      t("shared.time.weekdays.sunday"),
-      t("shared.time.weekdays.monday"),
-      t("shared.time.weekdays.tuesday"),
-      t("shared.time.weekdays.wednesday"),
-      t("shared.time.weekdays.thursday"),
-      t("shared.time.weekdays.friday"),
-      t("shared.time.weekdays.saturday"),
+      t("weekdays.sunday"),
+      t("weekdays.monday"),
+      t("weekdays.tuesday"),
+      t("weekdays.wednesday"),
+      t("weekdays.thursday"),
+      t("weekdays.friday"),
+      t("weekdays.saturday"),
     ],
-    [t, locale], // language를 의존성에 추가하여 언어 변경 시 업데이트
+    [t, locale],
   );
 
   // 캘린더 매트릭스를 useMemo로 메모이제이션
@@ -155,12 +155,12 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
   }
 
   return (
-    <div className={containerClasses.join(" ")} role="application" aria-label="월간 스케줄 캘린더">
+    <div className={containerClasses.join(" ")} role="application" aria-label={t("aria.calendar") || "Calendar"}>
       {/* 헤더 - 연/월, 이전/다음 버튼 */}
       <header className={CALENDAR_STYLES.header} role="banner">
-        <button onClick={handlePrevMonth} className="focus:outline-none" aria-label="이전 달로 이동">
+        <button onClick={handlePrevMonth} className="focus:outline-none" aria-label={t("aria.prevMonth")}>
           <span className="block cursor-pointer">
-            <Image src={LeftArrowIcon} alt="이전 달" />
+            <Image src={LeftArrowIcon} alt={t("aria.prevMonth")} />
           </span>
         </button>
 
@@ -168,15 +168,15 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
           {format(currentDate, "yyyy. MM")}
         </h2>
 
-        <button onClick={handleNextMonth} className="focus:outline-none" aria-label="다음 달로 이동">
+        <button onClick={handleNextMonth} className="focus:outline-none" aria-label={t("aria.nextMonth")}>
           <span className="block cursor-pointer">
-            <Image src={RightArrowIcon} alt="다음 달" />
+            <Image src={RightArrowIcon} alt={t("aria.nextMonth")} />
           </span>
         </button>
       </header>
 
       {/* 요일 헤더 */}
-      <div className={CALENDAR_STYLES.dayHeader} role="rowgroup" aria-label="요일 헤더">
+      <div className={CALENDAR_STYLES.dayHeader} role="rowgroup" aria-label={t("aria.weekHeader")}>
         {daysOfWeek.map((day) => (
           <div key={day} className={CALENDAR_STYLES.dayCell} role="columnheader" aria-label={day}>
             {day}
@@ -185,7 +185,7 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
       </div>
 
       {/* 날짜 그리드 */}
-      <div role="grid" aria-label={`${format(currentDate, "yyyy년 MM월")} 스케줄 캘린더`}>
+      <div role="grid" aria-label={`${format(currentDate, "yyyy.MM")} ${t("aria.calendarGrid") || "Calendar"}`}>
         {calendarMatrix.map((week, weekIndex) => (
           <div className={CALENDAR_STYLES.weekRow} key={weekIndex} role="row">
             {week.map((dateObj, dayIndex) => {
@@ -198,15 +198,13 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
 
               // 날짜 셀의 접근성 라벨 생성
               const getDateAriaLabel = () => {
-                const dateStr = format(dateObj.date, "M월 d일");
-                let label = dateStr;
-
-                if (isCurrentDay) label += " (오늘)";
-                if (isPast) label += " (과거 날짜)";
-                if (isSelected) label += " (선택됨)";
-                if (scheduleCount > 0) label += ` (${scheduleCount}개 일정)`;
-
-                return label;
+                const dateStr = format(dateObj.date, "yyyy.MM.dd");
+                const parts: string[] = [dateStr];
+                if (isCurrentDay) parts.push(t("aria.today"));
+                if (isPast) parts.push(t("aria.pastDate"));
+                if (isSelected) parts.push(t("aria.selected"));
+                if (scheduleCount > 0) parts.push(`${scheduleCount} ${t("aria.scheduleCountSuffix")}`);
+                return parts.join(" ");
               };
 
               return (

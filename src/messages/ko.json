@@ -58,6 +58,28 @@
       "storage": "보관이사"
     }
   },
+  "calendar": {
+    "weekdays": {
+      "sunday": "일",
+      "monday": "월",
+      "tuesday": "화",
+      "wednesday": "수",
+      "thursday": "목",
+      "friday": "금",
+      "saturday": "토"
+    },
+    "aria": {
+      "calendar": "월간 스케줄 캘린더",
+      "prevMonth": "이전 달로 이동",
+      "nextMonth": "다음 달로 이동",
+      "weekHeader": "요일 헤더",
+      "calendarGrid": "캘린더",
+      "today": "오늘",
+      "pastDate": "과거 날짜",
+      "selected": "선택됨",
+      "scheduleCountSuffix": "개 일정"
+    }
+  },
   "estimateRequest": {
     "title": "견적요청",
     "editTitle": "견적 수정",
@@ -249,6 +271,14 @@
     "editButton": "수정하기",
     "deleteButton": "삭제하기",
     "aria": {
+      "main": "견적 요청 페이지",
+      "content": "견적 요청 콘텐츠",
+      "progress": "진행률",
+      "question": "질문",
+      "answer": "답변",
+      "questionContent": "질문 내용",
+      "answerContent": "답변 내용",
+      "editAnswer": "답변 수정하기",
       "estimateDetailSection": "견적 상세 정보 섹션",
       "moverProfileImage": "기사님 프로필 이미지",
       "estimatePriceSection": "견적 가격 섹션",
@@ -645,6 +675,13 @@
       "totalExperience": "총 경력",
       "providedServices": "제공 서비스",
       "serviceAreas": "서비스 가능 지역"
+    },
+    "aria": {
+      "searchResults": "검색된 기사님 {count}명",
+      "listSummary": "총 {count}명의 기사님이 검색되었습니다.",
+      "moreOnScroll": "스크롤하면 더 많은 기사님을 볼 수 있습니다.",
+      "loadingMore": "추가 기사님 정보 로딩 중",
+      "scrollTop": "페이지 맨 위로 이동"
     },
     "serviceTypes": {
       "small": "소형이사",

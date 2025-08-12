@@ -49,7 +49,8 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
   const activeQuery = externalActiveQuery;
 
   // API 로딩 상태 확인
-  const isPending = activeQuery.isLoading || activeQuery.isFetching;
+  // 최초 로딩시에만 전체 로더를 노출하고, 기존 데이터가 있는 상태에서의 백그라운드 refetch(isFetching)에는 로더를 노출하지 않아 깜빡임을 방지
+  const isPending = activeQuery.isLoading && !activeQuery.data;
 
   // 주소 모달 훅 사용
   const { handleDepartureModal, handleArrivalModal } = useEstimateRequestAddressModal(handleAddressUpdate);

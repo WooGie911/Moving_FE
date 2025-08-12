@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import Providers from "./providers";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
@@ -28,6 +28,9 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // 현재 요청의 로케일을 서버에서 명시적으로 설정하여 클라이언트 훅(useLocale 등)과 동기화
+  setRequestLocale(locale);
+
   // 해당 locale의 메시지 로드
   const messages = await getMessages();
 
@@ -36,7 +39,7 @@ export default async function LocaleLayout({
   await qc.prefetchQuery({ queryKey: ["user"], queryFn: getServerUser });
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider key={locale} messages={messages} locale={locale}>
       <Providers reactQueryState={dehydrate(qc)}>
         <LanguageInitializer>
           <Gnb />
