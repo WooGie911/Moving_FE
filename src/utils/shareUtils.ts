@@ -11,22 +11,37 @@ declare global {
   }
 }
 
-// 카카오톡 SDK 동적 로드
+// 카카오톡 SDK 동적 로드 (필요할 때만)
 const loadKakaoSDK = (): Promise<void> => {
   return new Promise((resolve, reject) => {
-    // 이미 로드되어 있으면 바로 resolve
-    if (typeof window !== "undefined" && window.Kakao) {
-      // SDK 초기화
+    if (typeof window === "undefined") return resolve();
+
+    // 이미 로드되어 있으면 초기화만 보장
+    if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
         const key = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
         window.Kakao.init(key);
       }
-      resolve();
-      return;
+      return resolve();
     }
 
-    // Next.js Script 컴포넌트에서 이미 로드되었으므로 바로 resolve
-    resolve();
+    const script = document.createElement("script");
+    script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.onload = () => {
+      try {
+        if (window.Kakao && !window.Kakao.isInitialized()) {
+          const key = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
+          window.Kakao.init(key);
+        }
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    };
+    script.onerror = () => reject(new Error("Kakao SDK load failed"));
+    document.head.appendChild(script);
   });
 };
 

@@ -39,6 +39,7 @@ const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect 
   const movingTypeCards = useMemo(() => {
     return MOVING_TYPES.map(({ type, image }) => {
       const isLoaded = loadedImages.has(type);
+      const isLcpCandidate = type === "small";
 
       return {
         type,
@@ -50,19 +51,33 @@ const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect 
             description={t(`shared.movingTypes.${type}Desc`)}
             image={
               <div className="relative h-30 w-30">
-                {!isLoaded && <ImageSkeleton />}
-                <Image
-                  src={image}
-                  alt={t(`shared.movingTypes.${type}`)}
-                  fill
-                  className={`object-contain transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-                  priority={type === "small"}
-                  fetchPriority="high"
-                  loading="eager"
-                  decoding="async"
-                  unoptimized
-                  onLoad={() => handleImageLoad(type)}
-                />
+                {/* LCP 후보는 스켈레톤/페이드 제거 */}
+                {!isLoaded && !isLcpCandidate && <ImageSkeleton />}
+                {isLcpCandidate ? (
+                  <Image
+                    src={image}
+                    alt={t(`shared.movingTypes.${type}`)}
+                    width={120}
+                    height={120}
+                    sizes="(min-width: 1024px) 120px, 96px"
+                    decoding="sync"
+                    className="object-contain"
+                    priority
+                    fetchPriority="high"
+                    onLoad={() => handleImageLoad(type)}
+                  />
+                ) : (
+                  <Image
+                    src={image}
+                    alt={t(`shared.movingTypes.${type}`)}
+                    fill
+                    sizes="(min-width: 1024px) 120px, 96px"
+                    className={`object-contain transition-opacity duration-300 ${
+                      isLoaded ? "opacity-100" : "opacity-0"
+                    }`}
+                    onLoad={() => handleImageLoad(type)}
+                  />
+                )}
               </div>
             }
             onClick={() => onSelect(type)}
