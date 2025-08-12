@@ -1,9 +1,16 @@
 import React, { useCallback } from "react";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 import { Button } from "@/components/common/button/Button";
-import MovingTypeSection from "@/components/estimateRequest/create/sections/MovingTypeSection";
-import DateSection from "@/components/estimateRequest/create/sections/DateSection";
-import AddressSection from "@/components/estimateRequest/create/sections/AddressSection";
+import dynamic from "next/dynamic";
+const MovingTypeSection = dynamic(() => import("@/components/estimateRequest/create/sections/MovingTypeSection"), {
+  ssr: false,
+});
+const DateSection = dynamic(() => import("@/components/estimateRequest/create/sections/DateSection"), {
+  ssr: false,
+});
+const AddressSection = dynamic(() => import("@/components/estimateRequest/create/sections/AddressSection"), {
+  ssr: false,
+});
 import { ESTIMATE_REQUEST_STYLES } from "./EstimateRequestLayout";
 import { IFormState, IEstimateRequestStepRendererProps } from "@/types/estimateRequest";
 import { formatDateByLanguage } from "@/utils/dateUtils";
@@ -32,7 +39,8 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
       // case 1: 이사 종류(소형/가정/사무실) 선택 화면
       case 1:
         return (
-          <section className="animate-fade-in-up" role="region" aria-label="이사 종류 선택">
+          // LCP 구간: 초기 페인트 지연 방지를 위해 애니메이션 제거
+          <section role="region" aria-label="이사 종류 선택">
             <MovingTypeSection value={form.movingType} onSelect={onSelectMovingType} />
           </section>
         );

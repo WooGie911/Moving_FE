@@ -889,7 +889,10 @@
     "editLoadingText": "Loading profile edit page...",
     "imageUploadError": "Only image files can be uploaded.",
     "error": {
-      "duplicateNickname": "This nickname is already in use."
+      "duplicateNickname": "This nickname is already in use.",
+      "passwordMismatch": "The current password is the same as the new password",
+      "invalidCurrentPassword": "The current password does not match",
+      "currentPasswordRequired": "Please enter your current password"
     }
   },
   "search": {

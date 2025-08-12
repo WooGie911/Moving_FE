@@ -109,6 +109,7 @@ export default function CustomerEditPage() {
     } catch (error: unknown) {
       logDevError(error, "CustomerEditPage onSubmit");
       const message = error instanceof Error ? error.message : "Unknown error";
+      console.log("message", message);
       handleAuthErrorToast(t, message);
     }
   };

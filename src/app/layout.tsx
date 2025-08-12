@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Script from "next/script";
 
 const pretendard = localFont({
   src: "../assets/font/PretendardVariable.woff2",
@@ -106,13 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
 
-        {/* 카카오톡 SDK 로드 */}
-        <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js"
-          integrity="sha384-dok87au0gKqJdxs7msEdBPNnKSRT+/mhTVzq+qOhcL464zXwvcrpjeWvyj1kCdq6"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {/* 카카오톡 SDK는 필요 시 동적 로드 (전역 로드 제거) */}
       </head>
       <body className={`${pretendard.variable} antialiased`}>{children}</body>
     </html>
