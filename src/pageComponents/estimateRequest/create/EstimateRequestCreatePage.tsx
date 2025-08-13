@@ -20,6 +20,7 @@ const EstimateRequestCreatePage = () => {
       title={t("estimateRequest.title")}
       onConfirm={(form) => apiLogic.createMutation.mutate(form)}
       showConfirmModal={apiLogic.showConfirmEstimateRequestModal}
+      enableUnsavedGuard={true}
     />
   );
 };

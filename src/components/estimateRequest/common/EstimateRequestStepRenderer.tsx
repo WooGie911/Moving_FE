@@ -40,14 +40,18 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
       case 1:
         return (
           // LCP 구간: 초기 페인트 지연 방지를 위해 애니메이션 제거
-          <section role="region" aria-label="이사 종류 선택">
+          <section role="region" aria-label={t("estimateRequest.aria.selectMovingTypeSection")}>
             <MovingTypeSection value={form.movingType} onSelect={onSelectMovingType} />
           </section>
         );
       // case 2: 이사 날짜 선택 화면
       case 2:
         return (
-          <section className="animate-fade-in-up" role="region" aria-label="이사 날짜 선택">
+          <section
+            className="animate-fade-in-up"
+            role="region"
+            aria-label={t("estimateRequest.aria.selectDateSection")}
+          >
             <SpeechBubble type="question">{t("estimateRequest.dateQuestion")}</SpeechBubble>
             <SpeechBubble type="question">
               <DateSection
@@ -62,7 +66,11 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
       // case 3: 출발지/도착지 주소 입력 화면
       case 3:
         return (
-          <section className="animate-fade-in-up" role="region" aria-label="주소 입력">
+          <section
+            className="animate-fade-in-up"
+            role="region"
+            aria-label={t("estimateRequest.aria.addressInputSection")}
+          >
             <SpeechBubble type="question">{t("estimateRequest.addressQuestion")}</SpeechBubble>
             <SpeechBubble type="question">
               <div className={ESTIMATE_REQUEST_STYLES.addressContainer}>
@@ -102,9 +110,17 @@ export const EstimateRequestStepRenderer: React.FC<IEstimateRequestStepRendererP
       // case 4: 입력한 모든 정보를 요약해서 보여주고, 최종 확인(요청) 버튼을 제공하는 화면
       case 4:
         return (
-          <section className="animate-fade-in-up" role="region" aria-label="견적 요청 정보 확인">
+          <section
+            className="animate-fade-in-up"
+            role="region"
+            aria-label={t("estimateRequest.aria.confirmInfoSection")}
+          >
             <SpeechBubble type="answer" isLatest={true}>
-              <div className={ESTIMATE_REQUEST_STYLES.resultContainer} role="list" aria-label="견적 요청 정보 목록">
+              <div
+                className={ESTIMATE_REQUEST_STYLES.resultContainer}
+                role="list"
+                aria-label={t("estimateRequest.aria.infoList")}
+              >
                 <div className={ESTIMATE_REQUEST_STYLES.resultItem} role="listitem">
                   {t("estimateRequest.result.movingType")}:{" "}
                   {form.movingType
