@@ -53,12 +53,12 @@ export const useLikeToggle = ({ moverId, initialIsLiked = false, onToggle }: IUs
     try {
       if (isLiked) {
         // 찜하기 해제
-        const result = await removeFavoriteMutation.mutateAsync(moverId);
-        setIsLiked(result.isFavorited);
+        await removeFavoriteMutation.mutateAsync(moverId);
+        setIsLiked(false);
       } else {
         // 찜하기 등록
-        const result = await addFavoriteMutation.mutateAsync(moverId);
-        setIsLiked(result.isFavorited);
+        await addFavoriteMutation.mutateAsync(moverId);
+        setIsLiked(true);
       }
 
       if (onToggle) {

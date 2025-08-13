@@ -38,7 +38,7 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
 
   // mover 상태 업데이트 함수 - React Query 캐시만 사용
   const handleMoverUpdate = async () => {
-    // 견적 요청 관련 캐시 무효화
+    // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
     queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
     queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
   };
