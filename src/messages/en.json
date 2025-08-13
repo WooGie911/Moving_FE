@@ -616,7 +616,10 @@
       "estimateRequestDeparture": "Estimate request departure",
       "estimateRequestArrival": "Estimate request arrival",
       "estimateRequestMovingDate": "Estimate request moving date",
-      "estimateRequestArrow": "Estimate request arrow"
+      "estimateRequestArrow": "Estimate request arrow",
+      "estimateRequestList": "Estimate request list",
+      "emptyStateImage": "Empty state image",
+      "estimateRequestItem": "Estimate request item"
     },
     "estimateRequestAndEstimates": "Estimate request and estimate list",
     "service": "Service",

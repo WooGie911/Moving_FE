@@ -330,6 +330,14 @@
     }
   },
   "customerEstimateRequest": {
+    "noEstimateInProgress": "没有进行中的报价。",
+    "requestNewEstimate": "请申请新的报价。",
+    "goToCreateEstimate": "去创建报价",
+    "moversReviewing": "司机们正在积极审核中。",
+    "estimateComingSoon": "报价即将到达。",
+    "noDataAvailable": "无法加载数据。",
+    "noPastEstimates": "没有收到过报价。",
+    "completeMoveToSeeHistory": "完成搬家后即可查看报价历史。",
     "requestDate": "报价申请日期",
     "movingDate": "搬家日期",
     "driverSuffix": "司机",
@@ -660,7 +668,9 @@
       "estimateCardButtonGroup": "报价卡片按钮组",
       "estimateRequestList": "收到的报价请求列表",
       "estimateRequestItem": "报价请求项目",
-      "emptyStateImage": "表示无报价历史的图片"
+      "emptyStateImage": "表示无报价历史的图片",
+      "loadingSection": "加载部分",
+      "errorSection": "错误部分"
     },
     "ariaLabels": {
       "emptyStateImage": "表示无报价历史的图片",
