@@ -152,6 +152,8 @@ const MoverSchedulePage = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const { useGetMonthlySchedules } = useMoverScheduleApi();
 
+  // FE에서는 상태/유형 정규화 로직을 사용하지 않습니다 (백엔드 표준화 보장).
+
   // 현재 선택된 달의 스케줄 조회
   const { data: monthlySchedules = [], isLoading: isLoadingMonthly } = useGetMonthlySchedules(
     currentMonth.getFullYear(),
@@ -168,6 +170,7 @@ const MoverSchedulePage = () => {
       return schedules.map((schedule) => ({
         ...schedule,
         movingType: t(`shared.movingTypes.${schedule.movingType}`),
+        status: schedule.status,
       }));
     },
     [schedulesByDate, t],

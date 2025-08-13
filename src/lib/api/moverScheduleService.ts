@@ -16,7 +16,8 @@ export class MoverScheduleService {
    */
   static async getMonthlySchedules(year: number, month: number, lang?: string): Promise<ScheduleApiResponse> {
     try {
-      const queryParams = lang ? `?lang=${lang}` : "";
+      // 동적 텍스트만 번역 (상태/유형 키는 백엔드에서 제외 처리)
+      const queryParams = lang && lang !== "ko" ? `?lang=${lang}` : "";
       return await apiCall<ScheduleApiResponse>(`/mover-schedules/monthly/${year}/${month}${queryParams}`, {
         method: "GET",
       });
