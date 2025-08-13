@@ -4,7 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations("schedule.metadata");
+  // 현재 로케일 기준으로 메타데이터 생성
+  const t = await getTranslations({ locale: params.locale, namespace: "schedule.metadata" });
 
   return {
     title: t("title"),

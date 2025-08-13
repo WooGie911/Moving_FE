@@ -40,9 +40,12 @@ const createErrorModal = (
   return createModalOptions(t("common.error"), message, close, t);
 };
 
+// 로컬 유틸을 재사용해 정규화 중복 제거
+
 const fetchMonthlySchedules = async (year: number, month: number, locale: string) => {
+  // 주소/이름 등 동적 텍스트 번역을 위해 서버에 locale 전달
   const response = await MoverScheduleService.getMonthlySchedules(year, month, locale);
-  return response.data || [];
+  return (response.data || []) as Schedule[];
 };
 
 export const useMoverScheduleApi = () => {

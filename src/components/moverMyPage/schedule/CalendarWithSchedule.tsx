@@ -139,7 +139,7 @@ const CalendarWithSchedule: React.FC<CalendarWithScheduleProps> = ({
                       ? "bg-primary-200"
                       : "bg-gray-400"
               }`}
-              title={`${schedule.customerName}님 - ${schedule.movingType}`}
+              title={`${schedule.customerName} - ${schedule.movingType}`}
             />
           ))}
           {schedules.length > 2 && <div className="text-xs text-gray-500">+{schedules.length - 2}</div>}
