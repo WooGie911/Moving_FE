@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { BaseInput } from "@/components/common/input/BaseInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ISignupFormProps {
   userType: TUserType;
@@ -45,6 +46,13 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
   // 회원 가입 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = name && email && phoneNumber && password && passwordCheck && isValid;
 
+  // 로케일 변경 시 오류 메시지 번역을 최신화하기 위해 재검증
+  useEffect(() => {
+    void form.trigger();
+    // form 인스턴스는 불변으로 간주
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLocale]);
+
   const onSubmit = async (data: ISignUpFormValues) => {
     const signUpData = {
       email: data.email,
@@ -67,14 +75,16 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
           router.push(`/${currentLocale}/estimate/received`);
         }
       }
-    } catch (error: any) {
-      handleAuthErrorToast(t, error.message);
+    } catch (error) {
+      const message = (error as { message?: string } | undefined)?.message ?? "";
+      handleAuthErrorToast(t, message);
     }
   };
 
   return (
     <FormProvider {...form}>
       <form
+        key={currentLocale}
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full flex-col"
         aria-labelledby="signupFormTitle"
@@ -228,9 +238,9 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
 
           <div className="flex w-full items-center justify-center gap-2" role="presentation">
             <span className="text-black-200 text-lg">{t("alreadyMember")}</span>
-            <a href={signinLink}>
-              <span className="text-primary-400 text-lg font-semibold underline">{t("login")}</span>
-            </a>
+            <Link href={signinLink} className="text-primary-400 text-lg font-semibold underline">
+              {t("login")}
+            </Link>
           </div>
         </div>
       </form>

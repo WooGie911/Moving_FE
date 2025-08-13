@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TUserRole } from "@/types/user.types";
 import { GEUST_NAVIGATION_ITEMS, CUSTOMER_NAVIGATION_ITEMS, MOVER_NAVIGATION_ITEMS } from "@/constant/gnbItems";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getPathWithoutLocale } from "@/utils/locale";
 
 interface ISideGnbProps {
@@ -19,12 +19,13 @@ export const SideGnb = ({ isOpen, onClose, userRole = "GUEST" }: ISideGnbProps) 
   const pathname = usePathname();
   const t = useTranslations();
   const cleanPath = getPathWithoutLocale(pathname); // "/ko/mypage" -> "/mypage"
+  const locale = useLocale();
 
   const getMenuItems = () => {
     if (userRole === "GUEST") {
       return [
         ...GEUST_NAVIGATION_ITEMS.map((item) => ({ ...item, name: `navigation.${item.name}` })),
-        { name: "auth.signin", href: "/userSignin" },
+        { name: "auth.signin", href: `/${locale}/userSignin` },
       ];
     } else {
       const items = userRole === "CUSTOMER" ? CUSTOMER_NAVIGATION_ITEMS : MOVER_NAVIGATION_ITEMS;

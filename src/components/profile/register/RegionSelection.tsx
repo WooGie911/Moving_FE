@@ -63,7 +63,7 @@ export const RegionSelection = ({
         {descriptionKey && <span className="text-xs text-gray-400 lg:text-lg">* {t(descriptionKey)}</span>}
       </div>
 
-      <div className="flex w-[300px] flex-col gap-4 lg:w-[450px]">
+      <div className="flex w-[320px] flex-col gap-4 lg:w-[450px]">
         <div className={`grid w-full gap-2 lg:gap-3.5 ${locale === "en" ? "grid-cols-3" : "grid-cols-5"}`}>
           {REGION_OPTIONS.map((region) => {
             const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { BaseInput } from "@/components/common/input/BaseInput";
 import { PasswordInput } from "@/components/common/input/PasswordInput";
@@ -9,9 +9,9 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
-import Link from "next/link";
 import { handleAuthErrorToast } from "@/utils/handleAuthErrorToast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ISigninFormProps {
   userType: TUserType;
@@ -41,6 +41,13 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
 
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
+  // 로케일 변경 시 오류 메시지 번역을 최신화하기 위해 재검증
+  useEffect(() => {
+    void form.trigger();
+    // form는 react-hook-form 인스턴스이며 변경되지 않으므로 의존성에서 제외
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLocale]);
+
   const onSubmit = async () => {
     try {
       if (isLoading) return;
@@ -55,14 +62,15 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
           router.push(`/${currentLocale}/estimate/received`);
         }
       }
-    } catch (error: any) {
-      handleAuthErrorToast(t, error.message);
+    } catch (error) {
+      const message = (error as { message?: string } | undefined)?.message ?? "";
+      handleAuthErrorToast(t, message);
     }
   };
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
+      <form key={currentLocale} onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col">
         <div className="mb-6 flex flex-col gap-2 font-normal">
           <label htmlFor="email" className="text-black-400 text-md">
             {t("email")}
