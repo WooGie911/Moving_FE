@@ -38,8 +38,9 @@ export const useFavoriteMovers = () => {
   return useQuery({
     queryKey: ["favoriteMovers", "preview", locale],
     queryFn: () => findMoverApi.fetchFavoriteMovers(3, undefined, locale),
-    staleTime: 2 * 60 * 1000, // 2분
-    gcTime: 5 * 60 * 1000, // 5분
+    // 캐싱 비활성화: 찜하기는 실시간 반영 필요
+    staleTime: 0,
+    gcTime: 0,
     select: (data) => data.items, // items만 반환
   });
 };
@@ -51,8 +52,9 @@ export const useInfiniteFavoriteMovers = (limit: number = 3, language?: string) 
     queryFn: ({ pageParam }) => findMoverApi.fetchFavoriteMovers(limit, pageParam, language),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    staleTime: 5 * 60 * 1000, // 5분
-    gcTime: 10 * 60 * 1000, // 10분
+    // 캐싱 비활성화
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
@@ -83,14 +85,7 @@ export const useAddFavorite = () => {
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.addFavorite(moverId),
     onSuccess: (data, moverId) => {
-      // 찜한 기사님 목록 캐시 무효화 (preview와 infinite 모두)
-      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
-
-      // 기사님 리스트 캐시 무효화 (더 강력한 무효화)
-      queryClient.invalidateQueries({ queryKey: ["movers"] });
-
-      // 기사님 상세 캐시 무효화
-      queryClient.invalidateQueries({ queryKey: ["mover", moverId] });
+      // 캐싱 제거: 무효화 대신 직접 최신 값만 적용
 
       // 즉시 캐시 업데이트 (백업)
       queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
@@ -124,14 +119,7 @@ export const useRemoveFavorite = () => {
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.removeFavorite(moverId),
     onSuccess: (data, moverId) => {
-      // 찜한 기사님 목록 캐시 무효화 (preview와 infinite 모두)
-      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
-
-      // 기사님 리스트 캐시 무효화 (더 강력한 무효화)
-      queryClient.invalidateQueries({ queryKey: ["movers"] });
-
-      // 기사님 상세 캐시 무효화
-      queryClient.invalidateQueries({ queryKey: ["mover", moverId] });
+      // 캐싱 제거: 무효화 대신 직접 최신 값만 적용
 
       // 즉시 캐시 업데이트 (백업)
       queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
