@@ -1501,12 +1501,17 @@
   },
   "review": {
     "metadata": {
-      "title": "리뷰 | 무빙",
+      "title": "리뷰 | Moving",
       "description": "이사 리뷰를 작성하고 관리하세요",
-      "writableTitle": "작성 가능한 리뷰 | 무빙",
+      "writableTitle": "작성 가능한 리뷰 | Moving",
       "writableDescription": "이사 완료 후 작성할 수 있는 리뷰를 확인하세요",
-      "writtenTitle": "내가 작성한 리뷰 | 무빙",
+      "writtenTitle": "내가 작성한 리뷰 | Moving",
       "writtenDescription": "내가 작성한 이사 리뷰를 확인하고 관리하세요"
+    },
+    "aria": {
+      "tabNavigation": "리뷰 탭 네비게이션",
+      "activeTab": "활성 탭",
+      "inactiveTab": "비활성 탭"
     },
     "title": "리뷰",
     "writableTab": "작성 가능한 리뷰",

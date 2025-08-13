@@ -1458,6 +1458,11 @@
       "writtenTitle": "My Written Reviews | Moving",
       "writtenDescription": "Check and manage your written moving reviews"
     },
+    "aria": {
+      "tabNavigation": "Review tab navigation",
+      "activeTab": "Active tab",
+      "inactiveTab": "Inactive tab"
+    },
     "title": "Review",
     "writableTab": "Writable Reviews",
     "writtenTab": "My Written Reviews",

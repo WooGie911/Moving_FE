@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import notification from "@/assets/icon/notification/icon-notification-lg.svg";
+import notification from "@/assets/icon/notification/icon-notification.svg";
 import { TDeviceType } from "@/types/deviceType";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
@@ -37,6 +37,14 @@ export const GnbActions = ({
 }: IGnbActionsProps) => {
   const t = useTranslations();
   const locale = useLocale();
+
+  // profileImage가 유효한 URL인지 확인하는 함수
+  const isValidImageUrl = (url: string | null | undefined): boolean => {
+    if (!url) return false;
+    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+  };
+
+  const profileImageSrc = isValidImageUrl(profileImage) ? profileImage! : "/img/mascot/profile.webp";
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -198,7 +206,7 @@ export const GnbActions = ({
             >
               <div className="h-10 w-10 overflow-hidden rounded-full">
                 <Image
-                  src={profileImage || "/img/mascot/profile.webp"}
+                  src={profileImageSrc}
                   alt={t("gnb.profile")}
                   width={40}
                   height={40}

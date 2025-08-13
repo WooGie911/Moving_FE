@@ -1427,12 +1427,17 @@
   },
   "review": {
     "metadata": {
-      "title": "评价 | 무빙",
+      "title": "评价 | Moving",
       "description": "撰写和管理您的搬家评价",
-      "writableTitle": "可写评价 | 무빙",
+      "writableTitle": "可写评价 | Moving",
       "writableDescription": "查看搬家完成后可以撰写的评价",
-      "writtenTitle": "我写的评价 | 무빙",
+      "writtenTitle": "我写的评价 | Moving",
       "writtenDescription": "查看和管理您撰写的搬家评价"
+    },
+    "aria": {
+      "tabNavigation": "评价标签导航",
+      "activeTab": "活动标签",
+      "inactiveTab": "非活动标签"
     },
     "title": "评价",
     "writableTab": "可写评价",

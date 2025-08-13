@@ -4,7 +4,7 @@ import Image from "next/image";
 import defaultProfile from "@/assets/img/mascot/moverprofile-sm.webp";
 import { IMoverInfoProps } from "@/types/customerEstimateRequest";
 import veteran from "@/assets/icon/etc/icon-chat.svg";
-import star from "@/assets/icon/star/icon-star-active-sm.svg";
+import star from "@/assets/icon/star/icon-star-active.svg";
 import Favorite from "@/components/common/button/Favorite";
 import { useTranslations, useLocale } from "next-intl";
 import deleteIcon from "@/assets/icon/menu/icon-delete.svg";

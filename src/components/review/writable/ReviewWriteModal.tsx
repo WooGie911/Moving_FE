@@ -27,6 +27,14 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
   const methods = useForm<IReviewForm>();
   const { control, handleSubmit, formState } = methods;
 
+  // profileImage가 유효한 URL인지 확인하는 함수
+  const isValidImageUrl = (url: string | null | undefined): boolean => {
+    if (!url) return false;
+    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+  };
+
+  const profileImageSrc = isValidImageUrl(card.mover.profileImage) ? card.mover.profileImage! : defaultProfile;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -50,7 +58,7 @@ const ReviewWriteModal = ({ card, onSubmit, isSubmitting }: IReviewWriteModalPro
 
               {/* 프로필 이미지 */}
               <Image
-                src={card.mover.profileImage || defaultProfile}
+                src={profileImageSrc}
                 alt="프로필"
                 width={50}
                 height={50}
