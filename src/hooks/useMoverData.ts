@@ -84,8 +84,58 @@ export const useAddFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.addFavorite(moverId),
-    onSuccess: () => {
-      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
+    onSuccess: (data, moverId) => {
+      queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            items: page.items.map((mover: any) =>
+              mover.id === moverId
+                ? {
+                    ...mover,
+                    favoriteCount: (mover.favoriteCount || 0) + 1,
+                    isFavorited: true,
+                  }
+                : mover,
+            ),
+          })),
+        };
+      });
+
+      // 개별 기사님 상세 정보도 업데이트
+      queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          favoriteCount: (oldData.favoriteCount || 0) + 1,
+          isFavorited: true,
+        };
+      });
+
+      // 찜한 기사님 목록에도 추가
+      queryClient.setQueriesData({ queryKey: ["favoriteMovers"] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+
+        const firstPage = oldData.pages[0];
+        if (firstPage?.items) {
+          const moverData = queryClient.getQueryData(["mover", moverId]);
+          if (moverData) {
+            const newFirstPage = {
+              ...firstPage,
+              items: [moverData, ...firstPage.items],
+            };
+
+            return {
+              ...oldData,
+              pages: [newFirstPage, ...oldData.pages.slice(1)],
+            };
+          }
+        }
+        return oldData;
+      });
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
       queryClient.invalidateQueries({ queryKey: ["movers"] });
@@ -100,8 +150,52 @@ export const useRemoveFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.removeFavorite(moverId),
-    onSuccess: () => {
-      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
+    onSuccess: (data, moverId) => {
+      // 낙관적 업데이트: 즉시 UI 반영
+      queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            items: page.items.map((mover: any) =>
+              mover.id === moverId
+                ? {
+                    ...mover,
+                    favoriteCount: Math.max(0, (mover.favoriteCount || 0) - 1),
+                    isFavorited: false,
+                  }
+                : mover,
+            ),
+          })),
+        };
+      });
+
+      // 개별 기사님 상세 정보도 업데이트
+      queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          favoriteCount: Math.max(0, (oldData.favoriteCount || 0) - 1),
+          isFavorited: false,
+        };
+      });
+
+      // 찜한 기사님 목록에서 제거
+      queryClient.setQueriesData({ queryKey: ["favoriteMovers"] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            items: page.items.filter((mover: any) => mover.id !== moverId),
+          })),
+        };
+      });
+
+      // 백그라운드에서 캐시 무효화 (데이터 동기화)
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
       queryClient.invalidateQueries({ queryKey: ["movers"] });
