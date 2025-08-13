@@ -25,8 +25,7 @@ export const LgButtonSection = ({
   estimatePrice,
   mover,
 }: LgButtonSectionProps) => {
-  const t = useTranslations("estimateRequest");
-  const tCommon = useTranslations("common");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
   const { open, close } = useModal();
   const queryClient = useQueryClient();
@@ -121,7 +120,7 @@ export const LgButtonSection = ({
       };
     } else {
       return {
-        text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
+        text: confirmEstimateMutation.isPending ? t("loading") : t("confirmEstimateButton"),
         disabled: confirmEstimateMutation.isPending,
         state: confirmEstimateMutation.isPending ? ("disabled" as const) : ("default" as const),
         ariaLabel: confirmEstimateMutation.isPending
@@ -184,12 +183,12 @@ export const LgButtonSection = ({
                     type: "bottomSheet",
                     buttons: [
                       {
-                        text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
+                        text: confirmEstimateMutation.isPending ? t("loading") : t("confirmEstimateButton"),
                         onClick: handleConfirmEstimate,
                         disabled: confirmEstimateMutation.isPending,
                       },
                       {
-                        text: tCommon("cancel"),
+                        text: t("cancel"),
                         onClick: () => close(),
                       },
                     ],

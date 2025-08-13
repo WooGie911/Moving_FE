@@ -14,8 +14,7 @@ import { useAuth } from "@/providers/AuthProvider";
 export const UserReceivedEstimateRequestDetailPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
   const { id: estimateId } = useParams(); // id는 estimateId
-  const t = useTranslations("estimateRequest");
-  const commonT = useTranslations("common");
+  const t = useTranslations("customerEstimateRequest");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
@@ -26,7 +25,7 @@ export const UserReceivedEstimateRequestDetailPage = () => {
   if (isPending)
     return (
       <main aria-label={t("aria.detailPageLoadingSection")}>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        <MovingTruckLoader size="lg" loadingText={t("loading")} />
       </main>
     );
   if (isError) return <Error error={error} reset={() => refetch()} />;

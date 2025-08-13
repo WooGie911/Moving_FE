@@ -20,14 +20,13 @@ export const DetailPageMainSeaction = ({
   type,
   estimates,
 }: IDetailPageMainSeactionProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
   const locale = useLocale();
 
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
-  console.log("estimateRequest", estimateRequest);
   return (
     <main
       className={`flex w-full flex-col items-center justify-center px-5 lg:flex-row lg:gap-[140px] ${type === "pending" ? "lg:items-center" : "lg:items-start"}`}
@@ -142,7 +141,11 @@ export const DetailPageMainSeaction = ({
           aria-label={t("aria.actionButtonsSection")}
         >
           <ShareSection
-            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimate={{
+              id: estimate.id,
+              price: estimate.price,
+              mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" },
+            }}
             estimateRequest={estimateRequest || undefined}
           />
           {type === "pending" ? (
@@ -175,7 +178,11 @@ export const DetailPageMainSeaction = ({
           )}
           {type === "pending" ? <div className="border-border-light flex w-full flex-col border-b-1" /> : ""}
           <ShareSection
-            estimate={{ ...estimate, mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" } }}
+            estimate={{
+              id: estimate.id,
+              price: estimate.price,
+              mover: { ...estimate.mover, nickname: estimate.mover?.nickname || "" },
+            }}
             estimateRequest={estimateRequest || undefined}
           />
         </section>

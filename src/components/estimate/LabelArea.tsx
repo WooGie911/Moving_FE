@@ -13,33 +13,31 @@ interface ILabelAreaProps {
   estimateStatus?: "PROPOSED" | "ACCEPTED" | "REJECTED" | "AUTO_REJECTED";
 }
 export const LabelArea = ({ movingType, isDesignated, createdAt, usedAt, estimateStatus }: ILabelAreaProps) => {
-  const t = useTranslations("relativeTime");
-  const estimateT = useTranslations("estimateRequest");
-  const ariaT = useTranslations("estimateRequest.ariaLabels");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
 
   return (
     <section
       className="flex w-full flex-row items-center justify-between gap-2"
-      aria-label={ariaT("labelArea")}
+      aria-label={t("ariaLabels.labelArea")}
       role="region"
     >
       <section
         className="flex flex-row items-center justify-center gap-2"
-        aria-label={ariaT("movingTypeSection")}
+        aria-label={t("ariaLabels.movingTypeSection")}
         role="group"
       >
-        <MoveTypeLabel type={movingType} aria-label={ariaT("movingTypeLabel")} />
-        {isDesignated && <MoveTypeLabel type="document" aria-label={ariaT("designatedLabel")} />}
+        <MoveTypeLabel type={movingType} aria-label={t("ariaLabels.movingTypeLabel")} />
+        {isDesignated && <MoveTypeLabel type="document" aria-label={t("ariaLabels.designatedLabel")} />}
       </section>
 
       {usedAt === "received" && createdAt && (
         <section
           className="text-[14px] leading-[24px] font-normal text-gray-500"
-          aria-label={ariaT("timeSection")}
+          aria-label={t("ariaLabels.timeSection")}
           role="group"
         >
-          <span aria-label={ariaT("relativeTime")}>
+          <span aria-label={t("ariaLabels.relativeTime")}>
             {formatRelativeTimeWithTranslations(
               createdAt,
               {
@@ -57,28 +55,31 @@ export const LabelArea = ({ movingType, isDesignated, createdAt, usedAt, estimat
       {usedAt === "detail" && (
         <section
           className="flex flex-row items-center justify-end gap-1 md:hidden"
-          aria-label={ariaT("statusSection")}
+          aria-label={t("ariaLabels.statusSection")}
           role="group"
         >
           {estimateStatus === "PROPOSED" ? (
-            <p className="text-[16px] leading-[26px] font-semibold text-gray-300" aria-label={ariaT("estimateStatus")}>
-              {estimateT("estimateWaiting")}
+            <p
+              className="text-[16px] leading-[26px] font-semibold text-gray-300"
+              aria-label={t("ariaLabels.estimateStatus")}
+            >
+              {t("estimateWaiting")}
             </p>
           ) : estimateStatus === "ACCEPTED" ? (
             <div
               className="flex flex-row items-center justify-center gap-1"
-              aria-label={ariaT("confirmedEstimate")}
+              aria-label={t("ariaLabels.confirmedEstimate")}
               role="group"
             >
               <Image src={confirm} alt="" width={16} height={16} className="object-contain" aria-hidden="true" />
-              <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{estimateT("confirmedEstimate")}</p>
+              <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
             </div>
           ) : (
             <p
               className="text-[16px] leading-[26px] font-semibold text-gray-300"
-              aria-label={ariaT("rejectedEstimate")}
+              aria-label={t("ariaLabels.rejectedEstimate")}
             >
-              {estimateT("rejectedEstimate")}
+              {t("rejectedEstimate")}
             </p>
           )}
         </section>

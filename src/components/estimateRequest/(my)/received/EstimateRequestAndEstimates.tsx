@@ -5,7 +5,7 @@ import { TReceivedEstimateRequestResponse } from "@/types/customerEstimateReques
 import { useTranslations } from "next-intl";
 
 export const EstimateRequestAndEstimates = ({ estimateRequest, estimates }: TReceivedEstimateRequestResponse) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
 
   const cardListData = estimates.map((estimate) => ({
     estimateRequest,

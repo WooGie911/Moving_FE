@@ -23,8 +23,7 @@ export const LastButtonSection = ({
   hasConfirmedEstimate,
   mover,
 }: ILastButtonSectionProps) => {
-  const t = useTranslations("estimateRequest");
-  const tCommon = useTranslations("common");
+  const t = useTranslations("customerEstimateRequest");
   const { open, close } = useModal();
   const queryClient = useQueryClient();
   const locale = useLocale();
@@ -167,7 +166,7 @@ export const LastButtonSection = ({
               type: "bottomSheet",
               buttons: [
                 {
-                  text: confirmEstimateMutation.isPending ? tCommon("loading") : t("confirmEstimateButton"),
+                  text: confirmEstimateMutation.isPending ? t("loading") : t("confirmEstimateButton"),
                   onClick: handleConfirmEstimate,
                   disabled: confirmEstimateMutation.isPending,
                 },

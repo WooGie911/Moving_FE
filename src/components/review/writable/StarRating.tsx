@@ -1,6 +1,6 @@
 "use client";
-import star_active from "@/assets/icon/star/icon-star-active-sm.svg";
-import star_inactive from "@/assets/icon/star/icon-star-inactive-sm.svg";
+import star_active from "@/assets/icon/star/icon-star-active.svg";
+import star_inactive from "@/assets/icon/star/icon-star-inactive.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as Sentry from "@sentry/nextjs";

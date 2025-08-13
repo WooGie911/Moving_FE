@@ -12,8 +12,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverReceivedPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimate");
-  const commonT = useTranslations("common");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
 
   // 필터 상태 관리
@@ -118,7 +117,7 @@ export const MoverReceivedPage = () => {
     return (
       <main role="main" aria-label={t("receivedRequests")}>
         <div aria-live="polite" aria-busy="true">
-          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+          <MovingTruckLoader size="lg" loadingText={t("loading")} />
         </div>
       </main>
     );

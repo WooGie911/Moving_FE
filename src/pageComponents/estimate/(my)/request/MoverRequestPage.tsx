@@ -12,8 +12,7 @@ import { CardList } from "@/components/estimate/CardList";
 
 export const MoverRequestPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimate");
-  const commonT = useTranslations("common");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRequestEstimates", locale],
@@ -25,7 +24,7 @@ export const MoverRequestPage = () => {
     return (
       <main aria-label={t("ariaLabels.requestLoadingSection")}>
         <section aria-live="polite" aria-busy="true">
-          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+          <MovingTruckLoader size="lg" loadingText={t("loading")} />
         </section>
       </main>
     );

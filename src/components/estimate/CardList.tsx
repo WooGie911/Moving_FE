@@ -25,7 +25,7 @@ export const CardList = ({ data, isDesignated, usedAt, id, estimatePrice, estima
   const [modalData, setModalData] = useState<{ price?: number; comment?: string }>({});
   const queryClient = useQueryClient();
   const { user } = useAuth();
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
   const tShared = useTranslations();
   const locale = useLocale();
 

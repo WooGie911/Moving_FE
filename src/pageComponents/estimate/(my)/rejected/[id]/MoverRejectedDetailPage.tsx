@@ -13,8 +13,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverRejectedDetailPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimate");
-  const commonT = useTranslations("common");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
   const { id } = useParams(); // 이렇게 해야 실제 URL 파라미터와 일치
   const { data, isPending, isError, error, refetch } = useQuery({
@@ -27,7 +26,7 @@ export const MoverRejectedDetailPage = () => {
     return (
       <main aria-label={t("ariaLabels.detailLoadingSection")}>
         <section aria-live="polite" aria-busy="true">
-          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+          <MovingTruckLoader size="lg" loadingText={t("loading")} />
         </section>
       </main>
     );

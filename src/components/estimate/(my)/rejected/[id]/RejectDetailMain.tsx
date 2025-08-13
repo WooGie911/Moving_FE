@@ -9,8 +9,7 @@ import { shortenRegionInAddress } from "@/utils/regionMapping";
 import { useTranslations, useLocale } from "next-intl";
 
 export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) => {
-  const t = useTranslations("estimate");
-  const ariaT = useTranslations("estimate.ariaLabels"); // Added
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
@@ -18,13 +17,13 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
   return (
     <main // Changed from div to main
       className={`flex w-full flex-col items-center justify-center px-5 pb-30 lg:flex-row lg:gap-[140px]`}
-      aria-label={ariaT("rejectDetailMain")} // Added
-      role="main" // Added
+      aria-label={t("ariaLabels.rejectDetailMain")}
+      role="main"
     >
-      <section // Changed from div to section
+      <section
         className="flex w-full max-w-[744px] flex-col items-start justify-center gap-5"
-        aria-label={ariaT("rejectDetailMain")} // Added
-        role="region" // Added
+        aria-label={t("ariaLabels.rejectDetailMain")}
+        role="region"
       >
         {/* 프로필사진 영역 */}
         {/* <div className="relative w-full">
@@ -33,10 +32,10 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
           </div>
         </div> */}
         {/* 라벨 영역 */}
-        <section // Changed from p to section
+        <section
           className="text-primary-400 border-border-light w-full border-b-1 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]"
-          aria-label={ariaT("rejectMessageSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.rejectMessageSection")}
+          role="region"
         >
           <h1 // Added h1 for main heading
             className="text-primary-400 pb-7 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]"
@@ -46,10 +45,10 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
         </section>
 
         {/* 유저 정보 */}
-        <section // Changed from div to section
+        <section
           className="border-border-light flex w-full flex-row items-center justify-between border-b-[0.5px] pt-3 pb-7"
-          aria-label={ariaT("customerInfoSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.customerInfoSection")}
+          role="region"
         >
           <h2 // Changed from p to h2
             className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]"
@@ -59,10 +58,10 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
         </section>
 
         {/* 견적가 */}
-        <section // Changed from div to section
+        <section
           className="border-border-light my-2 flex w-full flex-row items-center justify-between border-b-1 pb-7 md:justify-start md:gap-15"
-          aria-label={ariaT("estimatePriceSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.estimatePriceSection")}
+          role="region"
         >
           <h3 // Changed from p to h3
             className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold"
@@ -90,10 +89,10 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
         </section>
 
         {/* 반려 일자 */}
-        <section // Changed from div to section
+        <section
           className="border-border-light my-2 flex w-full flex-row items-center justify-between border-b-1 pb-7 md:justify-start md:gap-10"
-          aria-label={ariaT("rejectionDateSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.rejectionDateSection")}
+          role="region"
         >
           <h3 // Changed from p to h3
             className="text-black-300 text-[16px] leading-[26px] font-semibold md:text-[20px] md:font-bold"
@@ -109,11 +108,7 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
         </section>
 
         {/* 이사견적 상세정보들 */}
-        <section // Changed from div to section
-          aria-label={ariaT("movingDetailSection")} // Added
-          role="region" // Added
-          className="w-full"
-        >
+        <section aria-label={t("ariaLabels.movingDetailSection")} role="region" className="w-full">
           <DetailMoveInfo
             id={data.id}
             movingType={data.moveType}
@@ -137,22 +132,16 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
         </section>
 
         <div className="border-border-light flex w-full flex-col border-b-1 pt-2" />
-        <section // Changed from div to section
+        <section
           className="my-2 flex w-full flex-col items-start justify-center gap-10 lg:hidden"
-          aria-label={ariaT("shareSection")} // Added
-          role="region" // Added
+          aria-label={t("ariaLabels.shareSection")}
+          role="region"
         >
           <ShareSection estimateRequest={data} />
         </section>
       </section>
-      <section // Changed from div to section
-        className="hidden lg:block"
-        aria-label={ariaT("shareSection")} // Added
-        role="region" // Added
-      >
-        <section // Changed from div to section
-          className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start"
-        >
+      <section className="hidden lg:block" aria-label={t("ariaLabels.shareSection")} role="region">
+        <section className="my-2 flex w-full flex-col items-start justify-start gap-10 lg:w-[320px] lg:items-start">
           <ShareSection estimateRequest={data} />
         </section>
       </section>

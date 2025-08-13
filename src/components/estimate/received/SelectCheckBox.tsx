@@ -15,7 +15,7 @@ export const SelectCheckBox = ({
   onDesignatedChange,
   onServiceAreaChange,
 }: SelectCheckBoxProps) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
 
   return (
     <fieldset

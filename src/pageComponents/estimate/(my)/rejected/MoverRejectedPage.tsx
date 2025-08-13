@@ -11,8 +11,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export const MoverRejectedPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimate");
-  const commonT = useTranslations("common");
+  const t = useTranslations("moverEstimate");
   const locale = useLocale();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["MyRejectedEstimates", locale],
@@ -25,7 +24,7 @@ export const MoverRejectedPage = () => {
     return (
       <main aria-label={t("ariaLabels.loadingSection")}>
         <section aria-live="polite" aria-busy="true">
-          <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+          <MovingTruckLoader size="lg" loadingText={t("loading")} />
         </section>
       </main>
     );

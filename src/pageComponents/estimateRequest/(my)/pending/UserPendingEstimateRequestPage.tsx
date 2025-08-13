@@ -17,8 +17,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export const UserPendingEstimateRequestPage = () => {
   const { user, isLoading: isUserLoading } = useAuth();
-  const t = useTranslations("estimateRequest");
-  const commonT = useTranslations("common");
+  const t = useTranslations("customerEstimateRequest");
   const locale = useLocale();
 
   const { data, isPending, isError, error, refetch } = useQuery({
@@ -30,7 +29,7 @@ export const UserPendingEstimateRequestPage = () => {
   if (isPending)
     return (
       <main aria-label={t("aria.loadingSection")}>
-        <MovingTruckLoader size="lg" loadingText={commonT("loading")} />
+        <MovingTruckLoader size="lg" loadingText={t("loading")} />
       </main>
     );
 
