@@ -41,13 +41,6 @@ const SigninForm = ({ userType, signupLink }: ISigninFormProps) => {
 
   const isFormValid = email && password && email.trim() !== "" && password.trim() !== "" && isValid;
 
-  // 로케일 변경 시 오류 메시지 번역을 최신화하기 위해 재검증
-  useEffect(() => {
-    void form.trigger();
-    // form는 react-hook-form 인스턴스이며 변경되지 않으므로 의존성에서 제외
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLocale]);
-
   const onSubmit = async () => {
     try {
       if (isLoading) return;
