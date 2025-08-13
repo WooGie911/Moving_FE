@@ -52,6 +52,8 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
       // 캐시 무효화하여 데이터 새로고침
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 활성 견적요청(hasEstimate 포함)도 즉시 최신화
+      queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active", locale] });
       // 기사님 관련 페이지 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
       queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });

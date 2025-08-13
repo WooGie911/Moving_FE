@@ -17,7 +17,13 @@
     "next": "다음",
     "previous": "이전",
     "success": "완료",
-    "retry": "다시 시도"
+    "retry": "다시 시도",
+    "unsaved": {
+      "leaveConfirmTitle": "이동 확인",
+      "leaveConfirmMessage1": "작성 중인 내용이 사라질 수 있어요.",
+      "leaveConfirmMessage2": "페이지를 이동하시겠습니까?",
+      "leave": "이동"
+    }
   },
   "shared": {
     "units": {
@@ -152,6 +158,14 @@
     "all": "전체",
     "requestDateShort": "견적 요청일",
     "aria": {
+      "main": "견적 요청 페이지",
+      "progress": "진행률",
+      "content": "견적 요청 콘텐츠",
+      "question": "질문 말풍선",
+      "answer": "답변 말풍선",
+      "questionContent": "질문 내용",
+      "answerContent": "답변 내용",
+      "editAnswer": "답변 수정하기",
       "mainContent": "진행중인 견적 요청 페이지",
       "estimateRequestSection": "견적 요청 정보 섹션",
       "estimateListSection": "견적 목록 섹션",
@@ -194,6 +208,13 @@
       "departureLabel": "출발지 라벨",
       "arrivalLabel": "도착지 라벨",
       "movingDateLabel": "이사날짜 라벨",
+      "introSection": "견적 요청 소개",
+      "movingTypeQuestionSection": "이사 종류 질문",
+      "selectMovingTypeSection": "이사 종류 선택",
+      "selectDateSection": "이사 날짜 선택",
+      "addressInputSection": "주소 입력",
+      "confirmInfoSection": "견적 요청 정보 확인",
+      "infoList": "견적 요청 정보 목록",
       "detailPageContent": "견적 요청 상세 페이지 콘텐츠",
       "detailPageLoadingSection": "상세 페이지 로딩 섹션",
       "detailPageErrorSection": "상세 페이지 오류 섹션",
