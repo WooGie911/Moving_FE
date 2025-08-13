@@ -84,12 +84,72 @@ export const useAddFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.addFavorite(moverId),
-    onSuccess: () => {
-      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+    // 낙관적 업데이트
+    onMutate: async (moverId: string) => {
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: ["mover"] }),
+        queryClient.cancelQueries({ queryKey: ["movers"] }),
+        queryClient.cancelQueries({ queryKey: ["favoriteMovers"] }),
+      ]);
+
+      const previousMoverDetails = queryClient.getQueriesData<any>({ queryKey: ["mover", moverId] });
+      previousMoverDetails.forEach(([key, data]) => {
+        if (!data) return;
+        queryClient.setQueryData(key, {
+          ...data,
+          isFavorite: true,
+          totalFavoriteCount: (data.totalFavoriteCount || 0) + 1,
+        });
+      });
+
+      const previousMoverLists = queryClient.getQueriesData<any>({ queryKey: ["movers"] });
+      previousMoverLists.forEach(([key, data]) => {
+        if (!data) return;
+        const pages = data.pages?.map((page: any) => ({
+          ...page,
+          items: page.items?.map((item: any) =>
+            item.id === moverId
+              ? { ...item, isFavorite: true, totalFavoriteCount: (item.totalFavoriteCount || 0) + 1 }
+              : item,
+          ),
+        }));
+        queryClient.setQueryData(key, { ...data, pages });
+      });
+
+      const previousFavoriteLists = queryClient.getQueriesData<any>({ queryKey: ["favoriteMovers"] });
+      previousFavoriteLists.forEach(([key, data]) => {
+        if (!data) return;
+        const pages = data.pages?.map((page: any) => ({
+          ...page,
+          items: page.items?.map((item: any) =>
+            item.id === moverId
+              ? { ...item, isFavorite: true, totalFavoriteCount: (item.totalFavoriteCount || 0) + 1 }
+              : item,
+          ),
+        }));
+        queryClient.setQueryData(key, { ...data, pages });
+      });
+
+      return { previousMoverDetails, previousMoverLists, previousFavoriteLists };
+    },
+    onError: (_err, _variables, context) => {
+      if (!context) return;
+      context.previousMoverDetails?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+      context.previousMoverLists?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+      context.previousFavoriteLists?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["mover"] });
       queryClient.invalidateQueries({ queryKey: ["movers"] });
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
     },
   });
 };
@@ -100,12 +160,71 @@ export const useRemoveFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.removeFavorite(moverId),
-    onSuccess: () => {
-      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
-      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
-      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+    onMutate: async (moverId: string) => {
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: ["mover"] }),
+        queryClient.cancelQueries({ queryKey: ["movers"] }),
+        queryClient.cancelQueries({ queryKey: ["favoriteMovers"] }),
+      ]);
+
+      const previousMoverDetails = queryClient.getQueriesData<any>({ queryKey: ["mover", moverId] });
+      previousMoverDetails.forEach(([key, data]) => {
+        if (!data) return;
+        queryClient.setQueryData(key, {
+          ...data,
+          isFavorite: false,
+          totalFavoriteCount: Math.max(0, (data.totalFavoriteCount || 0) - 1),
+        });
+      });
+
+      const previousMoverLists = queryClient.getQueriesData<any>({ queryKey: ["movers"] });
+      previousMoverLists.forEach(([key, data]) => {
+        if (!data) return;
+        const pages = data.pages?.map((page: any) => ({
+          ...page,
+          items: page.items?.map((item: any) =>
+            item.id === moverId
+              ? { ...item, isFavorite: false, totalFavoriteCount: Math.max(0, (item.totalFavoriteCount || 0) - 1) }
+              : item,
+          ),
+        }));
+        queryClient.setQueryData(key, { ...data, pages });
+      });
+
+      const previousFavoriteLists = queryClient.getQueriesData<any>({ queryKey: ["favoriteMovers"] });
+      previousFavoriteLists.forEach(([key, data]) => {
+        if (!data) return;
+        const pages = data.pages?.map((page: any) => ({
+          ...page,
+          items: page.items?.map((item: any) =>
+            item.id === moverId
+              ? { ...item, isFavorite: false, totalFavoriteCount: Math.max(0, (item.totalFavoriteCount || 0) - 1) }
+              : item,
+          ),
+        }));
+        queryClient.setQueryData(key, { ...data, pages });
+      });
+
+      return { previousMoverDetails, previousMoverLists, previousFavoriteLists };
+    },
+    onError: (_err, _variables, context) => {
+      if (!context) return;
+      context.previousMoverDetails?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+      context.previousMoverLists?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+      context.previousFavoriteLists?.forEach(([key, data]: any) => {
+        queryClient.setQueryData(key, data);
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["mover"] });
       queryClient.invalidateQueries({ queryKey: ["movers"] });
       queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
     },
   });
 };
