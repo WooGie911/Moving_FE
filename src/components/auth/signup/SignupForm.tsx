@@ -46,13 +46,6 @@ const SignupForm = ({ userType, signinLink }: ISignupFormProps) => {
   // 회원 가입 버튼 활성화 조건 (값 존재 + validation 통과)
   const isFormValid = name && email && phoneNumber && password && passwordCheck && isValid;
 
-  // 로케일 변경 시 오류 메시지 번역을 최신화하기 위해 재검증
-  useEffect(() => {
-    void form.trigger();
-    // form 인스턴스는 불변으로 간주
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLocale]);
-
   const onSubmit = async (data: ISignUpFormValues) => {
     const signUpData = {
       email: data.email,
