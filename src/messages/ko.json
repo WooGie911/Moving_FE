@@ -349,6 +349,14 @@
     }
   },
   "customerEstimateRequest": {
+    "noEstimateInProgress": "진행중인 견적이 없습니다.",
+    "requestNewEstimate": "새로운 견적을 요청해보세요.",
+    "goToCreateEstimate": "견적 작성하러가기",
+    "moversReviewing": "기사님들이 열심히 확인중이예요.",
+    "estimateComingSoon": "곧 견적이 도착할 거예요.",
+    "noDataAvailable": "데이터를 불러올 수 없습니다.",
+    "noPastEstimates": "과거 받았던 견적이 없습니다.",
+    "completeMoveToSeeHistory": "이사를 완료하면 견적 내역을 확인할 수 있습니다.",
     "requestDate": "견적신청일",
     "movingDate": "이사일",
     "driverSuffix": "기사님",
@@ -683,7 +691,9 @@
       "estimateCardButtonGroup": "견적 카드 버튼 그룹",
       "estimateRequestList": "받은 견적 요청 목록",
       "estimateRequestItem": "견적 요청 항목",
-      "emptyStateImage": "견적 내역이 없음을 나타내는 이미지"
+      "emptyStateImage": "견적 내역이 없음을 나타내는 이미지",
+      "loadingSection": "로딩 섹션",
+      "errorSection": "오류 섹션"
     },
     "ariaLabels": {
       "emptyStateImage": "견적 내역이 없음을 나타내는 이미지",
@@ -1679,7 +1689,7 @@
     "completedMoveMessage": "이사가 완료되었습니다",
     "rejectedRequestCardMessage": "반려된 요청입니다",
     "viewEstimateDetail": "견적 상세보기",
-    "rejectedRequestMessage": "반려된 요청입니다",
+    "rejectedRequestMessage": "기사님께서 반려한 요청입니다",
     "confirmedEstimate": "확정된 견적",
     "customerSuffix": "님",
     "departure": "출발지",
@@ -1750,7 +1760,7 @@
     "estimatePrice": "견적가",
     "rejectedEstimateNoPrice": "견적이 반려되어 견적가를 확인할 수 없습니다",
     "profileImage": "프로필 이미지",
-    "rejectedEstimateMessage": "반려된 견적입니다",
+    "rejectedEstimateMessage": "기사님께서 반려한 견적입니다",
     "sharedEstimateMessage": "공유된 견적입니다",
     "rejectionDate": "반려 일자",
     "metadata": {

@@ -84,30 +84,12 @@ export const useAddFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.addFavorite(moverId),
-    onSuccess: (data, moverId) => {
-      // 캐싱 제거: 무효화 대신 직접 최신 값만 적용
-
-      // 즉시 캐시 업데이트 (백업)
-      queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
-        if (!oldData?.pages) return oldData;
-
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: any) => ({
-            ...page,
-            items: page.items.map((mover: any) =>
-              mover.id === moverId
-                ? { ...mover, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited }
-                : mover,
-            ),
-          })),
-        };
-      });
-
-      queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
-        if (!oldData) return oldData;
-        return { ...oldData, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited };
-      });
+    onSuccess: () => {
+      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
     },
   });
 };
@@ -118,59 +100,12 @@ export const useRemoveFavorite = () => {
 
   return useMutation({
     mutationFn: (moverId: string) => findMoverApi.removeFavorite(moverId),
-    onSuccess: (data, moverId) => {
-      // 캐싱 제거: 무효화 대신 직접 최신 값만 적용
-
-      // 즉시 캐시 업데이트 (백업)
-      queryClient.setQueriesData({ queryKey: ["movers"] }, (oldData: any) => {
-        if (!oldData?.pages) return oldData;
-
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: any) => ({
-            ...page,
-            items: page.items.map((mover: any) =>
-              mover.id === moverId
-                ? { ...mover, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited }
-                : mover,
-            ),
-          })),
-        };
-      });
-
-      queryClient.setQueriesData({ queryKey: ["mover", moverId] }, (oldData: any) => {
-        if (!oldData) return oldData;
-        return { ...oldData, favoriteCount: data.favoriteCount, isFavorited: data.isFavorited };
-      });
-
-      // 즐겨찾기 무한 목록에서도 즉시 제거 (옵티미스틱 후속 보장)
-      queryClient.setQueriesData({ queryKey: ["favoriteMovers"] }, (oldData: any) => {
-        // infiniteQuery 형태 처리
-        if (oldData?.pages) {
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page: any) => ({
-              ...page,
-              items: (page.items || []).filter((mover: any) => mover.id !== moverId),
-            })),
-          };
-        }
-
-        // 일반 query에서 select로 items 배열만 보관하는 경우 (preview 리스트)
-        if (Array.isArray(oldData)) {
-          return oldData.filter((mover: any) => mover.id !== moverId);
-        }
-
-        // 일반 query 원형을 보관하는 경우
-        if (oldData?.items) {
-          return {
-            ...oldData,
-            items: (oldData.items || []).filter((mover: any) => mover.id !== moverId),
-          };
-        }
-
-        return oldData;
-      });
+    onSuccess: () => {
+      // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
+      queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["movers"] });
+      queryClient.invalidateQueries({ queryKey: ["favoriteMovers"] });
     },
   });
 };

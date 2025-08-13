@@ -29,6 +29,7 @@ const Favorite = ({
   disabled = false, // 기본값은 false
 }: IFavoriteProps) => {
   const t = useTranslations("mover");
+  
   const { isLiked, toggleLike, isLoading } = useLikeToggle({
     moverId: String(moverId),
     initialIsLiked: initialIsFavorited,
