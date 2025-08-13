@@ -17,56 +17,7 @@ import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/tra
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import * as Sentry from "@sentry/nextjs";
-
-
-const SERVICE_OPTIONS = ["small", "home", "office"];
-const REGION_OPTIONS = [
-  "서울",
-  "경기",
-  "인천",
-  "강원",
-  "충북",
-  "충남",
-  "세종",
-  "대전",
-  "전북",
-  "전남",
-  "광주",
-  "경북",
-  "경남",
-  "대구",
-  "울산",
-  "부산",
-  "제주",
-];
-
-// 서비스 타입 매핑
-const serviceTypeMapping: { [key: string]: string } = {
-  "소형이사": "SMALL",
-  "가정이사": "HOME",
-  "사무실이사": "OFFICE",
-};
-
-// 지역 매핑
-const regionTypeMapping: { [key: string]: string } = {
-  서울: "SEOUL",
-  경기: "GYEONGGI",
-  인천: "INCHEON",
-  강원: "GANGWON",
-  충북: "CHUNGBUK",
-  충남: "CHUNGNAM",
-  세종: "SEJONG",
-  대전: "DAEJEON",
-  전북: "JEONBUK",
-  전남: "JEONNAM",
-  광주: "GWANGJU",
-  경북: "GYEONGBUK",
-  경남: "GYEONGNAM",
-  대구: "DAEGU",
-  울산: "ULSAN",
-  부산: "BUSAN",
-  제주: "JEJU",
-};
+import { SERVICE_OPTIONS, REGION_OPTIONS, SERVICE_MAPPING, REGION_MAPPING } from "@/constant/profile";
 
 const defaultValues = {
   nickname: "",
@@ -98,12 +49,15 @@ export default function MoverEditPage() {
   const intro = watch("intro");
   const desc = watch("desc");
 
-  // 컴포넌트 마운트 시 로딩 상태 시작
   useEffect(() => {
     setIsLoading(true);
   }, []);
 
-  // 프로필 정보 불러와서 폼 초기값 세팅
+  useEffect(() => {
+    setServices([]);
+    setRegions([]);
+  }, [locale]);
+
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -116,30 +70,18 @@ export default function MoverEditPage() {
             desc: res.data.detailIntro || "",
           });
 
-          // 서비스 타입 설정
           if (res.data.serviceTypes) {
-            const serviceNames = res.data.serviceTypes
-              .map((type: string) => {
-                // MoveType enum을 한글 이름으로 변환
-                const serviceNameMap: { [key: string]: string } = {
-                  SMALL: "소형이사",
-                  HOME: "가정이사",
-                  OFFICE: "사무실이사",
-                };
-                return serviceNameMap[type] || "";
-              })
+            const serviceCodes = res.data.serviceTypes
+              .map((type: string) => type)
               .filter(Boolean);
-            setServices(serviceNames);
+            setServices(serviceCodes);
           }
 
-          // 지역 설정
           if (res.data.currentAreas) {
-            const regionNames = res.data.currentAreas
-              .map((area: string) => {
-                return regionLabelMap[area] || "";
-              })
+            const areaCodes = res.data.currentAreas
+              .map((area: string) => area)
               .filter(Boolean);
-            setRegions(regionNames);
+            setRegions(areaCodes);
           }
 
           // 이미지 설정
@@ -195,11 +137,8 @@ export default function MoverEditPage() {
         imageUrl = await userApi.uploadFilesToS3(selectedImage.file);
       }
 
-      // 서비스 타입을 API 형식으로 변환
-      const serviceTypes = services.map((service) => serviceTypeMapping[service]).filter(Boolean);
-
-      // 지역을 API 형식으로 변환 (여러 지역 지원)
-      const currentAreas = regions.map((region) => regionTypeMapping[region]).filter(Boolean);
+      const serviceTypes = services;
+      const currentAreas = regions;
 
       const req = {
         nickname: data.nickname,
@@ -209,7 +148,7 @@ export default function MoverEditPage() {
         shortIntro: data.intro,
         detailIntro: data.desc,
         career: parseInt(data.career),
-        isVeteran: false, // 기본값
+        isVeteran: false,
       };
 
       const result = await userApi.updateMoverProfile(req);
@@ -408,24 +347,19 @@ export default function MoverEditPage() {
                 </div>
                 <div className="flex flex-wrap items-start gap-1.5 lg:gap-3">
                   {SERVICE_OPTIONS.map((service) => {
-                    const serviceNameMap: { [key: string]: string } = {
-                      small: "소형이사",
-                      home: "가정이사", 
-                      office: "사무실이사",
-                    };
-                    const serviceName = serviceNameMap[service];
+                    const serviceCode = SERVICE_MAPPING[service as keyof typeof SERVICE_MAPPING];
                     
                     return (
                       <CircleTextLabel
                         key={service}
                         text={moverT(`serviceTypes.${service}`)}
                         clickAble={true}
-                        isSelected={services.includes(serviceName)}
+                        isSelected={services.includes(serviceCode)}
                         onClick={() =>
                           setServices((prev) =>
-                            prev.includes(serviceName)
-                              ? prev.filter((s) => s !== serviceName)
-                              : [...prev, serviceName],
+                            prev.includes(serviceCode)
+                              ? prev.filter((s) => s !== serviceCode)
+                              : [...prev, serviceCode],
                           )
                         }
                       />
@@ -445,19 +379,23 @@ export default function MoverEditPage() {
                 </div>
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap items-start gap-2 lg:gap-3.5">
-                    {REGION_OPTIONS.map((region) => (
-                      <CircleTextLabel
-                        key={region}
-                        text={getRegionTranslation(regionTypeMapping[region], tRegions)}
-                        clickAble={true}
-                        isSelected={regions.includes(region)}
-                        onClick={() =>
-                          setRegions((prev) =>
-                            prev.includes(region) ? prev.filter((r) => r !== region) : [...prev, region],
-                          )
-                        }
-                      />
-                    ))}
+                    {REGION_OPTIONS.map((region) => {
+                      const regionValue = REGION_MAPPING[region as keyof typeof REGION_MAPPING];
+                      
+                      return (
+                        <CircleTextLabel
+                          key={region}
+                          text={getRegionTranslation(regionValue, tRegions)}
+                          clickAble={true}
+                          isSelected={regions.includes(regionValue)}
+                          onClick={() =>
+                            setRegions((prev) =>
+                              prev.includes(regionValue) ? prev.filter((r) => r !== regionValue) : [...prev, regionValue],
+                            )
+                          }
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </div>
