@@ -48,7 +48,7 @@ export const RequestDetailMain = ({ data }: { data: TMyEstimateResponse }) => {
           role="region"
         >
           <h2 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]">
-            {`${data.estimateRequest.customer.name}${t("customerSuffix")}`}
+            {`${data.estimateRequest.customer.nickname}${t("customerSuffix")}`}
           </h2>
           <div className="hidden md:block">
             <div className="flex flex-row items-center justify-end gap-1">

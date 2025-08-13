@@ -178,48 +178,13 @@ export const SharePage = () => {
               role="region"
             >
               <h2 className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]">
-                {`${estimateRequest.customer.name}${t("customerSuffix")}${t("customerEstimate")}`}
+                {`${estimateRequest.customer.nickname}${t("customerSuffix")}${t("customerEstimate")}`}
               </h2>
-              <div className="hidden md:block">
-                <div className="flex flex-row items-center justify-end gap-1">
-                  {estimateRequest.status === "PROPOSED" ? (
-                    <p
-                      className="text-[16px] leading-[26px] font-semibold text-gray-300"
-                      aria-label={t("ariaLabels.estimateWaiting")}
-                    >
-                      {t("estimateWaiting")}
-                    </p>
-                  ) : estimateRequest.status === "ACCEPTED" ? (
-                    <div
-                      className="flex flex-row items-center justify-center gap-1"
-                      aria-label={t("ariaLabels.confirmedEstimate")}
-                      role="group"
-                    >
-                      <Image
-                        src={confirm}
-                        alt=""
-                        width={16}
-                        height={16}
-                        className="object-contain"
-                        aria-hidden="true"
-                      />
-                      <p className="text-primary-400 text-[16px] leading-[26px] font-bold">{t("confirmedEstimate")}</p>
-                    </div>
-                  ) : (
-                    <p
-                      className="text-[16px] leading-[26px] font-semibold text-gray-300"
-                      aria-label={t("ariaLabels.rejectedEstimate")}
-                    >
-                      {t("rejectedEstimate")}
-                    </p>
-                  )}
-                </div>
-              </div>
             </section>
 
             {/* 견적가 */}
             <section // Changed from div to section
-              className="border-border-light my-2 flex w-full flex-row items-center justify-between border-b-1 pt-28 pb-7 md:justify-start md:gap-15"
+              className="border-border-light my-2 flex w-full flex-row items-center justify-between border-b-1 pb-7 md:justify-start md:gap-15"
               aria-label={t("ariaLabels.estimatePriceSection")}
               role="region"
             >
@@ -361,90 +326,4 @@ export const SharePage = () => {
       </section>
     </main>
   );
-
-  //   <div className="mx-auto max-w-4xl p-6">
-  //     <h1 className="mb-6 text-2xl font-bold">공유된 견적</h1>
-
-  //     {estimateRequest && (
-  //       <div className="mb-6 rounded-lg bg-white p-6 shadow-md">
-  //         <h2 className="mb-4 text-xl font-semibold">견적 요청 정보</h2>
-
-  //         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">이사 유형</h3>
-  //             <p className="text-gray-900">{estimateRequest.moveType}</p>
-  //           </div>
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">이사 날짜</h3>
-  //             <p className="text-gray-900">{new Date(estimateRequest.moveDate).toLocaleDateString()}</p>
-  //           </div>
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">출발지</h3>
-  //             <p className="text-gray-900">
-  //               {estimateRequest.fromAddress.region} {estimateRequest.fromAddress.city}{" "}
-  //               {estimateRequest.fromAddress.district}
-  //               {estimateRequest.fromAddress.detail && ` ${estimateRequest.fromAddress.detail}`}
-  //             </p>
-  //           </div>
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">도착지</h3>
-  //             <p className="text-gray-900">
-  //               {estimateRequest.toAddress.region} {estimateRequest.toAddress.city} {estimateRequest.toAddress.district}
-  //               {estimateRequest.toAddress.detail && ` ${estimateRequest.toAddress.detail}`}
-  //             </p>
-  //           </div>
-
-  //           {estimateRequest.description && (
-  //             <div className="md:col-span-2">
-  //               <h3 className="mb-2 font-medium text-gray-700">추가 요청사항</h3>
-  //               <p className="text-gray-900">{estimateRequest.description}</p>
-  //             </div>
-  //           )}
-  //         </div>
-  //       </div>
-  //     )}
-
-  //     {estimate ? (
-  //       <div className="rounded-lg bg-white p-6 shadow-md">
-  //         <h2 className="mb-4 text-xl font-semibold">견적 정보</h2>
-
-  //         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">견적 금액</h3>
-  //             <p className="text-2xl font-bold text-blue-600">{estimate.price!.toLocaleString()}원</p>
-  //           </div>
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">견적 상태</h3>
-  //             <p className="text-gray-900">{estimate.status}</p>
-  //           </div>
-
-  //           {estimate.comment && (
-  //             <div className="md:col-span-2">
-  //               <h3 className="mb-2 font-medium text-gray-700">견적 설명</h3>
-  //               <p className="text-gray-900">{estimate.comment}</p>
-  //             </div>
-  //           )}
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">견적 생성일</h3>
-  //             <p className="text-gray-900">{new Date(estimate.createdAt).toLocaleDateString()}</p>
-  //           </div>
-
-  //           <div>
-  //             <h3 className="mb-2 font-medium text-gray-700">최종 수정일</h3>
-  //             <p className="text-gray-900">{new Date(estimate.updatedAt).toLocaleDateString()}</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     ) : (
-  //       <div className="rounded-lg bg-white p-6 shadow-md">
-  //         <h2 className="mb-4 text-xl font-semibold">견적 정보</h2>
-  //         <p className="text-gray-500">아직 견적이 등록되지 않았습니다.</p>
-  //       </div>
-  //     )}
-  //   </div>
 };

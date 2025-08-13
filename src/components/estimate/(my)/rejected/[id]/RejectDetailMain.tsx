@@ -53,7 +53,7 @@ export const RejectDetailMain = ({ data }: { data: TEstimateRequestResponse }) =
           <h2 // Changed from p to h2
             className="text-black-400 text-[18px] leading-[26px] font-semibold md:text-[24px] md:leading-[32px]"
           >
-            {`${data.customer.name}${t("customerSuffix")}${t("customerEstimate")}`}
+            {`${data.customer.nickname}${t("customerSuffix")}${t("customerEstimate")}`}
           </h2>
         </section>
 

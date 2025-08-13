@@ -12,6 +12,7 @@ import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { normalizeImageUrl } from "@/utils/apiUtils";
 
 export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -86,10 +87,10 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
         ) : (
           <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[12px]">
             <Image
-              src={mover.moverImage ? mover.moverImage : defaultProfile}
+              src={normalizeImageUrl(mover.moverImage)}
               alt={t("aria.moverProfileImage")}
               fill
-              className="object-contain"
+              className="object-cover"
             />
           </div>
         )}
