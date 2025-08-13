@@ -15,7 +15,7 @@ import { useModal } from "@/components/common/modal/ModalContext";
 
 export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const queryClient = useQueryClient();
   const { open, close } = useModal();
   const locale = useLocale();

@@ -13,7 +13,7 @@ interface IPcFillterSectionProps {
 }
 
 export const PcFillterSection = ({ filters, onFiltersChange, totalCount }: IPcFillterSectionProps) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
 
   // 이사 유형 변경 핸들러
   const handleTypeChange = (type: string) => {

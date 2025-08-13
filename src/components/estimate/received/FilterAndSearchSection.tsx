@@ -16,7 +16,7 @@ interface FilterAndSearchSectionProps {
 }
 
 export const FilterAndSearchSection = ({ filters, onFiltersChange, totalCount }: FilterAndSearchSectionProps) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
   const methods = useForm({
     defaultValues: {
       search: filters.searchKeyword,

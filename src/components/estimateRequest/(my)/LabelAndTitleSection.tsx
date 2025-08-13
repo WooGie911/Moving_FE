@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { mapServiceTypeToMoveType } from "@/lib/utils/mapServiceTypeToMoveType";
 
 export const LabelAndTitleSection = ({ mover, estimate, usedAt }: ILabelAndTitleSectionProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
 
   return (
     <section className="border-border-light flex w-full flex-col gap-3" aria-label={t("aria.labelAndTitleSection")}>

@@ -4,19 +4,18 @@ import React from "react";
 import { useTranslations, useLocale } from "next-intl";
 
 export const EstimateRequestInfo = (props: TEstimateRequestResponse) => {
-  const t = useTranslations("estimateRequest");
-  const tMoveTypes = useTranslations("moveTypes");
+  const t = useTranslations("customerEstimateRequest");
   const locale = useLocale();
 
   // movingType에 따른 다국어 텍스트 변환 함수
   const getMovingTypeText = (type: string) => {
     switch (type.toLowerCase()) {
       case "small":
-        return tMoveTypes("small");
+        return t("movingTypes.small");
       case "home":
-        return tMoveTypes("home");
+        return t("movingTypes.home");
       case "office":
-        return tMoveTypes("office");
+        return t("movingTypes.office");
       default:
         return type;
     }

@@ -17,6 +17,7 @@ import { getRegionLabel } from "@/lib/utils/regionMapping";
 
 interface ShareSectionProps {
   estimate?: {
+    id?: string;
     price: number;
     mover?: {
       nickname: string;
@@ -24,6 +25,7 @@ interface ShareSectionProps {
     };
   };
   estimateRequest?: {
+    id?: string;
     moveType: string;
     fromAddress: {
       region: string;
@@ -39,9 +41,28 @@ interface ShareSectionProps {
 }
 
 export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
   const locale = useLocale();
+
+  // 공유 URL 생성 함수
+  const generateShareUrl = () => {
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://gomoving.site";
+    const sharePath = `/${locale}/share`;
+
+    const params = new URLSearchParams();
+    if (estimate?.id) {
+      params.append("estimateId", estimate.id);
+    }
+    if (estimateRequest?.id) {
+      params.append("estimateRequestId", estimateRequest.id);
+    }
+
+    const queryString = params.toString();
+    const finalUrl = queryString ? `${baseUrl}${sharePath}?${queryString}` : `${baseUrl}${sharePath}`;
+
+    return finalUrl;
+  };
 
   // 견적 정보를 포함한 공유 메시지 생성
   const generateShareMessage = () => {
@@ -81,12 +102,12 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
   };
 
   const shareInfo = generateShareMessage();
+  const shareUrl = generateShareUrl();
 
   // 클립보드 복사 핸들러
   const handleClipCopy = async () => {
     try {
-      const currentUrl = getCurrentPageUrl();
-      const success = await copyToClipboard(currentUrl);
+      const success = await copyToClipboard(shareUrl);
 
       if (success) {
         showShareSuccess("clip");
@@ -102,8 +123,8 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
   // 카카오톡 공유 핸들러
   const handleKakaoShare = async () => {
     try {
-      const currentUrl = getCurrentPageUrl();
-      await shareToKakao(currentUrl, shareInfo.title, shareInfo.description, shareInfo.imageUrl);
+      await shareToKakao(shareUrl, shareInfo.title, shareInfo.description, shareInfo.imageUrl);
+
       showShareSuccess("kakao");
     } catch (error) {
       console.error("ShareSection - 카카오톡 공유 오류:", error);
@@ -114,8 +135,7 @@ export const ShareSection = ({ estimate, estimateRequest }: ShareSectionProps) =
   // 페이스북 공유 핸들러
   const handleFacebookShare = () => {
     try {
-      const currentUrl = getCurrentPageUrl();
-      shareToFacebook(currentUrl, shareInfo.title, shareInfo.description);
+      shareToFacebook(shareUrl, shareInfo.title, shareInfo.description);
       showShareSuccess("facebook");
     } catch (error) {
       console.error("페이스북 공유 오류:", error);

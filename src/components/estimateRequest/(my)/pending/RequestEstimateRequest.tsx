@@ -14,15 +14,14 @@ export const RequestEstimateRequest = ({
   fromAddress,
   toAddress,
 }: IEstimateRequestProps) => {
-  const t = useTranslations("estimateRequest");
+  const t = useTranslations("customerEstimateRequest");
   const tShared = useTranslations();
-  const tMoveTypes = useTranslations("moveTypes");
   const locale = useLocale();
 
   // movingType을 다국어로 변환하는 함수
   const getMovingTypeTranslated = (movingType: string): string => {
     const key = getMovingTypeKey(movingType);
-    return tMoveTypes(key);
+    return t(`movingTypes.${key}`);
   };
 
   // 이사일: 다국어 날짜 포맷

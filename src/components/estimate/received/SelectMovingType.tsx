@@ -8,7 +8,7 @@ interface SelectMovingTypeProps {
 }
 
 export const SelectMovingType = ({ selectedTypes, onTypeChange }: SelectMovingTypeProps) => {
-  const t = useTranslations("estimate");
+  const t = useTranslations("moverEstimate");
 
   const movingTypes = [
     { text: t("movingTypesFilter.small"), value: "SMALL" },
