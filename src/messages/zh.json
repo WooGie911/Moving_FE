@@ -853,6 +853,7 @@
       "errorTitle": "资料更新失败",
       "errorMessage": "更新失败。",
       "generalError": "发生错误。",
+      "loadingText": "正在加载资料编辑页面...",
       "confirm": "确认",
 
       "optional": "（可选）"
@@ -999,7 +1000,8 @@
       "reviews": "评论",
       "totalExperience": "总经验",
       "providedServices": "提供的服务",
-      "serviceAreas": "服务区域"
+      "serviceAreas": "服务区域",
+      "loadingText": "正在加载司机我的页面..."
     },
     "aria": {
       "searchResults": "共找到 {count} 位司机",
@@ -1092,7 +1094,8 @@
     "save": "保存更改",
     "successMessage": "个人资料更新成功。",
     "errorMessage": "更新失败。",
-    "generalError": "发生错误。"
+    "generalError": "发生错误。",
+    "loadingText": "正在加载基本信息编辑页面..."
   },
   "auth": {
     "signin": "登录",

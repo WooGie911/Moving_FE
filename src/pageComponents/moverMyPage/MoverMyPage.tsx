@@ -7,8 +7,8 @@ import defaultHeader from "@/assets/img/etc/detail-header.webp";
 import defaultProfileImage from "@/assets/img/mascot/moverprofile-lg.webp";
 import editIcon from "@/assets/icon/edit/icon-edit-white.svg";
 import editGrayIcon from "@/assets/icon/edit/icon-edit-gray.svg";
+import like from "@/assets/icon/like/icon-like-black.svg";
 import { CircleTextLabel } from "@/components/common/chips/CircleTextLabel";
-import Favorite from "@/components/common/button/Favorite";
 import { getRegionTranslation } from "@/lib/utils/translationUtils";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -17,6 +17,7 @@ import ReviewList from "@/components/searchMover/[id]/ReviewList";
 import { IMoverInfo } from "@/types/mover.types";
 import { IReview } from "@/types/review";
 import findMoverApi from "@/lib/api/findMover.api";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 
 const MoverMyPage = () => {
   const router = useRouter();
@@ -86,6 +87,15 @@ const MoverMyPage = () => {
     }
   }, [profile, locale]);
 
+  // 로딩 상태를 먼저 확인
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-gray-200">
+        <MovingTruckLoader size="lg" loadingText={t("myPage.loadingText")} />
+      </div>
+    );
+  }
+
   if (error !== "") {
     return (
       <div className="bg-bg-primary flex min-h-screen w-full items-center justify-center">
@@ -118,24 +128,10 @@ const MoverMyPage = () => {
         </div>
       </header>
 
-      {/* 스켈레톤 UI */}
+      {/* 로딩 상태 */}
       {isLoading ? (
-        <div className="mx-auto max-w-6xl px-8 py-8">
-          <div className="flex flex-col gap-8 md:flex-row md:gap-12 lg:flex-row lg:gap-24">
-            <div className="flex w-full max-w-[821px] flex-col gap-10">
-              <div className="flex items-center gap-3">
-                <div className="w-20 h-20 bg-gray-200 animate-pulse rounded-[20px]" />
-                <div className="flex flex-col gap-2">
-                  <div className="w-32 h-8 bg-gray-200 animate-pulse rounded" />
-                  <div className="w-24 h-4 bg-gray-200 animate-pulse rounded" />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="w-full h-4 bg-gray-200 animate-pulse rounded" />
-                <div className="w-3/4 h-4 bg-gray-200 animate-pulse rounded" />
-              </div>
-            </div>
-          </div>
+        <div className="flex min-h-screen w-full items-center justify-center bg-gray-200">
+          <MovingTruckLoader size="lg" loadingText={t("myPage.loadingText")} />
         </div>
       ) : (
         <div className="mx-auto max-w-6xl px-8 py-8">
@@ -170,17 +166,8 @@ const MoverMyPage = () => {
                         </h1>
                       </div>
                       <div className="inline-flex items-center justify-start gap-1">
-                        <Favorite
-                          isFavorited={true}
-                          favoriteCount={profile.favoriteCount || 0}
-                          moverId={profile.id}
-                          favoritedColor="text-black"
-                          unfavoritedColor="text-black"
-                          textColor="text-gray-500"
-                          heartPosition="left"
-                          onFavoriteChange={() => {}}
-                          disabled={true}
-                        />
+                        <span className="text-md leading-6 font-normal text-gray-500">{profile.favoriteCount || 0}</span>
+                        <Image src={like} alt="" className="h-3 w-[14px]" role="presentation" aria-hidden="true" />
                       </div>
                     </div>
                   </div>
@@ -264,7 +251,7 @@ const MoverMyPage = () => {
                     </div>
                     <div className="inline-flex items-center justify-start gap-1.5">
                       <div className="text-primary-400 justify-center text-lg leading-loose font-bold sm:text-xl">
-                        {(profile.averageRating || 0).toFixed(1)}
+                        {(profile.avgRating || 0).toFixed(1)}
                       </div>
                     </div>
                   </div>

@@ -882,6 +882,7 @@
       "errorTitle": "Profile Update Failed",
       "errorMessage": "Failed to update profile.",
       "generalError": "An error occurred.",
+      "loadingText": "Loading profile edit page...",
       "confirm": "Confirm",
 
       "optional": "(Optional)"
@@ -1029,7 +1030,8 @@
       "reviews": "Reviews",
       "totalExperience": "Career",
       "providedServices": "Provided Services",
-      "serviceAreas": "Service Areas"
+      "serviceAreas": "Service Areas",
+      "loadingText": "Loading mover my page..."
     },
     "aria": {
       "searchResults": "{count} movers found",
@@ -1105,7 +1107,8 @@
     "save": "Save Changes",
     "successMessage": "Profile updated successfully.",
     "errorMessage": "Update failed.",
-    "generalError": "An error occurred."
+    "generalError": "An error occurred.",
+    "loadingText": "Loading basic info edit page..."
   },
   "auth": {
     "signin": "Sign In",

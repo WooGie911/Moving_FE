@@ -15,6 +15,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import * as Sentry from "@sentry/nextjs";
 
 
@@ -88,6 +89,7 @@ export default function MoverEditPage() {
     file: null,
     dataUrl: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const methods = useForm({ defaultValues });
   const { watch, handleSubmit, setValue, reset } = methods;
@@ -95,6 +97,11 @@ export default function MoverEditPage() {
   const career = watch("career");
   const intro = watch("intro");
   const desc = watch("desc");
+
+  // 컴포넌트 마운트 시 로딩 상태 시작
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
 
   // 프로필 정보 불러와서 폼 초기값 세팅
   useEffect(() => {
@@ -152,6 +159,8 @@ export default function MoverEditPage() {
           },
         });
         showErrorToast("프로필 정보를 불러오는데 실패했습니다.");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchProfile();
@@ -234,6 +243,14 @@ export default function MoverEditPage() {
       showErrorToast(t("edit.generalError"));
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white">
+        <MovingTruckLoader size="lg" loadingText={t("edit.loadingText")} />
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
@@ -463,7 +480,7 @@ export default function MoverEditPage() {
                   width="w-full"
                   height="h-[54px] lg:h-14"
                   className="!hover:bg-white !focus:bg-white !active:bg-white order-2 items-center justify-center rounded-2xl border border-[1px] !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline-1 outline-offset-[-1px] lg:order-1"
-                  onClick={() => window.history.back()}
+                  onClick={() => router.push(`/${locale}/moverMyPage`)}
                 >
                   <div className="justify-center text-center">{t("edit.cancel")}</div>
                 </Button>

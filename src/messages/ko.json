@@ -841,6 +841,7 @@
       "errorTitle": "프로필 수정 실패",
       "errorMessage": "수정에 실패했습니다.",
       "generalError": "오류가 발생했습니다.",
+      "loadingText": "프로필 수정 페이지 불러오는 중...",
       "confirm": "확인",
       "name": "이름",
       "namePlaceholder": "이름을 입력해 주세요",
@@ -998,7 +999,8 @@
       "reviews": "리뷰",
       "totalExperience": "총 경력",
       "providedServices": "제공 서비스",
-      "serviceAreas": "서비스 가능 지역"
+      "serviceAreas": "서비스 가능 지역",
+      "loadingText": "기사님 마이페이지 불러오는 중..."
     },
     "aria": {
       "searchResults": "검색된 기사님 {count}명",
@@ -1074,7 +1076,8 @@
     "save": "수정하기",
     "successMessage": "기본정보가 성공적으로 수정되었습니다.",
     "errorMessage": "수정에 실패했습니다.",
-    "generalError": "오류가 발생했습니다."
+    "generalError": "오류가 발생했습니다.",
+    "loadingText": "기본정보 수정 페이지 불러오는 중..."
   },
   "auth": {
     "signin": "로그인",
