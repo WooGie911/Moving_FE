@@ -19,7 +19,13 @@
     "completeSelection": "Complete Selection",
     "editAnswer": "Edit",
     "success": "Success",
-    "retry": "Retry"
+    "retry": "Retry",
+    "unsaved": {
+      "leaveConfirmTitle": "Leave Confirm",
+      "leaveConfirmMessage1": "You have unsaved changes.",
+      "leaveConfirmMessage2": "Are you sure you want to leave this page?",
+      "leave": "Leave"
+    }
   },
   "shared": {
     "units": {
@@ -323,6 +329,14 @@
     "openDropdown": "Open Dropdown",
     "estimateRequestAndEstimates": "Estimate Request and Estimates",
     "aria": {
+      "main": "Estimate request page",
+      "progress": "Progress",
+      "content": "Estimate request content",
+      "question": "Question bubble",
+      "answer": "Answer bubble",
+      "questionContent": "Question content",
+      "answerContent": "Answer content",
+      "editAnswer": "Edit answer",
       "mainContent": "Pending estimate request page",
       "estimateRequestSection": "Estimate request information section",
       "estimateListSection": "Estimate list section",
@@ -365,6 +379,13 @@
       "departureLabel": "Departure label",
       "arrivalLabel": "Arrival label",
       "movingDateLabel": "Moving date label",
+      "introSection": "Estimate request introduction",
+      "movingTypeQuestionSection": "Moving type question",
+      "selectMovingTypeSection": "Select moving type",
+      "selectDateSection": "Select moving date",
+      "addressInputSection": "Address input",
+      "confirmInfoSection": "Review estimate request info",
+      "infoList": "Estimate request info list",
       "detailPageContent": "Estimate request detail page content",
       "detailPageLoadingSection": "Detail page loading section",
       "detailPageErrorSection": "Detail page error section",
@@ -559,6 +580,14 @@
     "all": "All",
     "requestDateShort": "Request date",
     "aria": {
+      "main": "Estimate request page",
+      "progress": "Progress",
+      "content": "Estimate request content",
+      "question": "Question bubble",
+      "answer": "Answer bubble",
+      "questionContent": "Question content",
+      "answerContent": "Answer content",
+      "editAnswer": "Edit answer",
       "mainContent": "Pending estimate request page",
       "estimateRequestSection": "Estimate request information section",
       "estimateListSection": "Estimate list section",

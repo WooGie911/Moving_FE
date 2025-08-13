@@ -45,6 +45,22 @@ export const useEstimateRequestApi = () => {
     queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active", locale] });
   }, [queryClient, locale]);
 
+  // 공통: 성공 토스트 + 쿼리 무효화 + 자동 새로고침
+  const reloadAfter = useCallback((delayMs: number = 300) => {
+    setTimeout(() => {
+      window.location.reload();
+    }, delayMs);
+  }, []);
+
+  const handleSuccessThenReload = useCallback(
+    (messageKey: string, delayMs?: number) => {
+      showSuccessToast(t(messageKey));
+      invalidateEstimateQueries();
+      reloadAfter(delayMs ?? 300);
+    },
+    [invalidateEstimateQueries, reloadAfter, t],
+  );
+
   // 공통 모달 생성 함수
   const createModal = useCallback(
     (title: string, message: string, onConfirm?: () => void, confirmText?: string) => {
@@ -156,14 +172,7 @@ export const useEstimateRequestApi = () => {
     mutationFn: (form: IFormState) => estimateRequestClientApi.create(form, locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 견적 생성 성공 토스트 표시
-        showSuccessToast(t("estimateRequest.createSuccess"));
-        // 관련 쿼리 무효화 및 즉시 재조회
-        invalidateEstimateQueries();
-        // 최신 활성 견적 상태를 반영하기 위해 페이지 새로고침
-        setTimeout(() => {
-          window.location.reload();
-        }, 800);
+        handleSuccessThenReload("estimateRequest.createSuccess");
       } else {
         showErrorModal(result.message || "견적 저장에 실패했습니다.");
       }
@@ -176,10 +185,7 @@ export const useEstimateRequestApi = () => {
     mutationFn: (form: IFormState) => estimateRequestClientApi.updateActive(form, locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 견적 수정 성공 토스트 표시
-        showSuccessToast(t("estimateRequest.editSuccess"));
-        // 관련 쿼리 무효화 및 즉시 재조회
-        invalidateEstimateQueries();
+        handleSuccessThenReload("estimateRequest.editSuccess");
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {
@@ -200,14 +206,7 @@ export const useEstimateRequestApi = () => {
     mutationFn: () => estimateRequestClientApi.cancelActive(locale),
     onSuccess: (result) => {
       if (result.success) {
-        // 삭제 성공 토스트 표시
-        showSuccessToast(t("estimateRequest.deleteSuccess"));
-        // 관련 쿼리 무효화 및 즉시 재조회
-        invalidateEstimateQueries();
-        // 생성 페이지로 이동하면서 전체 리로드 (뒤로가기 잔여 상태/캐시 이슈 방지)
-        setTimeout(() => {
-          window.location.replace("/estimateRequest/create");
-        }, 500);
+        handleSuccessThenReload("estimateRequest.deleteSuccess", 300);
       } else {
         // 기사님이 보낸 견적이 있는 경우 pending 페이지로 리다이렉트
         if (!checkEstimatesAndRedirect(result)) {

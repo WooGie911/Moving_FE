@@ -29,6 +29,14 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
 
   const progress = step === 4 ? 100 : step * 33;
 
+  // 변경 여부(dirty) 판단
+  const isDirty = React.useMemo(() => {
+    const hasMoving = !!form.movingType || !!form.movingDate;
+    const hasDeparture = !!form.departure.roadAddress || !!form.departure.detailAddress;
+    const hasArrival = !!form.arrival.roadAddress || !!form.arrival.detailAddress;
+    return hasMoving || hasDeparture || hasArrival;
+  }, [form]);
+
   // 과거에 사용하던 견적요청 드래프트 로컬스토리지 키를 더 이상 사용하지 않도록 초기화 시 제거
   useEffect(() => {
     try {
@@ -170,6 +178,7 @@ export const useEstimateRequestForm = (initialData?: Partial<IFormState>) => {
     pendingAnswer,
     setPendingAnswer,
     progress,
+    isDirty,
     isFormValid,
     handleSelectMovingType,
     handleDateChange,

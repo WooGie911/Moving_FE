@@ -57,8 +57,7 @@ const MovingTypeSection: React.FC<IMovingTypeSectionProps> = ({ value, onSelect 
                   <Image
                     src={image}
                     alt={t(`shared.movingTypes.${type}`)}
-                    width={120}
-                    height={120}
+                    fill
                     sizes="(min-width: 1024px) 120px, 96px"
                     decoding="sync"
                     className="object-contain"
