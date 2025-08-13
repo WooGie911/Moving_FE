@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import SpeechBubble from "@/components/estimateRequest/create/SpeechBubble";
 import { EstimateRequestLayout } from "@/components/estimateRequest/common/EstimateRequestLayout";
 import { EstimateRequestStepRenderer } from "@/components/estimateRequest/common/EstimateRequestStepRenderer";
@@ -9,6 +9,7 @@ import { useEstimateRequestApi } from "@/hooks/useEstimateRequestApi";
 import { useEstimateRequestAddressModal } from "@/hooks/useEstimateRequestAddressModal";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import { UseQueryResult } from "@tanstack/react-query";
+import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
 interface EstimateRequestFlowProps {
   title: string;
@@ -16,6 +17,7 @@ interface EstimateRequestFlowProps {
   customButtonText?: string;
   showConfirmModal?: (callback: () => void) => void;
   activeQuery?: UseQueryResult<any>;
+  enableUnsavedGuard?: boolean;
 }
 
 export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
@@ -24,6 +26,7 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
   customButtonText,
   showConfirmModal,
   activeQuery: externalActiveQuery,
+  enableUnsavedGuard = false,
 }) => {
   // 공통 훅들 사용
   const formLogic = useEstimateRequestForm();
@@ -38,12 +41,16 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
     pendingAnswer,
     setPendingAnswer,
     progress,
+    isDirty,
     handleAddressUpdate,
     renderAnswerBubble,
     renderPreviousAnswers,
     t,
     locale,
   } = formLogic;
+
+  // 이탈 방지 가드: 생성 플로우 등에서만 활성화
+  const { bypassNextNavigation, bypassFor } = useUnsavedChangesGuard(enableUnsavedGuard && isDirty);
 
   // 외부에서 전달받은 activeQuery 사용
   const activeQuery = externalActiveQuery;
@@ -83,13 +90,13 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
 
   return (
     <EstimateRequestLayout title={title} progress={progress}>
-      <section role="region" aria-label="견적 요청 소개">
+      <section role="region" aria-label={t("estimateRequest.aria.introSection")}>
         <SpeechBubble type="question">
           <span className="sr-only">견적 요청 안내: </span>
           {t("estimateRequest.intro")}
         </SpeechBubble>
       </section>
-      <section role="region" aria-label="이사 종류 질문">
+      <section role="region" aria-label={t("estimateRequest.aria.movingTypeQuestionSection")}>
         <SpeechBubble type="question">
           <span className="sr-only">이사 종류 질문: </span>
           {t("estimateRequest.movingTypeQuestion")}
@@ -115,7 +122,11 @@ export const EstimateRequestFlow: React.FC<EstimateRequestFlowProps> = ({
         onDateComplete={formLogic.handleDateComplete}
         onDepartureModal={handleDepartureModal}
         onArrivalModal={handleArrivalModal}
-        onConfirmEstimateRequest={onConfirm}
+        onConfirmEstimateRequest={(data) => {
+          // 제출 시에는 가드를 잠시 비활성화하여 네이티브 새로고침 경고를 방지
+          bypassFor(3000);
+          onConfirm(data);
+        }}
         customButtonText={customButtonText}
         showConfirmModal={showConfirmModal}
       />

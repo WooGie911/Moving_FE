@@ -95,7 +95,7 @@ export const ModalChild = ({ data, isDesignated, usedAt, onFormChange }: IModalP
         role="group"
       >
         <h2 className="text-black-400 text-[16px] leading-[26px] font-semibold md:text-[20px] md:leading-[32px]">
-          {`${data.customer.name}${t("customerSuffix")}`}
+          {`${data.customer.nickname}${t("customerSuffix")}`}{" "}
         </h2>
       </section>
 

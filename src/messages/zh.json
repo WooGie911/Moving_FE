@@ -19,7 +19,13 @@
     "completeSelection": "完成选择",
     "editAnswer": "修改",
     "success": "完成",
-    "retry": "重试"
+    "retry": "重试",
+    "unsaved": {
+      "leaveConfirmTitle": "离开确认",
+      "leaveConfirmMessage1": "您有未保存的更改。",
+      "leaveConfirmMessage2": "您确定要离开此页面吗？",
+      "leave": "离开"
+    }
   },
   "shared": {
     "units": {
@@ -154,6 +160,14 @@
     "all": "全部",
     "requestDateShort": "申请日期",
     "aria": {
+      "main": "报价请求页面",
+      "progress": "进度",
+      "content": "报价请求内容",
+      "question": "问题气泡",
+      "answer": "回答气泡",
+      "questionContent": "问题内容",
+      "answerContent": "回答内容",
+      "editAnswer": "修改回答",
       "mainContent": "待处理报价请求页面",
       "estimateRequestSection": "报价请求信息部分",
       "estimateListSection": "报价列表部分",
@@ -196,6 +210,13 @@
       "departureLabel": "出发地标签",
       "arrivalLabel": "目的地标签",
       "movingDateLabel": "搬家日期标签",
+      "introSection": "报价请求介绍",
+      "movingTypeQuestionSection": "搬家类型问题",
+      "selectMovingTypeSection": "选择搬家类型",
+      "selectDateSection": "选择搬家日期",
+      "addressInputSection": "地址输入",
+      "confirmInfoSection": "确认报价请求信息",
+      "infoList": "报价请求信息列表",
       "detailPageContent": "报价请求详情页面内容",
       "detailPageLoadingSection": "详情页面加载部分",
       "detailPageErrorSection": "详情页面错误部分",
@@ -330,6 +351,14 @@
     }
   },
   "customerEstimateRequest": {
+    "noEstimateInProgress": "没有进行中的报价。",
+    "requestNewEstimate": "请申请新的报价。",
+    "goToCreateEstimate": "去创建报价",
+    "moversReviewing": "司机们正在积极审核中。",
+    "estimateComingSoon": "报价即将到达。",
+    "noDataAvailable": "无法加载数据。",
+    "noPastEstimates": "没有收到过报价。",
+    "completeMoveToSeeHistory": "完成搬家后即可查看报价历史。",
     "requestDate": "报价申请日期",
     "movingDate": "搬家日期",
     "driverSuffix": "司机",
@@ -660,7 +689,9 @@
       "estimateCardButtonGroup": "报价卡片按钮组",
       "estimateRequestList": "收到的报价请求列表",
       "estimateRequestItem": "报价请求项目",
-      "emptyStateImage": "表示无报价历史的图片"
+      "emptyStateImage": "表示无报价历史的图片",
+      "loadingSection": "加载部分",
+      "errorSection": "错误部分"
     },
     "ariaLabels": {
       "emptyStateImage": "表示无报价历史的图片",

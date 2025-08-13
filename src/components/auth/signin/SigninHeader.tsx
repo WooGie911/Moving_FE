@@ -3,24 +3,25 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 
 const SigninHeader = ({ userType }: { userType: TUserType }) => {
   const t = useTranslations("auth");
+  const locale = useLocale();
 
   const getAlternateUserTypeInfo = () => {
     if (userType === "CUSTOMER") {
       return {
         message: t("areYouMover"),
         link: t("moverPage"),
-        href: "/moverSignin",
+        href: `/${locale}/moverSignin`,
       };
     } else {
       return {
         message: t("areYouCustomer"),
         link: t("customerPage"),
-        href: "/userSignin",
+        href: `/${locale}/userSignin`,
       };
     }
   };

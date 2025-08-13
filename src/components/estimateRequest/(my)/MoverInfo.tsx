@@ -12,6 +12,7 @@ import Link from "next/link";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/components/common/modal/ModalContext";
+import { normalizeImageUrl } from "@/utils/apiUtils";
 
 export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: IMoverInfoProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
 
   // mover 상태 업데이트 함수 - React Query 캐시만 사용
   const handleMoverUpdate = async () => {
-    // 견적 요청 관련 캐시 무효화
+    // 백엔드에서 캐시 무효화를 처리하므로 프론트엔드에서는 간단히 무효화만 수행
     queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
     queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
   };
@@ -52,6 +53,8 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
       // 캐시 무효화하여 데이터 새로고침
       queryClient.invalidateQueries({ queryKey: ["pendingEstimateRequests", locale] });
       queryClient.invalidateQueries({ queryKey: ["receivedEstimateRequests", locale] });
+      // 활성 견적요청(hasEstimate 포함)도 즉시 최신화
+      queryClient.invalidateQueries({ queryKey: ["estimateRequest", "active", locale] });
       // 기사님 관련 페이지 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ["MyRequestEstimates"] });
       queryClient.invalidateQueries({ queryKey: ["MyRejectedEstimates"] });
@@ -86,10 +89,10 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
         ) : (
           <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[12px]">
             <Image
-              src={mover.moverImage ? mover.moverImage : defaultProfile}
+              src={normalizeImageUrl(mover.moverImage)}
               alt={t("aria.moverProfileImage")}
               fill
-              className="object-contain"
+              className="object-cover"
             />
           </div>
         )}

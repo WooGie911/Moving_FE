@@ -3,7 +3,7 @@
 export const ESTIMATE_REQUEST_CARD_STYLES = {
   // MovingTypeCard 스타일
   movingType: {
-    base: "w-full rounded-2xl border flex flex-row items-center gap-4 px-4 py-5 transition-colors duration-200 lg:px-6 lg:py-6",
+    base: "w-full rounded-2xl border flex flex-row items-center gap-4 px-4 py-5 transition-colors duration-200 lg:px-6 lg:py-6 cursor-pointer",
     selected: "border-primary-400 bg-primary-50",
     unselected: "border-gray-200 bg-white",
     radioBase: "inline-block h-6 w-6 items-center justify-center rounded-full border-[1px] transition-colors",
@@ -14,6 +14,7 @@ export const ESTIMATE_REQUEST_CARD_STYLES = {
     textArea: "text-left",
     title: "text-black-500 text-base leading-[26px] font-semibold",
     description: "text-[14px] leading-6 font-normal text-gray-500",
+    // 이미지 수직 정렬 보정: 모두 중앙 정렬로 통일
     imageContainer: "flex w-1/3 items-center justify-end",
   },
 

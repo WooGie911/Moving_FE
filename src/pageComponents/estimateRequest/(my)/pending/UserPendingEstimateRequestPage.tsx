@@ -32,7 +32,6 @@ export const UserPendingEstimateRequestPage = () => {
         <MovingTruckLoader size="lg" loadingText={t("loading")} />
       </main>
     );
-
   if (isError)
     return (
       <main aria-label={t("aria.errorSection")}>

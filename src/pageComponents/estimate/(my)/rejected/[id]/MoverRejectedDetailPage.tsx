@@ -42,7 +42,6 @@ export const MoverRejectedDetailPage = () => {
     );
   }
 
-  console.log("data", data);
   // data에서 estimateRequestId와 일치하는 항목 찾기
   const mydata = Array.isArray(data) ? data.find((item: any) => item.id === id) : null;
 

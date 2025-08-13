@@ -98,6 +98,35 @@ export const createQueryKey = (baseKey: string, params: QueryParams): string[] =
 };
 
 /**
+ * 이미지 URL 검증 및 수정 함수
+ * Next.js Image 컴포넌트에서 사용할 수 있도록 URL을 정규화합니다.
+ */
+export const normalizeImageUrl = (imageUrl: string | null | undefined): string => {
+  if (!imageUrl) {
+    return "/img/mascot/profile.webp"; // 기본 프로필 이미지
+  }
+
+  // 이미 절대 URL인 경우 (http:// 또는 https://로 시작)
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  // 상대 경로인 경우 (파일명에 확장자가 있는 경우)
+  if (imageUrl.includes(".") && !imageUrl.startsWith("/")) {
+    // moverImage는 CloudFront URL로 변환
+    return `https://d29ije7v1csha8.cloudfront.net/mover/${imageUrl}`;
+  }
+
+  // 이미 올바른 상대 경로인 경우 (/로 시작)
+  if (imageUrl.startsWith("/")) {
+    return imageUrl;
+  }
+
+  // 기본값
+  return "/img/mascot/profile.webp";
+};
+
+/**
  * 에러 처리 헬퍼
  */
 export const handleApiError = (error: unknown, defaultMessage: string): string => {
