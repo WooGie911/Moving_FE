@@ -1,15 +1,17 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 import { SigninForm, SigninHeader } from "@/components/auth/signin";
 import { SocialLoginButtons, MascotCharacter } from "@/components/auth";
-import { useTranslations } from "next-intl";
 
 const UserSigninPage = () => {
   const t = useTranslations("auth");
+  const locale = useLocale();
 
   return (
     <main
+      key={locale}
       className="md:bg-primary-400 flex w-full items-center justify-center overflow-x-hidden bg-white sm:h-screen"
       aria-label={t("signinPageBg")}
     >
@@ -30,7 +32,7 @@ const UserSigninPage = () => {
 
         {/* 로그인 폼 */}
         <div className="mt-6 flex flex-col gap-6 md:gap-10" role="presentation" aria-label={t("signinPageForm")}>
-          <SigninForm userType="CUSTOMER" signupLink="/userSignup" />
+          <SigninForm userType="CUSTOMER" signupLink={`/${locale}/userSignup`} />
 
           <div
             className="flex flex-col items-center justify-center gap-6"

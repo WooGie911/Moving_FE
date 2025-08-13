@@ -3,13 +3,15 @@
 import React from "react";
 import { SignupForm, SignupHeader } from "@/components/auth/signup";
 import { SocialLoginButtons, MascotCharacter } from "@/components/auth";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const UserSignupPage = () => {
   const t = useTranslations("auth");
+  const locale = useLocale();
 
   return (
     <main
+      key={locale}
       className="md:bg-primary-400 flex h-screen min-h-[1100px] w-full items-center justify-center overflow-x-hidden bg-white md:min-h-[1300px]"
       aria-label={t("signupPageBg")}
     >
@@ -30,7 +32,7 @@ const UserSignupPage = () => {
 
         {/* 회원가입 폼 */}
         <div className="mt-6 flex flex-col gap-6 md:gap-10" role="presentation" aria-label={t("signupPageForm")}>
-          <SignupForm userType="CUSTOMER" signinLink="/userSignin" />
+          <SignupForm userType="CUSTOMER" signinLink={`/${locale}/userSignin`} />
 
           <div
             className="flex flex-col items-center justify-center gap-6"

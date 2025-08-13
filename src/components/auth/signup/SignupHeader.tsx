@@ -3,25 +3,25 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
-// Vercel CDN 최적화를 위해 public 경로 사용
+import { useLocale, useTranslations } from "next-intl";
 import { TUserType } from "@/types/user";
 
 const SignupHeader = ({ userType }: { userType: TUserType }) => {
   const t = useTranslations("auth");
+  const locale = useLocale();
 
   const getAlternateUserTypeInfo = () => {
     if (userType === "CUSTOMER") {
       return {
         message: t("areYouMover"),
         link: t("moverPage"),
-        href: "/moverSignup",
+        href: `/${locale}/moverSignup`,
       };
     } else {
       return {
         message: t("areYouCustomer"),
         link: t("customerPage"),
-        href: "/userSignup",
+        href: `/${locale}/userSignup`,
       };
     }
   };

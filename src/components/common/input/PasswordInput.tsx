@@ -9,6 +9,7 @@ import { useState } from "react";
 
 interface IInputProps {
   name: string;
+  id?: string;
   placeholder?: string;
   rules?: RegisterOptions;
   inputClassName?: string;
@@ -19,6 +20,7 @@ interface IInputProps {
 
 export const PasswordInput = ({
   name,
+  id,
   placeholder,
   rules,
   inputClassName,
@@ -55,6 +57,7 @@ export const PasswordInput = ({
   return (
     <BaseInput
       type={visible ? "text" : "password"}
+      id={id}
       placeholder={placeholder}
       error={error}
       icon={toggleIcon}
