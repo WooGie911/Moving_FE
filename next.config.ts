@@ -20,9 +20,9 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "example.com",
-        pathname: "/**",
       },
     ],
+    domains: ["d29ije7v1csha8.cloudfront.net", "example.com"],
     formats: ["image/webp", "image/avif"],
     deviceSizes: [375, 744, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
