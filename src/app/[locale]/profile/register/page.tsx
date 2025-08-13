@@ -2,6 +2,10 @@ import IndexRegisterPage from "@/pageComponents/profile/register/IndexRegisterPa
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+// ISR: 5분마다 재생성
+export const revalidate = 300;
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("profile.registerMetadata");
   return {
