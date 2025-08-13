@@ -15,6 +15,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { regionLabelMap } from "@/lib/utils/regionMapping";
 import { getServiceTypeTranslation, getRegionTranslation } from "@/lib/utils/translationUtils";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import * as Sentry from "@sentry/nextjs";
 
 
 const SERVICE_OPTIONS = ["small", "home", "office"];
@@ -87,6 +89,7 @@ export default function MoverEditPage() {
     file: null,
     dataUrl: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const methods = useForm({ defaultValues });
   const { watch, handleSubmit, setValue, reset } = methods;
@@ -95,48 +98,69 @@ export default function MoverEditPage() {
   const intro = watch("intro");
   const desc = watch("desc");
 
+  // 컴포넌트 마운트 시 로딩 상태 시작
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+
   // 프로필 정보 불러와서 폼 초기값 세팅
   useEffect(() => {
     async function fetchProfile() {
-      const res = await userApi.getProfile();
-      if (res.success && res.data) {
-        reset({
-          nickname: res.data.nickname || "",
-          career: res.data.career?.toString() || "",
-          intro: res.data.shortIntro || "",
-          desc: res.data.detailIntro || "",
+      try {
+        const res = await userApi.getProfile();
+        if (res.success && res.data) {
+          reset({
+            nickname: res.data.nickname || "",
+            career: res.data.career?.toString() || "",
+            intro: res.data.shortIntro || "",
+            desc: res.data.detailIntro || "",
+          });
+
+          // 서비스 타입 설정
+          if (res.data.serviceTypes) {
+            const serviceNames = res.data.serviceTypes
+              .map((type: string) => {
+                // MoveType enum을 한글 이름으로 변환
+                const serviceNameMap: { [key: string]: string } = {
+                  SMALL: "소형이사",
+                  HOME: "가정이사",
+                  OFFICE: "사무실이사",
+                };
+                return serviceNameMap[type] || "";
+              })
+              .filter(Boolean);
+            setServices(serviceNames);
+          }
+
+          // 지역 설정
+          if (res.data.currentAreas) {
+            const regionNames = res.data.currentAreas
+              .map((area: string) => {
+                return regionLabelMap[area] || "";
+              })
+              .filter(Boolean);
+            setRegions(regionNames);
+          }
+
+          // 이미지 설정
+          if (res.data.moverImage) {
+            setSelectedImage({ file: null, dataUrl: res.data.moverImage });
+          }
+        }
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            page: "mover-profile-edit-page",
+            action: "fetch-profile",
+          },
+          extra: {
+            component: "MoverEditPage",
+            method: "fetchProfile",
+          },
         });
-
-        // 서비스 타입 설정
-        if (res.data.serviceTypes) {
-          const serviceNames = res.data.serviceTypes
-            .map((type: string) => {
-              // MoveType enum을 한글 이름으로 변환
-              const serviceNameMap: { [key: string]: string } = {
-                SMALL: "소형이사",
-                HOME: "가정이사",
-                OFFICE: "사무실이사",
-              };
-              return serviceNameMap[type] || "";
-            })
-            .filter(Boolean);
-          setServices(serviceNames);
-        }
-
-        // 지역 설정
-        if (res.data.currentAreas) {
-          const regionNames = res.data.currentAreas
-            .map((area: string) => {
-              return regionLabelMap[area] || "";
-            })
-            .filter(Boolean);
-          setRegions(regionNames);
-        }
-
-        // 이미지 설정
-        if (res.data.moverImage) {
-          setSelectedImage({ file: null, dataUrl: res.data.moverImage });
-        }
+        showErrorToast("프로필 정보를 불러오는데 실패했습니다.");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchProfile();
@@ -196,10 +220,37 @@ export default function MoverEditPage() {
       } else {
         showErrorToast(result.message || t("edit.errorMessage"));
       }
-          } catch (e) {
-        showErrorToast(t("edit.generalError"));
-      }
+    } catch (e) {
+      Sentry.captureException(e, {
+        tags: {
+          page: "mover-profile-edit-page",
+          action: "update-profile",
+        },
+        extra: {
+          component: "MoverEditPage",
+          method: "onSubmit",
+          formData: {
+            nickname: data.nickname,
+            career: data.career,
+            intro: data.intro,
+            desc: data.desc,
+            services,
+            regions,
+            hasImage: !!selectedImage.file,
+          },
+        },
+      });
+      showErrorToast(t("edit.generalError"));
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white">
+        <MovingTruckLoader size="lg" loadingText={t("edit.loadingText")} />
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
@@ -429,7 +480,7 @@ export default function MoverEditPage() {
                   width="w-full"
                   height="h-[54px] lg:h-14"
                   className="!hover:bg-white !focus:bg-white !active:bg-white order-2 items-center justify-center rounded-2xl border border-[1px] !border-[#C4C4C4] bg-white px-6 py-4 text-base leading-relaxed font-semibold !text-[#C4C4C4] shadow-none outline-1 outline-offset-[-1px] lg:order-1"
-                  onClick={() => window.history.back()}
+                  onClick={() => router.push(`/${locale}/moverMyPage`)}
                 >
                   <div className="justify-center text-center">{t("edit.cancel")}</div>
                 </Button>

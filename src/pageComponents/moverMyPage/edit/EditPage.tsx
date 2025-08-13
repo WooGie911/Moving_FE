@@ -12,6 +12,8 @@ import userApi from "@/lib/api/user.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { useValidationRules } from "@/hooks/useValidationRules";
 import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
+import * as Sentry from "@sentry/nextjs";
 
 
 const EditPage = () => {
@@ -20,6 +22,7 @@ const EditPage = () => {
 
   const [formError, setFormError] = useState<string | null>(null);
   const [userProvider, setUserProvider] = useState<string>("LOCAL");
+  const [isLoading, setIsLoading] = useState(true);
   const t = useTranslations("edit");
   const authT = useTranslations("auth");
   const locale = useLocale();
@@ -39,18 +42,35 @@ const EditPage = () => {
   // 유저 정보 불러와서 폼 초기값 세팅
   useEffect(() => {
     async function fetchUser() {
-      const res = await userApi.getUser();
-      if (res.success && res.data) {
-        form.reset({
-          name: res.data.name || "",
-          email: res.data.email || "",
-          phone: res.data.phoneNumber || "",
-          currentPassword: "",
-          newPassword: "",
-          newPasswordConfirm: "",
+      try {
+        setIsLoading(true);
+        const res = await userApi.getUser();
+        if (res.success && res.data) {
+          form.reset({
+            name: res.data.name || "",
+            email: res.data.email || "",
+            phone: res.data.phoneNumber || "",
+            currentPassword: "",
+            newPassword: "",
+            newPasswordConfirm: "",
+          });
+          // 유저의 provider 정보 저장
+          setUserProvider(res.data.provider || "LOCAL");
+        }
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            page: "mover-edit-page",
+            action: "fetch-user",
+          },
+          extra: {
+            component: "EditPage",
+            method: "fetchUser",
+          },
         });
-        // 유저의 provider 정보 저장
-        setUserProvider(res.data.provider || "LOCAL");
+        showErrorToast("사용자 정보를 불러오는데 실패했습니다.");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchUser();
@@ -104,10 +124,34 @@ const EditPage = () => {
           showErrorToast(result.message || t("errorMessage"));
         }
       }
-          } catch (e) {
-        showErrorToast(t("generalError"));
-      }
+    } catch (e) {
+      Sentry.captureException(e, {
+        tags: {
+          page: "mover-edit-page",
+          action: "update-basic-info",
+        },
+        extra: {
+          component: "EditPage",
+          method: "onSubmit",
+          formData: {
+            name: data.name,
+            phone: data.phone,
+            hasCurrentPassword: !!data.currentPassword,
+            hasNewPassword: !!data.newPassword,
+          },
+        },
+      });
+      showErrorToast(t("generalError"));
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-white">
+        <MovingTruckLoader size="lg" loadingText={t("loadingText")} />
+      </div>
+    );
+  }
 
   return (
           <div className="flex min-h-[90vh] w-full items-center justify-center bg-white">
@@ -210,7 +254,7 @@ const EditPage = () => {
               <button
                 type="button"
                 className="h-[54px] w-full rounded-xl px-6 py-4 text-base font-semibold text-neutral-400 shadow-[4px_4px_10px_0px_rgba(195,217,242,0.20)] outline outline-1 outline-offset-[-1px] outline-stone-300 lg:h-[60px] lg:w-[240px] cursor-pointer"
-                onClick={() => router.back()}
+                onClick={() => router.push(`/${locale}/moverMyPage`)}
               >
                 {t("cancel")}
               </button>
