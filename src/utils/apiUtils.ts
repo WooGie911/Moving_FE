@@ -51,7 +51,7 @@ export const getErrorMessage = (status: number): string => {
 export const apiCall = async <T>(endpoint: string, options: ApiCallOptions = {}): Promise<T> => {
   try {
     const token = await getAccessToken();
-    const apiBaseURL = options.baseURL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+    const apiBaseURL = options.baseURL || process.env.NEXT_PUBLIC_API_URL;
     const url = `${apiBaseURL}${endpoint}`;
 
     // 로깅 (개발 환경에서만)

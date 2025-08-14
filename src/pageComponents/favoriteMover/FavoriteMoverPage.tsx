@@ -138,7 +138,6 @@ const FavoriteMoverPage = () => {
         await fetchNextPage();
       }
     } catch (error) {
-      console.error("선택된 항목 삭제 실패:", error);
       // 롤백: 옵티미스틱 업데이트 복구
       if (previousInfiniteData) {
         queryClient.setQueryData(infiniteKey, previousInfiniteData as any);
