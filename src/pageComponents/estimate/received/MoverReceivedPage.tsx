@@ -130,14 +130,14 @@ export const MoverReceivedPage = () => {
   if (!data || (!data.regionEstimateRequests?.length && !data.designatedEstimateRequests?.length)) {
     return (
       <main role="main" aria-label={t("receivedRequests")}>
-        <div className="mx-auto flex h-full w-full flex-col items-center justify-center">
+        <div className="mx-auto flex min-h-screen w-full flex-col items-center justify-center">
           <header className="flex w-full max-w-[1200px] justify-start px-6 md:px-18 lg:px-0">
             <h1 className="text-2lg text-black-500 cursor-pointer py-4 font-bold whitespace-nowrap transition-colors">
               {t("receivedRequests")}
             </h1>
           </header>
           <section
-            className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
+            className="flex min-h-screen w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
             aria-label={t("noAvailableEstimatesMessage1")}
           >
             <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">

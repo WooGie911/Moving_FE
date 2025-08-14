@@ -8,8 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
 import { FavoriteService } from "@/services/favoriteService";
 import Image from "next/image";
-import like from "@/assets/icon/like/icon-like-red.svg";
-import unlike from "@/assets/icon/like/icon-like-black.svg";
+import like from "@/assets/icon/like/icon-like-black.svg";
+import unlike from "@/assets/icon/like/icon-like-white-lg.svg";
 
 interface LgButtonSectionProps {
   estimateId: string;

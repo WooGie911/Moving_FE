@@ -47,7 +47,7 @@ export const UserPendingEstimateRequestPage = () => {
         </nav>
         <section
           aria-label={t("aria.emptyStateSection")}
-          className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+          className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fafafa]"
         >
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
@@ -98,10 +98,10 @@ export const UserPendingEstimateRequestPage = () => {
       )}
       <section
         aria-label={t("aria.estimateListSection")}
-        className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+        className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fafafa]"
       >
         {estimates.length === 0 ? (
-          <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
+          <div className="flex min-h-screen flex-col items-center justify-center">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
               <Image src={noEstimate} alt={t("aria.noEstimateImage")} fill className="object-contain" priority />
             </div>
@@ -109,7 +109,7 @@ export const UserPendingEstimateRequestPage = () => {
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("estimateComingSoon")}</div>
           </div>
         ) : (
-          <div className="mb-[66px] flex w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
+          <div className="mb-[66px] flex h-full w-full flex-col items-center justify-center gap-4 px-6 pt-[35px] md:mb-[98px] md:px-18 md:pt-[42px] lg:mx-auto lg:mb-[122px] lg:grid lg:max-w-[1200px] lg:grid-cols-2 lg:items-start lg:gap-6 lg:pt-[78px]">
             {estimates.map((item) => (
               <article key={item.id} aria-label={t("aria.estimateCard")}>
                 <CardList
