@@ -27,7 +27,6 @@ export default function NotificationSSEProvider({ children }: { children: React.
   const connectSSE = useNotificationStore(connectSSESelector);
   const disconnectSSE = useNotificationStore(disconnectSSESelector);
   const isSSEConnected = useNotificationStore(isSSEConnectedSelector);
-  const fetchNotifications = useNotificationStore(fetchNotificationsSelector);
   const { user } = useAuth();
 
   useEffect(() => {
