@@ -117,18 +117,16 @@ const FilterBar = () => {
           />
         </div>
 
-        {/* 초기화 버튼 -> 데스크탑에서만 보임 */}
-        {deviceType === "desktop" && (
-          <button
-            type="button"
-            onClick={reset}
-            className="hover:text-primary-400 focus:ring-primary-400 ml-[25px] cursor-pointer rounded text-lg font-medium text-[#ababab] focus:ring-2 focus:ring-offset-2 focus:outline-none"
-            aria-label="모든 필터 초기화"
-            title="선택한 지역과 서비스 타입을 초기화합니다"
-          >
-            {t("reset")}
-          </button>
-        )}
+        {/* 초기화 버튼 */}
+        <button
+          type="button"
+          onClick={reset}
+          className="hover:text-primary-400 focus:ring-primary-400 ml-[25px] cursor-pointer rounded text-lg font-medium text-[#ababab] focus:ring-2 focus:ring-offset-2 focus:outline-none"
+          aria-label="모든 필터 초기화"
+          title="선택한 지역과 서비스 타입을 초기화합니다"
+        >
+          {t("reset")}
+        </button>
       </div>
 
       {/* 정렬 */}

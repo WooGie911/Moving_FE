@@ -14,7 +14,7 @@ const SearchBar = () => {
 
   useEffect(() => {
     setInput(search || "");
-  }, []);
+  }, [search]);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +58,28 @@ const SearchBar = () => {
         placeholder={t("searchPlaceholder")}
         value={input}
         onChange={handleInputChange}
-        className="focus:ring-primary-400 bg-bg-secondary text-md lg:text-2lg placeholder:text-md lg:placeholder:text-2lg placeholder:text-gray-450 h-full w-full rounded-2xl pl-[46px] focus:border-transparent focus:ring-2 focus:outline-none lg:pl-17"
+        className="focus:ring-primary-400 bg-bg-secondary text-md lg:text-2lg placeholder:text-md lg:placeholder:text-2lg placeholder:text-gray-450 h-full w-full rounded-2xl pr-12 pl-[46px] focus:border-transparent focus:ring-2 focus:outline-none lg:pl-17"
         aria-label="기사님 검색"
         aria-describedby="search-description"
         role="searchbox"
         autoComplete="off"
       />
+      {/* 검색어 초기화 버튼 */}
+      {input && (
+        <button
+          type="button"
+          onClick={() => {
+            setInput("");
+            setSearch("");
+          }}
+          className="focus:ring-primary-400 absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer rounded-full p-1 text-gray-400 hover:text-gray-600 focus:ring-2 focus:outline-none"
+          aria-label="검색어 지우기"
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
       <span id="search-description" className="sr-only">
         입력하시면 실시간으로 기사님을 검색합니다. 기사님 이름이나 지역명으로 검색 가능합니다.
       </span>
