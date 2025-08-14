@@ -123,7 +123,7 @@ export const ShareButton = ({
   return (
     <button
       type="button"
-      className={`flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none ${sizeClass} ${className} ${
+      className={`flex cursor-pointer items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none ${sizeClass} ${className} ${
         type === "clip" ? `border border-gray-200 bg-white ${clipRoundedClass}` : ""
       }`}
       onClick={handleClick}

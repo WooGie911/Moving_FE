@@ -72,7 +72,7 @@ const SearchBar = () => {
             setInput("");
             setSearch("");
           }}
-          className="focus:ring-primary-400 absolute top-1/2 right-4 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:text-gray-600 focus:ring-2 focus:outline-none"
+          className="focus:ring-primary-400 absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer rounded-full p-1 text-gray-400 hover:text-gray-600 focus:ring-2 focus:outline-none"
           aria-label="검색어 지우기"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

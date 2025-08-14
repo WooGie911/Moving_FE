@@ -8,8 +8,8 @@ interface IPaginationButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   size?: TPaginationSize;
-  isArrow?: boolean; 
-  isRightArrow?: boolean; 
+  isArrow?: boolean;
+  isRightArrow?: boolean;
 }
 
 export default function PaginationButton({
@@ -25,20 +25,20 @@ export default function PaginationButton({
     <button
       type="button"
       className={clsx(
-        "flex items-center justify-center rounded transition-colors bg-white min-w-0",
-        size === "sm" ? "w-8 h-8 text-sm" : "w-12 h-12 text-lg",
+        "flex min-w-0 cursor-pointer items-center justify-center rounded bg-white transition-colors",
+        size === "sm" ? "h-8 w-8 text-sm" : "h-12 w-12 text-lg",
         isArrow
           ? isRightArrow
             ? disabled
               ? "text-[#C4C4C4]"
               : "text-black"
             : disabled
-            ? "text-[#C4C4C4]"
-            : "text-black"
+              ? "text-[#C4C4C4]"
+              : "text-black"
           : active
-          ? "text-black font-bold"
-          : "text-[#C4C4C4]",
-        disabled && "opacity-50 cursor-not-allowed"
+            ? "font-bold text-black"
+            : "text-[#C4C4C4]",
+        disabled && "cursor-not-allowed opacity-50",
       )}
       onClick={onClick}
       disabled={disabled}
@@ -46,4 +46,4 @@ export default function PaginationButton({
       {children}
     </button>
   );
-} 
+}
