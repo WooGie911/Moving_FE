@@ -8,20 +8,11 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 0.1, // 10%만 샘플링하여 성능 향상
+  tracesSampleRate: 1,
 
   // Enable logs to be sent to Sentry
-  enableLogs: false, // 로그 비활성화로 성능 향상
+  enableLogs: true,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
-
-  // 성능 최적화 설정
-  beforeSend(event) {
-    // 메인 스레드 블로킹 방지를 위해 비동기 처리
-    return event;
-  },
-
-  // 에러 샘플링 비율 낮춤
-  sampleRate: 0.1, // 10%만 에러 전송
 });
