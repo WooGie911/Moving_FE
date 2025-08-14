@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import share from "@/assets/icon/clip/icon-clip-md.svg";
+import share from "@/assets/icon/clip/icon-clip-lg.svg";
 import kakaohare from "@/assets/icon/share/icon-share-kakao-md.svg";
 import facebookshare from "@/assets/icon/share/icon-share-facebook-md.svg";
 import {

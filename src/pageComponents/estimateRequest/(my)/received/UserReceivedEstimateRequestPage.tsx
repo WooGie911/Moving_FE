@@ -1,6 +1,5 @@
 "use client";
 import { EstimateRequestAndEstimateTab } from "@/components/common/tab/EstimateRequestAndEstimateTab";
-import { EstimateRequestAndEstimates } from "@/components/estimateRequest/(my)/received/EstimateRequestAndEstimates";
 import customerEstimateRequestApi from "@/lib/api/customerEstimateRequest.api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -10,15 +9,45 @@ import { useTranslations, useLocale } from "next-intl";
 import MovingTruckLoader from "@/components/common/pending/MovingTruckLoader";
 import Error from "@/app/error";
 import { useAuth } from "@/providers/AuthProvider";
+import dynamic from "next/dynamic";
 
-const UserReceivedEstimateRequestPage = () => {
+// EstimateRequestAndEstimates 컴포넌트를 동적으로 로드
+const EstimateRequestAndEstimates = dynamic(
+  () =>
+    import("@/components/estimateRequest/(my)/received/EstimateRequestAndEstimates").then((mod) => ({
+      default: mod.EstimateRequestAndEstimates,
+    })),
+  {
+    loading: () => (
+      <div className="flex w-full items-center justify-center p-4">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+      </div>
+    ),
+    ssr: false, // 서버사이드 렌더링 비활성화로 클라이언트에서만 로드
+  },
+);
+
+interface UserReceivedEstimateRequestPageProps {
+  locale?: string;
+  messages?: Record<string, any>;
+}
+
+const UserReceivedEstimateRequestPage = ({
+  locale: propLocale,
+  messages,
+}: UserReceivedEstimateRequestPageProps = {}) => {
   const { user, isLoading: isUserLoading } = useAuth();
   const t = useTranslations("customerEstimateRequest");
-  const locale = useLocale();
+  const locale = propLocale || useLocale();
+
+  // 번역 데이터가 미리 로드된 경우 성능 최적화
+  const isTranslationPreloaded = !!messages;
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["receivedEstimateRequests", locale],
     queryFn: () => customerEstimateRequestApi.getReceivedEstimateRequests(locale),
     enabled: !!user && !isUserLoading,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 
   if (isPending)
@@ -57,7 +86,15 @@ const UserReceivedEstimateRequestPage = () => {
         >
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
-              <Image src={notfound} alt={t("aria.emptyStateImage")} fill className="object-contain" />
+              <Image
+                src={notfound}
+                alt={t("aria.emptyStateImage")}
+                fill
+                className="object-contain"
+                priority
+                sizes="(min-width: 768px) 280px, 180px"
+                quality={85}
+              />
             </div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("noPastEstimates")}</div>
             <div className="text-[20px] leading-8 font-normal text-gray-400">{t("completeMoveToSeeHistory")}</div>

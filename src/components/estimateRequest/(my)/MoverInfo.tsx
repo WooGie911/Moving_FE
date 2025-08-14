@@ -93,6 +93,10 @@ export const MoverInfo = ({ mover, usedAt, estimateId, hasConfirmedEstimate }: I
               alt={t("aria.moverProfileImage")}
               fill
               className="object-cover"
+              sizes="50px"
+              quality={85}
+              // 첫 번째 기사님 이미지만 LCP 후보로 설정
+              priority={usedAt === "received"}
             />
           </div>
         )}

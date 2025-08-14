@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import like from "@/assets/icon/like/icon-like-button-md.svg";
+import like from "@/assets/icon/like/icon-like-red.svg";
+import unlike from "@/assets/icon/like/icon-like-black.svg";
 import { Button } from "@/components/common/button/Button";
 import { useTranslations, useLocale } from "next-intl";
 import { useModal } from "@/components/common/modal/ModalContext";
@@ -24,6 +25,7 @@ export const LastButtonSection = ({
   mover,
 }: ILastButtonSectionProps) => {
   const t = useTranslations("customerEstimateRequest");
+  const tCommon = useTranslations();
   const { open, close } = useModal();
   const queryClient = useQueryClient();
   const locale = useLocale();
@@ -127,7 +129,7 @@ export const LastButtonSection = ({
       role="region"
     >
       <button
-        className={`relative flex h-[54px] w-[54px] cursor-pointer flex-row items-center justify-center hover:cursor-pointer lg:hidden`}
+        className={`border-border-light relative flex h-[54px] w-[54px] cursor-pointer flex-row items-center justify-center rounded-[16px] border-1 hover:cursor-pointer lg:hidden`}
         onClick={handleFavorite}
         disabled={favoriteMutation.isPending}
         aria-label={mover.isFavorite ? t("removeFromFavorites") : t("addToFavorites")}
@@ -135,12 +137,14 @@ export const LastButtonSection = ({
         aria-describedby="favorite-button-description"
         type="button"
       >
-        <Image
-          src={like}
-          alt={mover.isFavorite ? t("favoriteIconActive") : t("favoriteIconInactive")}
-          fill
-          className="object-contain"
-        />
+        <div className="relative flex h-[16px] w-[16px] items-center justify-center">
+          <Image
+            src={mover.isFavorite ? like : unlike}
+            alt={mover.isFavorite ? t("favoriteIconActive") : t("favoriteIconInactive")}
+            fill
+            className="object-contain"
+          />
+        </div>
         <span id="favorite-button-description" className="sr-only">
           {mover.isFavorite ? t("removeFromFavoritesDescription") : t("addToFavoritesDescription")}
         </span>
