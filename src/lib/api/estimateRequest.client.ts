@@ -38,7 +38,6 @@ export function toEstimateRequestPayload(form: IFormState): IEstimateRequestPayl
         form,
       },
     });
-    console.error("toEstimateRequestPayload 내부 에러", error, form);
     throw error;
   }
 }
@@ -140,7 +139,6 @@ export const estimateRequestClientApi = {
           payload: toEstimateRequestPayload(form),
         },
       });
-      console.error("updateActive 내부 에러", error, form);
       throw error;
     }
   },

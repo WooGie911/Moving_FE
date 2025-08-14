@@ -1,6 +1,6 @@
 // 찜하기 관련 API 서비스
 import { getTokenFromCookie } from "@/utils/auth";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // API 응답 타입
 interface ApiResponse<T = any> {
@@ -32,17 +32,6 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
     const token = await getAccessToken();
     const url = `${API_BASE_URL}${endpoint}`;
 
-    console.log("찜하기 API 호출 정보:", {
-      url,
-      method: options.method || "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-      body: options.body,
-    });
-
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -52,18 +41,12 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
       },
     });
 
-    console.log("찜하기 API 응답 상태:", response.status, response.statusText);
-
-    const data = await response.json();
-    console.log("찜하기 API 응답 데이터:", data);
-
     if (!response.ok) {
-      throw new Error(data.message || "찜하기 API 호출에 실패했습니다.");
+      throw new Error(response.statusText || "찜하기 API 호출에 실패했습니다.");
     }
 
-    return data;
+    return response.json();
   } catch (error) {
-    console.error("찜하기 API 호출 오류:", error);
     throw error;
   }
 };
