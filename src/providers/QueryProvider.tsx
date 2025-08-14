@@ -48,7 +48,7 @@ export default function QueryProvider({ children }: IQueryProviderProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
+      <ReactQueryDevtools initialIsOpen={false} />
       {children}
     </QueryClientProvider>
   );
