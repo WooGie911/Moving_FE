@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/movers/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movers/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
