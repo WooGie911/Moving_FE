@@ -48,7 +48,7 @@ export const MoverRequestPage = () => {
         </nav>
         <section
           aria-label={t("ariaLabels.requestEmptyStateSection")}
-          className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
+          className="flex min-h-screen w-full flex-col items-center justify-center gap-7 bg-[#fafafa]"
         >
           <div className="flex min-h-screen w-full max-w-[1200px] flex-col items-center justify-center gap-4">
             <h2 className="mb-2 text-lg font-medium text-gray-600" aria-label={t("ariaLabels.requestEmptyStateTitle")}>

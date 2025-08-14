@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import like from "@/assets/icon/like/icon-like-red.svg";
-import unlike from "@/assets/icon/like/icon-like-black.svg";
+import like from "@/assets/icon/like/icon-like-black.svg";
+import unlike from "@/assets/icon/like/icon-like-white-lg.svg";
 import { Button } from "@/components/common/button/Button";
 import { useTranslations, useLocale } from "next-intl";
 import { useModal } from "@/components/common/modal/ModalContext";

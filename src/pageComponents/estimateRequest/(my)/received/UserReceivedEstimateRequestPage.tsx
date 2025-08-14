@@ -84,7 +84,7 @@ const UserReceivedEstimateRequestPage = ({
           className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
           aria-label={t("aria.estimateRequestList")}
         >
-          <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
+          <div className="flex min-h-screen flex-col items-center justify-center">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
               <Image
                 src={notfound}

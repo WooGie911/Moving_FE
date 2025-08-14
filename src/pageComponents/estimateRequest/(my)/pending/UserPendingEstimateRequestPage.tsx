@@ -47,7 +47,7 @@ export const UserPendingEstimateRequestPage = () => {
         </nav>
         <section
           aria-label={t("aria.emptyStateSection")}
-          className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
+          className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fafafa]"
         >
           <div className="flex min-h-[650px] flex-col items-center justify-center md:min-h-[900px]">
             <div className="relative h-[180px] w-[180px] md:h-[280px] md:w-[280px]">
