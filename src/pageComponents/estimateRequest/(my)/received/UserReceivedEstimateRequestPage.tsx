@@ -81,7 +81,7 @@ const UserReceivedEstimateRequestPage = ({
       <main>
         <EstimateRequestAndEstimateTab userType="User" />
         <section
-          className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fafafa]"
+          className="flex h-full w-full flex-col items-center justify-center bg-[#fafafa]"
           aria-label={t("aria.estimateRequestList")}
         >
           <div className="flex min-h-screen flex-col items-center justify-center">
@@ -108,7 +108,7 @@ const UserReceivedEstimateRequestPage = ({
     <main>
       <EstimateRequestAndEstimateTab userType="User" />
       <section
-        className="flex min-h-screen w-full flex-col items-center justify-center gap-7 bg-[#fafafa] px-6 pt-8 pb-6 md:gap-10 md:px-7 md:pb-8 lg:gap-14 lg:px-10 lg:pt-11 lg:pb-9"
+        className="flex h-full w-full flex-col items-center justify-center gap-7 bg-[#fafafa] px-6 pt-8 pb-6 md:gap-10 md:px-7 md:pb-8 lg:gap-14 lg:px-10 lg:pt-11 lg:pb-9"
         aria-label={t("aria.estimateRequestList")}
         role="list"
       >
