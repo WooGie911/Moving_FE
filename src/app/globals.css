@@ -1,0 +1,487 @@
+@import "tailwindcss";
+
+/* 페이지 전체 가로 스크롤 방지 */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* 스크린 리더 전용 클래스 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 커스텀 둥근 모서리 클래스 */
+.rounded-16 {
+  border-radius: 16px;
+}
+
+.rounded-24 {
+  border-radius: 24px;
+}
+
+/* search input 기본 clear 버튼 제거 */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --state-error: #ff4f64;
+
+  /* Grayscale */
+  --gray-50: #ffffff;
+  --gray-100: #f5f5f5;
+  --gray-150: #c4c4c4;
+  --gray-200: #e6e6e6;
+  --gray-300: #d9d9d9;
+  --gray-350: #ababab;
+  --gray-400: #b3b3b3;
+  --gray-450: #999999;
+  --gray-500: #7a7a79;
+  --gray-600: #808080;
+
+  /* Primary Orange */
+  --primary-100: #feeeea;
+  --primary-200: #fed8d0;
+  --primary-300: #fd947f;
+  --primary-400: #f9502e;
+  --primary-500: #e04829;
+
+  /* Black Scale */
+  --black-100: #61605e;
+  --black-200: #474643;
+  --black-250: #262524;
+  --black-300: #302f2d;
+  --black-400: #1e1e1e;
+  --black-500: #111111;
+  --black-600: #000000;
+
+  /* Background */
+  --bg-primary: #fcfcfc;
+  --bg-secondary: #f7f7f7;
+  --bg-tertiary: #efefef;
+
+  /* Line/Border */
+  --line-light: #f2f2f2;
+  --line-dark: #e6e6e6;
+}
+
+.bg-orange-gradient {
+  background: linear-gradient(90.32deg, #f95d2e 3.36%, #f9502e 88.38%);
+}
+
+@theme inline {
+  /* 브레이크포인트 정의: 기본 반응형 브레이크 포인트를 디자인 요구사항에 따라 변경가능. */
+  --breakpoint-md: 744px; /* 태블릿 사이즈 -744px~1199px*/
+  --breakpoint-lg: 1200px; /* 데스크탑 사이즈 1200~px*/
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-state-error: var(--state-error);
+
+  --font-sans: var(--font-pretendard);
+
+  /* =======================
+Typography Scale
+======================= */
+
+  /* Text-3xl: 32px / 42px */
+  --text-3xl: 32px;
+  --leading-3xl: 42px;
+
+  /* Text-2xl: 24px / 32px */
+  --text-2xl: 24px;
+  --leading-2xl: 32px;
+
+  /* Text-xl: 20px / 32px */
+  --text-xl: 20px;
+  --leading-xl: 32px;
+
+  /* Text-2lg: 18px / 26px */
+  --text-2lg: 18px;
+  --leading-2lg: 26px;
+
+  /* Text-lg: 16px / 26px */
+  --text-lg: 16px;
+  --leading-lg: 26px;
+
+  /* Text-md: 14px / 24px */
+  --text-md: 14px;
+  --leading-md: 24px;
+
+  /* Text-sm: 13px / 22px */
+  --text-sm: 13px;
+  --leading-sm: 22px;
+
+  /* Text-xs: 12px / 20px */
+  --text-xs: 12px;
+  --leading-xs: 20px;
+
+  /* Tight line height for xs: 18px */
+  --leading-xs-tight: 18px;
+
+  /* font-weight */
+  /* --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700; */
+
+  /* Grayscale Colors */
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+
+  /* Primary Colors */
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+
+  /* Black Colors */
+  --color-black-100: var(--black-100);
+  --color-black-200: var(--black-200);
+  --color-black-250: var(--black-250);
+  --color-black-300: var(--black-300);
+  --color-black-400: var(--black-400);
+  --color-black-500: var(--black-500);
+  --color-black-600: var(--black-600);
+
+  /* Background Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+
+  /* Border Colors */
+  --color-border-light: var(--line-light);
+  --color-border-dark: var(--line-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+}
+
+@keyframes truck-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-16px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.truck-slide-in {
+  animation: truck-slide-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+
+@keyframes slow-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+.slow-pulse {
+  animation: slow-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 트럭 움직임 애니메이션 */
+@keyframes truck-move {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+@keyframes dust-1 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0);
+  }
+}
+
+@keyframes dust-2 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  25% {
+    opacity: 0.6;
+    transform: translateY(-8px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0);
+  }
+}
+
+@keyframes dust-3 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  75% {
+    opacity: 0.6;
+    transform: translateY(-12px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0);
+  }
+}
+
+/* Tailwind 클래스로 애니메이션 적용 */
+.animate-truck-move {
+  animation: truck-move 4s linear infinite;
+}
+
+.animate-dust-1 {
+  animation: dust-1 1.5s ease-out infinite;
+}
+
+.animate-dust-2 {
+  animation: dust-2 1.5s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-dust-3 {
+  animation: dust-3 1.5s ease-out infinite;
+  animation-delay: 1s;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(
+    --font-pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif
+  );
+}
+/* Custom Dropdown Sheet Scrollbar */
+.dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-300) var(--gray-100);
+}
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 194px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  opacity: 1;
+}
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 100px;
+  opacity: 1;
+}
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 100px;
+  opacity: 1;
+}
+
+/* React Toastify 커스텀 스타일 */
+.custom-toast {
+  background: var(--primary-200);
+  color: var(--primary-400);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 12px 16px;
+  min-height: auto;
+  margin: 0;
+  width: 100% !important;
+}
+
+.custom-toast .Toastify__toast-body {
+  padding: 0;
+  margin: 0;
+}
+
+.custom-toast .Toastify__close-button {
+  display: none;
+}
+
+.custom-toast .Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* 토스트 아이콘 스타일링 */
+.custom-toast .Toastify__toast-icon {
+  color: var(--primary-400);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 성공 토스트 아이콘은 초록색 */
+.custom-toast.Toastify__toast--success .Toastify__toast-icon {
+  color: #28a745;
+}
+
+/* react-toastify 기본 성공 아이콘 오버라이드 */
+.custom-toast.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: #28a745;
+}
+
+.custom-toast.Toastify__toast--success .Toastify__toast-icon path {
+  fill: #28a745;
+}
+
+/* 에러 토스트 아이콘은 빨간색 */
+.custom-toast.Toastify__toast--error .Toastify__toast-icon {
+  color: #dc3545;
+}
+
+/* 경고 토스트 아이콘은 노란색 */
+.custom-toast.Toastify__toast--warning .Toastify__toast-icon {
+  color: #ffc107;
+}
+
+/* 성공 토스트 - 초록색 */
+.custom-toast.Toastify__toast--success {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+/* 에러 토스트 - 빨간색으로 구분 */
+.custom-toast.Toastify__toast--error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+/* 경고 토스트 - 노란색으로 구분 */
+.custom-toast.Toastify__toast--warning {
+  background: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+/* 정보 토스트 - 브랜드 오렌지 색상 */
+.custom-toast.Toastify__toast--info {
+  background: var(--primary-200);
+  color: var(--primary-400);
+  border-left: 4px solid var(--primary-400);
+}
+
+/* 토스트 컨테이너 스타일 */
+.Toastify__toast-container {
+  z-index: 9999;
+}
+
+/* 토스트 애니메이션 커스터마이징 */
+.Toastify__toast-container--top-center {
+  top: 1rem;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 24px) !important;
+  max-width: 600px;
+}
+
+/* 반응형 토스트 */
+@media (max-width: 768px) {
+  .custom-toast {
+    font-size: 13px;
+    padding: 10px 14px;
+    margin: 0;
+    width: 100% !important;
+  }
+
+  .Toastify__toast-container--top-center {
+    top: 0.5rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 24px) !important;
+    max-width: none;
+  }
+}
+
+/* 알림 펄스 효과 애니메이션 */
+@keyframes notification-pulse-strong {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
+  }
+  25% {
+    transform: scale(1);
+    opacity: 0.9;
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+    box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+  }
+  75% {
+    transform: scale(1.2);
+    opacity: 0.8;
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.animate-notification-pulse-strong {
+  animation: notification-pulse-strong 2s ease-in-out infinite;
+}
+
+

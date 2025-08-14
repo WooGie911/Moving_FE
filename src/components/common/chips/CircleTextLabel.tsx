@@ -1,0 +1,84 @@
+"use client";
+import { ICircleTextLabelProps } from "@/types/Chip";
+import React, { useState, useEffect } from "react";
+
+export const CircleTextLabel = ({
+  text,
+  clickAble = false,
+  onClick,
+  hasBorder1,
+  hasBorder2,
+  isSelected,
+  "aria-pressed": ariaPressed,
+  role,
+  tabIndex,
+  onKeyDown,
+}: ICircleTextLabelProps) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  // isSelected prop이 변경될 때 내부 상태 동기화
+  useEffect(() => {
+    setIsClicked(isSelected || false);
+  }, [isSelected]);
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+      setIsClicked((prev) => !prev);
+      // onClick이 있으면 외부 상태에만 의존하므로 내부 상태 토글하지 않음
+    } else {
+      setIsClicked((prev) => !prev);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (onKeyDown) {
+      onKeyDown(e);
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
+  return clickAble ? (
+    <div>
+      <div
+        className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 focus:outline-none lg:h-[46px] lg:px-5 ${isClicked ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        aria-pressed={ariaPressed !== undefined ? ariaPressed : isClicked}
+        role={role || "button"}
+        tabIndex={tabIndex !== undefined ? tabIndex : 0}
+      >
+        <p
+          className={`text-sm text-[14px] leading-[20px] font-semibold lg:text-[18px] lg:leading-[26px] ${isClicked ? "text-primary-400" : "text-gray-900"}`}
+        >
+          {text}
+        </p>
+      </div>
+    </div>
+  ) : hasBorder1 ? (
+    <div
+      className={`inline-flex h-[36px] cursor-pointer items-center justify-start rounded-full border px-3 py-1.5 focus:outline-none lg:h-[46px] lg:px-5 ${hasBorder2 ? "border-primary-400 bg-primary-100" : "border-gray-300 bg-gray-100"}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      aria-pressed={ariaPressed !== undefined ? ariaPressed : hasBorder2}
+      role={role || "button"}
+      tabIndex={tabIndex !== undefined ? tabIndex : 0}
+    >
+      <p
+        className={`text-sm text-[14px] leading-[20px] font-semibold lg:text-[18px] lg:leading-[26px] ${hasBorder2 ? "text-primary-400" : "text-gray-900"}`}
+      >
+        {text}
+      </p>
+    </div>
+  ) : (
+    <div>
+      <div className="bg-primary-100 inline-flex h-6 items-center justify-start rounded-full px-[6px] py-1.5 md:h-8 md:px-[8.5px]">
+        <p className="text-primary-400 text-[12px] leading-[16px] font-semibold md:text-[14px] md:leading-[20px]">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+};
