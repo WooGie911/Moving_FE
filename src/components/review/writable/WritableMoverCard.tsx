@@ -120,7 +120,7 @@ const WritableMoverCard = ({
         <Button
           variant="solid"
           rounded="rounded-xl"
-          className="bg-primary-400 w-full p-4 text-lg font-bold md:my-4 lg:px-10"
+          className="bg-primary-400 w-full cursor-pointer p-4 text-lg font-bold md:my-4 lg:px-10"
           onClick={onClickWrite}
         >
           {t("writeReviewButton")}

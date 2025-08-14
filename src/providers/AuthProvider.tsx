@@ -120,7 +120,7 @@ export default function AuthProvider({ children }: IAuthProviderProps) {
   // 고정 주기 선제 갱신 타이머 설정 (예: 14분마다 갱신)
   // 만료 exp를 매 라운드마다 갱신하기 어렵다면, 고정 주기 리프레시로 세션을 슬라이딩 유지합니다.
   useEffect(() => {
-    const FIXED_REFRESH_MS = 1 * 60 * 1000; // 서버 액세스토큰 15분 가정 시 14분에 선제 갱신
+    const FIXED_REFRESH_MS = 14 * 60 * 1000; // 서버 액세스토큰 15분 가정 시 14분에 선제 갱신
     const isLoggedIn = Boolean(userData);
     if (!isLoggedIn) return; // 로그인 상태에서만 작동
 

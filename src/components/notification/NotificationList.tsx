@@ -93,7 +93,7 @@ export default function NotificationList({ onClose }: { onClose?: () => void }) 
             ) : (
               <button
                 onClick={() => handleClick(notification)}
-                className={`flex flex-col items-start w-full p-4 text-left hover:bg-gray-50 transition-colors ${
+                className={`flex flex-col items-start w-full p-4 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
                   idx !== notifications.length - 1 ? "border-b border-gray-200" : ""
                 }`}
               >

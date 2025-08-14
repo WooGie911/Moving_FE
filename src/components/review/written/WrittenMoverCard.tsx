@@ -52,7 +52,7 @@ const WrittenMoverCard = ({
   const profileImageSrc = isValidImageUrl(profileImage) ? profileImage! : defaultProfile;
 
   return (
-    <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between">
+    <div className="mb-6 flex w-full max-w-[350px] min-w-[350px] flex-col gap-2 rounded-2xl bg-white p-6 shadow-lg md:max-w-[600px] md:p-10 lg:w-[1120px] lg:max-w-none lg:justify-between cursor-pointer">
       <div className="flex flex-col gap-y-1 md:gap-y-1">
         <div className="flex gap-2 md:hidden">
           <MoveTypeLabel type="small" />
