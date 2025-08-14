@@ -44,6 +44,9 @@ export const DetailPageMainSeaction = ({
               alt={t("profileImage")}
               fill
               className="object-cover"
+              priority
+              sizes="(min-width: 1024px) 134px, (min-width: 768px) 100px, 64px"
+              quality={85}
             />
           </div>
         </div>

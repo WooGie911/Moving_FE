@@ -8,7 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TMoverInfo } from "@/types/customerEstimateRequest";
 import { FavoriteService } from "@/services/favoriteService";
 import Image from "next/image";
-import like from "@/assets/icon/like/icon-like-button-md.svg";
+import like from "@/assets/icon/like/icon-like-red.svg";
+import unlike from "@/assets/icon/like/icon-like-black.svg";
 
 interface LgButtonSectionProps {
   estimateId: string;
@@ -147,19 +148,21 @@ export const LgButtonSection = ({
           role="group"
         >
           <button
-            className={`relative flex h-[64px] w-[64px] cursor-pointer flex-row items-center justify-center rounded-[16px] hover:cursor-pointer`}
+            className={`border-border-light relative flex h-[64px] w-[64px] cursor-pointer flex-row items-center justify-center rounded-[16px] border-1 hover:cursor-pointer`}
             onClick={handleFavorite}
             disabled={favoriteMutation.isPending}
             aria-label={mover.isFavorite ? t("aria.favoriteButtonActive") : t("aria.favoriteButtonInactive")}
             aria-pressed={mover.isFavorite}
             aria-describedby="favorite-button-description"
           >
-            <Image
-              src={like}
-              alt={mover.isFavorite ? t("aria.favoriteButtonActive") : t("aria.favoriteButtonInactive")}
-              fill
-              className="object-contain"
-            />
+            <div className="relative flex h-[16px] w-[16px] items-center justify-center">
+              <Image
+                src={mover.isFavorite ? like : unlike}
+                alt={mover.isFavorite ? t("aria.favoriteButtonActive") : t("aria.favoriteButtonInactive")}
+                fill
+                className="object-contain"
+              />
+            </div>
           </button>
           <div aria-label={t("aria.confirmEstimateButtonSection")} role="group">
             <Button

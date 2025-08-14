@@ -77,6 +77,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function page() {
-  return <UserReceivedEstimateRequestPage />;
+export default async function page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+
+  // 번역 데이터를 미리 로드하여 성능 최적화
+  const messages = await getMessages({ locale });
+
+  return <UserReceivedEstimateRequestPage locale={locale} messages={messages} />;
 }
