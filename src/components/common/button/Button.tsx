@@ -65,18 +65,18 @@ export const Button = ({
     return (
       <button
         type={type}
-        className={`text-2lg flex items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
+        className={`text-2lg flex cursor-pointer items-center justify-center border-[1px] border-gray-200 transition-all duration-200 focus:outline-none ${width} ${height} ${rounded} ${className}`}
         onClick={onClick}
         style={style}
         aria-label={ariaLabel || (isLiked ? "찜 해제" : "찜하기")}
         aria-describedby={ariaDescribedby}
         aria-pressed={isLiked}
       >
-        <Image 
-          src={likeIcon} 
-          alt={isLiked ? "찜 해제 아이콘" : "찜하기 아이콘"} 
-          width={likeIconSize} 
-          height={likeIconSize} 
+        <Image
+          src={likeIcon}
+          alt={isLiked ? "찜 해제 아이콘" : "찜하기 아이콘"}
+          width={likeIconSize}
+          height={likeIconSize}
         />
         <span className="ml-[10px] hidden font-semibold text-black lg:inline">{t("favoriteDriver")}</span>
       </button>
@@ -103,14 +103,7 @@ export const Button = ({
       {children}
       {/* 수정 아이콘 */}
       {variant === "solid" && isEditButton && (
-        <Image 
-          src={iconEdit} 
-          alt="수정 아이콘" 
-          width={24} 
-          height={24} 
-          className="ml-2" 
-          aria-hidden="true"
-        />
+        <Image src={iconEdit} alt="수정 아이콘" width={24} height={24} className="ml-2" aria-hidden="true" />
       )}
     </button>
   );
