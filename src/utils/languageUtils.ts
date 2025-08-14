@@ -1,5 +1,7 @@
 // 언어 설정 관련 유틸리티 함수들
 
+import * as Sentry from "@sentry/nextjs";
+
 const LANGUAGE_PREFERENCE_KEY = "user_language_preference";
 const LANGUAGE_STORAGE_KEY = "language-storage";
 
@@ -16,7 +18,7 @@ export const getLanguageFromStorage = (): string | null => {
       return parsed.state?.language || null;
     }
   } catch (error) {
-    console.error("로컬스토리지에서 언어 설정 읽기 실패:", error);
+    Sentry.captureException(error);
   }
   return null;
 };
@@ -34,7 +36,7 @@ export const setLanguageToStorage = (language: string): void => {
     };
     localStorage.setItem(LANGUAGE_STORAGE_KEY, JSON.stringify(languageData));
   } catch (error) {
-    console.error("로컬스토리지에 언어 설정 저장 실패:", error);
+    Sentry.captureException(error);
   }
 };
 
@@ -80,7 +82,7 @@ export const clearLanguagePreference = (): void => {
   try {
     localStorage.removeItem(LANGUAGE_STORAGE_KEY);
   } catch (error) {
-    console.error("로컬스토리지에서 언어 설정 삭제 실패:", error);
+    Sentry.captureException(error);
   }
 };
 

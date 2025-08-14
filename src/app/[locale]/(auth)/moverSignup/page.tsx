@@ -7,8 +7,8 @@ import { getTranslations } from "next-intl/server";
 export const revalidate = 300;
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "auth" });
   return {
     title: t("moverSignupMetadata.title"),

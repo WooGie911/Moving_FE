@@ -36,7 +36,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -173,7 +173,7 @@ const findMoverApi = {
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "POST",
         headers,
         credentials: "include",
@@ -214,7 +214,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -280,7 +280,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}${endpoint}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -305,7 +305,7 @@ const findMoverApi = {
       const { getTokenFromCookie } = await import("@/utils/auth");
       const accessToken = await getTokenFromCookie();
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/favorites`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -335,7 +335,7 @@ const findMoverApi = {
       const accessToken = await getTokenFromCookie();
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/favorites/${moverId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/favorites/${moverId}`,
         {
           method: "DELETE",
           headers: {
@@ -364,7 +364,7 @@ const findMoverApi = {
       const accessToken = await getTokenFromCookie();
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050"}/movers/active-estimate-request/check`,
+        `${process.env.NEXT_PUBLIC_API_URL}/movers/active-estimate-request/check`,
         {
           method: "GET",
           headers: {

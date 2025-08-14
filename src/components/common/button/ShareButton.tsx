@@ -85,7 +85,6 @@ export const ShareButton = ({
       const shareUrl = url || getCurrentPageUrl();
 
       if (!shareUrl) {
-        console.error("공유할 URL이 없습니다!");
         return;
       }
 
@@ -93,7 +92,6 @@ export const ShareButton = ({
       showShareSuccess("facebook");
       onSuccess?.();
     } catch (error) {
-      console.error("페이스북 공유 에러:", error);
       const errorMessage = "페이스북 공유에 실패했습니다.";
       showShareError(errorMessage);
       onError?.(errorMessage);

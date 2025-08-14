@@ -134,15 +134,39 @@ export const useNotificationStore = create<INotificationState>((set, get) => ({
           const messageEvent = event as MessageEvent;
           const data = JSON.parse(messageEvent.data);
           
+          // 다양한 메시지 구조 처리
+          let notificationData = null;
+          
           if (data.notification) {
+            notificationData = data.notification;
+          } else if (data.data && data.data.notification) {
+            notificationData = data.data.notification;
+          } else if (data.type === "notification") {
+            notificationData = data;
+          } else if (typeof data === "object" && data.id && data.message) {
+            // 직접 알림 객체인 경우
+            notificationData = data;
+          }
+          
+          if (notificationData) {
             // 새 알림 추가 (hasUnread는 addNotification에서 자동으로 true로 설정됨)
-            get().addNotification(data.notification);
+            get().addNotification(notificationData);
             
             // 서버에서 받은 unreadCount로도 확인
             if (data.unreadCount !== undefined) {
               const hasUnread = data.unreadCount > 0;
               set({ hasUnread });
             }
+            
+            // 즉시 UI 업데이트를 위한 강제 리렌더링
+            setTimeout(() => {
+              set((currentState) => ({
+                ...currentState,
+                notifications: [...currentState.notifications], // 배열 참조 변경으로 리렌더링 트리거
+              }));
+            }, 0);
+          } else {
+            console.warn("알림 데이터를 찾을 수 없음:", data);
           }
         } catch (e) {
           Sentry.captureException(e, {
