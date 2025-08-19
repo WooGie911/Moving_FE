@@ -31,9 +31,9 @@
 
 <br/>
 
-# 💻 기능 구현 영상 (추후 변경 예정)
+# 💻 기능 구현 영상
 
-[![프로젝트 소개 영상 유튜브 썸네일](https://github.com/user-attachments/assets/0a87f716-3677-4b75-b41c-aa02e934682c)](https://youtu.be/EClrOPXoyFY)
+[![프로젝트 소개 영상 유튜브 썸네일](./public/thumbnail.png)](https://www.youtube.com/watch?v=aVZHjcHTIvc)
 
 <br/>
 
@@ -180,7 +180,9 @@
 
 ## 팀 문서
 
-📝 [팀 노션](https://www.notion.so/Part4-Team1-Moving-2155da6dc98c80fa89c2f08319b1ef83)
+### 📝 [팀 노션](https://admitted-turkey-c17.notion.site/Part4-Team1-Moving-2155da6dc98c80fa89c2f08319b1ef83?pvs=74)
+
+### 📝 [API 문서](https://admitted-turkey-c17.notion.site/API-2155da6dc98c813891ead8eb7218d631)
 
 <br/>
 
